@@ -1,0 +1,14 @@
+name: SuperItems
+version: '${project.version}'
+main: me.zenox.superitems.SuperItems
+api-version: 1.19
+authors: [ ZenoX ]
+description: Implements custom hypixel inspired items!
+softdepend: [WorldGuard, WorldEdit]
+
+commands:
+  superitems:
+    aliases: [ si ]
+    description: Base command for superitems!
+    usage: /si
+    permission: superitems.admin
