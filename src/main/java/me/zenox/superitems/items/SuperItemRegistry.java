@@ -28,41 +28,70 @@ import org.bukkit.util.Vector;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static me.zenox.superitems.util.Util.getNearbyBlocks;
+
 public class SuperItemRegistry{
 
     private SuperItems plugin;
 
-    public HashMap<String, SuperItem> registeredItems = new HashMap();
+    private HashMap<String, SuperItem> registeredItems = new HashMap();
 
     public SuperItemRegistry(SuperItems plugin){
         this.plugin = plugin;
-        addItems();
+        ToyStick toyStick = new ToyStick();
+        SoulCrystal soulCrystal = new SoulCrystal();
+        addItems(toyStick, soulCrystal);
+        addRecipes(toyStick.getRecipe());
     }
 
-    private void addItems() {
-        registeredItems.put("magic_toy_stick", getNewSuperItemInstance(new ToyStick()));
+    private void addItems(SuperItemInterface ... items) {
+        for (SuperItemInterface item: items) {
+            registeredItems.put(item.getId(), getNewSuperItemInstance(item));
+        }
+    }
+
+    private void addRecipes(ShapedRecipe ... recipes){
+        for (ShapedRecipe recipe :
+                recipes) {
+            try{
+                Bukkit.addRecipe(recipe);
+            } catch (IllegalStateException e){
+                Util.logToConsole("Found duplicate recipe, re-adding.");
+                Bukkit.removeRecipe(recipe.getKey());
+                Bukkit.addRecipe(recipe);
+            }
+        }
+
     }
 
     // UTIL
     private static SuperItem getNewSuperItemInstance(SuperItemInterface sii){
-        return new SuperItem(sii.getName(), sii.getId(), sii.getRarity(), sii.getType(), sii.getItemAbility(), sii.getMaterial(),sii.getItemMeta(), sii.getRecipe());
+        return new SuperItem(sii.getName(), sii.getId(), sii.getRarity(), sii.getType(), sii.getItemAbility(), sii.getMaterial(),sii.getItemMeta());
     }
 
     @Nullable
-    public static SuperItem getSuperItemFromItemStack(ItemStack item) {
+    public SuperItem getSuperItemFromItemStack(ItemStack item) {
         PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
         String id = container.get(SuperItem.GLOBAL_ID, PersistentDataType.STRING);
-        return getSuperItemFromId(id);
+        return this.getSuperItemFromId(id);
     }
 
-    public static SuperItem getSuperItemFromId(String id) {
-        for (Map.Entry<String, SuperItem> entry : SuperItems.registry.registeredItems.entrySet()) {
+    public SuperItem getSuperItemFromId(String id) {
+        for (Map.Entry<String, SuperItem> entry : this.registeredItems.entrySet()) {
             if (id == null) return null;
             if (id.equals(entry.getKey())) {
                 return entry.getValue();
             }
         }
         return null;
+    }
+
+    public HashMap<String, SuperItem> getRegisteredItems() {
+        return registeredItems;
+    }
+
+    public void setRegisteredItems(HashMap<String, SuperItem> registeredItems) {
+        this.registeredItems = registeredItems;
     }
 
     //Gets the class of the item
@@ -80,7 +109,7 @@ public class SuperItemRegistry{
 
         @Override
         public SuperItem.Rarity getRarity() {
-            return SuperItem.Rarity.LEGENDARY;
+            return SuperItem.Rarity.EPIC;
         }
 
         @Override
@@ -106,7 +135,11 @@ public class SuperItemRegistry{
 
         @Override
         public ItemAbility getItemAbility() {
-            return new ItemAbility("Magic Missile", getItemAbilityLore(), getItemAbilityExecutable());
+
+            List<Action> actions = new ArrayList<>();
+            actions.add(Action.RIGHT_CLICK_AIR);
+            actions.add(Action.RIGHT_CLICK_BLOCK);
+            return new ItemAbility("Magic Missile", "magic_missile", getItemAbilityLore(), actions, getItemAbilityExecutable(), 0);
         }
 
         @Override
@@ -115,7 +148,7 @@ public class SuperItemRegistry{
             abilityLore.add(ChatColor.GRAY + "Shoots a magic missile that explodes");
             abilityLore.add(ChatColor.GRAY + "on impact and deals massive" + ChatColor.RED + " damage.");
             abilityLore.add("");
-            abilityLore.add(ChatColor.GRAY + "33% chance for the item to " + ChatColor.GOLD + "combust " + ChatColor.GRAY + "and dissapear.");
+            abilityLore.add(ChatColor.GRAY + "20% chance for the item to " + ChatColor.GOLD + "combust " + ChatColor.GRAY + "and dissapear.");
             return abilityLore;
         }
 
@@ -128,7 +161,7 @@ public class SuperItemRegistry{
                     World w = p.getWorld();
 
                     // 50% chance to remove an item from their hand
-                    if (r.nextInt(3) == 0) {
+                    if (r.nextInt(5) == 0) {
                         e.getItem().setAmount(e.getItem().getAmount() - 1);
                         Util.sendMessage(p, ChatColor.GOLD + "Woah! Your " + ChatColor.ITALIC + "Magic Toy Stick " + ChatColor.GOLD + "combusted in your hand!", false);
                         p.damage(5, p);
@@ -144,7 +177,7 @@ public class SuperItemRegistry{
                     trident.setGravity(false);
                     trident.setPierceLevel(127);
 
-                    int explosionPower = 5;
+                    int explosionPower = 4;
 
                     new BukkitRunnable() {
                         int count = 0;
@@ -167,15 +200,22 @@ public class SuperItemRegistry{
                                 w.spawnParticle(Particle.END_ROD, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
                                 w.spawnParticle(Particle.SMOKE_NORMAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
                             }
-                            LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
-                            com.sk89q.worldedit.util.Location guardLoc = BukkitAdapter.adapt(trident.getLocation());
-                            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-                            RegionQuery query = container.createQuery();
 
-                            if (!query.testState(guardLoc, localPlayer, Flags.BUILD)) {
-                                trident.remove();
-                                Util.sendMessage(p, "You cannot use this item in a worldguard region!");
-                                cancel();
+                            LocalPlayer localPlayer;
+                            com.sk89q.worldedit.util.Location guardLoc;
+                            RegionContainer container;
+                            RegionQuery query;
+                            if(plugin.isUsingWorldGuard) {
+                                localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
+                                guardLoc = BukkitAdapter.adapt(trident.getLocation());
+                                container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                                query = container.createQuery();
+
+                                if (!query.testState(guardLoc, localPlayer, Flags.BUILD)) {
+                                    trident.remove();
+                                    Util.sendMessage(p, "You cannot use this item in a worldguard region!");
+                                    cancel();
+                                }
                             }
 
                             if (trident.isInBlock()) {
@@ -184,10 +224,15 @@ public class SuperItemRegistry{
                                 for (Block block : blocks) {
                                     if (block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD))
                                         continue;
-                                    com.sk89q.worldedit.util.Location guardLoc2 = BukkitAdapter.adapt(block.getLocation());
+                                    if(plugin.isUsingWorldGuard) {
+                                        localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
+                                        guardLoc = BukkitAdapter.adapt(block.getLocation());
+                                        container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                                        query = container.createQuery();
 
-                                    if (!query.testState(guardLoc2, localPlayer, Flags.BUILD)) {
-                                        continue;
+                                        if (!query.testState(guardLoc, localPlayer, Flags.BUILD)) {
+                                            continue;
+                                        }
                                     }
                                     FallingBlock fallingBlock = w.spawnFallingBlock(block.getLocation(), block.getBlockData());
                                     fallingBlock.setVelocity(fallingBlock.getLocation().toVector().subtract(loc.toVector()).multiply(explosionPower * 2).normalize());
@@ -216,19 +261,8 @@ public class SuperItemRegistry{
             return exec;
         }
 
-        private List<Block> getNearbyBlocks(Location loc, int radius, int yradius) {
-            List<Block> nearbyBlocks = new ArrayList();
-            for (int x = loc.getBlockX() - radius; x <= loc.getBlockX() + radius; x++) {
-                for (int z = loc.getBlockZ() - radius; z <= loc.getBlockZ() + radius; z++) {
-                    for (int y = loc.getBlockY() + yradius; y >= loc.getBlockY() - yradius; y--) {
-                        nearbyBlocks.add(loc.getWorld().getBlockAt(x, y, z));
-                    }
-                }
-            }
-            return nearbyBlocks;
-        }
 
-        @Override
+
         public ShapedRecipe getRecipe() {
             NamespacedKey key = new NamespacedKey(SuperItems.getPlugin(), getId());
             ShapedRecipe recipe = new ShapedRecipe(key, getSuperItemFromId(getId()).getItemStack(3));
@@ -239,6 +273,166 @@ public class SuperItemRegistry{
             recipe.setIngredient('S', Material.DEBUG_STICK);
             recipe.setIngredient('T', Material.TNT);
             return recipe;
+        }
+    }
+
+    private class SoulCrystal implements SuperItemInterface{
+
+        @Override
+        public String getName() {
+            return "Soul Crystal";
+        }
+
+        @Override
+        public String getId() {
+            return "soul_crystal";
+        }
+
+        @Override
+        public SuperItem.Rarity getRarity() {
+            return SuperItem.Rarity.LEGENDARY;
+        }
+
+        @Override
+        public SuperItem.Type getType() {
+            return SuperItem.Type.DEPLOYABLE;
+        }
+
+        @Override
+        public ItemAbility getItemAbility() {
+            List<Action> actions = new ArrayList<>();
+            actions.add(Action.RIGHT_CLICK_AIR);
+            actions.add(Action.RIGHT_CLICK_BLOCK);
+
+            return new ItemAbility("Soul Rift", "soul_rift", getItemAbilityLore(), actions,getItemAbilityExecutable(), 45);
+        }
+
+        @Override
+        public ItemMeta getItemMeta() {
+            ItemStack item = new ItemStack(Material.END_CRYSTAL);
+            ItemMeta meta = item.getItemMeta();
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "The void-Sphere of Life was an anti-magic device, which could absorb the");
+            lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "special form of magic in the player. It could not be destroyed by magic");
+            lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "weapons. The soul crystal was left by an evil spirit of a mighty elf in that");
+            lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "sphere. When you wore the orb, your magic power would be raised, while");
+            lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "you could control people and objects with you. The soul crystal had a");
+            lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "maximum energy level of 3. There are a few Dark elves whose souls were");
+            lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "shattered by the sphere, and they tried to absorb the magic from its");
+            lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "remains, but they are too weak and starved and died.");
+            lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "");
+            lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Generated at: https://app.inferkit.com/demo");
+            meta.setLore(lore);
+            return meta;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.END_CRYSTAL;
+        }
+
+        @Override
+        public List<String> getItemAbilityLore() {
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "Deploys a" + ChatColor.AQUA + " soul crystal" + ChatColor.GRAY + ", which lasts for" + ChatColor.GREEN + " 5s" + ChatColor.GRAY + " and");
+            lore.add(ChatColor.GRAY + "pulls entities in, dealing " + ChatColor.RED + "6 true damage" + ChatColor.GRAY + " per second.");
+            return lore;
+        }
+
+        @Override
+        public Executable getItemAbilityExecutable() {
+            Executable exec = (PlayerInteractEvent e) -> {
+                Action action = e.getAction();
+                Player p = e.getPlayer();
+                World w = p.getWorld();
+                Location loc;
+                if(action.equals(Action.RIGHT_CLICK_BLOCK)){
+                    loc = e.getClickedBlock().getLocation();
+                } else if (action.equals(Action.RIGHT_CLICK_AIR)){
+                    loc = p.getLocation();
+                } else {
+                    return;
+                }
+
+                EnderCrystal crystal = (EnderCrystal) w.spawnEntity(loc.add(0, 2, 0), EntityType.ENDER_CRYSTAL);
+                crystal.setInvulnerable(true);
+
+                new BukkitRunnable(){
+                    int count = 0;
+                    List<Block> blocks = getNearbyBlocks(crystal.getLocation(), 7, 2);
+                    List<FallingBlock> fBlocks = new ArrayList<>();
+                    List<LivingEntity> entities = new ArrayList<>();
+
+                    @Override
+                    public void run() {
+                        // At 15 seconds
+
+                        if(count == 100){
+                            cancel();
+                            crystal.remove();
+                            w.createExplosion(crystal.getLocation(), 3);
+                            for (FallingBlock fallingblock: fBlocks) {
+                                fallingblock.setGravity(true);
+                            }
+                            for (LivingEntity entity : entities){
+                                entity.setGravity(true);
+                            }
+
+                        }
+
+                        Random r = new Random();
+                        Block block = blocks.get(r.nextInt(blocks.size() - 0) + 0);
+                        Boolean allowed = true;
+
+                        if(plugin.isUsingWorldGuard){
+                            LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
+                            com.sk89q.worldedit.util.Location guardLoc = BukkitAdapter.adapt(block.getLocation());
+                            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                            RegionQuery query = container.createQuery();
+                            allowed = query.testState(guardLoc, localPlayer, Flags.BUILD);
+                        }
+                        if (!(block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD)) && allowed) {
+                            FallingBlock fBlock = w.spawnFallingBlock(block.getLocation(), block.getBlockData());
+                            fBlock.setVelocity((fBlock.getLocation().toVector().subtract(crystal.getLocation().toVector()).multiply(-10).normalize()));
+                            fBlock.setGravity(false);
+                            fBlock.setDropItem(false);
+                            fBlock.setHurtEntities(true);
+
+                            fBlocks.add(fBlock);
+                        }
+
+                        for (FallingBlock fallingBlock: fBlocks) {
+                            if(r.nextInt(count/25+1) == 0){
+                                fallingBlock.setVelocity((fallingBlock.getLocation().toVector().subtract(crystal.getLocation().add(r.nextDouble()-0.5, r.nextDouble()-0.5+2, r.nextDouble()-0.5).toVector()).multiply(-0.5).normalize()));
+                            }
+                        }
+
+                        //TODO: Uncomment to allow deployer to bypass
+                        for (LivingEntity entity: entities) {
+                            if(r.nextInt(count/25+1) == 0 && !entity.equals(p)){
+                                entity.setVelocity((entity.getLocation().toVector().subtract(crystal.getLocation().add(r.nextDouble()-0.5, r.nextDouble()-0.5+2, r.nextDouble()-0.5).toVector()).multiply(-0.5).normalize()));
+                                entity.damage((entity.getHealth()*(2/3))/15+1);
+                            }
+                        }
+
+
+                        if (count == 0) {
+                            for (Entity entity : crystal.getNearbyEntities(7.5, 5, 7.5)) {
+                                if (entity instanceof LivingEntity && !entity.equals(p)) {
+                                    entity.setVelocity((entity.getLocation().toVector().subtract(crystal.getLocation().add(0, 2, 0).toVector()).multiply(-10).normalize()));
+                                    entity.setGravity(false);
+                                    entities.add((LivingEntity) entity);
+                                }
+                            }
+                        }
+
+                        count++;
+                    }
+                }.runTaskTimer(SuperItems.getPlugin(), 0, 0);
+
+
+            };
+            return exec;
         }
     }
 }

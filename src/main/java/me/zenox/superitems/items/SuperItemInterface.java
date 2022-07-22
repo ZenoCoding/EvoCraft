@@ -18,5 +18,5 @@ public interface SuperItemInterface {
     Material getMaterial();
     List<String> getItemAbilityLore();
     Executable getItemAbilityExecutable();
-    ShapedRecipe getRecipe();
+    //ShapedRecipe getRecipe();
 }

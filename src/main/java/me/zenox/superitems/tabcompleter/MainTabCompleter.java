@@ -23,7 +23,7 @@ public class MainTabCompleter implements TabCompleter {
         }
 
         if(items.isEmpty()){
-            for (Map.Entry<String, SuperItem> entry: SuperItems.registry.registeredItems.entrySet()) {
+            for (Map.Entry<String, SuperItem> entry: SuperItems.getPlugin().registry.getRegisteredItems().entrySet()) {
                 items.add(entry.getKey());
             }
         }
@@ -42,6 +42,9 @@ public class MainTabCompleter implements TabCompleter {
                     results.add(b);
                 }
             }
+            return results;
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
+            results.add("<amount>");
             return results;
         }
         return null;

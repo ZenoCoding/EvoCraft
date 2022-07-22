@@ -1,22 +1,16 @@
 package me.zenox.superitems.items;
 
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.util.Executable;
-import me.zenox.superitems.util.Util;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class SuperItem {
     public static NamespacedKey GLOBAL_ID = new NamespacedKey(SuperItems.getPlugin(), "superitem");
@@ -27,9 +21,8 @@ public class SuperItem {
     private ItemAbility ability;
     private Material material;
     private ItemMeta meta;
-    private ShapedRecipe recipe;
 
-    public SuperItem(String name, String id, Rarity rarity, Type type, ItemAbility ability, Material material, ItemMeta metadata, ShapedRecipe recipe){
+    public SuperItem(String name, String id, Rarity rarity, Type type, ItemAbility ability, Material material, ItemMeta metadata){
         this.name = name;
         this.id = id;
         this.rarity = rarity;
@@ -37,17 +30,7 @@ public class SuperItem {
         this.ability = ability;
         this.material = material;
         this.meta = metadata;
-        this.recipe = recipe;
 
-        addRecipe(this.recipe);
-    }
-
-    private void addRecipe(ShapedRecipe recipe){
-        try{
-            Bukkit.addRecipe(recipe);
-        } catch (Exception e){
-            Util.logToConsole(e.toString());
-        }
     }
 
     public ItemStack getItemStack(Integer amount){
@@ -61,8 +44,11 @@ public class SuperItem {
 
         List<String> lore = (meta.getLore() == null) ? new ArrayList() : meta.getLore();
         lore.add("");
-        lore.add(ChatColor.GOLD + "Ability: " + this.ability.getAbilityName() + ChatColor.YELLOW + ChatColor.BOLD + "  RIGHT CLICK");
-        lore.addAll(this.ability.getAbilityLore());
+        lore.add(ChatColor.GOLD + "Ability: " + this.ability.getName() + ChatColor.YELLOW + ChatColor.BOLD + " RIGHT CLICK");
+        lore.addAll(this.ability.getLore());
+        if(this.ability.getCooldown() > 0){
+            lore.add(ChatColor.GRAY + "Cooldown: " + ChatColor.AQUA + this.ability.getCooldown());
+        }
         lore.add("");
         lore.add(this.rarity.color() + this.rarity.getName() + " " + this.type.getName());
         meta.setLore(lore);
@@ -123,13 +109,6 @@ public class SuperItem {
         this.name = name;
     }
 
-    public ShapedRecipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(ShapedRecipe recipe) {
-        this.recipe = recipe;
-    }
 
     enum Rarity{
 

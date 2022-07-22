@@ -20,9 +20,9 @@ public class PlayerUseItemEvent implements Listener {
     @EventHandler
     public void useEvent(PlayerInteractEvent e){
         if(e.getItem() == null) return;
-        SuperItem superItem = SuperItemRegistry.getSuperItemFromItemStack(e.getItem());
+        SuperItem superItem = plugin.registry.getSuperItemFromItemStack(e.getItem());
         if(superItem != null){
-            superItem.getAbility().getAbilityExecutable().run(e);
+            superItem.getAbility().runExecutable(e);
         }
     }
 
