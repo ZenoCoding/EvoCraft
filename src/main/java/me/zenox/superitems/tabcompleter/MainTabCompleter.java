@@ -1,6 +1,7 @@
 package me.zenox.superitems.tabcompleter;
 
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.items.BasicItem;
 import me.zenox.superitems.items.SuperItem;
 import me.zenox.superitems.util.Util;
 import org.bukkit.command.Command;
@@ -23,7 +24,7 @@ public class MainTabCompleter implements TabCompleter {
         }
 
         if(items.isEmpty()){
-            for (Map.Entry<String, SuperItem> entry: SuperItems.getPlugin().registry.getRegisteredItems().entrySet()) {
+            for (Map.Entry<String, BasicItem> entry: SuperItems.getPlugin().registry.getRegisteredItems().entrySet()) {
                 items.add(entry.getKey());
             }
         }

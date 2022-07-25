@@ -34,17 +34,24 @@ public class SuperItemRegistry{
 
     private SuperItems plugin;
 
-    private HashMap<String, SuperItem> registeredItems = new HashMap();
+    private HashMap<String, BasicItem> registeredItems = new HashMap();
 
     public SuperItemRegistry(SuperItems plugin){
         this.plugin = plugin;
         ToyStick toyStick = new ToyStick();
         SoulCrystal soulCrystal = new SoulCrystal();
-        addItems(toyStick, soulCrystal);
+        addSuperItems(toyStick, soulCrystal);
+        addBasicItems(new GardenerSapling(new String[]{"bobderaa238", ChatColor.RED + "[ADMIN] Zqnqx", "Friday, July 22"}));
         addRecipes(toyStick.getRecipe());
     }
 
-    private void addItems(SuperItemInterface ... items) {
+    private void addBasicItems(BasicItemInterface ... items) {
+        for (BasicItemInterface item: items) {
+            registeredItems.put(item.getId(), getNewBasicItemInstance(item));
+        }
+    }
+
+    private void addSuperItems(SuperItemInterface ... items) {
         for (SuperItemInterface item: items) {
             registeredItems.put(item.getId(), getNewSuperItemInstance(item));
         }
@@ -65,19 +72,23 @@ public class SuperItemRegistry{
     }
 
     // UTIL
+    private static BasicItem getNewBasicItemInstance(BasicItemInterface bii){
+        return new BasicItem(bii.getName(), bii.getId(), bii.getRarity(), bii.getType(), bii.getMaterial(), bii.getItemMeta());
+    }
+
     private static SuperItem getNewSuperItemInstance(SuperItemInterface sii){
-        return new SuperItem(sii.getName(), sii.getId(), sii.getRarity(), sii.getType(), sii.getItemAbility(), sii.getMaterial(),sii.getItemMeta());
+        return new SuperItem(sii.getName(), sii.getId(), sii.getRarity(), sii.getType(), sii.getItemAbilities(), sii.getMaterial(),sii.getItemMeta());
     }
 
     @Nullable
-    public SuperItem getSuperItemFromItemStack(ItemStack item) {
+    public BasicItem getBasicItemFromItemStack(ItemStack item) {
         PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
         String id = container.get(SuperItem.GLOBAL_ID, PersistentDataType.STRING);
-        return this.getSuperItemFromId(id);
+        return this.getBasicItemFromId(id);
     }
 
-    public SuperItem getSuperItemFromId(String id) {
-        for (Map.Entry<String, SuperItem> entry : this.registeredItems.entrySet()) {
+    public BasicItem getBasicItemFromId(String id) {
+        for (Map.Entry<String, BasicItem> entry : this.registeredItems.entrySet()) {
             if (id == null) return null;
             if (id.equals(entry.getKey())) {
                 return entry.getValue();
@@ -86,12 +97,72 @@ public class SuperItemRegistry{
         return null;
     }
 
-    public HashMap<String, SuperItem> getRegisteredItems() {
+    public HashMap<String, BasicItem> getRegisteredItems() {
         return registeredItems;
     }
 
-    public void setRegisteredItems(HashMap<String, SuperItem> registeredItems) {
-        this.registeredItems = registeredItems;
+    private class GardenerSapling implements BasicItemInterface{
+
+        private String issuedTo;
+        private String issuedFrom;
+        private String date;
+
+        private GardenerSapling(String ... args){
+            this.issuedTo = args[0];
+            this.issuedFrom = args[1];
+            this.date = args[2];
+        }
+
+        private GardenerSapling(){
+            this.issuedTo = "N/A";
+            this.issuedFrom = "N/A";
+            this.date = "N/A";
+        }
+
+        @Override
+        public String getName() {
+            return "Gardener's Sapling";
+        }
+
+        @Override
+        public String getId() {
+            return "gardener_sapling";
+        }
+
+        @Override
+        public BasicItem.Rarity getRarity() {
+            return BasicItem.Rarity.VERY_SPECIAL;
+        }
+
+        @Override
+        public SuperItem.Type getType() {
+            return BasicItem.Type.MISC;
+        }
+
+        @Override
+        public ItemMeta getItemMeta() {
+            ItemStack item = new ItemStack(Material.OAK_SAPLING);
+            ItemMeta meta = item.getItemMeta();
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "A sapling, that can when cared for");
+            lore.add(ChatColor.GRAY + "can grow into something beautiful.");
+            lore.add("");
+            lore.add(ChatColor.GRAY + "A thanks to the beta testers who helped along the way.");
+            lore.add("");
+            lore.add(ChatColor.GRAY + "Issued to: " + ChatColor.YELLOW + this.issuedTo);
+            lore.add(ChatColor.GRAY + "Issued From: " + ChatColor.YELLOW + this.issuedFrom);
+            lore.add(ChatColor.GRAY + "Date Issued: " + ChatColor.YELLOW + this.date);
+            meta.setLore(lore);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            return null;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return Material.OAK_SAPLING;
+        }
     }
 
     //Gets the class of the item
@@ -108,8 +179,8 @@ public class SuperItemRegistry{
         }
 
         @Override
-        public SuperItem.Rarity getRarity() {
-            return SuperItem.Rarity.EPIC;
+        public BasicItem.Rarity getRarity() {
+            return BasicItem.Rarity.EPIC;
         }
 
         @Override
@@ -134,15 +205,12 @@ public class SuperItemRegistry{
         }
 
         @Override
-        public ItemAbility getItemAbility() {
-
-            List<Action> actions = new ArrayList<>();
-            actions.add(Action.RIGHT_CLICK_AIR);
-            actions.add(Action.RIGHT_CLICK_BLOCK);
-            return new ItemAbility("Magic Missile", "magic_missile", getItemAbilityLore(), actions, getItemAbilityExecutable(), 0);
+        public List<ItemAbility> getItemAbilities() {
+            List<ItemAbility> abilities = new ArrayList<>();
+            abilities.add(new ItemAbility("Magic Missile", "magic_missile", getItemAbilityLore(), ItemAbility.AbilityAction.RIGHT_CLICK_ALL, getItemAbilityExecutable(), 0));
+            return abilities;
         }
 
-        @Override
         public List<String> getItemAbilityLore() {
             List<String> abilityLore = new ArrayList<>();
             abilityLore.add(ChatColor.GRAY + "Shoots a magic missile that explodes");
@@ -152,7 +220,6 @@ public class SuperItemRegistry{
             return abilityLore;
         }
 
-        @Override
         public Executable getItemAbilityExecutable() {
             Executable exec = (PlayerInteractEvent e) -> {
                 if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
@@ -177,7 +244,7 @@ public class SuperItemRegistry{
                     trident.setGravity(false);
                     trident.setPierceLevel(127);
 
-                    int explosionPower = 4;
+                    int explosionPower = 7;
 
                     new BukkitRunnable() {
                         int count = 0;
@@ -265,7 +332,7 @@ public class SuperItemRegistry{
 
         public ShapedRecipe getRecipe() {
             NamespacedKey key = new NamespacedKey(SuperItems.getPlugin(), getId());
-            ShapedRecipe recipe = new ShapedRecipe(key, getSuperItemFromId(getId()).getItemStack(3));
+            ShapedRecipe recipe = new ShapedRecipe(key, ((SuperItem) getBasicItemFromId(getId())).getItemStack(3));
             recipe.shape("DGD","FSF","TST");
             recipe.setIngredient('D', Material.DRAGON_BREATH);
             recipe.setIngredient('G', Material.GLOWSTONE_DUST);
@@ -289,8 +356,8 @@ public class SuperItemRegistry{
         }
 
         @Override
-        public SuperItem.Rarity getRarity() {
-            return SuperItem.Rarity.LEGENDARY;
+        public BasicItem.Rarity getRarity() {
+            return BasicItem.Rarity.LEGENDARY;
         }
 
         @Override
@@ -299,12 +366,11 @@ public class SuperItemRegistry{
         }
 
         @Override
-        public ItemAbility getItemAbility() {
-            List<Action> actions = new ArrayList<>();
-            actions.add(Action.RIGHT_CLICK_AIR);
-            actions.add(Action.RIGHT_CLICK_BLOCK);
+        public List<ItemAbility> getItemAbilities() {
+            List<ItemAbility> abilities = new ArrayList<>();
+            abilities.add(new ItemAbility("Soul Rift", "soul_rift", getItemAbilityLore(), ItemAbility.AbilityAction.RIGHT_CLICK_ALL, getItemAbilityExecutable(), 30));
 
-            return new ItemAbility("Soul Rift", "soul_rift", getItemAbilityLore(), actions,getItemAbilityExecutable(), 45);
+            return abilities;
         }
 
         @Override
@@ -331,7 +397,6 @@ public class SuperItemRegistry{
             return Material.END_CRYSTAL;
         }
 
-        @Override
         public List<String> getItemAbilityLore() {
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GRAY + "Deploys a" + ChatColor.AQUA + " soul crystal" + ChatColor.GRAY + ", which lasts for" + ChatColor.GREEN + " 5s" + ChatColor.GRAY + " and");
@@ -339,7 +404,6 @@ public class SuperItemRegistry{
             return lore;
         }
 
-        @Override
         public Executable getItemAbilityExecutable() {
             Executable exec = (PlayerInteractEvent e) -> {
                 Action action = e.getAction();
@@ -353,6 +417,8 @@ public class SuperItemRegistry{
                 } else {
                     return;
                 }
+
+                e.setCancelled(true);
 
                 EnderCrystal crystal = (EnderCrystal) w.spawnEntity(loc.add(0, 2, 0), EntityType.ENDER_CRYSTAL);
                 crystal.setInvulnerable(true);
@@ -398,6 +464,8 @@ public class SuperItemRegistry{
                             fBlock.setDropItem(false);
                             fBlock.setHurtEntities(true);
 
+                            block.breakNaturally();
+
                             fBlocks.add(fBlock);
                         }
 
@@ -407,14 +475,12 @@ public class SuperItemRegistry{
                             }
                         }
 
-                        //TODO: Uncomment to allow deployer to bypass
                         for (LivingEntity entity: entities) {
                             if(r.nextInt(count/25+1) == 0 && !entity.equals(p)){
                                 entity.setVelocity((entity.getLocation().toVector().subtract(crystal.getLocation().add(r.nextDouble()-0.5, r.nextDouble()-0.5+2, r.nextDouble()-0.5).toVector()).multiply(-0.5).normalize()));
-                                entity.damage((entity.getHealth()*(2/3))/15+1);
+                                entity.damage((entity.getHealth()*(2/3))/10+1);
                             }
                         }
-
 
                         if (count == 0) {
                             for (Entity entity : crystal.getNearbyEntities(7.5, 5, 7.5)) {
@@ -433,6 +499,69 @@ public class SuperItemRegistry{
 
             };
             return exec;
+        }
+    }
+
+    private class DarkEmberStaff implements SuperItemInterface{
+
+        @Override
+        public String getName() {
+            return "Dark Ember Staff";
+        }
+
+        @Override
+        public String getId() {
+            return "dark_ember_staff";
+        }
+
+        @Override
+        public BasicItem.Rarity getRarity() {
+            return BasicItem.Rarity.RARE;
+        }
+
+        @Override
+        public SuperItem.Type getType() {
+            return BasicItem.Type.STAFF;
+        }
+
+        @Override
+        public List<ItemAbility> getItemAbilities() {
+            List<ItemAbility> abilities = new ArrayList<>();
+            abilities.add(new ItemAbility("Attune", "ember_attune", getAbilityLore(0), ItemAbility.AbilityAction.LEFT_CLICK_ALL, getSwapExecutable(), 0));
+            abilities.add(new ItemAbility("Attune", "ember_attune", getAbilityLore(0), ItemAbility.AbilityAction.LEFT_CLICK_ALL, getSwapExecutable(), 0));
+            return abilities;
+        }
+
+        private Executable getSwapExecutable() {
+            Executable exec = (PlayerInteractEvent e) -> {
+
+            };
+            return exec;
+        }
+
+        private Executable getShootExecutable() {
+            Executable exec = (PlayerInteractEvent e) -> {
+
+            };
+            return exec;
+        }
+
+        private List<String> getAbilityLore(int arg){
+            if(arg == 0){
+                return
+            } else {
+
+            }
+        }
+
+        @Override
+        public ItemMeta getItemMeta() {
+            return null;
+        }
+
+        @Override
+        public Material getMaterial() {
+            return null;
         }
     }
 }

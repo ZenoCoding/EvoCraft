@@ -2,6 +2,7 @@ package me.zenox.superitems.command;
 
 import com.google.common.primitives.Ints;
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.items.BasicItem;
 import me.zenox.superitems.items.SuperItem;
 import me.zenox.superitems.items.SuperItemRegistry;
 import me.zenox.superitems.tabcompleter.MainTabCompleter;
@@ -41,7 +42,7 @@ public class MainCommand implements CommandExecutor {
                     Util.sendMessage(p, "Please specify a valid item to give.");
                     return true;
                 }
-                SuperItem itemtype = plugin.registry.getSuperItemFromId(args[1]);
+                BasicItem itemtype = plugin.registry.getBasicItemFromId(args[1]);
                 if(itemtype == null){
                     Util.sendMessage(p, "This item could not be found!");
                     Util.sendMessage(p, plugin.registry.getRegisteredItems().toString());

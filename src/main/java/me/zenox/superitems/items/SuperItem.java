@@ -12,136 +12,46 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SuperItem {
+public class SuperItem extends BasicItem{
     public static NamespacedKey GLOBAL_ID = new NamespacedKey(SuperItems.getPlugin(), "superitem");
-    private String name;
-    private String id;
-    private Rarity rarity;
-    private Type type;
-    private ItemAbility ability;
-    private Material material;
-    private ItemMeta meta;
+    private List<ItemAbility> abilities;
 
-    public SuperItem(String name, String id, Rarity rarity, Type type, ItemAbility ability, Material material, ItemMeta metadata){
-        this.name = name;
-        this.id = id;
-        this.rarity = rarity;
-        this.type = type;
-        this.ability = ability;
-        this.material = material;
-        this.meta = metadata;
-
+    public SuperItem(String name, String id, Rarity rarity, Type type, List<ItemAbility> abilities, Material material, ItemMeta metadata){
+        super(name, id, rarity, type, material, metadata);
+        this.abilities = abilities;
     }
 
+    @Override
     public ItemStack getItemStack(Integer amount){
-        ItemStack item = new ItemStack(this.material);
-        item.setItemMeta(this.meta);
+        ItemStack item = new ItemStack(this.getMaterial());
+        item.setItemMeta(this.getMeta());
         item.setAmount(amount);
         ItemMeta meta = item.getItemMeta();
         // Add persistent data
         PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
-        dataContainer.set(GLOBAL_ID, PersistentDataType.STRING, this.id);
+        dataContainer.set(GLOBAL_ID, PersistentDataType.STRING, this.getId());
 
         List<String> lore = (meta.getLore() == null) ? new ArrayList() : meta.getLore();
-        lore.add("");
-        lore.add(ChatColor.GOLD + "Ability: " + this.ability.getName() + ChatColor.YELLOW + ChatColor.BOLD + " RIGHT CLICK");
-        lore.addAll(this.ability.getLore());
-        if(this.ability.getCooldown() > 0){
-            lore.add(ChatColor.GRAY + "Cooldown: " + ChatColor.AQUA + this.ability.getCooldown());
+        for (ItemAbility ability: this.abilities) {
+            lore.add("");
+            lore.add(ChatColor.GOLD + "Ability: " + ability.getName() + ChatColor.YELLOW + ChatColor.BOLD + " " + ability.getAction().getName());
+            lore.addAll(ability.getLore());
+            if (ability.getCooldown() > 0) {
+                lore.add(ChatColor.GRAY + "Cooldown: " + ChatColor.AQUA + ability.getCooldown() + " seconds");
+            }
         }
         lore.add("");
-        lore.add(this.rarity.color() + this.rarity.getName() + " " + this.type.getName());
+        lore.add(this.getRarity().color() + this.getRarity().getName() + " " + this.getType().getName());
         meta.setLore(lore);
-        meta.setDisplayName(this.rarity.color() + this.getName());
+        meta.setDisplayName(this.getRarity().color() + this.getName());
         item.setItemMeta(meta);
         return item;
-    }
-
-    public String getDisplayName(){
-        return this.rarity.color() + this.name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Rarity getRarity() {
-        return rarity;
-    }
-
-    public void setRarity(Rarity rarity) {
-        this.rarity = rarity;
-    }
-
-    public Material getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(Material material){
-        this.material = material;
-    }
-
-    public ItemMeta getMeta() {
-        return meta;
-    }
-
-    public void setMeta(ItemMeta meta) {
-        this.meta = meta;
-    }
-
-    public ItemAbility getAbility() {
-        return ability;
-    }
-
-    public void setAbility(ItemAbility ability) {
-        this.ability = ability;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-    enum Rarity{
-
-        COMMON(ChatColor.WHITE, ChatColor.BOLD + "COMMON"), UNCOMMON(ChatColor.GREEN, ChatColor.BOLD + "UNCOMMON"),
-        RARE(ChatColor.BLUE, ChatColor.BOLD + "RARE"), EPIC(ChatColor.DARK_PURPLE, ChatColor.BOLD + "EPIC"),
-        LEGENDARY(ChatColor.GOLD, ChatColor.BOLD + "LEGENDARY"),
-        MYTHIC(ChatColor.LIGHT_PURPLE, ChatColor.MAGIC + "" + ChatColor.BOLD + "D" + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "MYTHIC" + ChatColor.MAGIC + "D" + ChatColor.LIGHT_PURPLE);
-        //SPECIAL(ChatColor.RED), VERY_SPECIAL(ChatColor.RED);
-
-        private ChatColor color;
-        private String name;
-
-        private Rarity(ChatColor color, String name){
-            this.color = color;
-            this.name = name;
-        }
-
-        public ChatColor color(){return color;}
-
-        public String getName(){return name;}
 
     }
 
-    enum Type {
-
-        SWORD("SWORD"), WAND("WAND"), SUPERITEM("SUPERITEM"), DEPLOYABLE("DEPLOYABLE");
-
-        private String name;
-
-        private Type(String name){
-            this.name = name;
-        }
-
-        public String getName(){ return name; }
+    public List<ItemAbility> getAbilities() {
+        return this.abilities;
     }
+
+
 }

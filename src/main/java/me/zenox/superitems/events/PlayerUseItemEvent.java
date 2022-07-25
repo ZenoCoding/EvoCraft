@@ -1,6 +1,8 @@
 package me.zenox.superitems.events;
 
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.items.BasicItem;
+import me.zenox.superitems.items.ItemAbility;
 import me.zenox.superitems.items.SuperItem;
 import me.zenox.superitems.items.SuperItemRegistry;
 import org.bukkit.Bukkit;
@@ -20,9 +22,14 @@ public class PlayerUseItemEvent implements Listener {
     @EventHandler
     public void useEvent(PlayerInteractEvent e){
         if(e.getItem() == null) return;
-        SuperItem superItem = plugin.registry.getSuperItemFromItemStack(e.getItem());
-        if(superItem != null){
-            superItem.getAbility().runExecutable(e);
+        BasicItem basicItem =  plugin.registry.getBasicItemFromItemStack(e.getItem());
+        if(basicItem instanceof SuperItem){
+            SuperItem superItem = (SuperItem) basicItem;
+            if(superItem != null){
+                for (ItemAbility ability : superItem.getAbilities()) {
+                    ability.getExecutable().run(e);
+                }
+            }
         }
     }
 
