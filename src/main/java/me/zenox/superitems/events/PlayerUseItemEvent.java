@@ -27,7 +27,7 @@ public class PlayerUseItemEvent implements Listener {
             SuperItem superItem = (SuperItem) basicItem;
             if(superItem != null){
                 for (ItemAbility ability : superItem.getAbilities()) {
-                    ability.getExecutable().run(e);
+                    ability.runExecutable(e);
                 }
             }
         }

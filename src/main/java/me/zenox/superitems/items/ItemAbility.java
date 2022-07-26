@@ -1,5 +1,6 @@
 package me.zenox.superitems.items;
 
+import com.archyx.aureliumskills.api.AureliumAPI;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.util.Executable;
 import me.zenox.superitems.util.Util;
@@ -15,19 +16,21 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ItemAbility {
-    private String name;
-    private String id;
+    private final String name;
+    private final String id;
     private List<String> lore;
-    private AbilityAction action;
-    private Executable executable;
-    private int cooldown;
+    private final AbilityAction action;
+    private final Executable executable;
+    private final int manaCost;
+    private final int cooldown;
 
-    public ItemAbility(String name, String id, List<String> lore, AbilityAction action, Executable executable, int cooldown){
+    public ItemAbility(String name, String id, List<String> lore, AbilityAction action, Executable executable, int manaCost, int cooldown){
         this.name = name;
         this.lore = lore;
         this.action = action;
         this.executable = executable;
         this.cooldown = cooldown;
+        this.manaCost = manaCost;
         this.id = id;
     }
 
@@ -35,9 +38,6 @@ public class ItemAbility {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public List<String> getLore() {
         return lore;
@@ -62,13 +62,27 @@ public class ItemAbility {
             NamespacedKey cooldownKey = new NamespacedKey(SuperItems.getPlugin(), getId() + "_cooldown");
             Long cooldown = container.get(cooldownKey, PersistentDataType.LONG);
 
+
             if (cooldown != null && Math.ceil((cooldown - System.currentTimeMillis()) / 1000) > 0) {
                 Util.sendMessage(e.getPlayer(), "This ability is on cooldown for " + ChatColor.RED + Math.ceil((cooldown - System.currentTimeMillis()) / 1000) + " seconds");
                 return;
             }
 
-            this.getExecutable().run(e);
+            AureliumAPI.getPlugin().getActionBar().setPaused(e.getPlayer(), 20);
+            String manaMessage = this.manaCost > 0 ? ChatColor.AQUA + "-" + manaCost + " Mana " + "(" + ChatColor.GOLD + name + ChatColor.AQUA + ")" : ChatColor.GOLD + "Used " + name;
+            Util.sendActionBar(e.getPlayer(),  manaMessage);
 
+            if(this.manaCost > 0){
+                int resultingMana = ((int) AureliumAPI.getMana(e.getPlayer()))-manaCost;
+                if (resultingMana < 0) {
+                    Util.sendMessage(e.getPlayer(), ChatColor.RED + "You don't have enough mana to use this ability.", false);
+                    return;
+                } else {
+                    AureliumAPI.setMana(e.getPlayer(), AureliumAPI.getMana(e.getPlayer()) - manaCost);
+                }
+            }
+
+            this.getExecutable().run(e);
 
             container.set(cooldownKey, PersistentDataType.LONG, System.currentTimeMillis() + (getCooldown() * 1000));
         }
@@ -79,18 +93,13 @@ public class ItemAbility {
         return cooldown;
     }
 
-    public void setCooldown(int cooldown) {
-        this.cooldown = cooldown;
+    public int getManaCost() {
+        return manaCost;
     }
 
     public String getId() {
         return id;
     }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
 
     enum AbilityAction {
 

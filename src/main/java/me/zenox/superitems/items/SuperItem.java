@@ -36,8 +36,12 @@ public class SuperItem extends BasicItem{
             lore.add("");
             lore.add(ChatColor.GOLD + "Ability: " + ability.getName() + ChatColor.YELLOW + ChatColor.BOLD + " " + ability.getAction().getName());
             lore.addAll(ability.getLore());
+
+            if (ability.getManaCost() > 0) {
+                lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + ability.getManaCost());
+            }
             if (ability.getCooldown() > 0) {
-                lore.add(ChatColor.GRAY + "Cooldown: " + ChatColor.AQUA + ability.getCooldown() + " seconds");
+                lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + ability.getCooldown() + "s");
             }
         }
         lore.add("");

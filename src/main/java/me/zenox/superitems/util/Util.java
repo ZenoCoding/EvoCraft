@@ -1,5 +1,7 @@
 package me.zenox.superitems.util;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -18,6 +20,9 @@ public class Util {
         p.sendMessage(prefix ? ChatColor.GOLD + "[SuperItems] " + message : message);
     }
 
+    public static void sendActionBar(Player p, String message){
+        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
+    }
 
     public static void logToConsole(String message){
         Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SuperItems] " + message);

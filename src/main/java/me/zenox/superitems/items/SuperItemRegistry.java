@@ -20,8 +20,11 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -40,7 +43,7 @@ public class SuperItemRegistry{
         this.plugin = plugin;
         ToyStick toyStick = new ToyStick();
         SoulCrystal soulCrystal = new SoulCrystal();
-        addSuperItems(toyStick, soulCrystal);
+        addSuperItems(toyStick, soulCrystal, new FieryEmberStaff(),new DarkEmberStaff());
         addBasicItems(new GardenerSapling(new String[]{"bobderaa238", ChatColor.RED + "[ADMIN] Zqnqx", "Friday, July 22"}));
         addRecipes(toyStick.getRecipe());
     }
@@ -207,7 +210,7 @@ public class SuperItemRegistry{
         @Override
         public List<ItemAbility> getItemAbilities() {
             List<ItemAbility> abilities = new ArrayList<>();
-            abilities.add(new ItemAbility("Magic Missile", "magic_missile", getItemAbilityLore(), ItemAbility.AbilityAction.RIGHT_CLICK_ALL, getItemAbilityExecutable(), 0));
+            abilities.add(new ItemAbility("Magic Missile", "magic_missile", getItemAbilityLore(), ItemAbility.AbilityAction.RIGHT_CLICK_ALL, getItemAbilityExecutable(), 0, 0));
             return abilities;
         }
 
@@ -368,7 +371,7 @@ public class SuperItemRegistry{
         @Override
         public List<ItemAbility> getItemAbilities() {
             List<ItemAbility> abilities = new ArrayList<>();
-            abilities.add(new ItemAbility("Soul Rift", "soul_rift", getItemAbilityLore(), ItemAbility.AbilityAction.RIGHT_CLICK_ALL, getItemAbilityExecutable(), 30));
+            abilities.add(new ItemAbility("Soul Rift", "soul_rift", getItemAbilityLore(), ItemAbility.AbilityAction.RIGHT_CLICK_ALL, getItemAbilityExecutable(), 30, 30));
 
             return abilities;
         }
@@ -410,6 +413,19 @@ public class SuperItemRegistry{
                 Player p = e.getPlayer();
                 World w = p.getWorld();
                 Location loc;
+                boolean allowed = true;
+                if(plugin.isUsingWorldGuard){
+                    LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
+                    com.sk89q.worldedit.util.Location guardLoc = BukkitAdapter.adapt(p.getLocation());
+                    RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                    RegionQuery query = container.createQuery();
+                    allowed = query.testState(guardLoc, localPlayer, Flags.BUILD);
+                }
+                if(!allowed){
+                    Util.sendMessage(p, "You cannot use this item in a worldguard region!");
+                    return;
+                }
+
                 if(action.equals(Action.RIGHT_CLICK_BLOCK)){
                     loc = e.getClickedBlock().getLocation();
                 } else if (action.equals(Action.RIGHT_CLICK_AIR)){
@@ -438,7 +454,19 @@ public class SuperItemRegistry{
                             crystal.remove();
                             w.createExplosion(crystal.getLocation(), 3);
                             for (FallingBlock fallingblock: fBlocks) {
-                                fallingblock.setGravity(true);
+                                boolean allowed = true;
+                                if(plugin.isUsingWorldGuard){
+                                    LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
+                                    com.sk89q.worldedit.util.Location guardLoc = BukkitAdapter.adapt(crystal.getLocation());
+                                    RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                                    RegionQuery query = container.createQuery();
+                                    allowed = query.testState(guardLoc, localPlayer, Flags.BUILD);
+                                }
+                                if(!allowed){
+                                    fallingblock.remove();
+                                } else {
+                                    fallingblock.setGravity(true);
+                                }
                             }
                             for (LivingEntity entity : entities){
                                 entity.setGravity(true);
@@ -457,6 +485,7 @@ public class SuperItemRegistry{
                             RegionQuery query = container.createQuery();
                             allowed = query.testState(guardLoc, localPlayer, Flags.BUILD);
                         }
+
                         if (!(block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD)) && allowed) {
                             FallingBlock fBlock = w.spawnFallingBlock(block.getLocation(), block.getBlockData());
                             fBlock.setVelocity((fBlock.getLocation().toVector().subtract(crystal.getLocation().toVector()).multiply(-10).normalize()));
@@ -502,6 +531,94 @@ public class SuperItemRegistry{
         }
     }
 
+    private class FieryEmberStaff implements SuperItemInterface{
+
+        @Override
+        public String getName() {
+            return "Fiery Ember Staff";
+        }
+
+        @Override
+        public String getId() {
+            return "fiery_ember_staff";
+        }
+
+        @Override
+        public BasicItem.Rarity getRarity() {
+            return BasicItem.Rarity.UNCOMMON;
+        }
+
+        @Override
+        public SuperItem.Type getType() {
+            return BasicItem.Type.STAFF;
+        }
+
+        @Override
+        public List<ItemAbility> getItemAbilities() {
+            List<ItemAbility> abilities = new ArrayList<>();
+            abilities.add(new ItemAbility("Fiery Embers", "fiery_ember_shoot", getAbilityLore(1), ItemAbility.AbilityAction.RIGHT_CLICK_ALL, getShootExecutable(), 5, 0));
+            return abilities;
+        }
+
+        private Executable getShootExecutable() {
+            Executable exec = (PlayerInteractEvent e) -> {
+                Player p = e.getPlayer();
+//                World w = p.getWorld();
+//                Location loc;
+//
+//                boolean allowed = true;
+//                if(plugin.isUsingWorldGuard){
+//                    LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
+//                    com.sk89q.worldedit.util.Location guardLoc = BukkitAdapter.adapt(p.getLocation());
+//                    RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+//                    RegionQuery query = container.createQuery();
+//                    allowed = query.testState(guardLoc, localPlayer, Flags.BUILD);
+//                }
+//                if(!allowed){
+//                    Util.sendMessage(p, "You cannot use this item in a worldguard region!");
+//                    return;
+//                }
+
+                Location eyeLoc = p.getEyeLocation();
+
+                Fireball f = (Fireball) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.FIREBALL);
+                f.setVelocity(eyeLoc.getDirection().normalize());
+                f.setMetadata("dmgEnv", new FixedMetadataValue(plugin, false));
+                f.setYield(1f);
+
+
+            };
+            return exec;
+        }
+
+        private List<String> getAbilityLore(int arg){
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "Shoot a " + ChatColor.RED + "fireball" + ChatColor.GRAY + " that explodes");
+            lore.add(ChatColor.GRAY + "on impact. Fiery Explosions!");
+            return lore;
+        }
+
+        @Override
+        public ItemMeta getItemMeta() {
+            ItemStack item = new ItemStack(getMaterial());
+            ItemMeta meta = item.getItemMeta();
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 5, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "A fiery rod, taken from " + ChatColor.RED + "Blaziel" + ChatColor.GRAY + " himself.");
+            meta.setLore(lore);
+
+
+            return meta;
+        }
+
+
+        @Override
+        public Material getMaterial() {
+            return Material.BLAZE_ROD;
+        }
+    }
+
     private class DarkEmberStaff implements SuperItemInterface{
 
         @Override
@@ -527,13 +644,42 @@ public class SuperItemRegistry{
         @Override
         public List<ItemAbility> getItemAbilities() {
             List<ItemAbility> abilities = new ArrayList<>();
-            abilities.add(new ItemAbility("Attune", "ember_attune", getAbilityLore(0), ItemAbility.AbilityAction.LEFT_CLICK_ALL, getSwapExecutable(), 0));
-            abilities.add(new ItemAbility("Attune", "ember_attune", getAbilityLore(0), ItemAbility.AbilityAction.LEFT_CLICK_ALL, getSwapExecutable(), 0));
+            abilities.add(new ItemAbility("Attune", "dark_ember_attune", getAbilityLore(0), ItemAbility.AbilityAction.LEFT_CLICK_ALL, getSwapExecutable(), 0, 0));
+            abilities.add(new ItemAbility("Dark Embers", "dark_ember_shoot", getAbilityLore(1), ItemAbility.AbilityAction.RIGHT_CLICK_ALL, getShootExecutable(), 10, 0));
             return abilities;
         }
 
         private Executable getSwapExecutable() {
             Executable exec = (PlayerInteractEvent e) -> {
+                Player p = e.getPlayer();
+                ItemStack item = e.getItem();
+                ItemMeta meta = item.getItemMeta();
+                PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
+                String attunement = dataContainer.get(new NamespacedKey(plugin, "ember_attunement"), PersistentDataType.STRING);
+                String message = ChatColor.RED + "Unknown Attunement";
+                String newAttunement = "attunement_unknown";
+                if(attunement.equalsIgnoreCase("blazeborn")){
+                    message = ChatColor.DARK_GRAY + "Darksoul";
+                    newAttunement = "darksoul";
+                } else if (attunement.equalsIgnoreCase("darksoul")){
+                    message = ChatColor.GOLD + "Blazeborn";
+                    newAttunement = "blazeborn";
+                }
+
+                dataContainer.set(new NamespacedKey(plugin, "ember_attunement"), PersistentDataType.STRING, newAttunement);
+
+                Util.sendActionBar(p, message);
+                p.playSound(p.getLocation(), Sound.BLOCK_STONE_BUTTON_CLICK_OFF, 1, 1f);
+
+                // Update lore
+                List<String> lore = item.getItemMeta().getLore();
+                for (String lorestring: lore) {
+                    if(lorestring.startsWith(ChatColor.AQUA + "Attunement: ")){
+                        lore.set(lore.indexOf(lorestring), ChatColor.AQUA + "Attunement: " + message);
+                    }
+                }
+                meta.setLore(lore);
+                item.setItemMeta(meta);
 
             };
             return exec;
@@ -541,27 +687,82 @@ public class SuperItemRegistry{
 
         private Executable getShootExecutable() {
             Executable exec = (PlayerInteractEvent e) -> {
+                Player p = e.getPlayer();
+                World w = p.getWorld();
+                Location loc;
+//
+//                boolean allowed = true;
+//                if(plugin.isUsingWorldGuard){
+//                    LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
+//                    com.sk89q.worldedit.util.Location guardLoc = BukkitAdapter.adapt(p.getLocation());
+//                    RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+//                    RegionQuery query = container.createQuery();
+//                    allowed = query.testState(guardLoc, localPlayer, Flags.BUILD);
+//                }
+//                if(!allowed){
+//                    Util.sendMessage(p, "You cannot use this item in a worldguard region!");
+//                    return;
+//                }
+
+                Location eyeLoc = p.getEyeLocation();
+
+                ItemStack item = e.getItem();
+                ItemMeta meta = item.getItemMeta();
+                PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
+                String attunement = dataContainer.get(new NamespacedKey(plugin, "ember_attunement"), PersistentDataType.STRING);
+                if(attunement.equalsIgnoreCase("blazeborn")){
+                    Fireball f = (Fireball) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.FIREBALL);
+                    f.setVelocity(eyeLoc.getDirection().normalize());
+                    f.setMetadata("dmgEnv", new FixedMetadataValue(plugin, false));
+                    f.setYield(2f);
+                } else if (attunement.equalsIgnoreCase("darksoul")){
+                    WitherSkull f = (WitherSkull) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.WITHER_SKULL);
+                    f.setVelocity(eyeLoc.getDirection().normalize());
+                    f.setMetadata("dmgEnv", new FixedMetadataValue(plugin, false));
+                    f.setYield(2f);
+                }
+
 
             };
             return exec;
         }
 
         private List<String> getAbilityLore(int arg){
+            List<String> lore = new ArrayList<>();
             if(arg == 0){
-                return
+                lore.add(ChatColor.GRAY + "Changes the " + ChatColor.AQUA + "attunement" + ChatColor.GRAY + " of this staff,");
+                lore.add(ChatColor.GRAY + "changing the domain it draws power from.");
+                lore.add("");
+                lore.add(ChatColor.GRAY + "Swap between " + ChatColor.GOLD + "Blazeborn" + ChatColor.GRAY + " and " + ChatColor.DARK_GRAY + "Darksoul");
             } else {
-
+                lore.add(ChatColor.GRAY + "Shoot a projectile based on the " + ChatColor.AQUA + "attunement");
+                lore.add(ChatColor.GRAY + "of this weapon. Dark magic is cool, right?");
+                lore.add("");
+                lore.add(ChatColor.AQUA + "Attunement: " + ChatColor.GOLD + "Blazeborn");
             }
+            return lore;
         }
 
         @Override
         public ItemMeta getItemMeta() {
-            return null;
+            ItemStack item = new ItemStack(getMaterial());
+            ItemMeta meta = item.getItemMeta();
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 5, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "A fiery rod, taken from " + ChatColor.RED + "Blaziel" + ChatColor.GRAY + " himself.");
+            meta.setLore(lore);
+
+            PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
+            dataContainer.set(new NamespacedKey(plugin, "ember_attunement"), PersistentDataType.STRING, "blazeborn");
+
+            return meta;
         }
+
 
         @Override
         public Material getMaterial() {
-            return null;
+            return Material.BLAZE_ROD;
         }
     }
 }

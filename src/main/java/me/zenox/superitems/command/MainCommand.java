@@ -8,6 +8,7 @@ import me.zenox.superitems.items.SuperItemRegistry;
 import me.zenox.superitems.tabcompleter.MainTabCompleter;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -58,7 +59,7 @@ public class MainCommand implements CommandExecutor {
                         amount = 1;
                     }
                     p.getInventory().addItem(itemtype.getItemStack((int) amount));
-                    Util.sendMessage(p, "You have been given x" + amount + " [" + itemtype.getDisplayName() + "]");
+                    Util.sendMessage(p, "You have been given x" + amount + " [" + itemtype.getDisplayName() + ChatColor.GOLD + "]");
                     return true;
                 }
             case "removedatacooldown":

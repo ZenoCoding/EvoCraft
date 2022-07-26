@@ -3,6 +3,7 @@ package me.zenox.superitems;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import me.zenox.superitems.command.MainCommand;
+import me.zenox.superitems.events.OtherEvent;
 import me.zenox.superitems.events.PlayerUseItemEvent;
 import me.zenox.superitems.items.SuperItemRegistry;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,6 +33,7 @@ public final class SuperItems extends JavaPlugin {
         registry = new SuperItemRegistry(plugin);
 
         new PlayerUseItemEvent(plugin);
+        new OtherEvent(plugin);
         new MainCommand(plugin);
     }
 
