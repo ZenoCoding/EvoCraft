@@ -6,33 +6,42 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Util {
-    public static void sendMessage(Player p, String message){
+    public static void sendMessage(Player p, String message) {
         sendMessage(p, message, true);
     }
 
-    public static void sendMessage(Player p, String message, boolean prefix){
+    public static void sendMessage(Player p, String message, boolean prefix) {
         p.sendMessage(prefix ? ChatColor.GOLD + "[SuperItems] " + message : message);
     }
 
-    public static void sendActionBar(Player p, String message){
+    public static void sendMessage(CommandSender p, String message) {
+        sendMessage(p, message, true);
+    }
+
+    public static void sendMessage(CommandSender p, String message, boolean prefix) {
+        p.sendMessage(prefix ? ChatColor.GOLD + "[SuperItems] " + message : message);
+    }
+
+    public static void sendActionBar(Player p, String message) {
         p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
     }
 
-    public static void logToConsole(String message){
+    public static void logToConsole(String message) {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SuperItems] " + message);
     }
 
-    public static void broadcast(String message){
+    public static void broadcast(String message) {
         broadcast(message, true);
     }
 
-    public static void broadcast(String message, Boolean prefix){
+    public static void broadcast(String message, Boolean prefix) {
         Bukkit.broadcastMessage(prefix ? ChatColor.GOLD + "[SuperItems] " + message : message);
     }
 

@@ -2,49 +2,46 @@ package me.zenox.superitems.tabcompleter;
 
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.items.BasicItem;
-import me.zenox.superitems.items.SuperItem;
-import me.zenox.superitems.util.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class MainTabCompleter implements TabCompleter {
-    List<String> arguments = new ArrayList<String>();
+    List<String> arguments = new ArrayList();
     List<String> items = new ArrayList<>();
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
         if (arguments.isEmpty()) {
             arguments.add("give");
+            arguments.add("loottable");
         }
 
-        if(items.isEmpty()){
-            for (Map.Entry<String, BasicItem> entry: SuperItems.getPlugin().registry.getRegisteredItems().entrySet()) {
-                items.add(entry.getKey());
+        if (items.isEmpty()) {
+            for (BasicItem item : SuperItems.getPlugin().registry.getRegisteredItems()) {
+                items.add(item.getId());
             }
         }
 
         List<String> results = new ArrayList<String>();
         if (args.length == 1) {
             for (String a : arguments) {
-                if(a.toLowerCase().startsWith(args[0].toLowerCase())) {
+                if (a.toLowerCase().startsWith(args[0].toLowerCase())) {
                     results.add(a);
                 }
             }
             return results;
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
             for (String b : items) {
-                if(b.toLowerCase().startsWith(args[1].toLowerCase())) {
+                if (b.toLowerCase().startsWith(args[2].toLowerCase())) {
                     results.add(b);
                 }
             }
             return results;
-        } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
+        } else if (args.length == 4 && args[0].equalsIgnoreCase("give")) {
             results.add("<amount>");
             return results;
         }

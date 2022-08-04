@@ -6,7 +6,7 @@
 
     <groupId>me.zenox</groupId>
     <artifactId>superitems</artifactId>
-    <version>0.0.1-BETA</version>
+    <version>0.0.5-BETA</version>
     <packaging>jar</packaging>
 
     <name>SuperItems</name>
