@@ -63,7 +63,10 @@ public class ItemRegistry {
     public static final ComplexItem CORRUPTED_TOTEM_POLE = registerItem(new CorruptedTotemPole());
     public static final ComplexItem WARPED_CUBE = registerItem(new WarpedCube());
     public static final ComplexItem VOID_STONE = registerItem(new VoidStone());
+
+    public static final ComplexItem DEV_STICK = registerItem(new DevStick());
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
+
 
     private static ComplexItem registerItem(ComplexItem item) {
         registeredItems.add(item);
@@ -84,6 +87,7 @@ public class ItemRegistry {
                     Bukkit.removeRecipe(((Keyed) recipe).getKey());
                     Bukkit.addRecipe(recipe);
                 } else { /**Util.logToConsole("Found duplicate recipe that wasn't keyed, skipping.");**/}
+
             }
         }
         return registeredRecipes;

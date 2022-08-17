@@ -12,9 +12,9 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.List;
 import java.util.Map;
 
-public class ToyStick extends ComplexItem {
-    public ToyStick() {
-        super("Magic Toy Stick", "magic_toy_stick", Rarity.EPIC, Type.SUPERITEM, Material.STICK, Map.of(), List.of(new MagicMissile(6)));
+public class DevStick extends ComplexItem {
+    public DevStick() {
+        super("Dev Stick", "dev_stick", Rarity.LEGENDARY, Type.SUPERITEM, Material.STICK, Map.of(), List.of(new MagicMissile(50)));
 
         List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Magical.");
 
@@ -25,13 +25,6 @@ public class ToyStick extends ComplexItem {
 
     @Override
     public List<Recipe> getRecipes() {
-        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(3));
-        recipe.shape("DGD", "FSF", "TST");
-        recipe.setIngredient('D', Material.DRAGON_BREATH);
-        recipe.setIngredient('G', Material.GLOWSTONE_DUST);
-        recipe.setIngredient('F', Material.FIRE_CHARGE);
-        recipe.setIngredient('S', Material.DEBUG_STICK);
-        recipe.setIngredient('T', Material.TNT);
-        return List.of(recipe);
+        return super.getRecipes();
     }
 }
