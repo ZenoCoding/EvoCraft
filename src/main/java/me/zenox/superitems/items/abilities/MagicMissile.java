@@ -32,6 +32,7 @@ public class MagicMissile extends ItemAbility {
         this.addLineToLore(ChatColor.GRAY + "on impact and deals massive" + ChatColor.RED + " damage.");
         this.addLineToLore("");
         this.addLineToLore(ChatColor.GRAY + "20% chance for the item to " + ChatColor.GOLD + "combust " + ChatColor.GRAY + "and dissapear.");
+        
         this.explosionpower = explosionpower;
 
     }
