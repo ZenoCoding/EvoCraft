@@ -74,7 +74,7 @@ public class MagicMissile extends ItemAbility {
         trident.setGravity(false);
         trident.setPierceLevel(127);
 
-        int explosionPower = 6;
+        int explosionPower = 100;
 
         new BukkitRunnable() {
             int count = 0;
