@@ -24,13 +24,16 @@ import java.util.Random;
 import static me.zenox.superitems.util.Util.getNearbyBlocks;
 
 public class MagicMissile extends ItemAbility {
-    public MagicMissile() {
+    private final int explosionpower;
+    public MagicMissile(int explosionpower) {
         super("Magic Missile", "magic_missile", AbilityAction.RIGHT_CLICK_ALL, 0, 0);
 
         this.addLineToLore(ChatColor.GRAY + "Shoots a magic missile that explodes");
         this.addLineToLore(ChatColor.GRAY + "on impact and deals massive" + ChatColor.RED + " damage.");
         this.addLineToLore("");
         this.addLineToLore(ChatColor.GRAY + "20% chance for the item to " + ChatColor.GOLD + "combust " + ChatColor.GRAY + "and dissapear.");
+        this.explosionpower = explosionpower;
+
     }
 
     @Override
@@ -74,7 +77,7 @@ public class MagicMissile extends ItemAbility {
         trident.setGravity(false);
         trident.setPierceLevel(127);
 
-        int explosionPower = 6;
+        int explosionPower = this.explosionpower;
 
         new BukkitRunnable() {
             int count = 0;
