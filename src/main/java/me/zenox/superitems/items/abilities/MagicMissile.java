@@ -24,17 +24,21 @@ import java.util.Random;
 import static me.zenox.superitems.util.Util.getNearbyBlocks;
 
 public class MagicMissile extends ItemAbility {
+
+    private final boolean combustion;
     private final int explosionpower;
-    public MagicMissile(int explosionpower) {
+    public MagicMissile(int explosionpower,boolean combustion) {
         super("Magic Missile", "magic_missile", AbilityAction.RIGHT_CLICK_ALL, 0, 0);
+        this.explosionpower = explosionpower;
+        this.combustion = combustion;
 
         this.addLineToLore(ChatColor.GRAY + "Shoots a magic missile that explodes");
         this.addLineToLore(ChatColor.GRAY + "on impact and deals massive" + ChatColor.RED + " damage.");
-        this.addLineToLore("");
-        this.addLineToLore(ChatColor.GRAY + "20% chance for the item to " + ChatColor.GOLD + "combust " + ChatColor.GRAY + "and dissapear.");
-        
-        this.explosionpower = explosionpower;
 
+        if (combustion == true) {
+            this.addLineToLore("");
+            this.addLineToLore(ChatColor.GRAY + "20% chance for the item to " + ChatColor.GOLD + "combust " + ChatColor.GRAY + "and dissapear.");
+        }
     }
 
     @Override
@@ -61,8 +65,8 @@ public class MagicMissile extends ItemAbility {
             }
         }
 
-        // 50% chance to remove an item from their hand
-        if (r.nextInt(5) == 0) {
+        // 20% chance to remove an item from their hand
+        if (r.nextInt(5) == 0 && this.combustion == true) {
             e.getItem().setAmount(e.getItem().getAmount() - 1);
             Util.sendMessage(p, ChatColor.GOLD + "Woah! Your " + ChatColor.ITALIC + "Magic Toy Stick " + ChatColor.GOLD + "combusted in your hand!", false);
             p.damage(5, p);
