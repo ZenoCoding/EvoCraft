@@ -12,7 +12,6 @@ public final class SuperItems extends JavaPlugin {
 
     private static SuperItems plugin;
 
-    public ItemRegistry registry;
     public boolean isUsingWorldGuard;
 
     public static SuperItems getPlugin() {
@@ -24,6 +23,9 @@ public final class SuperItems extends JavaPlugin {
         plugin = this;
         plugin.getLogger().info("SuperItems v" + plugin.getDescription().getVersion() + " loaded.");
 
+        //ItemRegistry.registerItems();
+        ItemRegistry.registerRecipes();
+
         // Dependency check
         try {
             WorldGuard.getInstance();
@@ -33,9 +35,6 @@ public final class SuperItems extends JavaPlugin {
         } catch (NoClassDefFoundError e) {
             this.isUsingWorldGuard = false;
         }
-
-        registry = new ItemRegistry(plugin);
-        registry.addRecipes();
 
         new PlayerUseItemEvent(plugin);
         new OtherEvent(plugin);

@@ -1,6 +1,7 @@
 package me.zenox.superitems.items.basicitems;
 
-import me.zenox.superitems.items.BasicItem;
+import me.zenox.superitems.items.ComplexItem;
+import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class GardenerSapling extends BasicItem {
+public class GardenerSapling extends ComplexItem {
     public GardenerSapling() {
         super("Gardener's Sapling", "gardener_sapling", Rarity.VERY_SPECIAL, Type.MISC, Material.OAK_SAPLING, Map.of());
 

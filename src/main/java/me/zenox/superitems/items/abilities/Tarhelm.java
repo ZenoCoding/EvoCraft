@@ -3,6 +3,7 @@ package me.zenox.superitems.items.abilities;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -16,7 +17,8 @@ public class Tarhelm extends ItemAbility {
     }
 
     @Override
-    public void runExecutable(PlayerInteractEvent e) {
+    public void runExecutable(PlayerEvent event) {
+        PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Player p = e.getPlayer();
         p.playSound(p.getLocation(), Sound.ENTITY_RAVAGER_ATTACK, 1, 0);
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 2));

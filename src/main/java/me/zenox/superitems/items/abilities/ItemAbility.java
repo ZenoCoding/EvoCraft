@@ -1,99 +1,44 @@
 package me.zenox.superitems.items.abilities;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
-import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.util.Util;
-import org.bukkit.ChatColor;
-import org.bukkit.NamespacedKey;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-public class ItemAbility {
-    private final String name;
-    private final String id;
+public class ItemAbility extends Ability{
     private final AbilityAction action;
-    private final int manaCost;
-    private final int cooldown;
-    private List<String> lore = new ArrayList<>();
 
     public ItemAbility(String name, String id, AbilityAction action, int manaCost, int cooldown) {
-        this.name = name;
+        super(name, id, manaCost, cooldown, PlayerInteractEvent.class, Slot.EITHER_HAND);
         this.action = action;
-        this.cooldown = cooldown;
-        this.manaCost = manaCost;
-        this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public List<String> addLineToLore(String line){
-        lore.add(line);
-        return lore;
-    }
-
-    public List<String> getLore() {
-        return lore;
+    public ItemAbility(String name, String id, AbilityAction action, int manaCost, int cooldown, Slot slot) {
+        super(name, id, manaCost, cooldown, PlayerInteractEvent.class, slot);
+        this.action = action;
     }
 
     public AbilityAction getAction() {
         return action;
     }
 
-    public void useAbility(PlayerInteractEvent e) {
-        if (action.isAction(e.getAction(), e.getPlayer().isSneaking())) {
-
-            PersistentDataContainer container = e.getPlayer().getPersistentDataContainer();
-            NamespacedKey cooldownKey = new NamespacedKey(SuperItems.getPlugin(), getId() + "_cooldown");
-            Long cooldown = container.get(cooldownKey, PersistentDataType.LONG);
-
-
-            if (cooldown != null && Math.ceil((cooldown - System.currentTimeMillis()) / 1000) > 0) {
-                Util.sendMessage(e.getPlayer(), "This ability is on cooldown for " + ChatColor.RED + Math.ceil((cooldown - System.currentTimeMillis()) / 1000) + " seconds");
-                return;
-            }
-
-            if (this.manaCost > 0) {
-                int resultingMana = ((int) AureliumAPI.getMana(e.getPlayer())) - manaCost;
-                if (resultingMana < 0) {
-                    Util.sendActionBar(e.getPlayer(), ChatColor.RED + "" + ChatColor.BOLD + "NOT ENOUGH MANA");
-                    return;
-                } else {
-                    AureliumAPI.setMana(e.getPlayer(), AureliumAPI.getMana(e.getPlayer()) - manaCost);
-                }
-            }
-
-            AureliumAPI.getPlugin().getActionBar().setPaused(e.getPlayer(), 20);
-            String manaMessage = this.manaCost > 0 ? ChatColor.AQUA + "-" + manaCost + " Mana " + "(" + ChatColor.GOLD + name + ChatColor.AQUA + ")" : ChatColor.GOLD + "Used " + name;
-            Util.sendActionBar(e.getPlayer(), manaMessage);
-
-            this.runExecutable(e);
-
-            container.set(cooldownKey, PersistentDataType.LONG, System.currentTimeMillis() + (getCooldown() * 1000));
+    @Override
+    public boolean checkEvent(PlayerEvent e) {
+        if(!super.checkEvent(e)) return false;
+        if (!action.isAction(((PlayerInteractEvent) e).getAction(), e.getPlayer().isSneaking())) {
+            return false;
         }
+        return true;
     }
 
-    protected void runExecutable(PlayerInteractEvent e) {
-        Util.sendMessage(e.getPlayer(), "Used the " + this.id + " ability");
-    }
+//    public void useItemAbility(PlayerInteractEvent e){
+//        super.useAbility(e);
+//    }
 
-    public int getCooldown() {
-        return this.cooldown;
-    }
-
-    public int getManaCost() {
-        return this.manaCost;
-    }
-
-    public String getId() {
-        return this.id;
+    @Override
+    protected void runExecutable(PlayerEvent e) {
+        super.runExecutable(e);
     }
 
     public enum AbilityAction {
@@ -116,18 +61,17 @@ public class ItemAbility {
         }
 
         public boolean isAction(Action action, boolean isCrouching) {
-            List<Action> leftClickActions = new ArrayList<>();
-            leftClickActions.add(Action.LEFT_CLICK_AIR);
-            leftClickActions.add(Action.LEFT_CLICK_BLOCK);
-
-            List<Action> rightClickActions = new ArrayList<>();
-            rightClickActions.add(Action.RIGHT_CLICK_AIR);
-            rightClickActions.add(Action.RIGHT_CLICK_BLOCK);
-
             if (this.requiresShift && !isCrouching) return false;
 
             return Arrays.stream(actionList).anyMatch(action::equals);
 
         }
+    }
+
+    /**
+     * Represents some built-in executables
+     */
+    static {
+
     }
 }

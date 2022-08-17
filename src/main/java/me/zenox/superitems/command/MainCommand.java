@@ -2,22 +2,22 @@ package me.zenox.superitems.command;
 
 import com.google.common.primitives.Ints;
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.BasicItem;
+import me.zenox.superitems.items.ComplexItem;
+import me.zenox.superitems.items.ItemRegistry;
+import me.zenox.superitems.loot.LootTableRegistry;
 import me.zenox.superitems.loot.LootTable;
-import me.zenox.superitems.loot.LootTableEntry;
 import me.zenox.superitems.tabcompleter.MainTabCompleter;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class MainCommand implements CommandExecutor {
 
@@ -54,7 +54,7 @@ public class MainCommand implements CommandExecutor {
                     return true;
                 }
 
-                BasicItem itemtype = plugin.registry.getBasicItemFromId(args[2]);
+                ComplexItem itemtype = ItemRegistry.getBasicItemFromId(args[2]);
 
                 if (itemtype == null) {
                     Util.sendMessage(p, "This item could not be found!");
@@ -86,16 +86,6 @@ public class MainCommand implements CommandExecutor {
                     return true;
                 }
 
-                List<LootTable> lootTableList = new ArrayList();
-                lootTableList.add(new LootTable("blaziel", List.of(
-                        new LootTableEntry(plugin.registry.getBasicItemFromId("dark_skull").getItemStack(1), 1, 1, 0.01),
-                        new LootTableEntry(plugin.registry.getBasicItemFromId("burning_ashes").getItemStack(1), 2, 4, 0.07),
-                        new LootTableEntry(plugin.registry.getBasicItemFromId("purified_magma_distillate").getItemStack(1), 1, 2, 0.1),
-                        new LootTableEntry(plugin.registry.getBasicItemFromId("enchanted_blaze_rod").getItemStack(1), 1, 3, 0.4),
-                        new LootTableEntry(plugin.registry.getBasicItemFromId("enchanted_magma_block").getItemStack(1), 1, 15, 0.5),
-                        new LootTableEntry(new ItemStack(Material.BLAZE_ROD), 5, 32, 1)
-                )));
-
                 int threatlevel;
 
                 if (args.length < 4 || Ints.tryParse(args[3]) == null) {
@@ -104,13 +94,66 @@ public class MainCommand implements CommandExecutor {
                     threatlevel = Ints.tryParse(args[3]);
                 }
 
-                for (LootTable lootTable : lootTableList) {
+                for (LootTable lootTable : LootTableRegistry.lootTableList) {
                     if (args[2].equalsIgnoreCase(lootTable.getId())) {
                         lootTable.openLootGUI(sender.getServer().getPlayer(args[1]), threatlevel);
                         return true;
                     }
                 }
+                break;
+            case "dropitematplayer":
 
+                if (args.length < 2 || sender.getServer().getPlayer(args[1]) == null) {
+                    Util.sendMessage(sender, "Please specify a valid user to drop an item at.");
+                    return true;
+                }
+
+                Player dropgivento = sender.getServer().getPlayer(args[1]);
+
+                if (args.length < 3) {
+                    Util.sendMessage(sender, "Please specify a item to drop.");
+                    return true;
+                }
+
+                ComplexItem itemtypetodrop = ItemRegistry.getBasicItemFromId(args[2]);
+
+                if (itemtypetodrop == null) {
+                    Util.sendMessage(sender, "This item could not be found!");
+                } else {
+                    Object amount;
+                    if (args.length >= 4) {
+                        amount = Ints.tryParse(args[3]);
+                        if (amount == null) {
+                            Util.sendMessage(sender, args[3] + " is not a valid integer! Please specify an integer for argument <amount>.");
+                            return true;
+                        }
+                    } else {
+                        amount = 1;
+                    }
+                    List<String> argsection = args.length > 4 ? List.of(Arrays.copyOfRange(args, 5, args.length)) : new ArrayList<>();
+
+                    dropgivento.getWorld().dropItemNaturally(dropgivento.getLocation(), itemtypetodrop.getItemStackWithData((int) amount, argsection));
+                    Util.sendMessage(sender, "You gave " + dropgivento.getDisplayName() + " x" + amount + " [" + itemtypetodrop.getDisplayName() + ChatColor.GOLD + "]");
+                }
+                break;
+            case "droploottable":
+                if (args.length < 2 || sender.getServer().getEntity(UUID.fromString(args[1])) == null) {
+                    Util.sendMessage(sender, "Please specify a valid entity to give a loot table for.");
+                    return true;
+                }
+
+                if (args.length < 3) {
+                    Util.sendMessage(sender, "Please specify a valid loot table.");
+                    return true;
+                }
+
+                for (LootTable lootTable : LootTableRegistry.lootTableList) {
+                    if (args[2].equalsIgnoreCase(lootTable.getId())) {
+                        lootTable.dropLoot(sender.getServer().getEntity(UUID.fromString(args[1])).getLocation(), 1);
+                        return true;
+                    }
+                }
+                return false;
             default:
                 Util.sendMessage(sender, "SuperItems Help Page.");
                 break;

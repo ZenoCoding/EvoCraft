@@ -2,8 +2,7 @@ package me.zenox.superitems.items.superitems;
 
 import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.BasicItem;
-import me.zenox.superitems.items.SuperItem;
+import me.zenox.superitems.items.ComplexItem;
 import me.zenox.superitems.items.abilities.EmberAttune;
 import me.zenox.superitems.items.abilities.EmberShoot;
 import org.bukkit.ChatColor;
@@ -21,9 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class DarkEmberStaff extends SuperItem {
+import static me.zenox.superitems.items.ItemRegistry.*;
+
+public class DarkEmberStaff extends ComplexItem {
     public DarkEmberStaff() {
-        super("Dark Ember Staff", "dark_ember_staff", Rarity.RARE, Type.STAFF, Material.BLAZE_ROD, true, 1, Map.of(Stats.WISDOM, 125d, Stats.STRENGTH, -75d), List.of(new EmberAttune(), new EmberShoot()));
+        super("Dark Ember Staff", "dark_ember_staff", Rarity.RARE, Type.STAFF, Material.BLAZE_ROD, Map.of(Stats.WISDOM, 100d, Stats.STRENGTH, -100d), List.of(new EmberAttune(), new EmberShoot()));
 
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 5, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -37,13 +38,13 @@ public class DarkEmberStaff extends SuperItem {
     }
 
     @Override
-    public List<Recipe> getRecipes(List<BasicItem> registeredItems) {
+    public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
         recipe.shape("RWR", "PSP", "MPM");
-        recipe.setIngredient('S', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("fiery_ember_staff").getItemStack(1)));
-        recipe.setIngredient('P', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("molten_powder").getItemStack(1)));
-        recipe.setIngredient('M', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("purified_magma_distillate").getItemStack(1)));
-        recipe.setIngredient('W', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("dark_skull").getItemStack(1)));
+        recipe.setIngredient('S', new RecipeChoice.ExactChoice(FIERY_EMBER_STAFF.getItemStack(1)));
+        recipe.setIngredient('P', new RecipeChoice.ExactChoice(MOLTEN_POWDER.getItemStack(1)));
+        recipe.setIngredient('M', new RecipeChoice.ExactChoice(PURIFIED_MAGMA_DISTILLATE.getItemStack(1)));
+        recipe.setIngredient('W', new RecipeChoice.ExactChoice(DARK_SKULL.getItemStack(1)));
         recipe.setIngredient('R', Material.WITHER_ROSE);
         return List.of(recipe);
     }

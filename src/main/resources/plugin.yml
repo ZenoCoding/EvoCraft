@@ -11,6 +11,6 @@ depend:
 commands:
   superitems:
     aliases: [ si ]
-    description: Base command for superitems!
+    description: Base command for SuperItems
     usage: /si
     permission: superitems.admin

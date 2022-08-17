@@ -1,7 +1,6 @@
 package me.zenox.superitems.items.basicitems;
 
-import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.BasicItem;
+import me.zenox.superitems.items.ComplexItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -13,7 +12,9 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.List;
 import java.util.Map;
 
-public class AbsoluteEnderPearl extends BasicItem {
+import static me.zenox.superitems.items.ItemRegistry.COMPACTED_ENDER_PEARL;
+
+public class AbsoluteEnderPearl extends ComplexItem {
 
     public AbsoluteEnderPearl() {
         super("Absolute Ender Pearl", "ender_pearl_compact_3", Rarity.RARE, Type.MISC, Material.ENDER_PEARL, Map.of());
@@ -24,10 +25,10 @@ public class AbsoluteEnderPearl extends BasicItem {
     }
 
     @Override
-    public List<Recipe> getRecipes(List<BasicItem> registeredItems) {
+    public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
         recipe.shape("EEE", "EEE", "EEE");
-        recipe.setIngredient('E', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("ender_pearl_compact_2").getItemStack(1)));
+        recipe.setIngredient('E', new RecipeChoice.ExactChoice(COMPACTED_ENDER_PEARL.getItemStack(1)));
         return List.of(recipe);
     }
 }

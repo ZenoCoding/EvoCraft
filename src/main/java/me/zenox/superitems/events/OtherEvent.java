@@ -1,14 +1,18 @@
 package me.zenox.superitems.events;
 
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.items.ComplexItem;
+import me.zenox.superitems.items.ItemRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Explosive;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 
 import java.util.List;
@@ -49,6 +53,16 @@ public class OtherEvent implements Listener {
         List<MetadataValue> values = entity.getMetadata("temporary");
         if (!values.isEmpty() && values.get(0).asBoolean() == true) {
             entity.remove();
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void blockPlaceEvent(BlockPlaceEvent e) {
+        ItemStack item = e.getItemInHand();
+        if (item == null) return;
+        ComplexItem complexItem = ItemRegistry.getBasicItemFromItemStack(item);
+        if (complexItem != null) {
             e.setCancelled(true);
         }
     }

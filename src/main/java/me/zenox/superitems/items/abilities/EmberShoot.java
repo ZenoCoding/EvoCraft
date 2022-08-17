@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.WitherSkull;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -20,7 +21,7 @@ import org.bukkit.persistence.PersistentDataType;
 public class EmberShoot extends ItemAbility {
 
     public EmberShoot() {
-        super("Dark Embers", "dark_ember_shoot", AbilityAction.RIGHT_CLICK_ALL, 10, 0);
+        super("Dark Embers", "dark_ember_shoot", AbilityAction.RIGHT_CLICK_ALL, 25, 0);
 
         this.addLineToLore(ChatColor.GRAY + "Shoot a projectile based on the " + ChatColor.AQUA + "attunement");
         this.addLineToLore(ChatColor.GRAY + "of this weapon. Dark magic is cool, right?");
@@ -29,7 +30,8 @@ public class EmberShoot extends ItemAbility {
     }
 
     @Override
-    public void runExecutable(PlayerInteractEvent e) {
+    public void runExecutable(PlayerEvent event) {
+        PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Player p = e.getPlayer();
         World w = p.getWorld();
         Location loc;

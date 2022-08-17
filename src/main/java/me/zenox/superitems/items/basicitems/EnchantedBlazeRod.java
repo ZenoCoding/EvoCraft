@@ -2,7 +2,7 @@ package me.zenox.superitems.items.basicitems;
 
 
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.BasicItem;
+import me.zenox.superitems.items.ComplexItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -12,17 +12,17 @@ import java.util.List;
 import java.util.Map;
 
 
-public class EnchantedBlazeRod extends BasicItem {
+public class EnchantedBlazeRod extends ComplexItem {
 
     public EnchantedBlazeRod() {
-        super("Enchanted Blaze Rod", "enchanted_blaze_rod", BasicItem.Rarity.COMMON, BasicItem.Type.MISC, Material.BLAZE_ROD, Map.of());
+        super("Enchanted Blaze Rod", "enchanted_blaze_rod", ComplexItem.Rarity.COMMON, ComplexItem.Type.MISC, Material.BLAZE_ROD, Map.of());
 
         this.getMeta().addEnchant(Enchantment.FIRE_ASPECT, 2, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
     }
 
     @Override
-    public List<Recipe> getRecipes(List<BasicItem> registeredItems) {
+    public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
         recipe.shape("BBB", "BBB", "BBB");
         recipe.setIngredient('B', Material.BLAZE_ROD);

@@ -1,7 +1,7 @@
 package me.zenox.superitems.tabcompleter;
 
-import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.BasicItem;
+import me.zenox.superitems.items.ComplexItem;
+import me.zenox.superitems.items.ItemRegistry;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -18,10 +18,12 @@ public class MainTabCompleter implements TabCompleter {
         if (arguments.isEmpty()) {
             arguments.add("give");
             arguments.add("loottable");
+            arguments.add("droploottable");
+            arguments.add("dropitematplayer");
         }
 
         if (items.isEmpty()) {
-            for (BasicItem item : SuperItems.getPlugin().registry.getRegisteredItems()) {
+            for (ComplexItem item : ItemRegistry.getRegisteredItems()) {
                 items.add(item.getId());
             }
         }

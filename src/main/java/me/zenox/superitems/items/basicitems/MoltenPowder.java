@@ -1,8 +1,6 @@
 package me.zenox.superitems.items.basicitems;
 
-
-import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.BasicItem;
+import me.zenox.superitems.items.ComplexItem;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -13,7 +11,9 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.List;
 import java.util.Map;
 
-public class MoltenPowder extends BasicItem {
+import static me.zenox.superitems.items.ItemRegistry.*;
+
+public class MoltenPowder extends ComplexItem {
 
     public MoltenPowder() {
         super("Molten Powder", "molten_powder", Rarity.RARE, Type.MISC, Material.BLAZE_POWDER, Map.of());
@@ -23,12 +23,12 @@ public class MoltenPowder extends BasicItem {
     }
 
     @Override
-    public List<Recipe> getRecipes(List<BasicItem> registeredItems) {
+    public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
         recipe.shape("ABM", "BBB", "MBA");
-        recipe.setIngredient('A', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("burning_ashes").getItemStack(1)));
-        recipe.setIngredient('B', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("enchanted_blaze_rod").getItemStack(1)));
-        recipe.setIngredient('M', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("purified_magma_distillate").getItemStack(1)));
+        recipe.setIngredient('A', new RecipeChoice.ExactChoice(BURNING_ASHES.getItemStack(1)));
+        recipe.setIngredient('B', new RecipeChoice.ExactChoice(ENCHANTED_BLAZE_ROD.getItemStack(1)));
+        recipe.setIngredient('M', new RecipeChoice.ExactChoice(PURIFIED_MAGMA_DISTILLATE.getItemStack(1)));
         return List.of(recipe);
     }
 }

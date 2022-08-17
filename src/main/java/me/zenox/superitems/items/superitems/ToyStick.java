@@ -1,7 +1,6 @@
 package me.zenox.superitems.items.superitems;
 
-import me.zenox.superitems.items.BasicItem;
-import me.zenox.superitems.items.SuperItem;
+import me.zenox.superitems.items.ComplexItem;
 import me.zenox.superitems.items.abilities.MagicMissile;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,9 +12,9 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.List;
 import java.util.Map;
 
-public class ToyStick extends SuperItem {
+public class ToyStick extends ComplexItem {
     public ToyStick() {
-        super("Magic Toy Stick", "magic_toy_stick", Rarity.EPIC, Type.SUPERITEM, Material.STICK, true, 3, Map.of(), List.of(new MagicMissile()));
+        super("Magic Toy Stick", "magic_toy_stick", Rarity.EPIC, Type.SUPERITEM, Material.STICK, Map.of(), List.of(new MagicMissile()));
 
         List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Magical.");
 
@@ -25,7 +24,7 @@ public class ToyStick extends SuperItem {
     }
 
     @Override
-    public List<Recipe> getRecipes(List<BasicItem> registeredItems) {
+    public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(3));
         recipe.shape("DGD", "FSF", "TST");
         recipe.setIngredient('D', Material.DRAGON_BREATH);

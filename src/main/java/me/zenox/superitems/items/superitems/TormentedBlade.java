@@ -1,9 +1,7 @@
 package me.zenox.superitems.items.superitems;
 
 import com.archyx.aureliumskills.stats.Stats;
-import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.BasicItem;
-import me.zenox.superitems.items.SuperItem;
+import me.zenox.superitems.items.ComplexItem;
 import me.zenox.superitems.items.abilities.Tarhelm;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,9 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TormentedBlade extends SuperItem {
+import static me.zenox.superitems.items.ItemRegistry.*;
+
+public class TormentedBlade extends ComplexItem {
     public TormentedBlade() {
-        super("Tormented Blade", "tormented_blade", Rarity.LEGENDARY, Type.AXE, Material.IRON_AXE, false, 1, Map.of(Stats.STRENGTH, 50d), List.of(new Tarhelm()));
+        super("Tormented Blade", "tormented_blade", Rarity.LEGENDARY, Type.AXE, Material.IRON_AXE, Map.of(Stats.STRENGTH, 50d), List.of(new Tarhelm()));
 
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 5, true);
         List<String> lore = new ArrayList<>();
@@ -27,13 +27,13 @@ public class TormentedBlade extends SuperItem {
     }
 
     @Override
-    public List<Recipe> getRecipes(List<BasicItem> registeredItems) {
+    public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
         recipe.shape("ITI", "MBI", " B ");
-        recipe.setIngredient('B', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("enchanted_blaze_rod").getItemStack(1)));
-        recipe.setIngredient('M', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("molten_powder").getItemStack(1)));
-        recipe.setIngredient('T', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("tormented_soul").getItemStack(1)));
-        recipe.setIngredient('I', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("enchanted_iron_block").getItemStack(1)));
+        recipe.setIngredient('B', new RecipeChoice.ExactChoice(ENCHANTED_BLAZE_ROD.getItemStack(1)));
+        recipe.setIngredient('M', new RecipeChoice.ExactChoice(MOLTEN_POWDER.getItemStack(1)));
+        recipe.setIngredient('T', new RecipeChoice.ExactChoice(TORMENTED_SOUL.getItemStack(1)));
+        recipe.setIngredient('I', new RecipeChoice.ExactChoice(ENCHANTED_IRON_BLOCK.getItemStack(1)));
         return List.of(recipe);
     }
 }

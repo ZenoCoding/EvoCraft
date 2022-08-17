@@ -8,17 +8,17 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.util.Geo;
 import me.zenox.superitems.util.Util;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,8 @@ public class SoulRift extends ItemAbility {
     }
 
     @Override
-    public void runExecutable(PlayerInteractEvent e) {
+    public void runExecutable(PlayerEvent event) {
+        PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Action action = e.getAction();
         Player p = e.getPlayer();
         World w = p.getWorld();
@@ -53,6 +54,8 @@ public class SoulRift extends ItemAbility {
             return;
         }
 
+        e.setCancelled(true);
+
         if (action.equals(Action.RIGHT_CLICK_BLOCK)) {
             loc = e.getClickedBlock().getLocation();
         } else if (action.equals(Action.RIGHT_CLICK_AIR)) {
@@ -68,13 +71,21 @@ public class SoulRift extends ItemAbility {
         crystal.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
 
         new BukkitRunnable() {
-            int count = 0;
             final List<Block> blocks = getNearbyBlocks(crystal.getLocation(), 7, 2);
             final List<FallingBlock> fBlocks = new ArrayList<>();
             final List<LivingEntity> entities = new ArrayList<>();
+            int count = 0;
 
             @Override
             public void run() {
+                // Particle Magic
+                List<Vector> dodecahedron = Geo.MakeDodecahedron(loc.toVector(), 2);
+                for(Vector v : dodecahedron){
+                    Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 187, 215), 0.5F);
+                    w.spawnParticle(Particle.REDSTONE, v.toLocation(w).add(0, 0.5+Math.sin(count)/4, 0), 1, dustOptions);
+                }
+
+
                 // At 5 seconds
 
                 if (count == 100) {

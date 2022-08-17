@@ -1,7 +1,7 @@
 package me.zenox.superitems.items.basicitems;
 
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.BasicItem;
+import me.zenox.superitems.items.ComplexItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,14 +12,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.ShapedRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TormentedSoul extends BasicItem implements Listener {
+public class TormentedSoul extends ComplexItem implements Listener {
 
     public TormentedSoul() {
         super("Tormented Soul", "tormented_soul", Rarity.RARE, Type.MISC, Material.SPAWNER, Map.of());
@@ -33,15 +31,15 @@ public class TormentedSoul extends BasicItem implements Listener {
     }
 
     @Override
-    public List<Recipe> getRecipes(List<BasicItem> registeredItems) {
+    public List<Recipe> getRecipes() {
         return List.of();
     }
 
     @EventHandler
-    public void villagerDeathEvent(EntityDeathEvent e){
-        if(e.getEntity() instanceof Villager){
+    public void villagerDeathEvent(EntityDeathEvent e) {
+        if (e.getEntity() instanceof Villager) {
             Villager v = (Villager) e.getEntity();
-            if (v.getVillagerLevel() == 5){
+            if (v.getVillagerLevel() == 5) {
                 v.getWorld().dropItemNaturally(v.getLocation(), this.getItemStack(1));
             }
         }

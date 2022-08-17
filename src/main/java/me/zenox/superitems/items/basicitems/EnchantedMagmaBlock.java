@@ -1,6 +1,6 @@
 package me.zenox.superitems.items.basicitems;
 
-import me.zenox.superitems.items.BasicItem;
+import me.zenox.superitems.items.ComplexItem;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -10,7 +10,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.List;
 import java.util.Map;
 
-public class EnchantedMagmaBlock extends BasicItem {
+public class EnchantedMagmaBlock extends ComplexItem {
 
     public EnchantedMagmaBlock() {
 
@@ -21,7 +21,7 @@ public class EnchantedMagmaBlock extends BasicItem {
     }
 
     @Override
-    public List<Recipe> getRecipes(List<BasicItem> registeredItems) {
+    public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
         recipe.shape("MMM", "MMM", "MMM");
         recipe.setIngredient('M', Material.MAGMA_BLOCK);

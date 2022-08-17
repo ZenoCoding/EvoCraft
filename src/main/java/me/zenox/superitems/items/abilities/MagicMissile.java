@@ -12,7 +12,9 @@ import me.zenox.superitems.util.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -32,10 +34,28 @@ public class MagicMissile extends ItemAbility {
     }
 
     @Override
-    protected void runExecutable(PlayerInteractEvent e) {
+    protected void runExecutable(PlayerEvent event) {
+        PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Random r = new Random();
         Player p = e.getPlayer();
         World w = p.getWorld();
+
+        LocalPlayer localPlayer;
+        com.sk89q.worldedit.util.Location guardLoc;
+        RegionContainer container;
+        RegionQuery query;
+
+        if (SuperItems.getPlugin().isUsingWorldGuard) {
+            localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
+            guardLoc = BukkitAdapter.adapt(p.getLocation());
+            container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+            query = container.createQuery();
+
+            if (!query.testState(guardLoc, localPlayer, Flags.BUILD)) {
+                Util.sendMessage(p, "You cannot use this item in a worldguard region! Flags: [BUILD]");
+                return;
+            }
+        }
 
         // 50% chance to remove an item from their hand
         if (r.nextInt(5) == 0) {
@@ -54,7 +74,7 @@ public class MagicMissile extends ItemAbility {
         trident.setGravity(false);
         trident.setPierceLevel(127);
 
-        int explosionPower = 7;
+        int explosionPower = 6;
 
         new BukkitRunnable() {
             int count = 0;
@@ -66,7 +86,7 @@ public class MagicMissile extends ItemAbility {
                 for (Entity entity :
                         trident.getNearbyEntities(2, 2, 2)) {
                     if (entity instanceof Damageable && !entity.equals(p)) {
-                        ((Damageable) entity).damage(explosionPower / 2, p);
+                        ((Damageable) entity).damage(explosionPower, p);
                     }
                 }
                 for (int i = 0; i < 5; i++) {
@@ -78,19 +98,15 @@ public class MagicMissile extends ItemAbility {
                     w.spawnParticle(Particle.SMOKE_NORMAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
                 }
 
-                LocalPlayer localPlayer;
-                com.sk89q.worldedit.util.Location guardLoc;
-                RegionContainer container;
-                RegionQuery query;
                 if (SuperItems.getPlugin().isUsingWorldGuard) {
-                    localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
-                    guardLoc = BukkitAdapter.adapt(trident.getLocation());
-                    container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-                    query = container.createQuery();
+                    LocalPlayer localPlayer2 = WorldGuardPlugin.inst().wrapPlayer(p);
+                    com.sk89q.worldedit.util.Location guardLoc2 = BukkitAdapter.adapt(trident.getLocation());
+                    RegionContainer container2 = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                    RegionQuery query2 = container2.createQuery();
 
-                    if (!query.testState(guardLoc, localPlayer, Flags.BUILD)) {
+                    if (!query2.testState(guardLoc2, localPlayer2, Flags.BUILD)) {
                         trident.remove();
-                        Util.sendMessage(p, "You cannot use this item in a worldguard region!");
+                        Util.sendMessage(p, "You cannot shoot this item into a worldguard region! Flags: [PVP]");
                         cancel();
                     }
                 }
@@ -101,28 +117,30 @@ public class MagicMissile extends ItemAbility {
                     for (Block block : blocks) {
                         if (block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD))
                             continue;
+                        if (r.nextDouble() > 0.7) continue;
                         if (SuperItems.getPlugin().isUsingWorldGuard) {
-                            localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
-                            guardLoc = BukkitAdapter.adapt(block.getLocation());
-                            container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-                            query = container.createQuery();
+                            LocalPlayer localPlayer2 = WorldGuardPlugin.inst().wrapPlayer(p);
+                            com.sk89q.worldedit.util.Location guardLoc2 = BukkitAdapter.adapt(block.getLocation());
+                            RegionContainer container2 = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                            RegionQuery query2 = container2.createQuery();
 
-                            if (!query.testState(guardLoc, localPlayer, Flags.BUILD)) {
+
+                            if (!query2.testState(guardLoc2, localPlayer2, Flags.BUILD)) {
                                 continue;
                             }
                         }
                         FallingBlock fallingBlock = w.spawnFallingBlock(block.getLocation(), block.getBlockData());
-                        fallingBlock.setVelocity(fallingBlock.getLocation().toVector().subtract(loc.toVector()).multiply(explosionPower * 2).normalize());
+                        fallingBlock.setVelocity(fallingBlock.getLocation().toVector().subtract(loc.clone().add(r.nextDouble() * 4 - 2, -2, r.nextDouble() * 4 - 2).toVector()).multiply(explosionPower * 2).normalize());
                         fallingBlock.setDropItem(false);
                         fallingBlock.setHurtEntities(true);
-                        block.breakNaturally();
+                        fallingBlock.setMetadata("temporary", new FixedMetadataValue(SuperItems.getPlugin(), true));
                     }
                     try {
                         trident.remove();
                     } catch (Exception e) {
 
                     }
-                    w.createExplosion(loc, explosionPower, false, true, p);
+                    w.createExplosion(loc, explosionPower, false, false, p);
                     cancel();
                 }
                 count++;

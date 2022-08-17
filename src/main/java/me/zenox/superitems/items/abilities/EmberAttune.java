@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,7 +26,8 @@ public class EmberAttune extends ItemAbility {
     }
 
     @Override
-    public void runExecutable(PlayerInteractEvent e) {
+    public void runExecutable(PlayerEvent event) {
+        PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Player p = e.getPlayer();
         ItemStack item = e.getItem();
         ItemMeta meta = item.getItemMeta();

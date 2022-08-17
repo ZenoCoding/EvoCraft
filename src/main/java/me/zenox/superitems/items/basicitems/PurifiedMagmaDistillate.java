@@ -1,7 +1,6 @@
 package me.zenox.superitems.items.basicitems;
 
-import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.BasicItem;
+import me.zenox.superitems.items.ComplexItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -14,7 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class PurifiedMagmaDistillate extends BasicItem {
+import static me.zenox.superitems.items.ItemRegistry.ENCHANTED_MAGMA_BLOCK;
+
+public class PurifiedMagmaDistillate extends ComplexItem {
 
     public PurifiedMagmaDistillate() {
         super("Purified Magma Distillate", "purified_magma_distillate", Rarity.UNCOMMON, Type.MISC, Material.MAGMA_CREAM, Map.of());
@@ -28,10 +29,10 @@ public class PurifiedMagmaDistillate extends BasicItem {
     }
 
     @Override
-    public List<Recipe> getRecipes(List<BasicItem> registeredItems) {
+    public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
         recipe.shape("TML", "MMM", "LMT");
-        recipe.setIngredient('M', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("enchanted_magma_block").getItemStack(1)));
+        recipe.setIngredient('M', new RecipeChoice.ExactChoice(ENCHANTED_MAGMA_BLOCK.getItemStack(1)));
         recipe.setIngredient('L', Material.LAVA_BUCKET);
         recipe.setIngredient('T', Material.GHAST_TEAR);
         return List.of(recipe);

@@ -1,8 +1,6 @@
 package me.zenox.superitems.items.superitems;
 
-import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.BasicItem;
-import me.zenox.superitems.items.SuperItem;
+import me.zenox.superitems.items.ComplexItem;
 import me.zenox.superitems.items.abilities.SoulRift;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,9 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SoulCrystal extends SuperItem {
+import static me.zenox.superitems.items.ItemRegistry.ABSOLUTE_ENDER_PEARL;
+import static me.zenox.superitems.items.ItemRegistry.ENCHANTED_BLAZE_ROD;
+
+public class SoulCrystal extends ComplexItem {
     public SoulCrystal() {
-        super("Soul Crystal", "soul_crystal", Rarity.LEGENDARY, Type.DEPLOYABLE, Material.END_CRYSTAL, true, 1, Map.of(), List.of(new SoulRift()));
+        super("Soul Crystal", "soul_crystal", Rarity.LEGENDARY, Type.DEPLOYABLE, Material.END_CRYSTAL, Map.of(), List.of(new SoulRift()));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "The void-Sphere of Life was an anti-magic device, which could absorb the");
@@ -34,12 +35,12 @@ public class SoulCrystal extends SuperItem {
     }
 
     @Override
-    public List<Recipe> getRecipes(List<BasicItem> registeredItems) {
+    public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
 
         recipe.shape("BEB", "ECE", "BEB");
-        recipe.setIngredient('B', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("enchanted_blaze_rod").getItemStack(1)));
-        recipe.setIngredient('E', new RecipeChoice.ExactChoice(SuperItems.getPlugin().registry.getBasicItemFromId("ender_pearl_compact_3").getItemStack(1)));
+        recipe.setIngredient('B', new RecipeChoice.ExactChoice(ENCHANTED_BLAZE_ROD.getItemStack(1)));
+        recipe.setIngredient('E', new RecipeChoice.ExactChoice(ABSOLUTE_ENDER_PEARL.getItemStack(1)));
         recipe.setIngredient('C', Material.END_CRYSTAL);
         return List.of(recipe);
     }
