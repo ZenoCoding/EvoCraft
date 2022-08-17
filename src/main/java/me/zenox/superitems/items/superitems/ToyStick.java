@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class ToyStick extends ComplexItem {
     public ToyStick() {
-        super("Magic Toy Stick", "magic_toy_stick", Rarity.EPIC, Type.SUPERITEM, Material.STICK, Map.of(), List.of(new MagicMissile(6)));
+        super("Magic Toy Stick", "magic_toy_stick", Rarity.EPIC, Type.SUPERITEM, Material.STICK, Map.of(), List.of(new MagicMissile(6, true)));
 
         List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Magical.");
 
