@@ -12,19 +12,20 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.List;
 import java.util.Map;
 
-public class DevStick extends ComplexItem {
-    public DevStick() {
-        super("Dev Stick", "dev_stick", Rarity.VERY_SPECIAL, Type.SUPERITEM, Material.STICK, Map.of(), List.of(new MagicMissile(15, false)));
+public class VoidScepter extends ComplexItem {
+    public VoidScepter() {
+        super("Void Scepter", "void_scepter", Rarity.EPIC, Type.STAFF, Material.DIAMOND_SHOVEL, Map.of(), List.of(new MagicMissile(6, true)));
 
-        List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Magical.");
+        List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Forged from the souls of corrupted endermen...");
 
         this.getMeta().setLore(lore);
-        this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-        this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
     }
 
     @Override
     public List<Recipe> getRecipes() {
-        return super.getRecipes();
+        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(3));
+
+        return List.of(recipe);
     }
 }

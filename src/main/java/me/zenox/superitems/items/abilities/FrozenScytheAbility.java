@@ -23,25 +23,22 @@ import java.util.Random;
 
 import static me.zenox.superitems.util.Util.getNearbyBlocks;
 
-public class MagicMissile extends ItemAbility {
+public class FrozenScytheAbility extends ItemAbility {
 
-    private final boolean combustion;
+
     private final int explosionpower;
 
     private final boolean worldguard;
-    public MagicMissile(int explosionpower,boolean combustion,boolean worldguard) {
-        super("Magic Missile", "magic_missile", AbilityAction.RIGHT_CLICK_ALL, 0, 0);
+    public FrozenScytheAbility(int explosionpower, boolean combustion, boolean worldguard) {
+        super("Obsidian Fireball", "obsidian_fireball", AbilityAction.RIGHT_CLICK_ALL, 5, 0);
         this.explosionpower = explosionpower;
-        this.combustion = combustion;
+
         this.worldguard = worldguard;
 
-        this.addLineToLore(ChatColor.GRAY + "Shoots a magic missile that explodes");
-        this.addLineToLore(ChatColor.GRAY + "on impact and deals massive" + ChatColor.RED + " damage.");
+        this.addLineToLore(ChatColor.GRAY + "Shoots waves of Obsidian Fireballs");
+        this.addLineToLore(ChatColor.GRAY + "on impact deals massive" + ChatColor.RED + " damage.");
 
-        if (combustion == true) {
-            this.addLineToLore("");
-            this.addLineToLore(ChatColor.GRAY + "20% chance for the item to " + ChatColor.GOLD + "combust " + ChatColor.GRAY + "and dissapear.");
-        }
+
     }
 
     @Override
@@ -56,34 +53,35 @@ public class MagicMissile extends ItemAbility {
         RegionContainer container;
         RegionQuery query;
 
-        if (SuperItems.getPlugin().isUsingWorldGuard) {
-            localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
-            guardLoc = BukkitAdapter.adapt(p.getLocation());
-            container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-            query = container.createQuery();
-
-            if (!query.testState(guardLoc, localPlayer, Flags.BUILD)) {
-                Util.sendMessage(p, "You cannot use this item in a worldguard region! Flags: [BUILD]");
-                return;
-            }
-        }
+//        if (SuperItems.getPlugin().isUsingWorldGuard) {
+//            LocalPlayer localPlayer2 = WorldGuardPlugin.inst().wrapPlayer(p);
+//            com.sk89q.worldedit.util.Location guardLoc2 = BukkitAdapter.adapt(trident.getLocation());
+//            RegionContainer container2 = WorldGuard.getInstance().getPlatform().getRegionContainer();
+//            RegionQuery query2 = container2.createQuery();
+//
+//            if (!query2.testState(guardLoc2, localPlayer2, Flags.BUILD)) {
+//                trident.remove();
+//                Util.sendMessage(p, "You cannot shoot this item into a worldguard region! Flags: [PVP]");
+//                cancel();
+//            }
+//        }
 
         // 20% chance to remove an item from their hand
-        if (r.nextInt(5) == 0 && this.combustion == true) {
-            e.getItem().setAmount(e.getItem().getAmount() - 1);
-            Util.sendMessage(p, ChatColor.GOLD + "Woah! Your " + ChatColor.ITALIC + "Magic Toy Stick " + ChatColor.GOLD + "combusted in your hand!", false);
-            p.damage(5, p);
-            p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 0.5F);
-        }
+//        if (r.nextInt(5) == 0 && this.combustion == true) {
+//            e.getItem().setAmount(e.getItem().getAmount() - 1);
+//            Util.sendMessage(p, ChatColor.GOLD + "Woah! Your " + ChatColor.ITALIC + "Magic Toy Stick " + ChatColor.GOLD + "combusted in your hand!", false);
+//            p.damage(5, p);
+//            p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 0.5F);
+//        }
 
 
-        Trident trident = (Trident) w.spawnEntity(p.getLocation().add(0, 1.8, 0), EntityType.TRIDENT);
+        Trident fireball = (Trident) w.spawnEntity(p.getLocation().add(0, 1.8, 0), EntityType.DRAGON_FIREBALL);
         Vector v = p.getLocation().getDirection().normalize().clone();
-        Vector v2 = v.multiply(3);
-        trident.setVelocity(v2);
-        trident.setDamage(0);
-        trident.setGravity(false);
-        trident.setPierceLevel(127);
+        Vector v2 = v.multiply(5);
+        fireball.setVelocity(v2);
+        fireball.setDamage(0);
+        fireball.setGravity(false);
+        fireball.setPierceLevel(127);
 
         int explosionPower = this.explosionpower;
 
@@ -92,10 +90,10 @@ public class MagicMissile extends ItemAbility {
 
             @Override
             public void run() {
-                trident.setVelocity(v2);
-                Location loc = trident.getLocation();
+                fireball.setVelocity(v2);
+                Location loc = fireball.getLocation();
                 for (Entity entity :
-                        trident.getNearbyEntities(2, 2, 2)) {
+                        fireball.getNearbyEntities(2, 2, 2)) {
                     if (entity instanceof Damageable && !entity.equals(p)) {
                         ((Damageable) entity).damage(explosionPower, p);
                     }
@@ -109,22 +107,22 @@ public class MagicMissile extends ItemAbility {
                     w.spawnParticle(Particle.SMOKE_NORMAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
                 }
 
-                if (SuperItems.getPlugin().isUsingWorldGuard) {
-                    LocalPlayer localPlayer2 = WorldGuardPlugin.inst().wrapPlayer(p);
-                    com.sk89q.worldedit.util.Location guardLoc2 = BukkitAdapter.adapt(trident.getLocation());
-                    RegionContainer container2 = WorldGuard.getInstance().getPlatform().getRegionContainer();
-                    RegionQuery query2 = container2.createQuery();
+//                if (SuperItems.getPlugin().isUsingWorldGuard) {
+//                    LocalPlayer localPlayer2 = WorldGuardPlugin.inst().wrapPlayer(p);
+//                    com.sk89q.worldedit.util.Location guardLoc2 = BukkitAdapter.adapt(trident.getLocation());
+//                    RegionContainer container2 = WorldGuard.getInstance().getPlatform().getRegionContainer();
+//                    RegionQuery query2 = container2.createQuery();
+//
+//                    if (!query2.testState(guardLoc2, localPlayer2, Flags.BUILD)) {
+//                        trident.remove();
+//                        Util.sendMessage(p, "You cannot shoot this item into a worldguard region! Flags: [PVP]");
+//                        cancel();
+//                    }
+//                }
 
-                    if (!query2.testState(guardLoc2, localPlayer2, Flags.BUILD)) {
-                        trident.remove();
-                        Util.sendMessage(p, "You cannot shoot this item into a worldguard region! Flags: [PVP]");
-                        cancel();
-                    }
-                }
-
-                if (trident.isInBlock()) {
-                    trident.remove();
-                    List<Block> blocks = getNearbyBlocks(loc, explosionPower / 2, explosionPower / 4);
+                if (fireball.isInBlock()) {
+                    fireball.remove();
+                    List<Block> blocks = getNearbyBlocks(loc, explosionPower / 10, explosionPower / 20);
                     for (Block block : blocks) {
                         if (block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD))
                             continue;
@@ -147,7 +145,7 @@ public class MagicMissile extends ItemAbility {
                         fallingBlock.setMetadata("temporary", new FixedMetadataValue(SuperItems.getPlugin(), true));
                     }
                     try {
-                        trident.remove();
+                        fireball.remove();
                     } catch (Exception e) {
 
                     }
@@ -155,8 +153,8 @@ public class MagicMissile extends ItemAbility {
                     cancel();
                 }
                 count++;
-                if (count >= 600) {
-                    trident.remove();
+                if (count >= 10000) {
+                    fireball.remove();
                     cancel();
                 }
 
