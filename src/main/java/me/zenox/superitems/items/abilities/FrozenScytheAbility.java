@@ -28,7 +28,7 @@ public class FrozenScytheAbility extends ItemAbility {
 
     private final int explosionpower;
 
-    
+
     public FrozenScytheAbility(int explosionpower, boolean combustion, boolean worldguard) {
         super("Obsidian Fireball", "obsidian_fireball", AbilityAction.RIGHT_CLICK_ALL, 5, 0);
         this.explosionpower = explosionpower;
@@ -84,6 +84,7 @@ public class FrozenScytheAbility extends ItemAbility {
         fireball.setBounce(true);
         fireball.setIsIncendiary(true);
         fireball.setGlowing(true);
+        fireball.setInvulnerable(true);
 
         int explosionPower = this.explosionpower;
 
