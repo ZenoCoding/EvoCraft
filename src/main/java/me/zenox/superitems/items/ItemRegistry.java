@@ -63,6 +63,8 @@ public class ItemRegistry {
     public static final ComplexItem CORRUPTED_TOTEM_POLE = registerItem(new CorruptedTotemPole());
     public static final ComplexItem WARPED_CUBE = registerItem(new WarpedCube());
     public static final ComplexItem VOID_STONE = registerItem(new VoidStone());
+    public static final ComplexItem VOID_SCEPTER = registerItem(new VoidScepter());
+    public static final ComplexItem OBSIDIAN_SCYTHE = registerItem(new ObsidianScythe());
 
     public static final ComplexItem DEV_STICK = registerItem(new DevStick());
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
