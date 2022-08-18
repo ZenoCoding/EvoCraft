@@ -79,9 +79,10 @@ public class FrozenScytheAbility extends ItemAbility {
         Vector v = p.getLocation().getDirection().normalize().clone();
         Vector v2 = v.multiply(5);
         fireball.setVelocity(v2);
-        fireball.setDamage(0);
+        fireball.setShooter(true);
         fireball.setGravity(false);
-        fireball.setPierceLevel(127);
+        fireball.setBounce(true);
+        fireball.setIsIncendiary(true);
 
         int explosionPower = this.explosionpower;
 
