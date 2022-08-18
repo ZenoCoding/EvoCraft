@@ -30,6 +30,7 @@ public class RecipeRegistry {
 
     private static Recipe registerRecipe(Recipe recipe){
         registeredRecipes.add(recipe);
+        return recipe;
     }
 
     public static void registerRecipes(){
