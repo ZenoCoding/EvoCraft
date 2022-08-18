@@ -27,5 +27,11 @@ public class VoidScepter extends ComplexItem {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(3));
 
         return List.of(recipe);
+        recipe.shape("DGD", "FSF", "TST");
+        recipe.setIngredient('D', Material.END_STONE);
+        recipe.setIngredient('G', Material.GLOWSTONE_DUST);
+        recipe.setIngredient('F', Material.LEGACY_ENDER_PEARL);
+        recipe.setIngredient('S', Material.DEBUG_STICK);
+        recipe.setIngredient('T', Material.LEGACY_ENDER_PEARL);
     }
 }

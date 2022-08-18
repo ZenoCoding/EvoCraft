@@ -23,8 +23,6 @@ public class ObsidianScythe extends ComplexItem {
 
     @Override
     public List<Recipe> getRecipes() {
-        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(3));
-
-        return List.of(recipe);
+        return super.getRecipes();
     }
 }
