@@ -83,6 +83,7 @@ public class FrozenScytheAbility extends ItemAbility {
         fireball.setGravity(false);
         fireball.setBounce(true);
         fireball.setIsIncendiary(true);
+        fireball.setGlowing(true);
 
         int explosionPower = this.explosionpower;
 
