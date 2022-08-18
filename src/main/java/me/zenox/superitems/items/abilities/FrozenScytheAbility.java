@@ -75,7 +75,7 @@ public class FrozenScytheAbility extends ItemAbility {
 //        }
 
 
-        Trident fireball = (Trident) w.spawnEntity(p.getLocation().add(0, 1.8, 0), EntityType.DRAGON_FIREBALL);
+        DragonFireball fireball = (DragonFireball) w.spawnEntity(p.getLocation().add(0, 1.8, 0), EntityType.DRAGON_FIREBALL);
         Vector v = p.getLocation().getDirection().normalize().clone();
         Vector v2 = v.multiply(5);
         fireball.setVelocity(v2);
