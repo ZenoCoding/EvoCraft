@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class VoidScepter extends ComplexItem {
     public VoidScepter() {
-        super("Void Scepter", "void_scepter", Rarity.EPIC, Type.STAFF, Material.DIAMOND_SHOVEL, Map.of(), List.of(new VoidWarp()));
+        super("Void Scepter", "void_scepter", Rarity.EPIC, Type.STAFF, Material.NETHERITE_SHOVEL, Map.of(), List.of(new VoidWarp()));
 
         List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Forged from the souls of corrupted endermen and shoots everlasting corruption...");
 
