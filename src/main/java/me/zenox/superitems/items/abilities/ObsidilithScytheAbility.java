@@ -48,15 +48,6 @@ public class ObsidilithScytheAbility extends ItemAbility {
         fireball.setIsIncendiary(true);
         fireball.setGlowing(true);
 
-        SpectralArrow arrow = (SpectralArrow) w.spawnEntity(p.getLocation().add(0, 1.8, 0), EntityType.SPECTRAL_ARROW);
-        Vector v = p.getLocation().getDirection().normalize().clone();
-        Vector v2 = v.multiply(5);
-        arrow.setVelocity(v2);
-        arrow.setShooter(p);
-        arrow.setGravity(false);
-        arrow.setBounce(true);
-        arrow.setDamage(100);
-
 
         Endermite mite = (Endermite) w.spawnEntity(p.getLocation().add(0, 1.8, 0), EntityType.ENDERMITE);
         Vector v = p.getLocation().getDirection().normalize().clone();
