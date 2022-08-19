@@ -21,9 +21,9 @@ import java.util.Random;
 public class ObsidilithScytheAbility extends ItemAbility {
 
 
-    
+
     public ObsidilithScytheAbility() {
-        super("Obsid-strike", "obsidian_projectile", AbilityAction.RIGHT_CLICK_ALL, 2, 0);
+        super("Obsidi-strike", "obsidian_projectile", AbilityAction.RIGHT_CLICK_ALL, 2, 0);
 
         this.addLineToLore(ChatColor.GRAY + "Shoots a sharpened shard of" + ChatColor.BLACK + "obsidian.");
         this.addLineToLore(ChatColor.GRAY + "Deals massive" + ChatColor.RED + " damage" + ChatColor.GRAY + " on impact.");
@@ -48,57 +48,26 @@ public class ObsidilithScytheAbility extends ItemAbility {
         fireball.setIsIncendiary(true);
         fireball.setGlowing(true);
 
-        SpectralArrow arrow = (SpectralArrow) w.spawnEntity(p.getLocation().add(0, 1.8, 0), EntityType.SPECTRAL_ARROW);
-        Vector v = p.getLocation().getDirection().normalize().clone();
-        Vector v2 = v.multiply(5);
-        arrow.setVelocity(v2);
-        arrow.setShooter(p);
-        arrow.setGravity(false);
-        arrow.setBounce(true);
-        arrow.setDamage(100);
-
-
-        Endermite mite = (Endermite) w.spawnEntity(p.getLocation().add(0, 1.8, 0), EntityType.ENDERMITE);
-        Vector v = p.getLocation().getDirection().normalize().clone();
-        Vector v2 = v.multiply(5);
-        mite.setVelocity(v2);
-        mite.setHealth(69);
-        mite.setGravity(false);
-        mite.setCustomName("Minions Of the Void");
-        mite.setArrowsInBody(69);
-
 
         new BukkitRunnable() {
             int count = 0;
 
             @Override
             public void run() {
-                fireball.setVelocity(v2);
+
                 Location loc = fireball.getLocation();
                 for (Entity entity :
-                        fireball.getNearbyEntities(2, 2, 2)) {
+                        fireball.getNearbyEntities(0.5, 2, 0.5)) {
                     if (entity instanceof Damageable && !entity.equals(p)) {
                         ((Damageable) entity).damage(10, p);
                     }
                 }
 
-                arrow.setVelocity(v2);
-                Location loc1 = arrow.getLocation();
-                for (Entity entity :
-                        arrow.getNearbyEntities(2, 2, 2)) {
-                    if (entity instanceof Damageable && !entity.equals(p)) {
-                        ((Damageable) entity).damage(100, p);
-                    }
+                if(count/20 > 30) {
+                    fireball.remove();
+                    cancel();
                 }
 
-                mite.setVelocity(v2);
-                Location loc2 = mite.getLocation();
-                for (Entity entity :
-                        mite.getNearbyEntities(2, 2, 2)) {
-                    if (entity instanceof Damageable && !entity.equals(p)) {
-                        ((Damageable) entity).damage(30, p);
-                    }
-                }
                 for (int i = 0; i < 5; i++) {
                     w.spawnParticle(Particle.ELECTRIC_SPARK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
                     w.spawnParticle(Particle.BLOCK_CRACK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2, Material.OBSIDIAN.createBlockData());
@@ -107,13 +76,16 @@ public class ObsidilithScytheAbility extends ItemAbility {
                     w.spawnParticle(Particle.BLOCK_CRACK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2, Material.OBSIDIAN.createBlockData());
                     w.spawnParticle(Particle.SMOKE_NORMAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
                 }
-
                 if (SuperItems.getPlugin().isUsingWorldGuard) {
                     LocalPlayer localPlayer2 = WorldGuardPlugin.inst().wrapPlayer(p);
                     com.sk89q.worldedit.util.Location guardLoc2 = BukkitAdapter.adapt(fireball.getLocation());
                     RegionContainer container2 = WorldGuard.getInstance().getPlatform().getRegionContainer();
                     RegionQuery query2 = container2.createQuery();
-
+                    if (!query2.testState(guardLoc2, localPlayer2, Flags.BUILD)) {
+                        fireball.remove();
+                        Util.sendMessage(p, "You cannot shoot this item into a worldguard region! Flags: [PVP]");
+                        cancel();
+                    }
 
                 }
 
