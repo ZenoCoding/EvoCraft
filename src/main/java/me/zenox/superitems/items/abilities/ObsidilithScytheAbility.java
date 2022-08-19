@@ -55,7 +55,7 @@ public class ObsidilithScytheAbility extends ItemAbility {
         arrow.setShooter(p);
         arrow.setGravity(false);
         arrow.setBounce(true);
-        arrow.setDamage(0);
+        arrow.setDamage(100);
         fireball.setGlowing(true);
 
         new BukkitRunnable() {
