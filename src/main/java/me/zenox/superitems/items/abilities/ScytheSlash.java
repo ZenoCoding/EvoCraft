@@ -11,6 +11,8 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -35,7 +37,7 @@ public class ScytheSlash extends ItemAbility {
         Random r = new Random();
         Player p = e.getPlayer();
         World w = p.getWorld();
-
+        p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 2));
 
 
         //ttyl
