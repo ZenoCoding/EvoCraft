@@ -23,7 +23,7 @@ public class ObsidilithScytheAbility extends ItemAbility {
 
     
     public ObsidilithScytheAbility() {
-        super("Obsid-strike", "obsidian_projectile", AbilityAction.RIGHT_CLICK_ALL, 25, 0);
+        super("Obsid-strike", "obsidian_projectile", AbilityAction.RIGHT_CLICK_ALL, 2, 0);
 
         this.addLineToLore(ChatColor.GRAY + "Shoots a sharpened shard of" + ChatColor.BLACK + "obsidian.");
         this.addLineToLore(ChatColor.GRAY + "Deals massive" + ChatColor.RED + " damage" + ChatColor.GRAY + " on impact.");
@@ -40,12 +40,22 @@ public class ObsidilithScytheAbility extends ItemAbility {
 
         DragonFireball fireball = (DragonFireball) w.spawnEntity(p.getLocation().add(0, 1.8, 0), EntityType.DRAGON_FIREBALL);
         Vector v = p.getLocation().getDirection().normalize().clone();
-        Vector v2 = v.multiply(5);
+        Vector v2 = v.multiply(10);
         fireball.setVelocity(v2);
         fireball.setShooter(p);
         fireball.setGravity(false);
         fireball.setBounce(true);
         fireball.setIsIncendiary(true);
+        fireball.setGlowing(true);
+
+        SpectralArrow arrow = (SpectralArrow) w.spawnEntity(p.getLocation().add(0, 1.8, 0), EntityType.SPECTRAL_ARROW);
+        Vector v = p.getLocation().getDirection().normalize().clone();
+        Vector v2 = v.multiply(5);
+        arrow.setVelocity(v2);
+        arrow.setShooter(p);
+        arrow.setGravity(false);
+        arrow.setBounce(true);
+        arrow.setDamage(0);
         fireball.setGlowing(true);
 
         new BukkitRunnable() {
@@ -59,6 +69,15 @@ public class ObsidilithScytheAbility extends ItemAbility {
                         fireball.getNearbyEntities(2, 2, 2)) {
                     if (entity instanceof Damageable && !entity.equals(p)) {
                         ((Damageable) entity).damage(10, p);
+                    }
+                }
+
+                arrow.setVelocity(v2);
+                Location loc1 = arrow.getLocation();
+                for (Entity entity :
+                        arrow.getNearbyEntities(2, 2, 2)) {
+                    if (entity instanceof Damageable && !entity.equals(p)) {
+                        ((Damageable) entity).damage(100, p);
                     }
                 }
                 for (int i = 0; i < 5; i++) {
@@ -76,11 +95,7 @@ public class ObsidilithScytheAbility extends ItemAbility {
                     RegionContainer container2 = WorldGuard.getInstance().getPlatform().getRegionContainer();
                     RegionQuery query2 = container2.createQuery();
 
-                    if (!query2.testState(guardLoc2, localPlayer2, Flags.BUILD)) {
-                        fireball.remove();
-                        Util.sendMessage(p, "You cannot shoot this item into a worldguard region! Flags: [PVP]");
-                        cancel();
-                    }
+
                 }
 
             }

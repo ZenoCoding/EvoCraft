@@ -61,6 +61,6 @@ public class VoidWarp extends ItemAbility {
                 }
                 count ++;
             }
-        }.runTaskTimer(SuperItems.getPlugin(), 10, 1);
+        }.runTaskTimer(SuperItems.getPlugin(), 5, 1);
     }
 }
