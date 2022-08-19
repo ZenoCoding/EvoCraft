@@ -56,7 +56,17 @@ public class ObsidilithScytheAbility extends ItemAbility {
         arrow.setGravity(false);
         arrow.setBounce(true);
         arrow.setDamage(100);
-        fireball.setGlowing(true);
+
+
+        Endermite mite = (Endermite) w.spawnEntity(p.getLocation().add(0, 1.8, 0), EntityType.ENDERMITE);
+        Vector v = p.getLocation().getDirection().normalize().clone();
+        Vector v2 = v.multiply(5);
+        mite.setVelocity(v2);
+        mite.setHealth(69);
+        mite.setGravity(false);
+        mite.setCustomName("Minions Of the Void");
+        mite.setArrowsInBody(69);
+
 
         new BukkitRunnable() {
             int count = 0;
@@ -78,6 +88,15 @@ public class ObsidilithScytheAbility extends ItemAbility {
                         arrow.getNearbyEntities(2, 2, 2)) {
                     if (entity instanceof Damageable && !entity.equals(p)) {
                         ((Damageable) entity).damage(100, p);
+                    }
+                }
+
+                mite.setVelocity(v2);
+                Location loc2 = mite.getLocation();
+                for (Entity entity :
+                        mite.getNearbyEntities(2, 2, 2)) {
+                    if (entity instanceof Damageable && !entity.equals(p)) {
+                        ((Damageable) entity).damage(30, p);
                     }
                 }
                 for (int i = 0; i < 5; i++) {

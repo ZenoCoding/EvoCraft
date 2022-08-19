@@ -16,10 +16,14 @@ public class DevStick extends ComplexItem {
     public DevStick() {
         super("Dev Stick", "dev_stick", Rarity.VERY_SPECIAL, Type.SUPERITEM, Material.STICK, Map.of(), List.of(new MagicMissile(15, false)));
 
-        List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Magical.");
+        List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Built Diffrent");
 
         this.getMeta().setLore(lore);
-        this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+        this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 5, true);
+        this.getMeta().addEnchant(Enchantment.FIRE_ASPECT, 2, true);
+        this.getMeta().addEnchant(Enchantment.KNOCKBACK, 3, true);
+        this.getMeta().addEnchant(Enchantment.SILK_TOUCH, 1, true);
+        this.getMeta().addEnchant(Enchantment.DIG_SPEED, 5, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
     }
 
