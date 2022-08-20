@@ -53,6 +53,6 @@ public class VoidMask extends ArmorItem {
 //        recipe.setIngredient('C', new RecipeChoice.ExactChoice(CRULEN_SHARD.getItemStack(1)));
 //        recipe.setIngredient('S', new RecipeChoice.ExactChoice(DESECRATOR_SCALE.getItemStack(1)));
 //        recipe.setIngredient('G', new RecipeChoice.ExactChoice(PYTHEMION_GEM.getItemStack(1)));
-//        return List.of(recipe);
+          return List.of();
     }
 }

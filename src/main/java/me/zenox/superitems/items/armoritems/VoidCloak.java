@@ -48,6 +48,6 @@ public class VoidCloak extends ArmorItem {
 //        recipe.setIngredient('K', new RecipeChoice.ExactChoice(KEVLAR.getItemStack(1)));
 //        recipe.setIngredient('F', new RecipeChoice.ExactChoice(TOUGH_FABRIC.getItemStack(1)));
 //        recipe.setIngredient('S', new RecipeChoice.ExactChoice(DESECRATOR_SCALE.getItemStack(1)));
-//        return List.of(recipe);
+        return List.of();
     }
 }

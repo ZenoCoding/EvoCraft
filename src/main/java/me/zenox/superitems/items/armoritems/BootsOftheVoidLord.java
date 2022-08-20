@@ -47,6 +47,6 @@ public class BootsOftheVoidLord extends ArmorItem {
 //        recipe.shape("   ", "S S", "T T");
 //        recipe.setIngredient('T', new RecipeChoice.ExactChoice(DESECRATOR_TOE.getItemStack(1)));
 //        recipe.setIngredient('S', new RecipeChoice.ExactChoice(DESECRATOR_SCALE.getItemStack(1)));
-//        return List.of(recipe);
+        return List.of();
     }
 }

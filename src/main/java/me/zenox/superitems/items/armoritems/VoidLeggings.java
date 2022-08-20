@@ -47,6 +47,6 @@ public class VoidLeggings extends ArmorItem {
 //        recipe.shape("SKS", "S S", "S S");
 //        recipe.setIngredient('K', new RecipeChoice.ExactChoice(KEVLAR.getItemStack(1)));
 //        recipe.setIngredient('S', new RecipeChoice.ExactChoice(DESECRATOR_SCALE.getItemStack(1)));
-//        return List.of(recipe);
+          return List.of();
     }
 }
