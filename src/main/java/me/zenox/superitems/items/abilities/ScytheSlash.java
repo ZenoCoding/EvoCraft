@@ -37,7 +37,9 @@ public class ScytheSlash extends ItemAbility {
         Random r = new Random();
         Player p = e.getPlayer();
         World w = p.getWorld();
-        p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 2));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2000, 2));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 2, true, false, false));
+
 
 
         //ttyl
