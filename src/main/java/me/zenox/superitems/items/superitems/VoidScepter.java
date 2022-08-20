@@ -3,6 +3,7 @@ package me.zenox.superitems.items.superitems;
 import me.zenox.superitems.items.ComplexItem;
 import me.zenox.superitems.items.abilities.MagicMissile;
 import me.zenox.superitems.items.abilities.VoidWarp;
+import me.zenox.superitems.items.abilities.VoidularRecall;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 public class VoidScepter extends ComplexItem {
     public VoidScepter() {
-        super("Void Scepter", "void_scepter", Rarity.EPIC, Type.STAFF, Material.NETHERITE_SHOVEL, Map.of(), List.of(new VoidWarp()));
+        super("Void Scepter", "void_scepter", Rarity.EPIC, Type.STAFF, Material.NETHERITE_SHOVEL, Map.of(), List.of(new VoidWarp(), new VoidularRecall()));
 
         List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Forged from the souls of corrupted endermen and shoots everlasting corruption...");
 
