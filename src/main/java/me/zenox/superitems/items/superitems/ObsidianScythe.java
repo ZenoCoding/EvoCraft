@@ -16,6 +16,7 @@ public class ObsidianScythe extends ComplexItem {
         List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "The Densest of All Compact Obisidians Combined to Make this Terror...");
 
         this.getMeta().setLore(lore);
+        this.getMeta().isUnbreakable();
 
     }
 

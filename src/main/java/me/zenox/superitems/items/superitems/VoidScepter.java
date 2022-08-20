@@ -21,6 +21,7 @@ public class VoidScepter extends ComplexItem {
         List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Forged from the souls of corrupted endermen and shoots everlasting corruption...");
 
         this.getMeta().setLore(lore);
+        this.getMeta().isUnbreakable();
 
     }
 
