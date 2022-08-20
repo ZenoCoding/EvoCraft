@@ -9,12 +9,12 @@ import java.util.Arrays;
 public class ItemAbility extends Ability{
     private final AbilityAction action;
 
-    public ItemAbility(String name, String id, AbilityAction action, int manaCost, int cooldown) {
+    public ItemAbility(String name, String id, AbilityAction action, int manaCost, double cooldown) {
         super(name, id, manaCost, cooldown, PlayerInteractEvent.class, Slot.EITHER_HAND);
         this.action = action;
     }
 
-    public ItemAbility(String name, String id, AbilityAction action, int manaCost, int cooldown, Slot slot) {
+    public ItemAbility(String name, String id, AbilityAction action, int manaCost, double cooldown, Slot slot) {
         super(name, id, manaCost, cooldown, PlayerInteractEvent.class, slot);
         this.action = action;
     }

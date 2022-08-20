@@ -48,7 +48,6 @@ public class ObsidilithScytheAbility extends ItemAbility {
         fireball.setIsIncendiary(true);
         fireball.setGlowing(true);
 
-
         new BukkitRunnable() {
             int count = 0;
 
