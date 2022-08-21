@@ -1,9 +1,6 @@
 package me.zenox.superitems.items;
 
-import me.zenox.superitems.items.armoritems.DesecratorBoots;
-import me.zenox.superitems.items.armoritems.DesecratorChestplate;
-import me.zenox.superitems.items.armoritems.DesecratorHelmet;
-import me.zenox.superitems.items.armoritems.DesecratorLeggings;
+import me.zenox.superitems.items.armoritems.*;
 import me.zenox.superitems.items.basicitems.*;
 import me.zenox.superitems.items.superitems.*;
 import me.zenox.superitems.util.Util;
@@ -67,6 +64,14 @@ public class ItemRegistry {
     public static final ComplexItem OBSIDIAN_SCYTHE = registerItem(new ObsidianScythe());
 
     public static final ComplexItem DEV_STICK = registerItem(new DevStick());
+
+    public  static final  ComplexItem VOID_SCYTHE = registerItem(new VoidScythe());
+
+    public static final ComplexItem FLAMING_CAP = registerItem(new FlamingCap());
+    public static final ComplexItem FLAMING_SHIRT = registerItem(new FlamingShirt());
+    public static final ComplexItem FLAMING_PANTS = registerItem(new FlamingPants());
+    public static final ComplexItem FLAMING_SANDALS= registerItem(new FlamingSandals());
+
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
 

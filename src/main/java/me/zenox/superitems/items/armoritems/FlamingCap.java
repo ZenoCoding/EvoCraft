@@ -12,8 +12,6 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.ArrayList;
@@ -21,36 +19,40 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static me.zenox.superitems.items.ItemRegistry.DESECRATOR_SCALE;
-import static me.zenox.superitems.items.ItemRegistry.KEVLAR;
-
-public class VoidLeggings extends ArmorItem {
-    public VoidLeggings() {
-        super("Void Leggings", "void_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 6d, Stats.HEALTH, 5d, Stats.WISDOM, 7d, Stats.REGENERATION, 2d));
+public class FlamingCap extends ArmorItem {
+    public FlamingCap() {
+        super("Flaming Cap", "flaming_cap", Rarity.EPIC, Type.HELMET, Material.LEATHER_HELMET, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 2d));
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "Rumored to talk and share knowledge to the wearer...");
+        lore.add(ChatColor.GRAY + "lore when tycho" );
         this.getMeta().setLore(lore);
         this.getMeta().addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
         this.getMeta().addEnchant(Enchantment.THORNS, 3, true);
         this.getMeta().addEnchant(Enchantment.WATER_WORKER, 1, true);
-        ((LeatherArmorMeta) this.getMeta()).setColor(Color.TEAL);
+        this.getMeta().addEnchant(Enchantment.OXYGEN, 3, true);
+        this.getMeta().addEnchant(Enchantment.MENDING, 1, true);
+        ((LeatherArmorMeta) this.getMeta()).setColor(Color.RED);
 
         Multimap<Attribute, AttributeModifier> attributeMap = ArrayListMultimap.create();
-        attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
-        attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
+        attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
+        attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
+        attributeMap.put(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", +0.75, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD));
 
 
         this.getMeta().setAttributeModifiers(attributeMap);
         this.getMeta().setUnbreakable(true);
+
+
     }
 
     @Override
     public List<Recipe> getRecipes() {
 //        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
-//        recipe.shape("SKS", "S S", "S S");
+//        recipe.shape("KCK", "SGS", "   ");
 //        recipe.setIngredient('K', new RecipeChoice.ExactChoice(KEVLAR.getItemStack(1)));
+//        recipe.setIngredient('C', new RecipeChoice.ExactChoice(CRULEN_SHARD.getItemStack(1)));
 //        recipe.setIngredient('S', new RecipeChoice.ExactChoice(DESECRATOR_SCALE.getItemStack(1)));
+//        recipe.setIngredient('G', new RecipeChoice.ExactChoice(PYTHEMION_GEM.getItemStack(1)));
           return List.of();
     }
 }
