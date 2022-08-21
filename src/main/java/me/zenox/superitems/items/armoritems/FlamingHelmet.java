@@ -19,12 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class FlamingCap extends ArmorItem {
-    public FlamingCap() {
-        super("Flaming Cap", "flaming_cap", Rarity.EPIC, Type.HELMET, Material.LEATHER_HELMET, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 2d));
+public class FlamingHelmet extends ArmorItem {
+    public FlamingHelmet() {
+        super("Flaming Helmet", "flaming_helmet", Rarity.EPIC, Type.HELMET, Material.LEATHER_HELMET, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 2d));
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "lore when tycho" );
+        lore.add(ChatColor.GRAY + "Seriously hot." );
         this.getMeta().setLore(lore);
         this.getMeta().addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
         this.getMeta().addEnchant(Enchantment.THORNS, 3, true);
