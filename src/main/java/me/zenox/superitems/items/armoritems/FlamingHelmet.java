@@ -36,7 +36,8 @@ public class FlamingCap extends ArmorItem {
         Multimap<Attribute, AttributeModifier> attributeMap = ArrayListMultimap.create();
         attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
         attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
-        attributeMap.put(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", +0.75, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD));
+        attributeMap.put(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD));
+        attributeMap.put(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", 0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD));
 
 
         this.getMeta().setAttributeModifiers(attributeMap);
@@ -48,11 +49,6 @@ public class FlamingCap extends ArmorItem {
     @Override
     public List<Recipe> getRecipes() {
 //        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
-//        recipe.shape("KCK", "SGS", "   ");
-//        recipe.setIngredient('K', new RecipeChoice.ExactChoice(KEVLAR.getItemStack(1)));
-//        recipe.setIngredient('C', new RecipeChoice.ExactChoice(CRULEN_SHARD.getItemStack(1)));
-//        recipe.setIngredient('S', new RecipeChoice.ExactChoice(DESECRATOR_SCALE.getItemStack(1)));
-//        recipe.setIngredient('G', new RecipeChoice.ExactChoice(PYTHEMION_GEM.getItemStack(1)));
           return List.of();
     }
 }
