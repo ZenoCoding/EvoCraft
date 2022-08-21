@@ -20,12 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static me.zenox.superitems.items.ItemRegistry.DESECRATOR_SCALE;
-import static me.zenox.superitems.items.ItemRegistry.DESECRATOR_TOE;
-
 public class FlamingSandals extends ArmorItem {
     public FlamingSandals() {
-        super("Flaming Sandals", "flaming_sandals", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 8d, Stats.HEALTH, 5d));
+        super("Flaming Boots", "flaming_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 8d, Stats.HEALTH, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Raw power.");
@@ -35,8 +32,8 @@ public class FlamingSandals extends ArmorItem {
         Multimap<Attribute, AttributeModifier> attributeMap = ArrayListMultimap.create();
         attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
         attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
-        attributeMap.put(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", +0.25, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.FEET));
-        attributeMap.put(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", +0.25, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
+        attributeMap.put(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 0.05, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.FEET));
+        attributeMap.put(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", 0.05, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.FEET));
         this.getMeta().setAttributeModifiers(attributeMap);
         this.getMeta().setUnbreakable(true);
     }
@@ -44,9 +41,6 @@ public class FlamingSandals extends ArmorItem {
     @Override
     public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
-//        recipe.shape("   ", "S S", "T T");
-//        recipe.setIngredient('T', new RecipeChoice.ExactChoice(DESECRATOR_TOE.getItemStack(1)));
-//        recipe.setIngredient('S', new RecipeChoice.ExactChoice(DESECRATOR_SCALE.getItemStack(1)));
         return List.of();
     }
 }
