@@ -24,12 +24,13 @@ public abstract class Ability {
     private final String name;
     private final String id;
     private final int manaCost;
-    private final int cooldown;
+    private final double cooldown;
+
     private final Class<? extends PlayerEvent> eventType;
     private final Slot slot;
     private final List<String> lore = new ArrayList<>();
 
-    public Ability(String name, String id, int manaCost, int cooldown, Class<? extends PlayerEvent> eventType, Slot slot) {
+    public Ability(String name, String id, int manaCost, double cooldown, Class<? extends PlayerEvent> eventType, Slot slot) {
         this.name = name;
         this.cooldown = cooldown;
         this.manaCost = manaCost;
@@ -69,7 +70,7 @@ public abstract class Ability {
 
 
         if (cooldown != null && Math.ceil((cooldown - System.currentTimeMillis()) / 1000) > 0) {
-            Util.sendMessage(e.getPlayer(), "This ability is on cooldown for " + ChatColor.RED + Math.ceil((cooldown - System.currentTimeMillis()) / 1000) + " seconds");
+            Util.sendMessage(e.getPlayer(), ChatColor.WHITE + "This ability is on cooldown for " + ChatColor.RED + Math.ceil((cooldown - System.currentTimeMillis()) / 1000) + ChatColor.WHITE + " seconds");
             return;
         }
 
@@ -89,14 +90,14 @@ public abstract class Ability {
 
         this.runExecutable(e);
 
-        container.set(cooldownKey, PersistentDataType.LONG, System.currentTimeMillis() + (getCooldown() * 1000));
+        container.set(cooldownKey, PersistentDataType.DOUBLE, System.currentTimeMillis() + (getCooldown() * 1000));
     }
 
     protected void runExecutable(PlayerEvent e) {
         Util.sendMessage(e.getPlayer(), "Used the " + this.id + " ability");
     }
 
-    public int getCooldown() {
+    public double getCooldown() {
         return this.cooldown;
     }
 

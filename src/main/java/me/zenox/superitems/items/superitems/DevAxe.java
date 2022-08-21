@@ -7,24 +7,23 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
 
 import java.util.List;
 import java.util.Map;
 
-public class DevStick extends ComplexItem {
-    public DevStick() {
-        super("Dev Stick", "dev_stick", Rarity.VERY_SPECIAL, Type.SUPERITEM, Material.STICK, Map.of(), List.of(new MagicMissile(15, false)));
+public class DevAxe extends ComplexItem {
+    public DevAxe() {
+        super("Dev Axe", "dev_axe", Rarity.VERY_SPECIAL, Type.SUPERITEM, Material.WOODEN_PICKAXE, Map.of(), List.of(new MagicMissile(5, false)));
 
         List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Built Diffrent");
 
         this.getMeta().setLore(lore);
-        this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 20, true);
+        this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 10, true);
         this.getMeta().addEnchant(Enchantment.FIRE_ASPECT, 2, true);
         this.getMeta().addEnchant(Enchantment.KNOCKBACK, 42, true);
         this.getMeta().addEnchant(Enchantment.SILK_TOUCH, 1, true);
-        this.getMeta().addEnchant(Enchantment.DIG_SPEED, 50, true);
-        this.getMeta()
+        this.getMeta().addEnchant(Enchantment.DIG_SPEED, 100, true);
+
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
     }
 
