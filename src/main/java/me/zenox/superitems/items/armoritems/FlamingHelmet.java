@@ -26,7 +26,7 @@ public class FlamingCap extends ArmorItem {
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "lore when tycho" );
         this.getMeta().setLore(lore);
-        this.getMeta().addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
+        this.getMeta().addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
         this.getMeta().addEnchant(Enchantment.THORNS, 3, true);
         this.getMeta().addEnchant(Enchantment.WATER_WORKER, 1, true);
         this.getMeta().addEnchant(Enchantment.OXYGEN, 3, true);
@@ -36,8 +36,8 @@ public class FlamingCap extends ArmorItem {
         Multimap<Attribute, AttributeModifier> attributeMap = ArrayListMultimap.create();
         attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
         attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD));
-        attributeMap.put(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD));
-        attributeMap.put(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", 0.2, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD));
+        attributeMap.put(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 0.05, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD));
+        attributeMap.put(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", 0.05, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD));
 
 
         this.getMeta().setAttributeModifiers(attributeMap);
