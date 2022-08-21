@@ -67,10 +67,10 @@ public class ItemRegistry {
 
     public  static final  ComplexItem VOID_SCYTHE = registerItem(new VoidScythe());
 
-    public static final ComplexItem FLAMING_CAP = registerItem(new FlamingCap());
-    public static final ComplexItem FLAMING_SHIRT = registerItem(new FlamingShirt());
-    public static final ComplexItem FLAMING_PANTS = registerItem(new FlamingPants());
-    public static final ComplexItem FLAMING_SANDALS= registerItem(new FlamingSandals());
+    public static final ComplexItem FLAMING_HELMET = registerItem(new FlamingHelmet());
+    public static final ComplexItem FLAMING_CHESTPLATE = registerItem(new FlamingChestplate());
+    public static final ComplexItem FLAMING_LEGGINGS = registerItem(new FlamingLeggings());
+    public static final ComplexItem FLAMING_BOOTS = registerItem(new FlamingBoots());
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 

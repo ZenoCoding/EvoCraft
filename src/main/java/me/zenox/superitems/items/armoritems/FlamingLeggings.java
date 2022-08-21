@@ -23,20 +23,20 @@ import java.util.UUID;
 import static me.zenox.superitems.items.ItemRegistry.DESECRATOR_SCALE;
 import static me.zenox.superitems.items.ItemRegistry.KEVLAR;
 
-public class FlamingPants extends ArmorItem {
-    public FlamingPants() {
-        super("Desecrator Leggings", "desecrator_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 6d, Stats.HEALTH, 5d));
+public class FlamingLeggings extends ArmorItem {
+    public FlamingLeggings() {
+        super("Flaming Leggings", "flaming_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 6d, Stats.HEALTH, 5d));
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "lore when");
+        lore.add(ChatColor.GRAY + "Forged in a blazing inferno.");
         this.getMeta().setLore(lore);
         ((LeatherArmorMeta) this.getMeta()).setColor(Color.RED);
 
         Multimap<Attribute, AttributeModifier> attributeMap = ArrayListMultimap.create();
         attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
         attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
-        attributeMap.put(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", +0.14, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.LEGS));
-        attributeMap.put(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", +0.25, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
+        attributeMap.put(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 0.07, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.LEGS));
+        attributeMap.put(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 0.07, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.LEGS));
         this.getMeta().setAttributeModifiers(attributeMap);
         this.getMeta().setUnbreakable(true);
     }
@@ -44,9 +44,6 @@ public class FlamingPants extends ArmorItem {
     @Override
     public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
-//        recipe.shape("SKS", "S S", "S S");
-//        recipe.setIngredient('K', new RecipeChoice.ExactChoice(KEVLAR.getItemStack(1)));
-//        recipe.setIngredient('S', new RecipeChoice.ExactChoice(DESECRATOR_SCALE.getItemStack(1)));
         return List.of();
     }
 }
