@@ -23,7 +23,7 @@ public class DevAxe extends ComplexItem {
         this.getMeta().addEnchant(Enchantment.KNOCKBACK, 42, true);
         this.getMeta().addEnchant(Enchantment.SILK_TOUCH, 1, true);
         this.getMeta().addEnchant(Enchantment.DIG_SPEED, 100, true);
-        
+
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
     }
 

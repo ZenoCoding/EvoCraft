@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class VoidScythe extends ComplexItem {
     public VoidScythe() {
-        super("Void Scythe", "void_scythe", Rarity.LEGENDARY, Type.MISC, Material, Map.of(), List.of(new VoidScytheAbility()));
+        super("Void Scythe", "void_scythe", Rarity.LEGENDARY, Type.MISC, Material.WOODEN_HOE, Map.of(), List.of(new VoidScytheAbility()));
 
         List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "tycho make lore");
 
