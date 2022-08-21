@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class FlamingSandals extends ArmorItem {
-    public FlamingSandals() {
+public class FlamingBoots extends ArmorItem {
+    public FlamingBoots() {
         super("Flaming Boots", "flaming_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 8d, Stats.HEALTH, 5d));
 
         List<String> lore = new ArrayList<>();
