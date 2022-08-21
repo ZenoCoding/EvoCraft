@@ -64,8 +64,7 @@ public class ItemRegistry {
     public static final ComplexItem OBSIDIAN_SCYTHE = registerItem(new ObsidianScythe());
 
     public static final ComplexItem DEV_STICK = registerItem(new DevStick());
-
-    public  static final  ComplexItem VOID_SCYTHE = registerItem(new VoidScythe());
+    public static final ComplexItem DEV_AXE = registerItem(new DevAxe());
 
     public static final ComplexItem FLAMING_HELMET = registerItem(new FlamingHelmet());
     public static final ComplexItem FLAMING_CHESTPLATE = registerItem(new FlamingChestplate());
