@@ -25,7 +25,7 @@ import static me.zenox.superitems.items.ItemRegistry.KEVLAR;
 
 public class VoidLeggings extends ArmorItem {
     public VoidLeggings() {
-        super("Void Leggings", "void_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 6d, Stats.HEALTH, 5d, Stats.WISDOM, 7d, Stats.REGENERATION, 2d));
+        super("Void Leggings", "void_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 5d, Stats.WISDOM, 35d, Stats.REGENERATION, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Rumored to talk and share knowledge to the wearer...");
@@ -47,6 +47,6 @@ public class VoidLeggings extends ArmorItem {
 //        recipe.shape("SKS", "S S", "S S");
 //        recipe.setIngredient('K', new RecipeChoice.ExactChoice(KEVLAR.getItemStack(1)));
 //        recipe.setIngredient('S', new RecipeChoice.ExactChoice(DESECRATOR_SCALE.getItemStack(1)));
-//        return List.of(recipe);
+        return List.of();
     }
 }

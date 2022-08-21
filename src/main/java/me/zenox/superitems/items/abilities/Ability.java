@@ -66,7 +66,14 @@ public abstract class Ability {
 
         PersistentDataContainer container = e.getPlayer().getPersistentDataContainer();
         NamespacedKey cooldownKey = new NamespacedKey(SuperItems.getPlugin(), getId() + "_cooldown");
-        Long cooldown = container.get(cooldownKey, PersistentDataType.LONG);
+        Double cooldown;
+        try{
+            cooldown = container.get(cooldownKey, PersistentDataType.DOUBLE);
+        } catch(IllegalArgumentException exception){
+            cooldown = Double.valueOf(container.get(cooldownKey, PersistentDataType.LONG));
+            container.remove(cooldownKey);
+            container.set(cooldownKey, PersistentDataType.DOUBLE, cooldown);
+        }
 
 
         if (cooldown != null && Math.ceil((cooldown - System.currentTimeMillis()) / 1000) > 0) {

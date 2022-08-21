@@ -21,8 +21,8 @@ public class Tarhelm extends ItemAbility {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Player p = e.getPlayer();
         p.playSound(p.getLocation(), Sound.ENTITY_RAVAGER_ATTACK, 1, 0);
-        p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 2));
-        p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 600, 4));
-        p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 400, 2));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 3));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 300, 0));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 400, 0));
     }
 }

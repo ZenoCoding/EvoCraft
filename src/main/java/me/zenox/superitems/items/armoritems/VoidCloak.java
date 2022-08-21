@@ -24,7 +24,7 @@ import static me.zenox.superitems.items.ItemRegistry.*;
 
 public class VoidCloak extends ArmorItem {
     public VoidCloak() {
-        super("Void Cloak", "void_cloak", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 8d, Stats.HEALTH, 5d, Stats.WISDOM, 10d, Stats.REGENERATION, 2d));
+        super("Void Cloak", "void_cloak", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 5d, Stats.WISDOM, 45d, Stats.REGENERATION, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "The ultimate source of wisdom");
@@ -48,6 +48,6 @@ public class VoidCloak extends ArmorItem {
 //        recipe.setIngredient('K', new RecipeChoice.ExactChoice(KEVLAR.getItemStack(1)));
 //        recipe.setIngredient('F', new RecipeChoice.ExactChoice(TOUGH_FABRIC.getItemStack(1)));
 //        recipe.setIngredient('S', new RecipeChoice.ExactChoice(DESECRATOR_SCALE.getItemStack(1)));
-//        return List.of(recipe);
+        return List.of();
     }
 }

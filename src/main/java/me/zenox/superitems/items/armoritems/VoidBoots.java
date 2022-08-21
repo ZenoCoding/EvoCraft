@@ -23,18 +23,18 @@ import java.util.UUID;
 import static me.zenox.superitems.items.ItemRegistry.DESECRATOR_SCALE;
 import static me.zenox.superitems.items.ItemRegistry.DESECRATOR_TOE;
 
-public class BootsOftheVoidLord extends ArmorItem {
-    public BootsOftheVoidLord() {
-        super("Boots Of the Void Lord", "boots_of_the_void_lord", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 2d, Stats.HEALTH, 5d, Stats.WISDOM, 10d, Stats.REGENERATION, 2d));
+public class VoidBoots extends ArmorItem {
+    public VoidBoots() {
+        super("Boots Of the Void Lord", "void_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 2d, Stats.HEALTH, 5d, Stats.WISDOM, 30d, Stats.REGENERATION, 5d));
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "Legend says the Void Lord embedded his knowledge in his armor before he died...");
+        lore.add(ChatColor.GRAY + "Who the heck is this \"Void Lord\" guy?");
         this.getMeta().setLore(lore);
         ((LeatherArmorMeta) this.getMeta()).setColor(Color.TEAL);
 
         Multimap<Attribute, AttributeModifier> attributeMap = ArrayListMultimap.create();
-        attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
-        attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
+        attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
+        attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
 
 
         this.getMeta().setAttributeModifiers(attributeMap);
@@ -47,6 +47,6 @@ public class BootsOftheVoidLord extends ArmorItem {
 //        recipe.shape("   ", "S S", "T T");
 //        recipe.setIngredient('T', new RecipeChoice.ExactChoice(DESECRATOR_TOE.getItemStack(1)));
 //        recipe.setIngredient('S', new RecipeChoice.ExactChoice(DESECRATOR_SCALE.getItemStack(1)));
-//        return List.of(recipe);
+        return List.of();
     }
 }
