@@ -9,7 +9,6 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
@@ -24,23 +23,20 @@ import java.util.UUID;
 import static me.zenox.superitems.items.ItemRegistry.DESECRATOR_SCALE;
 import static me.zenox.superitems.items.ItemRegistry.KEVLAR;
 
-public class VoidLeggings extends ArmorItem {
-    public VoidLeggings() {
-        super("Void Leggings", "void_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 5d, Stats.WISDOM, 35d, Stats.REGENERATION, 5d));
+public class FlamingLeggings extends ArmorItem {
+    public FlamingLeggings() {
+        super("Flaming Leggings", "flaming_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 6d, Stats.HEALTH, 5d));
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "Rumored to talk and share knowledge to the wearer...");
+        lore.add(ChatColor.GRAY + "Forged in a blazing inferno.");
         this.getMeta().setLore(lore);
-        this.getMeta().addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
-        this.getMeta().addEnchant(Enchantment.THORNS, 3, true);
-        this.getMeta().addEnchant(Enchantment.WATER_WORKER, 1, true);
-        ((LeatherArmorMeta) this.getMeta()).setColor(Color.TEAL);
+        ((LeatherArmorMeta) this.getMeta()).setColor(Color.RED);
 
         Multimap<Attribute, AttributeModifier> attributeMap = ArrayListMultimap.create();
         attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
         attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
-
-
+        attributeMap.put(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 0.07, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.LEGS));
+        attributeMap.put(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 0.07, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.LEGS));
         this.getMeta().setAttributeModifiers(attributeMap);
         this.getMeta().setUnbreakable(true);
     }

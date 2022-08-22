@@ -69,6 +69,13 @@ public class ItemRegistry {
     public static final ComplexItem CORRUPT_PEARL = registerItem(new CorruptPearl());
 
     public static final ComplexItem DEV_STICK = registerItem(new DevStick());
+    public static final ComplexItem DEV_AXE = registerItem(new DevAxe());
+
+    public static final ComplexItem FLAMING_HELMET = registerItem(new FlamingHelmet());
+    public static final ComplexItem FLAMING_CHESTPLATE = registerItem(new FlamingChestplate());
+    public static final ComplexItem FLAMING_LEGGINGS = registerItem(new FlamingLeggings());
+    public static final ComplexItem FLAMING_BOOTS = registerItem(new FlamingBoots());
+
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
 
