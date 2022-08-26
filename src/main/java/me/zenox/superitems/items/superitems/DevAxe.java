@@ -25,6 +25,7 @@ public class DevAxe extends ComplexItem {
         this.getMeta().addEnchant(Enchantment.DIG_SPEED, 100, true);
 
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        this.getMeta().isUnbreakable();
     }
 
     @Override
