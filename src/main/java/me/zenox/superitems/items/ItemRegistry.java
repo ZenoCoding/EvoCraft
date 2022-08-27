@@ -76,6 +76,20 @@ public class ItemRegistry {
     public static final ComplexItem FLAMING_LEGGINGS = registerItem(new FlamingLeggings());
     public static final ComplexItem FLAMING_BOOTS = registerItem(new FlamingBoots());
 
+    public static final ComplexItem LEAF_HAT = registerItem(new LeafHat());
+    public static final ComplexItem Druid_Chestplate = registerItem(new DruidChestplate());
+    public static final ComplexItem DRUID_LEGGINGS = registerItem(new DruidLeggings());
+    public static final ComplexItem DRUID_BOOTS = registerItem(new DruidBoots());
+
+    public static final ComplexItem SILVER_HELMET= registerItem(new SilverHelmet());
+    public static final ComplexItem SILVER_CHESPLATE = registerItem(new SilverChesplate());
+    public static final ComplexItem SILVER_LEGGINGS = registerItem(new SilverLeggings());
+    public static final ComplexItem SILVER_BOOTS = registerItem(new SilverBoots());
+
+    public static final ComplexItem BANE_OF_NOOBS = registerItem(new BaneofNoobs());
+
+    public static final ComplexItem FLYING_SWORD = registerItem(new FlyingSword());
+
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
 

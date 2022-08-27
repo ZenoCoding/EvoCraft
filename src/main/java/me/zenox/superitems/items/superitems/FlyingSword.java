@@ -12,8 +12,8 @@ import org.bukkit.inventory.Recipe;
 import java.util.List;
 import java.util.Map;
 
-public class flyingsword extends ComplexItem {
-    public flyingsword() {
+public class FlyingSword extends ComplexItem {
+    public FlyingSword() {
         super("Flying Sword", "Flying Sword", Rarity.LEGENDARY, Type.SUPERITEM, Material.IRON_SWORD, Map.of(), List.of(new MagicMissile(1, false), new FlyingSwordAbility()));
 
         List<String> lore = List.of(ChatColor.GOLD + "" + ChatColor.ITALIC + "A flying Sword");
