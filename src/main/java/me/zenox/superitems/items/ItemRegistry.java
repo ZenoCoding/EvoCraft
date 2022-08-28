@@ -90,6 +90,10 @@ public class ItemRegistry {
 
     public static final ComplexItem FLYING_SWORD = registerItem(new FlyingSword());
 
+    public static final ComplexItem APPLE_SWORD = registerItem(new AppleSword());
+
+    public static final ComplexItem BUFF_SWORD = registerItem(new BuffSword());
+
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
 
