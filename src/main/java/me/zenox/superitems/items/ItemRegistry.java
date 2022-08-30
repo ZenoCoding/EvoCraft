@@ -33,6 +33,7 @@ public class ItemRegistry {
     public static final ComplexItem DARK_SKULL = registerItem(new DarkSkull());
     public static final ComplexItem TORMENTED_SOUL = registerItem(new TormentedSoul());
     public static final ComplexItem ENCHANTED_IRON_BLOCK = registerItem(new EnchantedIronBlock());
+    public static final ComplexItem ENCHANTED_IRON_INGOT = registerItem(new EnchantedIronIngot());
     public static final ComplexItem MAGIC_TOY_STICK = registerItem(new ToyStick());
     public static final ComplexItem SOUL_CRYSTAL = registerItem(new SoulCrystal());
     public static final ComplexItem FIERY_EMBER_STAFF = registerItem(new FieryEmberStaff());
