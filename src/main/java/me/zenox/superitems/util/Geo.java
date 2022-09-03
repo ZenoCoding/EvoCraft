@@ -1,17 +1,15 @@
 package me.zenox.superitems.util;
 
 import org.bukkit.util.Vector;
+import org.codehaus.plexus.util.dag.Vertex;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Geo {
-    /// <summary>
+
     /// Generates a list of vertices (in arbitrary order) for a tetrahedron centered on the origin.
-    /// </summary>
-    /// <param name="r">The distance of each vertex from origin.</param>
-    /// <returns></returns>
-    public static List<Vector> MakeDodecahedron(Vector vec, double r)
+    public static List<Vector> makeDodecahedron(Vector vec, double r)
     {
         // Calculate constants that will be used to generate vertices
         float phi = (float)(Math.sqrt(5) - 1) / 2; // The golden ratio
@@ -51,6 +49,38 @@ public class Geo {
             vector.add(vec);
         }
         return vertices;
+    }
+
+    public static List<Vector> lerpEdges(List<Vector> vertices, int steps){
+        List<Vector> result = new ArrayList<>();
+
+        double minLengthSquared = Double.MAX_VALUE;
+        for(Vector vertex : vertices){
+            if(vertex == vertices.get(0)) continue;
+            double distSqr = vertices.get(0).distanceSquared(vertex);
+            if(distSqr < minLengthSquared) minLengthSquared = Math.round(distSqr*100.0)/100.0;
+        }
+
+
+        List<Vector> connected = new ArrayList<>();
+
+        for(Vector vertex : vertices){
+            List<Vector> lConnected = new ArrayList<>();
+            for(Vector v : vertices){
+                if(lConnected.size() == 3) break;
+                if(v.equals(vertex) || connected.contains(v)) continue;
+                if(Math.round(vertex.distanceSquared(v)*100.0)/100.0 == minLengthSquared){
+                    lConnected.add(v);
+                    for(int i = 0;i < steps;i++){
+                        Vector diff = vertex.clone().subtract(v);
+                        result.add(vertex.clone().subtract(diff.multiply(1d/steps*(i+1))));
+                    }
+                }
+            }
+            //connected.add(vertex);
+        }
+
+        return result;
     }
 }
 

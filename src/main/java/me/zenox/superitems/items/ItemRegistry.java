@@ -22,9 +22,17 @@ public class ItemRegistry {
 
     private final static List<ComplexItem> registeredItems = new ArrayList<>();
     public static final ComplexItem GARDENER_SAPLING = registerItem(new GardenerSapling());
-    public static final ComplexItem ENCHANTED_MAGMA_BLOCK = registerItem(new ComplexItem(new ItemSettings().name("Enchanted Magma Block").id("enchanted_magma_block").material(Material.MAGMA_BLOCK).glow()));
+    public static final ComplexItem ENCHANTED_MAGMA_BLOCK = registerItem(new ComplexItem(new ItemSettings()
+            .name("Enchanted Magma Block")
+            .id("enchanted_magma_block")
+            .material(Material.MAGMA_BLOCK)
+            .glow()));
     public static final ComplexItem PURIFIED_MAGMA_DISTILLATE = registerItem(new PurifiedMagmaDistillate());
-    public static final ComplexItem ENCHANTED_BLAZE_ROD = registerItem(new ComplexItem(new ItemSettings().name("Enchanted Blaze Rod").id("enchanted_blaze_rod").material(Material.BLAZE_ROD).glow()));
+    public static final ComplexItem ENCHANTED_BLAZE_ROD = registerItem(new ComplexItem(new ItemSettings()
+            .name("Enchanted Blaze Rod")
+            .id("enchanted_blaze_rod")
+            .material(Material.BLAZE_ROD)
+            .glow()));
     public static final ComplexItem BURNING_ASHES = registerItem(new BurningAshes());
     public static final ComplexItem MOLTEN_POWDER = registerItem(new MoltenPowder());
     public static final ComplexItem ENCHANTED_ENDER_PEARL = registerItem(new EnchantedEnderPearl());
@@ -59,11 +67,12 @@ public class ItemRegistry {
     public static final ComplexItem TOTEM_POLE = registerItem(new TotemPole());
     public static final ComplexItem CORRUPTED_TOTEM_POLE = registerItem(new CorruptedTotemPole());
     public static final ComplexItem WARPED_CUBE = registerItem(new WarpedCube());
+    public static final ComplexItem ROUGH_VOID_STONE = registerItem(new RoughVoidStone());
     public static final ComplexItem VOID_STONE = registerItem(new VoidStone());
     public static final ComplexItem VOID_SCEPTER = registerItem(new VoidScepter());
-    public static final ComplexItem OBSIDIAN_SCYTHE = registerItem(new ObsidianScythe());
+    public static final ComplexItem OBSIDIAN_SCYTHE = registerItem(new ObsidilithScythe());
     public static final ComplexItem VOID_HELMET = registerItem(new VoidMask());
-    public static final ComplexItem VOID_CLOAK = registerItem(new VoidCloak());
+    public static final ComplexItem VOID_CHESTPLATE = registerItem(new VoidCloak());
     public static final ComplexItem VOID_LEGGINGS = registerItem(new VoidLeggings());
     public static final ComplexItem VOID_BOOTS = registerItem(new VoidBoots());
     public static final ComplexItem CORRUPT_PEARL = registerItem(new CorruptPearl());
@@ -75,6 +84,26 @@ public class ItemRegistry {
     public static final ComplexItem FLAMING_CHESTPLATE = registerItem(new FlamingChestplate());
     public static final ComplexItem FLAMING_LEGGINGS = registerItem(new FlamingLeggings());
     public static final ComplexItem FLAMING_BOOTS = registerItem(new FlamingBoots());
+
+    public static final ComplexItem DARK_CORRUPTER = registerItem(new DarkCorrupter());
+    public static final ComplexItem DARK_CORRUPTER_BIG = registerItem(new DarkCorrupterTall());
+    public static final ComplexItem DARK_TOYSTICK = registerItem(new DarkToyStick());
+    public static final ComplexItem DARK_CORRUPTER_VISUAL = registerItem(new CorrupterVisual());
+    public static final ComplexItem DARK_CORRUPTER_BLACK_HOLE = registerItem(new DarkCorrupterBlackHole());
+
+    public static final ComplexItem OBSIDIAN_TABLET = registerItem(new ObsidianTablet());
+    public static final ComplexItem VERTEXICAL_CORE = registerItem(new VertexicalCore());
+    public static final ComplexItem VERTEXICAL_BLADE = registerItem(new VertexicalBlade());
+
+    public static final ComplexItem ENCHANTED_OBSIDIAN = registerItem(new EnchantedObsidian());
+    public static final ComplexItem COMPACT_OBSIDIAN = registerItem(new CompactObsidian());
+    public static final ComplexItem CORRUPT_OBSIDIAN = registerItem(new CorruptObsidian());
+    public static final ComplexItem CRESTFALLEN_MONOLITH = registerItem(new CrestfallenMonolith());
+
+    public static final ComplexItem PAGES_OF_AGONY = registerItem(new PagesOfAgony());
+    public static final ComplexItem DIMENSIONAL_JOURNAL = registerItem(new DimensionalJournal());
+
+
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 

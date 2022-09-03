@@ -6,9 +6,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.ShapedRecipe;
 
 import java.util.List;
 import java.util.Map;
+
+import static me.zenox.superitems.items.ItemRegistry.*;
 
 public class VoidStone extends ComplexItem {
 
@@ -23,6 +27,12 @@ public class VoidStone extends ComplexItem {
 
     @Override
     public List<Recipe> getRecipes() {
-        return super.getRecipes();
+        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
+        recipe.shape("CKC", "CVC", "CCC");
+        recipe.setIngredient('C', new RecipeChoice.ExactChoice(CORRUPT_PEARL.getItemStack(1)));
+        recipe.setIngredient('K', new RecipeChoice.ExactChoice(KEVLAR.getItemStack(1)));
+        recipe.setIngredient('V', new RecipeChoice.ExactChoice(ROUGH_VOID_STONE.getItemStack(1)));
+
+        return List.of(recipe);
     }
 }

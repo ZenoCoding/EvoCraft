@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class DevAxe extends ComplexItem {
     public DevAxe() {
-        super("Dev Axe", "dev_axe", Rarity.VERY_SPECIAL, Type.SUPERITEM, Material.WOODEN_PICKAXE, Map.of(), List.of(new MagicMissile(5, false)));
+        super("Dev Axe", "dev_axe", Rarity.VERY_SPECIAL, Type.SUPERITEM, Material.WOODEN_PICKAXE, Map.of(), List.of());
 
         List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Built Diffrent");
 

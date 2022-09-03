@@ -75,7 +75,6 @@ public abstract class Ability {
             container.set(cooldownKey, PersistentDataType.DOUBLE, cooldown);
         }
 
-
         if (cooldown != null && Math.ceil((cooldown - System.currentTimeMillis()) / 1000) > 0) {
             Util.sendMessage(e.getPlayer(), ChatColor.WHITE + "This ability is on cooldown for " + ChatColor.RED + Math.ceil((cooldown - System.currentTimeMillis()) / 1000) + ChatColor.WHITE + " seconds");
             return;

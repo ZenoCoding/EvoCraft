@@ -7,6 +7,8 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +19,7 @@ public class ShapelessRecipeBuilder {
     private List<RecipeChoice> choiceList;
 
     public ShapelessRecipeBuilder(){
-
+        this.choiceList = new ArrayList<>();
     }
 
     public String getId() {

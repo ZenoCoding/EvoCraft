@@ -70,6 +70,11 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>nexus</id>
+            <name>Lumine Releases</name>
+            <url>http://mvn.lumine.io/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -89,6 +94,12 @@
             <groupId>com.github.Archy-X</groupId>
             <artifactId>AureliumSkills</artifactId>
             <version>Beta1.3.6</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ticxo.modelengine</groupId>
+            <artifactId>api</artifactId>
+            <version>B3.0.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

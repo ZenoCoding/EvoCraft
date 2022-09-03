@@ -12,11 +12,14 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static me.zenox.superitems.items.ItemRegistry.*;
 
 public class VoidScepter extends ComplexItem {
     public VoidScepter() {
@@ -24,8 +27,10 @@ public class VoidScepter extends ComplexItem {
 
         List<String> lore = List.of(ChatColor.GRAY + "Forged from the souls of corrupted endermen.");
 
+
         Multimap<Attribute, AttributeModifier> attributeMap = ArrayListMultimap.create();
-        attributeMap.put(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "superitems:attack_damage", 12, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        attributeMap.put(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "superitems:attack_damage", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        attributeMap.put(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
 
         this.getMeta().setAttributeModifiers(attributeMap);
         this.getMeta().setLore(lore);
@@ -36,7 +41,12 @@ public class VoidScepter extends ComplexItem {
     @Override
     public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
-        return List.of();
+        recipe.shape("CVC", "NDN", "CDC");
+        recipe.setIngredient('C', new RecipeChoice.ExactChoice(CORRUPT_PEARL.getItemStack(1)));
+        recipe.setIngredient('V', new RecipeChoice.ExactChoice(VOID_STONE.getItemStack(1)));
+        recipe.setIngredient('N', Material.NETHER_STAR);
+        recipe.setIngredient('D', Material.DEBUG_STICK);
+        return List.of(recipe);
     }
 
 }

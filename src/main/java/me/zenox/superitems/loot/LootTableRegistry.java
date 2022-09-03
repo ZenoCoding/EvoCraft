@@ -31,7 +31,10 @@ public class LootTableRegistry {
             new LootTableEntry(new ItemStack(Material.LEATHER), 5, 32, 1))));
 
     public static LootTable DEMISER_DROPS = registerLootTable(new LootTable("demiser", "Demiser Loot", List.of(
-            new LootTableEntry(VOID_STONE.getItemStack(1), 1, 1, 0.02),
+            new LootTableEntry(VERTEXICAL_CORE.getItemStack(1), 1, 1, 0.01),
+            new LootTableEntry(ROUGH_VOID_STONE.getItemStack(1), 1, 1, 0.1),
+            new LootTableEntry(OBSIDIAN_TABLET.getItemStack(1), 1, 1, 0.05),
+            new LootTableEntry(CORRUPT_PEARL.getItemStack(1), 1, 3, 0.25),
             new LootTableEntry(HYPER_CRUX.getItemStack(1), 1, 1, 0.25),
             new LootTableEntry(TORMENTED_SOUL.getItemStack(1), 1, 2, 0.5),
             new LootTableEntry(new ItemStack(Material.TOTEM_OF_UNDYING), 1, 2, 1))));

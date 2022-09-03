@@ -79,7 +79,7 @@ public class SoulRift extends ItemAbility {
             @Override
             public void run() {
                 // Particle Magic
-                List<Vector> dodecahedron = Geo.MakeDodecahedron(loc.toVector(), 2);
+                List<Vector> dodecahedron = Geo.makeDodecahedron(loc.toVector(), 2);
                 for(Vector v : dodecahedron){
                     Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 187, 215), 0.5F);
                     w.spawnParticle(Particle.REDSTONE, v.toLocation(w).add(0, 0.5+Math.sin(count)/4, 0), 1, dustOptions);

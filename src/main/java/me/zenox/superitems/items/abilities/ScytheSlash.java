@@ -18,7 +18,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Random;
 
-public class ScytheSlash extends ItemAbility {
+public class  ScytheSlash extends ItemAbility {
 
 
 
@@ -39,9 +39,5 @@ public class ScytheSlash extends ItemAbility {
         World w = p.getWorld();
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2000, 2));
         p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 2, true, false, false));
-
-
-
-        //ttyl
     }
 }

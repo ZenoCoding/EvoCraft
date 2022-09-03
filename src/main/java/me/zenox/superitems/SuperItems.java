@@ -2,10 +2,12 @@ package me.zenox.superitems;
 
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.ticxo.modelengine.api.ModelEngineAPI;
 import me.zenox.superitems.command.MainCommand;
 import me.zenox.superitems.events.OtherEvent;
 import me.zenox.superitems.events.PlayerUseItemEvent;
 import me.zenox.superitems.items.ItemRegistry;
+import me.zenox.superitems.items.RecipeRegistry;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SuperItems extends JavaPlugin {
@@ -23,8 +25,8 @@ public final class SuperItems extends JavaPlugin {
         plugin = this;
         plugin.getLogger().info("SuperItems v" + plugin.getDescription().getVersion() + " loaded.");
 
-        //ItemRegistry.registerItems();
         ItemRegistry.registerRecipes();
+        RecipeRegistry.registerRecipes();
 
         // Dependency check
         try {

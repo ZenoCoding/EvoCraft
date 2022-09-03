@@ -27,8 +27,8 @@ public class MagicMissile extends ItemAbility {
 
     private final boolean combustion;
     private final int explosionpower;
-    public MagicMissile(int explosionpower, boolean combustion) {
-        super("Magic Missile", "magic_missile", AbilityAction.RIGHT_CLICK_ALL, 0, 0);
+    public MagicMissile(int explosionpower, double cooldown, boolean combustion) {
+        super("Magic Missile", "magic_missile", AbilityAction.RIGHT_CLICK_ALL, 0, cooldown);
         this.explosionpower = explosionpower;
         this.combustion = combustion;
 
