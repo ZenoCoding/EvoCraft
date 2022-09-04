@@ -81,8 +81,8 @@ public class VertexicalBlade extends ComplexItem implements Listener {
                 Util.sendMessage(p, "Stacks: " + stacks);
 
 
-                if(stacks >= 5){
-                    e.setDamage(e.getDamage()*(1+0.02*stacks));
+                if(stacks >= 3){
+                    e.setDamage(e.getDamage()*(1+0.04*stacks));
                 }
 
 
@@ -102,7 +102,7 @@ public class VertexicalBlade extends ComplexItem implements Listener {
                                 stacks = countValues.get(0).asInt();
                             }
 
-                            if (truecount % (Math.round(15 / Math.sqrt(count)) + 1)== 0 && oldstacks == stacks) {
+                            if (truecount % (Math.round(15 / Math.sqrt(count)) + 5)== 0 && oldstacks == stacks) {
                                 p.setMetadata("vertex_stack", new FixedMetadataValue(SuperItems.getPlugin(), stacks -= 1));
                             }
 
@@ -114,7 +114,7 @@ public class VertexicalBlade extends ComplexItem implements Listener {
                             }
 
 
-                            if(stacks >= 5) {
+                            if(stacks >= 3) {
                                 // Create Dodecahedron
                                 List<Vector> edgedDodecahedron = Geo.lerpEdges(Geo.makeDodecahedron(p.getLocation().toVector(), 2), 7);
 

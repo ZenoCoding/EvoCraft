@@ -11,5 +11,5 @@ import org.bukkit.inventory.ItemStack;
  * Planned for future implementation
  */
 public class ComplexItemStack {
-    
+
 }

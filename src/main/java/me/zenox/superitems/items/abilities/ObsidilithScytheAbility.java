@@ -99,7 +99,7 @@ public class ObsidilithScytheAbility extends ItemAbility {
 
                     }
                     if (entity instanceof Damageable && !entity.equals(p)) {
-                        ((Damageable) entity).damage(40, p);
+                        ((Damageable) entity).damage(20, p);
                         if(entity instanceof LivingEntity) ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
                     }
                 }
