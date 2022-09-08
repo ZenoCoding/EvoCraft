@@ -49,6 +49,7 @@ public class FlamingHelmet extends ArmorItem {
     @Override
     public List<Recipe> getRecipes() {
 //        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
+        //idfk bro this is my work today i promise ill do something tmr
           return List.of();
     }
 }
