@@ -1,15 +1,10 @@
 package me.zenox.superitems.events;
 
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.ComplexItem;
-import me.zenox.superitems.items.ItemRegistry;
-import me.zenox.superitems.items.abilities.Ability;
-import me.zenox.superitems.items.abilities.ItemAbility;
-import me.zenox.superitems.util.Util;
-import org.apache.commons.lang.ObjectUtils;
-import org.bukkit.Bukkit;
+import me.zenox.superitems.item.ComplexItem;
+import me.zenox.superitems.item.ItemRegistry;
+import me.zenox.superitems.item.abilities.Ability;
 import org.bukkit.event.*;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;

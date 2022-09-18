@@ -6,7 +6,7 @@
 
     <groupId>me.zenox</groupId>
     <artifactId>superitems</artifactId>
-    <version>0.1.2-BETA</version>
+    <version>1.0.0-ALPHA</version>
     <packaging>jar</packaging>
 
     <name>SuperItems</name>
@@ -90,6 +90,11 @@
             <artifactId>AureliumSkills</artifactId>
             <version>Beta1.3.6</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
         </dependency>
     </dependencies>
 </project>

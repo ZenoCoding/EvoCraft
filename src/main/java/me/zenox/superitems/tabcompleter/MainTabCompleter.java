@@ -1,7 +1,7 @@
 package me.zenox.superitems.tabcompleter;
 
-import me.zenox.superitems.items.ComplexItem;
-import me.zenox.superitems.items.ItemRegistry;
+import me.zenox.superitems.item.ComplexItem;
+import me.zenox.superitems.item.ItemRegistry;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;

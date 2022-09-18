@@ -1,8 +1,8 @@
 package me.zenox.superitems.events;
 
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.ComplexItem;
-import me.zenox.superitems.items.ItemRegistry;
+import me.zenox.superitems.item.ComplexItem;
+import me.zenox.superitems.item.ItemRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Explosive;
