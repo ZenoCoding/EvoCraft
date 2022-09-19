@@ -2,6 +2,8 @@ package me.zenox.superitems.item.abilities;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.item.ComplexItemMeta;
+import me.zenox.superitems.item.ComplexItemStack;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -33,28 +35,23 @@ public class EmberShoot extends ItemAbility {
     public void runExecutable(PlayerEvent event) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Player p = e.getPlayer();
-        World w = p.getWorld();
-        Location loc;
+        ComplexItemMeta complexMeta = ComplexItemStack.of(e.getItem()).getComplexMeta();
 
         Location eyeLoc = p.getEyeLocation();
 
-        ItemStack item = e.getItem();
-        ItemMeta meta = item.getItemMeta();
-        PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
-        String attunement = dataContainer.get(new NamespacedKey(SuperItems.getPlugin(), "ember_attunement"), PersistentDataType.STRING);
-        if (attunement.equalsIgnoreCase("blazeborn")) {
+        if (complexMeta.getVariable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE).getValue().equals(EmberAttune.Attunement.BLAZEBORN)) {
             Fireball f = (Fireball) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.FIREBALL);
             f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, AureliumAPI.getMaxMana(e.getPlayer()) / 75)));
             f.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
             f.setMetadata("knockback", new FixedMetadataValue(SuperItems.getPlugin(), 1.5));
             f.setShooter(p);
-            f.setYield(2f);
-        } else if (attunement.equalsIgnoreCase("darksoul")) {
+            f.setYield(((float) AureliumAPI.getMaxMana(p))/150f);
+        } else if (complexMeta.getVariable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE).getValue().equals(EmberAttune.Attunement.DARKSOUL)) {
             WitherSkull f = (WitherSkull) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.WITHER_SKULL);
             f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, AureliumAPI.getMaxMana(e.getPlayer()) / 50)));
             f.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
             f.setShooter(p);
-            f.setYield(3f);
+            f.setYield(((float) AureliumAPI.getMaxMana(p))/100f);
         }
     }
 }

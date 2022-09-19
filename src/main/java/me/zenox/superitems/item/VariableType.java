@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-class VariableType<T extends Serializable> {
+public class VariableType<T extends Serializable> {
     private static List<VariableType> variableList = new ArrayList<>();
 
     private final String name;
@@ -71,8 +71,8 @@ class VariableType<T extends Serializable> {
                 '}';
     }
 
-    enum Priority {
-        ABOVE_STATS(0), ABOVE_LORE(1), ABOVE_ENCHANTS(2), ABOVE_ABILITIES(3), BELOW(Integer.MAX_VALUE);
+    public enum Priority {
+        ABOVE_STATS(0), ABOVE_LORE(1), ABOVE_ENCHANTS(2), ABOVE_ABILITIES(3), BELOW_ABILITIES(4), BELOW(Integer.MAX_VALUE);
 
         private int weight;
 

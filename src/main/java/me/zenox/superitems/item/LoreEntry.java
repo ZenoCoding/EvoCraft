@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-class LoreEntry implements Cloneable{
+public class LoreEntry implements Cloneable{
     private final String id;
     private List<String> lore;
     private BiConsumer<LoreBuilder, LoreEntry> modifier;
@@ -16,9 +16,8 @@ class LoreEntry implements Cloneable{
         this.id = id;
         this.lore = new ArrayList<>(lore);
         this.modifier = modifier;
-        Util.logToConsole("LoreEntry: " + this);
     }
-    LoreEntry(String id, List<String> lore) {
+    public LoreEntry(String id, List<String> lore) {
         this(id, lore, ((loreBuilder, loreEntry) -> {}));
     }
 

@@ -81,9 +81,6 @@ public class InventoryListener implements Listener {
                 ItemMeta meta = item.getItemMeta();
                 meta.setLore(List.of());
                 if(meta.hasCustomModelData()) meta.setLore(List.of(ChatColor.RED + "This item has CustomModelData, but isn't registered as a ComplexItem. It appears that this item is bugged. Please report this."));
-
-
-                new ComplexItemMeta(meta, item);
             }
         }
     }

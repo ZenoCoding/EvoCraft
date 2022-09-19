@@ -32,9 +32,6 @@ public class DarkEmberStaff extends ComplexItem {
         lore.add(ChatColor.GRAY + "A fiery rod, taken from " + ChatColor.RED + "Blaziel" + ChatColor.GRAY + " and imbued with darkness.");
         lore.add(ChatColor.GRAY + "Draws power from the user's " + ChatColor.AQUA + "mana.");
         this.getMeta().setLore(lore);
-
-        PersistentDataContainer dataContainer = this.getMeta().getPersistentDataContainer();
-        dataContainer.set(new NamespacedKey(SuperItems.getPlugin(), "ember_attunement"), PersistentDataType.STRING, "blazeborn");
     }
 
     @Override

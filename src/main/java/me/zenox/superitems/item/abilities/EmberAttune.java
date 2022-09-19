@@ -1,6 +1,7 @@
 package me.zenox.superitems.item.abilities;
 
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.item.*;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -16,6 +17,12 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.List;
 
 public class EmberAttune extends ItemAbility {
+    public static final VariableType ATTUNEMENT_VARIABLE_TYPE =
+            new VariableType<Attunement>("ember_attunement",
+                    new LoreEntry("ember_attunement", List.of(ChatColor.AQUA + "Attunement: ")),
+                    VariableType.Priority.BELOW_ABILITIES, (loreEntry, variable) ->
+                    loreEntry.setLore(List.of(ChatColor.AQUA + "Attunement: " + ((Attunement) variable.getValue()).getName())));
+
     public EmberAttune() {
         super("Attune", "dark_ember_attune", AbilityAction.LEFT_CLICK_ALL, 0, 0);
 
@@ -31,33 +38,40 @@ public class EmberAttune extends ItemAbility {
         Player p = e.getPlayer();
         ItemStack item = e.getItem();
         ItemMeta meta = item.getItemMeta();
-        PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
-        String attunement = dataContainer.get(new NamespacedKey(SuperItems.getPlugin(), "ember_attunement"), PersistentDataType.STRING);
-        String message = ChatColor.RED + "Unknown Attunement";
-        String newAttunement = "attunement_unknown";
-        if (attunement.equalsIgnoreCase("blazeborn")) {
-            message = ChatColor.DARK_GRAY + "Darksoul";
-            newAttunement = "darksoul";
+        ComplexItemMeta complexMeta = ComplexItemStack.of(item).getComplexMeta();
+
+        Attunement attunement;
+        try {
+            attunement = (Attunement) complexMeta.getVariable(ATTUNEMENT_VARIABLE_TYPE).getValue();
+        } catch(NullPointerException ex){
+            attunement = Attunement.BLAZEBORN;
+            complexMeta.setVariable(ATTUNEMENT_VARIABLE_TYPE, attunement);
+        }
+        if (attunement.equals(Attunement.BLAZEBORN)) {
+            complexMeta.setVariable(ATTUNEMENT_VARIABLE_TYPE, Attunement.DARKSOUL);
             meta.setCustomModelData(meta.getCustomModelData()+1);
-        } else if (attunement.equalsIgnoreCase("darksoul")) {
-            message = ChatColor.GOLD + "Blazeborn";
-            newAttunement = "blazeborn";
+        } else {
+            complexMeta.setVariable(ATTUNEMENT_VARIABLE_TYPE, Attunement.BLAZEBORN);
             meta.setCustomModelData(meta.getCustomModelData()-1);
         }
-
-        dataContainer.set(new NamespacedKey(SuperItems.getPlugin(), "ember_attunement"), PersistentDataType.STRING, newAttunement);
-
-        Util.sendActionBar(p, message);
+        Util.sendActionBar(p, ((Attunement) complexMeta.getVariable(ATTUNEMENT_VARIABLE_TYPE).getValue()).getName());
         p.playSound(p.getLocation(), Sound.BLOCK_STONE_BUTTON_CLICK_OFF, 1, 1f);
 
-        // Update lore
-        List<String> lore = item.getItemMeta().getLore();
-        for (String lorestring : lore) {
-            if (lorestring.startsWith(ChatColor.AQUA + "Attunement: ")) {
-                lore.set(lore.indexOf(lorestring), ChatColor.AQUA + "Attunement: " + message);
-            }
-        }
-        meta.setLore(lore);
         item.setItemMeta(meta);
+        complexMeta.updateItem();
+    }
+
+    enum Attunement {
+        DARKSOUL(ChatColor.DARK_GRAY + "Darksoul"), BLAZEBORN(ChatColor.GOLD + "Blazeborn");
+
+        private String name;
+
+        private Attunement(String name){
+            this.name = name;
+        }
+
+        public String getName(){
+            return name;
+        }
     }
 }

@@ -35,11 +35,7 @@ public class ComplexItemStack implements Cloneable{
     private ItemStack item;
     private final ComplexItem complexItem;
     private final UUID uuid;
-    private ComplexItem.Rarity rarity;
-    private final ComplexItem.Type type;
-    private ItemMeta meta;
     private ComplexItemMeta complexMeta;
-    private final Map<Stat, Double> stats;
     private final List<Ability> abilities;
 
     private String skullURL = "";
@@ -47,70 +43,80 @@ public class ComplexItemStack implements Cloneable{
     public ComplexItemStack(ComplexItem complexItem, int amount){
         this(complexItem, new ItemStack(complexItem.getMaterial()));
         this.item = buildItem(amount);
+
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(complexItem.getDisplayName());
+
+        item.setItemMeta(meta);
     }
 
     public ComplexItemStack(ComplexItem complexItem, ItemStack item){
         this.complexItem = complexItem;
         this.uuid = complexItem.isUnique() ? UUID.randomUUID() : null;
-        this.rarity = complexItem.getRarity();
-        this.type = complexItem.getType();
-        this.meta = complexItem.getMeta();
-        this.stats = complexItem.getStats();
         this.abilities = complexItem.getAbilities() == null ? new ArrayList<>() : new ArrayList<>(complexItem.getAbilities());
         this.skullURL = complexItem.getSkullURL();
-
-        this.meta.setDisplayName(complexItem.getDisplayName());
-
         this.item = item;
 
-        this.complexMeta = new ComplexItemMeta(meta, abilities, item);
+        ItemMeta meta = item.getItemMeta();
 
-        Util.logToConsole("Item Name: " + this.meta.getDisplayName());
+        meta.setDisplayName(complexItem.getDisplayName());
+
+        item.setItemMeta(meta);
+
+        this.complexMeta = new ComplexItemMeta(this);
+
+        Util.logToConsole("Item Name: " + meta.getDisplayName());
     }
 
     private ItemStack buildItem(int amount){
-        ItemStack item = new ItemStack(this.complexItem.getMaterial());
+        item = new ItemStack(this.complexItem.getMaterial());
+
+        // Set Initial ComplexItem Modifications
+        item.setItemMeta(complexItem.getMeta());
+
+        ItemMeta meta = item.getItemMeta();
 
         // Set CustomModelData
-        this.meta.setCustomModelData(complexItem.getCustomModelData());
+        meta.setCustomModelData(complexItem.getCustomModelData());
 
-
-        item.setItemMeta(this.meta);
         item.setAmount(amount);
 
-        for (Map.Entry<Stat, Double> entry : this.getStats().entrySet()) {
-            item = this.getType().isWearable() ? AureliumAPI.addArmorModifier(item, entry.getKey(), entry.getValue(), false) : AureliumAPI.addItemModifier(item, entry.getKey(), entry.getValue(), false);
-            this.meta = item.getItemMeta();
+        // Set ItemMeta so that SkillModifier can use it
+        item.setItemMeta(meta);
+
+        for (Map.Entry<Stat, Double> entry : complexItem.getStats().entrySet()) {
+            item = complexItem.getType().isWearable() ? AureliumAPI.addArmorModifier(item, entry.getKey(), entry.getValue(), false) : AureliumAPI.addItemModifier(item, entry.getKey(), entry.getValue(), false);
         }
 
-        complexMeta = new ComplexItemMeta(this.meta, this.abilities, item);
+        meta = item.getItemMeta();
 
-        ItemMeta itemMeta = complexMeta.getItemMeta();
-        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
 
         container.set(ComplexItem.GLOBAL_ID, PersistentDataType.STRING, this.getId());
 
         if(this.uuid != null) container.set(new NamespacedKey(SuperItems.getPlugin(), "uuid"), new SerializedPersistentType<UUID>(), uuid);
 
-        ItemStack skullItem = Util.makeSkull(item, this.skullURL);
+        // Set ItemMeta so that ComplexItemMeta can use it
+        item.setItemMeta(meta);
 
-        complexMeta.setVariable(ComplexItemMeta.RARITY_VAR, rarity);
-        complexMeta.setVariable(ComplexItemMeta.TYPE_VAR, type);
+        complexMeta = new ComplexItemMeta(this);
 
-        item = this.skullURL.isBlank() ? item : skullItem;
+        complexMeta.setVariable(ComplexItemMeta.RARITY_VAR, complexItem.getRarity());
+        complexMeta.setVariable(ComplexItemMeta.TYPE_VAR, complexItem.getType());
 
         complexMeta.updateItem();
 
-        this.item = item;
+        item = this.skullURL.isBlank() ? item : Util.makeSkull(item, this.skullURL);
 
         return item;
     }
 
     public ComplexItemStack update(boolean force){
-        //ItemStack item = new ItemStack(this.complexItem.getMaterial());
+        ItemMeta meta = item.getItemMeta();
 
         // Set CustomModelData
-        this.meta.setCustomModelData(complexItem.getCustomModelData());
+        meta.setCustomModelData(complexItem.getCustomModelData());
 
         // Take attributes/enchants from it's previous state
 //        for (Map.Entry<Enchantment, Integer> enchant :
@@ -123,33 +129,28 @@ public class ComplexItemStack implements Cloneable{
 //            meta.addEnchant(enchant.getKey(), enchant.getValue(), true);
 //        }
 
-        item.setItemMeta(this.meta);
-
-
-        for (Map.Entry<Stat, Double> entry : this.getStats().entrySet()) {
-            item = this.getType().isWearable() ? AureliumAPI.addArmorModifier(item, entry.getKey(), entry.getValue(), false) : AureliumAPI.addItemModifier(item, entry.getKey(), entry.getValue(), false);
-            this.meta = item.getItemMeta();
+        for (Map.Entry<Stat, Double> entry : complexItem.getStats().entrySet()) {
+            item = complexItem.getType().isWearable() ? AureliumAPI.addArmorModifier(item, entry.getKey(), entry.getValue(), false) : AureliumAPI.addItemModifier(item, entry.getKey(), entry.getValue(), false);
+            meta = item.getItemMeta();
         }
 
-        complexMeta = new ComplexItemMeta(this.meta, this.abilities, item);
-
-        ItemMeta itemMeta = complexMeta.getItemMeta();
-        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
 
         container.set(ComplexItem.GLOBAL_ID, PersistentDataType.STRING, this.getId());
 
         if(this.uuid != null) container.set(new NamespacedKey(SuperItems.getPlugin(), "uuid"), new SerializedPersistentType<UUID>(), uuid);
 
-        ItemStack skullItem = Util.makeSkull(item, this.skullURL);
+        // Set ItemMeta so that ComplexItemMeta can use it
+        item.setItemMeta(meta);
 
-        complexMeta.setVariable(ComplexItemMeta.RARITY_VAR, rarity);
-        complexMeta.setVariable(ComplexItemMeta.TYPE_VAR, type);
+        complexMeta = new ComplexItemMeta(this);
 
-        item = this.skullURL.isBlank() ? item : skullItem;
+        complexMeta.setVariable(ComplexItemMeta.RARITY_VAR, complexItem.getRarity());
+        complexMeta.setVariable(ComplexItemMeta.TYPE_VAR, complexItem.getType());
 
-        complexMeta.read(force);
+        complexMeta.updateItem();
 
-        this.item.setItemMeta(item.getItemMeta());
+        item = this.skullURL.isBlank() ? item : Util.makeSkull(item, this.skullURL);
 
         return this;
     }
@@ -169,32 +170,8 @@ public class ComplexItemStack implements Cloneable{
         return item;
     }
 
-    public String getDisplayName() {
-        return this.rarity.color() + this.meta.getDisplayName();
-    }
-
     public String getId() {
         return complexItem.getId();
-    }
-
-    public ComplexItem.Rarity getRarity() {
-        return rarity;
-    }
-
-    public void setRarity(ComplexItem.Rarity rarity) {
-        this.rarity = rarity;
-    }
-
-    public ItemMeta getMeta() {
-        return meta;
-    }
-
-    public ComplexItem.Type getType() {
-        return this.type;
-    }
-
-    public Map<Stat, Double> getStats() {
-        return stats;
     }
 
     public NamespacedKey getKey() {
@@ -203,5 +180,13 @@ public class ComplexItemStack implements Cloneable{
 
     public List<Ability> getAbilities() {
         return this.abilities;
+    }
+
+    public ComplexItem getComplexItem() {
+        return complexItem;
+    }
+
+    public ComplexItemMeta getComplexMeta() {
+        return complexMeta;
     }
 }

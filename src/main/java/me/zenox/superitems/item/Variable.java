@@ -12,7 +12,7 @@ import java.io.Serializable;
  *
  * @param <T> The type of the variable
  */
-class Variable<T extends Serializable> {
+public class Variable<T extends Serializable> {
 
     private final ComplexItemMeta complexItemMeta;
     private final VariableType type;
