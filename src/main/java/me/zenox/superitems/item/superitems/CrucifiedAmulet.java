@@ -17,7 +17,7 @@ import static me.zenox.superitems.item.ItemRegistry.*;
 
 public class CrucifiedAmulet extends ComplexItem {
     public CrucifiedAmulet() {
-        super("Crucified Amulet", "crucified_amulet", ComplexItem.Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of(Stats.WISDOM, 5d), List.of(new Crucify()));
+        super( "crucified_amulet", ComplexItem.Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of(Stats.WISDOM, 5d), List.of(new Crucify()));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.RED + "Inevitable demise.");

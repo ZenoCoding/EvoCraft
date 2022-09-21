@@ -13,7 +13,7 @@ import java.util.Map;
 public class VoidStone extends ComplexItem {
 
     public VoidStone() {
-        super("Void Stone", "void_stone", Rarity.LEGENDARY, Type.MISC, Material.PLAYER_HEAD, Map.of());
+        super("void_stone", Rarity.LEGENDARY, Type.MISC, Material.PLAYER_HEAD, Map.of());
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
     this.getMeta().setLore(List.of(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC + "Who knows what it's really for?"));

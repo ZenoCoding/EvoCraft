@@ -150,6 +150,11 @@ public class MainCommand implements CommandExecutor {
                     }
                 }
                 return false;
+            case "reload":
+                plugin.reload();
+                Util.sendMessage(sender, ChatColor.WHITE + "SuperItems " + ChatColor.GOLD + "v" + plugin.getDescription().getVersion() + ChatColor.WHITE + " has been reloaded.");
+
+                return true;
             default:
                 Util.sendMessage(sender, "SuperItems Help Page.");
                 break;

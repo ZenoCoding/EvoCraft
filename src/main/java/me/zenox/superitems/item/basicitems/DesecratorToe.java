@@ -13,7 +13,7 @@ import java.util.Map;
 public class DesecratorToe extends ComplexItem {
 
     public DesecratorToe() {
-        super("Desecrator's Toe", "desecrator_toe", Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of());
+        super("desecrator_toe", Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of());
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         this.getMeta().setLore(List.of(ChatColor.GRAY + "Stinky."));

@@ -22,7 +22,7 @@ import java.util.UUID;
 
 public class VoidBoots extends ArmorItem {
     public VoidBoots() {
-        super("Boots Of the Void Lord", "void_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 2d, Stats.HEALTH, 5d, Stats.WISDOM, 30d, Stats.REGENERATION, 5d));
+        super("void_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 2d, Stats.HEALTH, 5d, Stats.WISDOM, 30d, Stats.REGENERATION, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Who the heck is this \"Void Lord\" guy?");

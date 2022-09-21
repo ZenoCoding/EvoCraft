@@ -14,7 +14,6 @@ import java.util.*;
 
 public class ItemSettings {
 
-    private String name;
     private String id;
     private Boolean unique;
     private ComplexItem.Rarity rarity;
@@ -27,7 +26,6 @@ public class ItemSettings {
     private List<Ability> abilities;
 
     public ItemSettings(){
-        this.name = "404: Item Name Not Specified";
         this.id = "undefined_" + UUID.randomUUID();
         this.unique = false;
         this.rarity = ComplexItem.Rarity.COMMON;
@@ -39,8 +37,7 @@ public class ItemSettings {
         this.abilities = new ArrayList<>();
     }
 
-    public ItemSettings(String name, String id, Boolean unique, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities){
-        this.name = name;
+    public ItemSettings(String id, Boolean unique, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities){
         this.id = id;
         this.unique = unique;
         this.rarity = rarity;
@@ -53,17 +50,13 @@ public class ItemSettings {
     }
 
     public static ItemSettings of(ComplexItem item){
-        return new ItemSettings(item.getName(), item.getId(), item.isUnique() ,item.getRarity(), item.getType(), item.getMaterial(), item.getMeta(), item.getStats(), item.getSkullURL(), new ArrayList<>());
+        return new ItemSettings(item.getId(), item.isUnique() ,item.getRarity(), item.getType(), item.getMaterial(), item.getMeta(), item.getStats(), item.getSkullURL(), new ArrayList<>());
     }
 
     public static ItemSettings of(ItemStack item){
-        return new ItemSettings(item.getItemMeta().getDisplayName(), item.getType().name(), false, ComplexItem.Rarity.COMMON,
+        return new ItemSettings(item.getType().name(), false, ComplexItem.Rarity.COMMON,
                 ComplexItem.Type.MISC, item.getType(), item.getItemMeta(), new HashMap(),
                 (item.getItemMeta() instanceof SkullMeta) ? ((SkullMeta) item.getItemMeta()).getOwnerProfile().getTextures().getSkin().toString() : "", new ArrayList());
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getId() {
@@ -98,11 +91,6 @@ public class ItemSettings {
 
     public List<Ability> getAbilities() {
         return abilities;
-    }
-
-    public ItemSettings name(String name){
-        this.name = name;
-        return this;
     }
 
     public ItemSettings id(String id){

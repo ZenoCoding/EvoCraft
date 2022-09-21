@@ -28,7 +28,7 @@ import java.util.*;
 public class SwordOfJustice extends ComplexItem implements Listener {
 
     public SwordOfJustice() {
-        super("Sword of Justice", "sword_of_justice", Rarity.SPECIAL, Type.SWORD, Material.IRON_SWORD, Map.of(Stats.STRENGTH, 30d), List.of());
+        super("sword_of_justice", Rarity.SPECIAL, Type.SWORD, Material.IRON_SWORD, Map.of(Stats.STRENGTH, 30d), List.of());
 
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 5, true);
         List<String> lore = new ArrayList<>();

@@ -22,7 +22,7 @@ import java.util.UUID;
 
 public class VoidLeggings extends ArmorItem {
     public VoidLeggings() {
-        super("Void Leggings", "void_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 5d, Stats.WISDOM, 35d, Stats.REGENERATION, 5d));
+        super("void_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 5d, Stats.WISDOM, 35d, Stats.REGENERATION, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Rumored to talk and share knowledge to the wearer...");

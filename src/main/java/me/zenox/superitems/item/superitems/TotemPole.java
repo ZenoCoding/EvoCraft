@@ -17,7 +17,7 @@ import static me.zenox.superitems.item.ItemRegistry.CRULEN_SHARD;
 
 public class TotemPole extends ComplexItem {
     public TotemPole() {
-        super("Totem Pole", "totem_pole", Rarity.RARE, Type.DEPLOYABLE, Material.PLAYER_HEAD, Map.of(Stats.WISDOM, 5d), List.of(new Centralize(false, 45)));
+        super("totem_pole", Rarity.RARE, Type.DEPLOYABLE, Material.PLAYER_HEAD, Map.of(Stats.WISDOM, 5d), List.of(new Centralize(false, 45)));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.YELLOW + "Centralized power.");

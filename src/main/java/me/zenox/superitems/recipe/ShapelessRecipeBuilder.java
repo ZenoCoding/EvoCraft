@@ -6,13 +6,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShapelessRecipeBuilder {
 
     private String id;
     private ItemStack result;
-    private List<RecipeChoice> choiceList;
+    private List<RecipeChoice> choiceList = new ArrayList<>();
 
     public ShapelessRecipeBuilder(){
 

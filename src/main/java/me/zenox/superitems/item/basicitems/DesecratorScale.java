@@ -13,7 +13,7 @@ import java.util.Map;
 public class DesecratorScale extends ComplexItem {
 
     public DesecratorScale() {
-        super("Desecrator Scale", "desecrator_scale", Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of());
+        super("desecrator_scale", Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of());
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         this.getMeta().setLore(List.of(ChatColor.GRAY + "Tougher than nails."));

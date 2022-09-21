@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class GardenerSapling extends ComplexItem {
     public GardenerSapling() {
-        super("Gardener's Sapling", "gardener_sapling", Rarity.VERY_SPECIAL, Type.MISC, Material.OAK_SAPLING, Map.of());
+        super("gardener_sapling", Rarity.VERY_SPECIAL, Type.MISC, Material.OAK_SAPLING, Map.of());
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "A sapling, that can when cared for");

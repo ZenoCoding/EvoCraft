@@ -57,7 +57,6 @@ public class ComplexItemMeta {
      * Updates the ItemStack to match the current ComplexItemMeta
      */
     public void updateItem(){
-        Util.logToConsole("Variable List: " + variableList);
         ItemStack item = complexItemStack.getItem();
         ItemMeta meta = item.getItemMeta();
 
@@ -72,7 +71,7 @@ public class ComplexItemMeta {
 
         writeVariables(VariableType.Priority.ABOVE_STATS, dataContainer, lore, true);
 
-        Util.logToConsole("Stat Lore: " + statlore);
+        // Util.logToConsole("Stat Lore: " + statlore);
         if(!statlore.isEmpty()) {
             lore.entry(new LoreEntry("stat_lore", statlore));
             lore.entry(new LoreEntry("newline", List.of("")));
@@ -80,8 +79,11 @@ public class ComplexItemMeta {
 
         writeVariables(VariableType.Priority.ABOVE_LORE, dataContainer, lore, true);
 
-        lore.entry(new LoreEntry("true_lore", complexItemStack.getComplexItem().getMeta().getLore() == null ? new ArrayList<>() : complexItemStack.getComplexItem().getMeta().getLore()));
-        if (complexItemStack.getComplexItem().getMeta().getLore() != null && !complexItemStack.getComplexItem().getMeta().getLore().isEmpty()) lore.entry(new LoreEntry("newline", List.of("")));
+
+        List<String> trueLore = complexItemStack.getComplexItem().getDefaultLore();
+
+        lore.entry(new LoreEntry("true_lore", trueLore == null ? new ArrayList<>() : trueLore));
+        if (trueLore != null && !trueLore.isEmpty()) lore.entry(new LoreEntry("newline", List.of("")));
 
         writeVariables(VariableType.Priority.ABOVE_ENCHANTS, dataContainer, lore, true);
 
@@ -124,7 +126,6 @@ public class ComplexItemMeta {
 
         PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
         if(force) this.abilities = dataContainer.get(ABILITY_ID, new ArrayListType<>()) == null ? new ArrayList<>() : new ArrayList<>(dataContainer.get(ABILITY_ID, new ArrayListType<>()));
-        Util.logToConsole("(Read | Keys) Variable List: " + dataContainer.getKeys());
         dataContainer.getKeys().stream()
             .filter(namespacedKey -> namespacedKey.getKey().startsWith(VAR_PREFIX))
             .forEach(namespacedKey -> setVariable(VariableType.getVariableByPrefix(namespacedKey.getKey().substring(VAR_PREFIX.length())), dataContainer.get(namespacedKey, new SerializedPersistentType<>())));

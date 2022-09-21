@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class VoidMask extends ArmorItem {
     public VoidMask() {
-        super("Void Mask", "void_mask", Rarity.EPIC, Type.HELMET, Material.PLAYER_HEAD, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 15d, Stats.WISDOM, 35d, Stats.REGENERATION, 5d));
+        super("void_helmet", Rarity.EPIC, Type.HELMET, Material.PLAYER_HEAD, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 15d, Stats.WISDOM, 35d, Stats.REGENERATION, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "A mysterious mask that corrupts and brings great power to the wearer");

@@ -18,7 +18,7 @@ import static me.zenox.superitems.item.ItemRegistry.*;
 
 public class TormentedBlade extends ComplexItem {
     public TormentedBlade() {
-        super("Tormented Blade", "tormented_blade", Rarity.LEGENDARY, Type.AXE, Material.IRON_AXE, Map.of(Stats.STRENGTH, 50d), List.of(new Tarhelm()));
+        super("tormented_blade", Rarity.LEGENDARY, Type.AXE, Material.IRON_AXE, Map.of(Stats.STRENGTH, 50d), List.of(new Tarhelm()));
 
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 5, true);
         List<String> lore = new ArrayList<>();

@@ -15,7 +15,7 @@ import java.util.Map;
 public class RavagerSkin extends ComplexItem implements Listener {
 
     public RavagerSkin() {
-        super("Ravager Skin", "ravager_skin_1", Rarity.COMMON, Type.MISC, Material.LEATHER, Map.of());
+        super("ravager_skin", Rarity.COMMON, Type.MISC, Material.LEATHER, Map.of());
         this.getMeta().setLore(List.of(ChatColor.GRAY + "Rough, isn't it?"));
     }
 

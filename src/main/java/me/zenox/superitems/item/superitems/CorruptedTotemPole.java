@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class CorruptedTotemPole extends ComplexItem {
     public CorruptedTotemPole() {
-        super("Corrupted Totem Pole", "corrupted_totem_pole", Rarity.RARE, Type.DEPLOYABLE, Material.PLAYER_HEAD, Map.of(Stats.STRENGTH, 5d), List.of(new Centralize(true, 60)));
+        super("corrupted_totem_pole", true, Rarity.RARE, Type.DEPLOYABLE, Material.PLAYER_HEAD, Map.of(Stats.STRENGTH, 5d), List.of(new Centralize(true, 60)));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.RED + "With great power, comes " + ChatColor.LIGHT_PURPLE + "corruption.");

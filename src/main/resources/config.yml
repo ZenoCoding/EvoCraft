@@ -1,0 +1,7 @@
+# SUPERITEMS CONFIG
+
+# Debug Option to enable force update configs to their defaults
+force_update_default: true
+
+# Locale
+locale: en_US

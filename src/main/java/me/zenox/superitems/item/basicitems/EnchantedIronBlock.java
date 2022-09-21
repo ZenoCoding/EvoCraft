@@ -17,7 +17,7 @@ import java.util.Map;
 public class EnchantedIronBlock extends ComplexItem implements Listener {
 
     public EnchantedIronBlock() {
-        super("Enchanted Iron Block", "enchanted_iron_block", Rarity.UNCOMMON, Type.MISC, Material.IRON_BLOCK, Map.of());
+        super("enchanted_iron_block", Rarity.UNCOMMON, Type.MISC, Material.IRON_BLOCK, Map.of());
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Pure, solid metal. Radioactive?");
         this.getMeta().setLore(lore);

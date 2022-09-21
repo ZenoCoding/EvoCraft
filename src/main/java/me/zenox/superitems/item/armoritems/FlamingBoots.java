@@ -22,7 +22,7 @@ import java.util.UUID;
 
 public class FlamingBoots extends ArmorItem {
     public FlamingBoots() {
-        super("Flaming Boots", "flaming_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 8d, Stats.HEALTH, 5d));
+        super("flaming_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 8d, Stats.HEALTH, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Raw power.");

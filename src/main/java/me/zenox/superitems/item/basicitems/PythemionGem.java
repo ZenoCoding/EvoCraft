@@ -13,7 +13,7 @@ import java.util.Map;
 public class PythemionGem extends ComplexItem {
 
     public PythemionGem() {
-        super("Pythemion Gem", "pythemion_gem", Rarity.EPIC, Type.MISC, Material.EMERALD, Map.of());
+        super("pythemion_gem", Rarity.EPIC, Type.MISC, Material.EMERALD, Map.of());
         this.getMeta().addEnchant(Enchantment.FIRE_ASPECT, 15, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
 

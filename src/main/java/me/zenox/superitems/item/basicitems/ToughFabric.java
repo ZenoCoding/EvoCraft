@@ -17,7 +17,7 @@ import static me.zenox.superitems.item.ItemRegistry.RAVAGER_SKIN;
 public class ToughFabric extends ComplexItem {
 
     public ToughFabric() {
-        super("Tough Fabric", "ravager_skin_2", Rarity.UNCOMMON, Type.MISC, Material.LEATHER, Map.of());
+        super("tough_fabric", Rarity.UNCOMMON, Type.MISC, Material.LEATHER, Map.of());
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 2, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
         this.getMeta().setLore(List.of(ChatColor.GRAY + "Sewn together with blood, sweat and tears."));

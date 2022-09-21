@@ -12,7 +12,7 @@ import java.util.Map;
 public class CrulenShard extends ComplexItem {
 
     public CrulenShard() {
-        super("Crulen Shard", "crulen_shard", Rarity.UNCOMMON, Type.MISC, Material.QUARTZ, Map.of());
+        super("crulen_shard", Rarity.UNCOMMON, Type.MISC, Material.QUARTZ, Map.of());
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 2, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
     }

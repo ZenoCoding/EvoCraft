@@ -2,6 +2,7 @@ package me.zenox.superitems.recipe;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
+import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.item.ItemRegistry;
 import org.bukkit.inventory.ItemStack;
@@ -12,16 +13,21 @@ import java.util.*;
 
 public class ComplexChoice implements RecipeChoice{
 
-    private Map<String, Integer> choices;
+    private Map<ComplexItem, Integer> choices;
 
-    public ComplexChoice(@NotNull String id, Integer amount) {
-        this(Map.of(id, amount));
+    /**
+     * Create a new instance of ComplexChoice, which represents a RecipeChoice that matches the complexitem and amount
+     * @param complexItem the item you want to match to match
+     * @param amount the amount you want to match, set to -1 to ignore amount
+     */
+    public ComplexChoice(@NotNull ComplexItem complexItem, Integer amount) {
+        this(Map.of(complexItem, amount));
     }
 
-    public ComplexChoice(@NotNull Map<String, Integer> choices) {
+    public ComplexChoice(@NotNull Map<ComplexItem, Integer> choices) {
         Preconditions.checkArgument(choices != null, "choices");
         Preconditions.checkArgument(!choices.isEmpty(), "Must have at least one choice");
-        for (Map.Entry<String, Integer> choice : choices.entrySet()) {
+        for (Map.Entry<ComplexItem, Integer> choice : choices.entrySet()) {
             Preconditions.checkArgument(choice != null, "Cannot have null choice");
         }
 
@@ -34,7 +40,7 @@ public class ComplexChoice implements RecipeChoice{
         return ItemRegistry.getBasicItemFromId(((Map.Entry<String, Integer>) choices.entrySet().toArray()[0]).getKey()).getItemStack(((Map.Entry<String, Integer>) choices.entrySet().toArray()[0]).getValue());
     }
 
-    public Map<String, Integer> getChoices() {
+    public Map<ComplexItem, Integer> getChoices() {
         return ImmutableMap.copyOf(choices);
     }
 
@@ -51,8 +57,8 @@ public class ComplexChoice implements RecipeChoice{
 
     @Override
     public boolean test(@NotNull ItemStack t) {
-        for (Map.Entry<String, Integer> match : choices.entrySet()) {
-            if (ComplexItemStack.of(t).getId().equalsIgnoreCase(match.getKey()) && t.getAmount() == match.getValue()) {
+        for (Map.Entry<ComplexItem, Integer> match : choices.entrySet()) {
+            if (ComplexItemStack.of(t).getComplexItem().equals(match) && (t.getAmount() == match.getValue() || match.getValue() == -1)) {
                 return true;
             }
         }

@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class VoidCloak extends ArmorItem {
     public VoidCloak() {
-        super("Void Cloak", "void_cloak", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 5d, Stats.WISDOM, 45d, Stats.REGENERATION, 5d));
+        super("void_cloak", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 5d, Stats.WISDOM, 45d, Stats.REGENERATION, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "The ultimate source of wisdom");

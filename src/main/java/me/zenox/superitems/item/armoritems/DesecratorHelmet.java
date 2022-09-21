@@ -23,7 +23,7 @@ import static me.zenox.superitems.item.ItemRegistry.*;
 
 public class DesecratorHelmet extends ArmorItem {
     public DesecratorHelmet() {
-        super("Desecrator Helmet", "desecrator_helmet", Rarity.EPIC, Type.HELMET, Material.PLAYER_HEAD, Map.of(Stats.STRENGTH, 25d, Stats.HEALTH, 25d));
+        super("desecrator_helmet", Rarity.EPIC, Type.HELMET, Material.PLAYER_HEAD, Map.of(Stats.STRENGTH, 25d, Stats.HEALTH, 25d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Raw power.");

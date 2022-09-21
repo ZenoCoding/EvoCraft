@@ -18,7 +18,7 @@ import static me.zenox.superitems.item.ItemRegistry.*;
 
 public class FieryEmberStaff extends ComplexItem {
     public FieryEmberStaff() {
-        super("Fiery Ember Staff", "fiery_ember_staff", Rarity.UNCOMMON, Type.STAFF, Material.BLAZE_ROD, Map.of(Stats.WISDOM, 50d, Stats.STRENGTH, -50d), List.of(new EmberShootSmall()));
+        super("fiery_ember_staff", Rarity.UNCOMMON, Type.STAFF, Material.BLAZE_ROD, Map.of(Stats.WISDOM, 50d, Stats.STRENGTH, -50d), List.of(new EmberShootSmall()));
 
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 5, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);//////////

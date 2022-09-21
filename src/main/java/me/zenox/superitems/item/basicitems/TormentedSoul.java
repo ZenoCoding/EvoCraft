@@ -20,7 +20,7 @@ import java.util.Map;
 public class TormentedSoul extends ComplexItem implements Listener {
 
     public TormentedSoul() {
-        super("Tormented Soul", "tormented_soul", Rarity.RARE, Type.MISC, Material.SPAWNER, Map.of());
+        super("tormented_soul", Rarity.RARE, Type.MISC, Material.SPAWNER, Map.of());
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "A trapped soul, that has been tortured for generations.");
         this.getMeta().setLore(lore);

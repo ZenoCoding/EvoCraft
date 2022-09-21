@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class ShapedRecipeBuilder {
     private String id;
     private List<String> shape;
     private ItemStack result;
-    private Map<Character, RecipeChoice> choiceMap;
+    private Map<Character, RecipeChoice> choiceMap = new HashMap<>();
 
     public ShapedRecipeBuilder(){
 

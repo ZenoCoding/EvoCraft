@@ -72,7 +72,6 @@ public class InventoryListener implements Listener {
             if (item.getItemMeta() == null) continue;
             ComplexItemStack itemStack = ComplexItemStack.of(item);
             if(itemStack != null) {
-                Util.sendMessage(p, "Updating Complex Item!");
                 //itemStack.update(false);
             } else {
                 // Update Normal Items

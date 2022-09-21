@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class FlamingLeggings extends ArmorItem {
     public FlamingLeggings() {
-        super("Flaming Leggings", "flaming_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 6d, Stats.HEALTH, 5d));
+        super("flaming_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 6d, Stats.HEALTH, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Forged in a blazing inferno.");

@@ -25,7 +25,7 @@ import static me.zenox.superitems.item.ItemRegistry.DESECRATOR_TOE;
 
 public class DesecratorBoots extends ArmorItem {
     public DesecratorBoots() {
-        super("Desecrator Boots", "desecrator_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 5d, Stats.HEALTH, 5d));
+        super("desecrator_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 5d, Stats.HEALTH, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Raw power.");

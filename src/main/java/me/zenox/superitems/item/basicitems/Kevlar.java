@@ -17,7 +17,7 @@ import static me.zenox.superitems.item.ItemRegistry.TOUGH_FABRIC;
 public class Kevlar extends ComplexItem {
 
     public Kevlar() {
-        super("Kevlar", "ravager_skin_3", Rarity.RARE, Type.MISC, Material.LEATHER, Map.of());
+        super("kevlar", Rarity.RARE, Type.MISC, Material.LEATHER, Map.of());
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 2, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
         this.getMeta().setLore(List.of(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bulletproof."));

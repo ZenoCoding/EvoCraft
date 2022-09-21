@@ -12,7 +12,7 @@ import java.util.Map;
 public class BurningAshes extends ComplexItem {
 
     public BurningAshes() {
-        super("Burning Ashes", "burning_ashes", Rarity.UNCOMMON, Type.MISC, Material.GUNPOWDER, Map.of());
+        super("burning_ashes", Rarity.UNCOMMON, Type.MISC, Material.GUNPOWDER, Map.of());
         this.getMeta().addEnchant(Enchantment.FIRE_ASPECT, 2, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
     }

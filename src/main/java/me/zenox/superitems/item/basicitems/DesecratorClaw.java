@@ -13,7 +13,7 @@ import java.util.Map;
 public class DesecratorClaw extends ComplexItem {
 
     public DesecratorClaw() {
-        super("Desecrator's Claw", "desecrator_claw", Rarity.EPIC, Type.MISC, Material.DAMAGED_ANVIL, Map.of());
+        super("desecrator_claw", Rarity.EPIC, Type.MISC, Material.DAMAGED_ANVIL, Map.of());
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 2, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
         this.getMeta().setLore(List.of(ChatColor.GRAY + "Sharper than a knife."));

@@ -1,0 +1,73 @@
+item-name-gardener_sapling: Gardener's Sapling
+item-name-enchanted_magma_block: Enchanted Magma Block
+item-name-purified_magma_distillate: Purified Magma Distillate
+item-name-enchanted_blaze_rod: Enchanted Blaze Rod
+item-name-burning_ashes: Burning Ashes
+item-name-molten_powder: Molten Powder
+
+item-name-enchanted_ender_pearl: Enchanted Ender Pearl
+item-name-absolute_ender_pearl: Absolute Ender Pearl
+
+item-name-dark_skull: Dark Skull
+item-name-tormented_soul: Tormented Soul
+item-name-enchanted_iron_block: Enchanted Iron Block
+
+item-name-magic_toy_stick: Magic Toy Stick
+item-name-soul_crystal: Soul Crystal
+
+item-name-fiery_ember_staff: Fiery Ember Staff
+item-name-dark_ember_staff: Dark Ember Staff
+
+item-name-tormented_blade: Tormented Blade
+
+item-name-speed_sword: Rush Sword
+item-name-speed_sword_2: Sonic Sword
+
+item-name-sword_of_justice: Sword of Justice
+item-name-crucified_amulet: Crucified Amulet
+
+item-name-desecrator_helmet: Desecrator Helmet
+item-name-desecrator_chestplate: Desecrator Chestplate
+item-name-desecrator_leggings: Desecrator Leggings
+item-name-desecrator_boots: Desecrator Boots
+
+item-name-desecrator_scale: Desecrator Scale
+item-name-desecrator_claw: Desecrator Claw
+item-name-desecrator_toe: Desecrator Toe
+
+item-name-crulen_shard: Crulen Shard
+item-name-pythemion_gem: Pythemion Gem
+item-name-psychedelic_orb: Psychedelic Orb
+item-name-hyper_crux: Hyper Crux
+
+item-name-ravager_skin: Ravager Skin
+item-name-tough_fabric: Tough Fabric
+item-name-kevlar: Kevlar
+
+item-name-totem_pole: Totem Pole
+item-name-corrupted_totem_pole: Corrupted Totem Pole
+
+item-name-warped_cube: Warped Cube
+
+item-name-void_stone: Void Stone
+item-name-void_scepter: Void Scepter
+
+item-name-obsidian_scythe: Obsidian Scythe
+
+item-name-void_helmet: Void Helmet
+item-name-void_chestplate: Void Chestplate
+item-name-void_leggings: Void Leggings
+item-name-void_boots: Void Boots
+
+item-name-corrupt_pearl: Corrupt Pearl
+item-name-dev_stick: Dev Stick
+
+item-name-flaming_helmet: Flaming Helmet
+item-name-flaming_chestplate: Flaming Chestplate
+item-name-flaming_leggings: Flaming Leggings
+item-name-flaming_boots: Flaming Boots
+
+item-lore-purified_magma_distillate:
+  - '&c&oBurning Hot.'
+  -
+  - '&7Rumors are that a single drop could power a city for generations.'

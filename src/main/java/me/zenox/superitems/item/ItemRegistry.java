@@ -5,6 +5,7 @@ import me.zenox.superitems.item.basicitems.*;
 import me.zenox.superitems.item.superitems.*;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -22,14 +23,37 @@ public class ItemRegistry {
 
     private final static List<ComplexItem> registeredItems = new ArrayList<>();
     public static final ComplexItem GARDENER_SAPLING = registerItem(new GardenerSapling());
-    public static final ComplexItem ENCHANTED_MAGMA_BLOCK = registerItem(new ComplexItem(new ItemSettings().name("Enchanted Magma Block").id("enchanted_magma_block").material(Material.MAGMA_BLOCK).glow()));
-    public static final ComplexItem PURIFIED_MAGMA_DISTILLATE = registerItem(new PurifiedMagmaDistillate());
-    public static final ComplexItem ENCHANTED_BLAZE_ROD = registerItem(new ComplexItem(new ItemSettings().name("Enchanted Blaze Rod").id("enchanted_blaze_rod").material(Material.BLAZE_ROD).glow()));
-    public static final ComplexItem BURNING_ASHES = registerItem(new ComplexItem(new ItemSettings().name("Burning Ashes").id("burning_ashes").material(Material.GUNPOWDER).rarity(ComplexItem.Rarity.UNCOMMON).glow()));
-    public static final ComplexItem MOLTEN_POWDER = registerItem(new ComplexItem(new ItemSettings().name("Molten Powder").id("molten_powder").material(Material.BLAZE_POWDER).rarity(ComplexItem.Rarity.RARE).glow()));
-    public static final ComplexItem ENCHANTED_ENDER_PEARL = registerItem(new ComplexItem(new ItemSettings().name("Enchanted Ender Pearl")));
-    public static final ComplexItem COMPACTED_ENDER_PEARL = registerItem(new CompactedEnderPearl());
-    public static final ComplexItem ABSOLUTE_ENDER_PEARL = registerItem(new AbsoluteEnderPearl());
+    public static final ComplexItem ENCHANTED_MAGMA_BLOCK = registerItem(new ComplexItem(new ItemSettings()
+            .id("enchanted_magma_block")
+            .rarity(ComplexItem.Rarity.COMMON)
+            .material(Material.MAGMA_BLOCK)));
+    public static final ComplexItem PURIFIED_MAGMA_DISTILLATE = registerItem(new ComplexItem(new ItemSettings()
+            .id("purified_magma_distillate")
+            .material(Material.MAGMA_CREAM)
+            .glow()));
+    public static final ComplexItem ENCHANTED_BLAZE_ROD = registerItem(new ComplexItem(new ItemSettings()
+            .id("enchanted_blaze_rod")
+            .material(Material.BLAZE_ROD)
+            .glow()));
+    public static final ComplexItem BURNING_ASHES = registerItem(new ComplexItem(new ItemSettings()
+            .id("burning_ashes")
+            .material(Material.GUNPOWDER)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .glow()));
+    public static final ComplexItem MOLTEN_POWDER = registerItem(new ComplexItem(new ItemSettings()
+            .id("molten_powder")
+            .material(Material.BLAZE_POWDER)
+            .rarity(ComplexItem.Rarity.RARE)
+            .glow()));
+    public static final ComplexItem ENCHANTED_ENDER_PEARL = registerItem(new ComplexItem(new ItemSettings()
+            .id("enchanted_ender_pearl")
+            .material(Material.ENDER_PEARL)
+            .rarity(ComplexItem.Rarity.COMMON)));
+    public static final ComplexItem ABSOLUTE_ENDER_PEARL = registerItem(new ComplexItem(new ItemSettings()
+            .id("absolute_ender_pearl")
+            .material(Material.ENDER_PEARL)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .glow()));
     public static final ComplexItem DARK_SKULL = registerItem(new DarkSkull());
     public static final ComplexItem TORMENTED_SOUL = registerItem(new TormentedSoul());
     public static final ComplexItem ENCHANTED_IRON_BLOCK = registerItem(new EnchantedIronBlock());
@@ -69,7 +93,6 @@ public class ItemRegistry {
     public static final ComplexItem CORRUPT_PEARL = registerItem(new CorruptPearl());
 
     public static final ComplexItem DEV_STICK = registerItem(new DevStick());
-    public static final ComplexItem DEV_AXE = registerItem(new DevAxe());
 
     public static final ComplexItem FLAMING_HELMET = registerItem(new FlamingHelmet());
     public static final ComplexItem FLAMING_CHESTPLATE = registerItem(new FlamingChestplate());
@@ -84,6 +107,7 @@ public class ItemRegistry {
         return item;
     }
 
+    @Deprecated
     public static List<Recipe> registerRecipes() {
         for (ComplexItem item : registeredItems) {
             registeredRecipes.addAll(item.getRecipes());
@@ -105,7 +129,7 @@ public class ItemRegistry {
     }
 
     public static void registerItems() {
-        Util.logToConsole("Registering Custom Items... " + registeredItems.size() + " Items registered.");
+        Util.logToConsole(ChatColor.WHITE + "Registering " + ChatColor.GOLD + registeredItems.size() + ChatColor.WHITE + " items.");
     }
 
     @Nullable

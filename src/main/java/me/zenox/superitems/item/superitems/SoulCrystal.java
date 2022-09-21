@@ -17,7 +17,7 @@ import static me.zenox.superitems.item.ItemRegistry.ENCHANTED_BLAZE_ROD;
 
 public class SoulCrystal extends ComplexItem {
     public SoulCrystal() {
-        super("Soul Crystal", "soul_crystal", Rarity.LEGENDARY, Type.DEPLOYABLE, Material.END_CRYSTAL, Map.of(), List.of(new SoulRift()));
+        super("soul_crystal", Rarity.LEGENDARY, Type.DEPLOYABLE, Material.END_CRYSTAL, Map.of(), List.of(new SoulRift()));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "The void-Sphere of Life was an anti-magic device, which could absorb the");

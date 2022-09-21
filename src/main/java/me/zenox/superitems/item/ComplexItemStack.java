@@ -51,6 +51,10 @@ public class ComplexItemStack implements Cloneable{
         item.setItemMeta(meta);
     }
 
+    public ComplexItemStack(ComplexItem complexItem){
+        this(complexItem, 1);
+    }
+
     public ComplexItemStack(ComplexItem complexItem, ItemStack item){
         this.complexItem = complexItem;
         this.uuid = complexItem.isUnique() ? UUID.randomUUID() : null;
@@ -66,7 +70,7 @@ public class ComplexItemStack implements Cloneable{
 
         this.complexMeta = new ComplexItemMeta(this);
 
-        Util.logToConsole("Item Name: " + meta.getDisplayName());
+        // Util.logToConsole("Item Name: " + meta.getDisplayName());
     }
 
     private ItemStack buildItem(int amount){
@@ -159,7 +163,7 @@ public class ComplexItemStack implements Cloneable{
     public static ComplexItemStack of(ItemStack item){
         ComplexItem complexItem = ItemRegistry.getBasicItemFromItemStack(item);
         if(complexItem == null) {
-            Util.logToConsole("Returned null because item " + item.getItemMeta().getDisplayName() + " had no complex registry.");
+            // Util.logToConsole("Returned null because item " + item.getItemMeta().getDisplayName() + " had no complex registry.");
             return null;
         }
         ComplexItemStack complexItemStack = new ComplexItemStack(complexItem, item);

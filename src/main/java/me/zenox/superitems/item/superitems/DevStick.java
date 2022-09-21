@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class DevStick extends ComplexItem {
     public DevStick() {
-        super("Dev Stick", "dev_stick", Rarity.VERY_SPECIAL, Type.SUPERITEM, Material.STICK, Map.of(), List.of(new MagicMissile(15, false)));
+        super("dev_stick", Rarity.VERY_SPECIAL, Type.SUPERITEM, Material.STICK, Map.of(), List.of(new MagicMissile(15, false)));
 
         List<String> lore = List.of(ChatColor.RED + "" + ChatColor.ITALIC + "Built Different");
 

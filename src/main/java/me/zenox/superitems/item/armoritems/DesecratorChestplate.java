@@ -24,7 +24,7 @@ import static me.zenox.superitems.item.ItemRegistry.*;
 
 public class DesecratorChestplate extends ArmorItem {
     public DesecratorChestplate() {
-        super("Desecrator Chestplate", "desecrator_chestplate", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 5d, Stats.HEALTH, 5d));
+        super("desecrator_chestplate", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 5d, Stats.HEALTH, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Raw power.");

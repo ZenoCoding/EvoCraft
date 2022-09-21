@@ -12,7 +12,7 @@ import java.util.Map;
 public class HyperCrux extends ComplexItem {
 
     public HyperCrux() {
-        super("Hyper Crux", "hyper_crux", Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of());
+        super("hyper_crux", Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of());
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 2, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
 

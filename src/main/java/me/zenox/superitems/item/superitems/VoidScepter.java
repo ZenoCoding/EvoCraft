@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class VoidScepter extends ComplexItem {
     public VoidScepter() {
-        super("Void Scepter", "void_scepter", Rarity.EPIC, Type.STAFF, Material.NETHERITE_SHOVEL, Map.of(Stats.WISDOM, 50d), List.of(new VoidWarp(), new VoidularRecall()));
+        super("void_scepter", Rarity.EPIC, Type.STAFF, Material.NETHERITE_SHOVEL, Map.of(Stats.WISDOM, 50d), List.of(new VoidWarp(), new VoidularRecall()));
 
         List<String> lore = List.of(ChatColor.GRAY + "Forged from the souls of corrupted endermen.");
 

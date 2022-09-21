@@ -24,7 +24,7 @@ import static me.zenox.superitems.item.ItemRegistry.CORRUPT_PEARL;
 public class CorruptPearl extends ComplexItem implements Listener {
 
     public CorruptPearl() {
-        super("Corrupt Pearl", "corrupt_pearl", Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of());
+        super("corrupt_pearl", Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of());
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         this.getMeta().setLore(List.of(ChatColor.GRAY + "A corrupt soul."));

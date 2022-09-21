@@ -17,7 +17,7 @@ import static me.zenox.superitems.item.ItemRegistry.HYPER_CRUX;
 public class PsychedelicOrb extends ComplexItem {
 
     public PsychedelicOrb() {
-        super("Psychedelic Orb", "psychedelic_orb", ComplexItem.Rarity.RARE, ComplexItem.Type.MISC, Material.ENDER_PEARL, Map.of(Stats.WISDOM, 1000d), List.of(new Psychic()));
+        super("psychedelic_orb", ComplexItem.Rarity.RARE, ComplexItem.Type.MISC, Material.ENDER_PEARL, Map.of(Stats.WISDOM, 1000d), List.of(new Psychic()));
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 2, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
 

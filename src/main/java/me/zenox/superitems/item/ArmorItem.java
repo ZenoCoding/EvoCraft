@@ -8,7 +8,7 @@ import java.util.Map;
 public class ArmorItem extends ComplexItem {
 
 
-    public ArmorItem(String name, String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats) {
-        super(name, id, rarity, type, material, stats);
+    public ArmorItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats) {
+        super(id, rarity, type, material, stats);
     }
 }

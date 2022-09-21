@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class SpeedyGonzales extends ComplexItem {
     public SpeedyGonzales() {
-        super("Speedy Gonzalas", "speed_sword", Rarity.COMMON, Type.SWORD, Material.GOLDEN_SWORD, Map.of(Stats.WISDOM, 5d), List.of(new Speed100(1, 30)));
+        super("speed_sword", Rarity.COMMON, Type.SWORD, Material.GOLDEN_SWORD, Map.of(Stats.WISDOM, 5d), List.of(new Speed100(1, 30)));
 
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 5, true);
         List<String> lore = new ArrayList<>();

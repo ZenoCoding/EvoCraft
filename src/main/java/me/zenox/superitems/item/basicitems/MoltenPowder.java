@@ -16,7 +16,7 @@ import static me.zenox.superitems.item.ItemRegistry.*;
 public class MoltenPowder extends ComplexItem {
 
     public MoltenPowder() {
-        super("Molten Powder", "molten_powder", Rarity.RARE, Type.MISC, Material.BLAZE_POWDER, Map.of());
+        super("molten_powder", Rarity.RARE, Type.MISC, Material.BLAZE_POWDER, Map.of());
 
         this.getMeta().addEnchant(Enchantment.FIRE_ASPECT, 2, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);

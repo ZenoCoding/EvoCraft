@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class FlamingHelmet extends ArmorItem {
     public FlamingHelmet() {
-        super("Flaming Helmet", "flaming_helmet", Rarity.EPIC, Type.HELMET, Material.LEATHER_HELMET, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 2d));
+        super("flaming_helmet", Rarity.EPIC, Type.HELMET, Material.LEATHER_HELMET, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 2d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Seriously hot." );

@@ -29,11 +29,8 @@ public class VariableType<T extends Serializable> {
 
     @Nullable
     public static VariableType getVariableByPrefix(String name) {
-        Util.logToConsole("Searching for VariableType Name: " + name);
-        Util.logToConsole("VariableType List: " + variableList);
         try {
             return variableList.stream().filter(variableType -> {
-                Util.logToConsole("VariableType Name: " + variableType.getName());
                 return variableType.getName().equalsIgnoreCase(name);
             }).toList().get(0);
         } catch(IndexOutOfBoundsException e){

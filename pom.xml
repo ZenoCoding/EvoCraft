@@ -6,7 +6,7 @@
 
     <groupId>me.zenox</groupId>
     <artifactId>superitems</artifactId>
-    <version>1.0.0-ALPHA</version>
+    <version>1.0.1-ALPHA</version>
     <packaging>jar</packaging>
 
     <name>SuperItems</name>
@@ -95,6 +95,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.moandjiezana.toml</groupId>
+            <artifactId>toml4j</artifactId>
+            <version>0.7.2</version>
         </dependency>
     </dependencies>
 </project>

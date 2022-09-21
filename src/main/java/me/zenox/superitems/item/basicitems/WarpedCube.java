@@ -13,7 +13,7 @@ import java.util.Map;
 public class WarpedCube extends ComplexItem {
 
     public WarpedCube() {
-        super("Warped Cube", "warped_cube", Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of());
+        super("warped_cube", Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of());
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         this.getMeta().setLore(List.of(ChatColor.GRAY + "Is it still considered wood?"));

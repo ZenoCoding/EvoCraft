@@ -25,7 +25,7 @@ import static me.zenox.superitems.item.ItemRegistry.KEVLAR;
 
 public class DesecratorLeggings extends ArmorItem {
     public DesecratorLeggings() {
-        super("Desecrator Leggings", "desecrator_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 5d, Stats.HEALTH, 5d));
+        super("desecrator_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 5d, Stats.HEALTH, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Raw power.");

@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class FlamingChestplate extends ArmorItem {
     public FlamingChestplate() {
-        super("Flaming Shirt", "flaming_shirt", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 2d));
+        super("flaming_chestplate", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 2d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Raw power.");

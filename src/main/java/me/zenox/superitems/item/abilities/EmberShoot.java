@@ -27,8 +27,6 @@ public class EmberShoot extends ItemAbility {
 
         this.addLineToLore(ChatColor.GRAY + "Shoot a projectile based on the " + ChatColor.AQUA + "attunement");
         this.addLineToLore(ChatColor.GRAY + "of this weapon. Dark magic is cool, right?");
-        this.addLineToLore("");
-        this.addLineToLore(ChatColor.AQUA + "Attunement: " + ChatColor.GOLD + "Blazeborn");
     }
 
     @Override

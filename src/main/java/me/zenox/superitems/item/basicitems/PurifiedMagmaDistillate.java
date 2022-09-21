@@ -18,7 +18,7 @@ import static me.zenox.superitems.item.ItemRegistry.ENCHANTED_MAGMA_BLOCK;
 public class PurifiedMagmaDistillate extends ComplexItem {
 
     public PurifiedMagmaDistillate() {
-        super("Purified Magma Distillate", "purified_magma_distillate", Rarity.UNCOMMON, Type.MISC, Material.MAGMA_CREAM, Map.of());
+        super("purified_magma_distillate", Rarity.UNCOMMON, Type.MISC, Material.MAGMA_CREAM, Map.of());
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.RED + "" + ChatColor.ITALIC + "Burning hot.");
         lore.add("");

@@ -24,7 +24,7 @@ import static me.zenox.superitems.item.ItemRegistry.*;
 
 public class DarkEmberStaff extends ComplexItem {
     public DarkEmberStaff() {
-        super("Dark Ember Staff", "dark_ember_staff", true, Rarity.RARE, Type.STAFF, Material.BLAZE_ROD, Map.of(Stats.WISDOM, 100d, Stats.STRENGTH, -100d), List.of(new EmberAttune(), new EmberShoot()));
+        super("dark_ember_staff", true, Rarity.RARE, Type.STAFF, Material.BLAZE_ROD, Map.of(Stats.WISDOM, 100d, Stats.STRENGTH, -100d), List.of(new EmberAttune(), new EmberShoot()));
 
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 5, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);

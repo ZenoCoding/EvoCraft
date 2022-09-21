@@ -4,6 +4,8 @@ import com.archyx.aureliumskills.api.AureliumAPI;
 import com.archyx.aureliumskills.stats.Stat;
 import com.google.common.primitives.Ints;
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.data.TranslatableList;
+import me.zenox.superitems.data.TranslatableText;
 import me.zenox.superitems.item.abilities.Ability;
 import me.zenox.superitems.item.abilities.ItemAbility;
 import me.zenox.superitems.util.Util;
@@ -23,9 +25,10 @@ import java.util.Map;
 public class ComplexItem {
 
     public static final NamespacedKey GLOBAL_ID = new NamespacedKey(SuperItems.getPlugin(), "superitem");
-    private String name;
     private String id;
     private NamespacedKey key;
+    private TranslatableText name;
+    private TranslatableList lore;
     private int customModelData;
     private final boolean unique;
     private Rarity rarity;
@@ -37,9 +40,10 @@ public class ComplexItem {
 
     private String skullURL = "";
 
-    public ComplexItem(String name, String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
-        this.name = name;
+    public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
         this.id = id;
+        this.name = new TranslatableText(TranslatableText.TranslatableType.ITEM_NAME + "-" + id);
+        this.lore = new TranslatableList(TranslatableText.TranslatableType.ITEM_LORE + "-" + id);
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
         this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
         this.unique = unique;
@@ -53,21 +57,22 @@ public class ComplexItem {
 
     }
 
-    public ComplexItem(String name, String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique){
-        this(name, id, unique, rarity, type, material, stats, List.of());
+    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique){
+        this(id, unique, rarity, type, material, stats, List.of());
     }
 
-    public ComplexItem(String name, String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities){
-        this(name, id, false, rarity, type, material, stats, abilities);
+    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities){
+        this(id, false, rarity, type, material, stats, abilities);
     }
 
-    public ComplexItem(String name, String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats){
-        this(name, id, false, rarity, type, material, stats, List.of());
+    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats){
+        this(id, false, rarity, type, material, stats, List.of());
     }
 
     public ComplexItem(ItemSettings settings){
-        this.name = settings.getName();
+        this.name = new TranslatableText(TranslatableText.TranslatableType.ITEM_NAME + "-" + settings.getId());
         this.id = settings.getId();
+        this.lore = new TranslatableList(TranslatableText.TranslatableType.ITEM_LORE + "-" + id);
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
         this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
         this.unique = settings.isUnique();
@@ -115,7 +120,7 @@ public class ComplexItem {
 
         lore.add(this.getRarity().color() + this.getRarity().getName() + " " + this.getType().getName());
         meta.setLore(lore);
-        meta.setDisplayName(this.getRarity().color() + this.getName());
+        meta.setDisplayName(this.getRarity().color() + this.getName().toString());
         item.setItemMeta(meta);
 
         for (Map.Entry<Stat, Double> entry : this.getStats().entrySet()) {
@@ -142,12 +147,16 @@ public class ComplexItem {
         }
     }
 
-    public String getName() {
+    public TranslatableText getName() {
         return name;
     }
 
     public String getDisplayName() {
-        return this.rarity.color() + this.name;
+        return this.rarity.color() + this.name.toString();
+    }
+
+    public List<String> getDefaultLore(){
+        return lore.getList();
     }
 
     public String getId() {

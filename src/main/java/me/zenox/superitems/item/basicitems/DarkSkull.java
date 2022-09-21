@@ -17,7 +17,7 @@ import static me.zenox.superitems.item.ItemRegistry.PURIFIED_MAGMA_DISTILLATE;
 public class DarkSkull extends ComplexItem {
 
     public DarkSkull() {
-        super("Dark Skull", "dark_skull", Rarity.RARE, Type.MISC, Material.WITHER_SKELETON_SKULL, Map.of());
+        super("dark_skull", Rarity.RARE, Type.MISC, Material.WITHER_SKELETON_SKULL, Map.of());
 
         List<String> lore = List.of(ChatColor.GRAY + "" + ChatColor.ITALIC + "Smoldering hot.");
         this.getMeta().setLore(lore);
