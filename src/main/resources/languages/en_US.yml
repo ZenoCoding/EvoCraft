@@ -10,7 +10,7 @@ item-name-absolute_ender_pearl: Absolute Ender Pearl
 
 item-name-dark_skull: Dark Skull
 item-name-tormented_soul: Tormented Soul
-item-name-enchanted_iron_block: Enchanted Iron Block
+item-name-titanium_cube: Enchanted Iron Block
 
 item-name-magic_toy_stick: Magic Toy Stick
 item-name-soul_crystal: Soul Crystal
@@ -71,3 +71,68 @@ item-lore-purified_magma_distillate:
   - '&c&oBurning Hot.'
   -
   - '&7Rumors are that a single drop could power a city for generations.'
+
+item-lore-absolute_ender_pearl:
+  - 'Made from the souls of thousands of endermen.'
+
+item-lore-dark_skull:
+  - '&oBurning through your soul.'
+
+item-lore-tormented_soul:
+  - 'A trapped soul, facing torture for generations.'
+
+item-lore-titanium_cube:
+  - 'Heavyweight.'
+
+item-lore-magic_toy_stick:
+  - '&c&oMagical.'
+
+item-lore-soul_rift:
+  - "&8&oThe void-Sphere of Life was an anti-magic device, which could absorb the"
+  - "&8&ospecial form of magic in the player. It could not be destroyed by magic"
+  - "&8&oweapons. The soul crystal was left by an evil spirit of a mighty elf in that"
+  - "&8&osphere. When you wore the orb, your magic power would be raised, while"
+  - "&8&oyou could control people and objects with you. The soul crystal had a"
+  - "&8&omaximum energy level of 3. There are a few Dark elves whose souls were"
+  - "&8&oshattered by the sphere, and they tried to absorb the magic from its"
+  - "&8&oremains, but they are too weak and starved and died."
+  - "&8&o"
+  - "&8&oGenerated at: https://app.inferkit.com/demo"
+
+ability-name-magic_missile: Magic Missile
+
+ability-lore-magic_missile:
+  - 'Shoots a magic missile that explodes'
+  - 'on impact and deals massive &cdamage.'
+
+ability-lore-magic_missile-combust:
+  - 'Shoots a magic missile that explodes'
+  - 'on impact and deals massive &cdamage.'
+  -
+  - '20% chance for the item to &6combust &7and dissapear.'
+
+ability-name-soul_rift: Soul Rift
+
+ability-lore-soul_rift:
+  - 'Deploys a &bsoul crystal&7, which lasts for &a5s &7and'
+  - 'pulls entities in, dealing &ctrue damage &7every second.'
+
+ability-name-fiery_ember_shoot: Fiery Embers
+
+ability-lore-fiery_ember_shoot:
+  - 'Shoot a &cfireball &7 that explodes'
+  - 'on impact. Fiery Explosions!'
+
+ability-name-dark_ember_attune: Attune
+
+ability-lore-dark_ember_attune:
+  - 'Changes the &battunement &7of this staff,'
+  - 'changing the domain it draws power from.'
+  -
+  - 'Swap between &6Blazeborn &7and &8Darksoul'
+
+ability-name-dark_ember_shoot: Dark Embers
+
+ability-lore-dark_ember_shoot:
+  - 'Shoot a projectile based on the &battunement'
+  - 'of this weapon. Dark magic is cool, right?'

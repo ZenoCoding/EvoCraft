@@ -23,15 +23,4 @@ public class ToyStick extends ComplexItem {
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
     }
 
-    @Override
-    public List<Recipe> getRecipes() {
-        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(3));
-        recipe.shape("DGD", "FSF", "TST");
-        recipe.setIngredient('D', Material.DRAGON_BREATH);
-        recipe.setIngredient('G', Material.GLOWSTONE_DUST);
-        recipe.setIngredient('F', Material.FIRE_CHARGE);
-        recipe.setIngredient('S', Material.DEBUG_STICK);
-        recipe.setIngredient('T', Material.TNT);
-        return List.of(recipe);
-    }
 }

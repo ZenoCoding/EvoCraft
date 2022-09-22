@@ -138,7 +138,7 @@ public class ComplexItem {
     protected void writeAbilityLore(List<String> lore) {
         for (Ability ability : this.abilities) {
             lore.add("");
-            lore.add(ChatColor.GOLD + "Ability: " + ability.getName() + ChatColor.YELLOW + ChatColor.BOLD + " " + (ability instanceof ItemAbility ? ((ItemAbility) ability).getAction().getName() : ""));
+            lore.add(ChatColor.GOLD + "Ability: " + ability.getDisplayName() + ChatColor.YELLOW + ChatColor.BOLD + " " + (ability instanceof ItemAbility ? ((ItemAbility) ability).getAction().getName() : ""));
             lore.addAll(ability.getLore());
 
             if (ability.getManaCost() > 0) lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + ability.getManaCost());

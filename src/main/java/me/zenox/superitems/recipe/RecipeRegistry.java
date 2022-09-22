@@ -10,6 +10,8 @@ import org.bukkit.inventory.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static me.zenox.superitems.item.ItemRegistry.FIERY_EMBER_STAFF;
+
 public class RecipeRegistry {
 
     public static final List<Recipe> registeredRecipes = new ArrayList<>();
@@ -43,6 +45,49 @@ public class RecipeRegistry {
                 .addChoice('E', new ComplexChoice(ItemRegistry.ENCHANTED_ENDER_PEARL, 9))
                 .build());
 
+        final Recipe PURIFIED_MAGMA_DISTILLATE = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.PURIFIED_MAGMA_DISTILLATE).getItem())
+                .id("purified_magma_distillate")
+                .shape("TML", "MMM", "LMT")
+                .addChoice('M', new RecipeChoice.ExactChoice(ItemRegistry.ENCHANTED_MAGMA_BLOCK.getItemStack(1)))
+                .addChoice('L', new RecipeChoice.MaterialChoice(Material.LAVA_BUCKET))
+                .addChoice('T', new RecipeChoice.MaterialChoice(Material.GHAST_TEAR))
+                .build());
+
+        final Recipe MAGIC_TOY_STICK = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.MAGIC_TOY_STICK).getItem())
+                .id("magic_toy_stick")
+                .shape("PHP", "TDT", "TDT")
+                .addChoice('P', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.PURIFIED_MAGMA_DISTILLATE).getItem()))
+                .addChoice('H', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.HYPER_CRUX).getItem()))
+                .addChoice('T', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.TITANIUM_CUBE).getItem()))
+                .addChoice('P', new RecipeChoice.MaterialChoice(Material.DEBUG_STICK))
+                .build());
+
+        final Recipe SOUL_CRYSTAL = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.SOUL_CRYSTAL).getItem())
+                .shape("BEB", "ECE", "BEB")
+                .addChoice('B', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.ENCHANTED_BLAZE_ROD).getItem()))
+                .addChoice('E', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.ABSOLUTE_ENDER_PEARL).getItem()))
+                .addChoice('C', new RecipeChoice.MaterialChoice(Material.END_CRYSTAL))
+                .build());
+
+        final Recipe FIERY_EMBER_STAFF = registerRecipe(new ShapedRecipeBuilder()
+                .shape("FFF", "APA", "MPM")
+                .addChoice('A', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.BURNING_ASHES).getItem()))
+                .addChoice('P', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.MOLTEN_POWDER).getItem()))
+                .addChoice('M', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.PURIFIED_MAGMA_DISTILLATE).getItem()))
+                .addChoice('F', new RecipeChoice.MaterialChoice(Material.FIRE_CHARGE))
+                .build());
+
+        final recipe DARK_EMBER_STAFF = registerRecipe(new ShapedRecipeBuilder()
+                .shape("RWR", "PSP", "MPM")
+                .addChoice('S', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.FIERY_EMBER_STAFF).getItem()))
+                .addChoice('P', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.MOLTEN_POWDER).getItem()))
+                .addChoice('M', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.PURIFIED_MAGMA_DISTILLATE).getItem()))
+                .addChoice('W', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.DARK_SKULL).getItem()))
+                .addChoice('R', new RecipeChoice.MaterialChoice(Material.WITHER_ROSE))
+                .build());
     }
 
     private static Recipe registerRecipe(Recipe recipe){

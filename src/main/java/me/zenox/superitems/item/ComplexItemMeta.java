@@ -8,7 +8,6 @@ import me.zenox.superitems.item.abilities.ItemAbility;
 import me.zenox.superitems.persistence.ArrayListType;
 import me.zenox.superitems.persistence.SerializedPersistentType;
 import me.zenox.superitems.util.Romans;
-import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -150,7 +149,7 @@ public class ComplexItemMeta {
     private void writeAbilityLore(LoreBuilder loreBuilder) {
         for (Ability ability : this.abilities) {
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GOLD + "Ability: " + ability.getName() + ChatColor.YELLOW + ChatColor.BOLD + " " + (ability instanceof ItemAbility ? ((ItemAbility) ability).getAction().getName() : ""));
+            lore.add(ChatColor.GOLD + "Ability: " + ability.getDisplayName() + ChatColor.YELLOW + ChatColor.BOLD + " " + (ability instanceof ItemAbility ? ((ItemAbility) ability).getAction().getName() : ""));
             lore.addAll(ability.getLore());
 
             if (ability.getManaCost() > 0) lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + ability.getManaCost());

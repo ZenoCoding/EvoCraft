@@ -33,7 +33,7 @@ public class TormentedBlade extends ComplexItem {
         recipe.setIngredient('B', new RecipeChoice.ExactChoice(ENCHANTED_BLAZE_ROD.getItemStack(1)));
         recipe.setIngredient('M', new RecipeChoice.ExactChoice(MOLTEN_POWDER.getItemStack(1)));
         recipe.setIngredient('T', new RecipeChoice.ExactChoice(TORMENTED_SOUL.getItemStack(1)));
-        recipe.setIngredient('I', new RecipeChoice.ExactChoice(ENCHANTED_IRON_BLOCK.getItemStack(1)));
+        recipe.setIngredient('I', new RecipeChoice.ExactChoice(TITANIUM_CUBE.getItemStack(1)));
         return List.of(recipe);
     }
 }

@@ -1,5 +1,6 @@
 package me.zenox.superitems.item;
 
+import me.zenox.superitems.item.abilities.*;
 import me.zenox.superitems.item.armoritems.*;
 import me.zenox.superitems.item.basicitems.*;
 import me.zenox.superitems.item.superitems.*;
@@ -54,13 +55,47 @@ public class ItemRegistry {
             .material(Material.ENDER_PEARL)
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .glow()));
-    public static final ComplexItem DARK_SKULL = registerItem(new DarkSkull());
+    public static final ComplexItem DARK_SKULL = registerItem(new ComplexItem(new ItemSettings()
+            .id("dark_skull")
+            .material(Material.WITHER_SKELETON_SKULL)
+            .rarity(ComplexItem.Rarity.UNCOMMON)));
+    // Cannot be migrated due to custom drop stuff!
     public static final ComplexItem TORMENTED_SOUL = registerItem(new TormentedSoul());
-    public static final ComplexItem ENCHANTED_IRON_BLOCK = registerItem(new EnchantedIronBlock());
-    public static final ComplexItem MAGIC_TOY_STICK = registerItem(new ToyStick());
-    public static final ComplexItem SOUL_CRYSTAL = registerItem(new SoulCrystal());
-    public static final ComplexItem FIERY_EMBER_STAFF = registerItem(new FieryEmberStaff());
-    public static final ComplexItem DARK_EMBER_STAFF = registerItem(new DarkEmberStaff());
+
+    public static final ComplexItem TITANIUM_CUBE = registerItem(new ComplexItem(new ItemSettings()
+            .id("titanium_cube")
+            .material(Material.IRON_BLOCK)
+            .rarity(ComplexItem.Rarity.COMMON)));
+
+    public static final ComplexItem MAGIC_TOY_STICK = registerItem(new ComplexItem(new ItemSettings()
+            .id("magic_toy_stick")
+            .material(Material.STICK)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.WAND)
+            .ability(new MagicMissile(0, true))));
+
+    public static final ComplexItem SOUL_CRYSTAL = registerItem(new ComplexItem(new ItemSettings()
+            .id("soul_crystal")
+            .material(Material.END_CRYSTAL)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.DEPLOYABLE)
+            .ability(new SoulRift())));
+
+    public static final ComplexItem FIERY_EMBER_STAFF = registerItem(new ComplexItem(new ItemSettings()
+            .id("fiery_ember_staff")
+            .material(Material.BLAZE_ROD)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.STAFF)
+            .ability(new EmberShootSmall())));
+
+    public static final ComplexItem DARK_EMBER_STAFF = registerItem(new ComplexItem(new ItemSettings()
+            .id("dark_ember_staff")
+            .material(Material.BLAZE_ROD)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.STAFF)
+            .ability(new EmberAttune())
+            .ability(new EmberShoot())));
+
     public static final ComplexItem TORMENTED_BLADE = registerItem(new TormentedBlade());
     public static final ComplexItem SPEEDY_GONZALES = registerItem(new SpeedyGonzales());
     public static final ComplexItem JACKASS_GONZALES = registerItem(new JackassGonzales());

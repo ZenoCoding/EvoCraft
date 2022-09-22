@@ -20,10 +20,7 @@ import java.util.Map;
 public class TormentedSoul extends ComplexItem implements Listener {
 
     public TormentedSoul() {
-        super("tormented_soul", Rarity.RARE, Type.MISC, Material.SPAWNER, Map.of());
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "A trapped soul, that has been tortured for generations.");
-        this.getMeta().setLore(lore);
+        super("tormented_soul", Rarity.COMMON, Type.MISC, Material.SPAWNER, Map.of());
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 1, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
 

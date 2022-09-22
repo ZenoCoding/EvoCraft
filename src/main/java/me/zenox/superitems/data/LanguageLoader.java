@@ -16,12 +16,12 @@ public class LanguageLoader {
 
     private final Character LIST_CONCAT_SEPERATOR = '␟';
 
-    private HashMap<String, Object> translationMap = new HashMap<>();
+    private final HashMap<String, String> translationMap = new HashMap<>();
 
     public LanguageLoader(SuperItems plugin) {
         File languageDirectory = new File(plugin.getDataFolder(), "languages/");
         File defaultLanguageFile = new File(plugin.getDataFolder(), "languages/en_US.yml");
-        if(!languageDirectory.isDirectory() || SuperItems.getPlugin().getConfigLoader().getConfig().getBoolean("force_update_default")) {
+        if (!languageDirectory.isDirectory() || SuperItems.getPlugin().getConfigLoader().getConfig().getBoolean("force_update_default")) {
             languageDirectory.mkdir();
             try {
                 InputStream stream = plugin.getResource("languages/en_US.yml");
@@ -39,9 +39,9 @@ public class LanguageLoader {
             FileConfiguration translations = YamlConfiguration.loadConfiguration(defaultLanguageFile);
             for (String translation : translations.getKeys(false)) {
                 translationMap.put(translation, translations.getString(translation));
-                if(translation.contains("lore")){
+                if (translation.contains("lore")) {
                     StringBuilder concat = new StringBuilder();
-                    translations.getStringList(translation).forEach(s -> concat.append(s + LIST_CONCAT_SEPERATOR));
+                    for(String s : translations.getStringList(translation)) concat.append(s + LIST_CONCAT_SEPERATOR);
                     translationMap.put(translation, concat.toString());
                 }
             }
@@ -49,12 +49,12 @@ public class LanguageLoader {
         Util.logToConsole("Translation Map: " + translationMap);
     }
 
-    public String get(String path){
-        return ((String) translationMap.get(path));
+    public String get(String path) {
+        return translationMap.get(path);
     }
 
-    public List<String> getList(String path){
-        if(translationMap.get(path) == null) return List.of();
-        return List.of(((String) translationMap.get(path)).split(LIST_CONCAT_SEPERATOR.toString()));
+    public List<String> getList(String path) {
+        if (translationMap.get(path) == null) return List.of();
+        return List.of(translationMap.get(path).split(LIST_CONCAT_SEPERATOR.toString()));
     }
 }

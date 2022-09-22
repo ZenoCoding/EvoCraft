@@ -13,7 +13,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class EmberShootSmall extends ItemAbility {
 
     public EmberShootSmall() {
-        super("Fiery Embers", "fiery_ember_shoot", AbilityAction.RIGHT_CLICK_ALL, 5, 0);
+        super("fiery_ember_shoot", AbilityAction.RIGHT_CLICK_ALL, 5, 0);
 
         this.addLineToLore(ChatColor.GRAY + "Shoot a " + ChatColor.RED + "fireball" + ChatColor.GRAY + " that explodes");
         this.addLineToLore(ChatColor.GRAY + "on impact. Fiery Explosions!");

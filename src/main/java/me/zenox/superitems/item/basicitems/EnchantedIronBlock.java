@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class EnchantedIronBlock extends ComplexItem implements Listener {
+public class EnchantedIronBlock extends ComplexItem {
 
     public EnchantedIronBlock() {
         super("enchanted_iron_block", Rarity.UNCOMMON, Type.MISC, Material.IRON_BLOCK, Map.of());
@@ -24,7 +24,6 @@ public class EnchantedIronBlock extends ComplexItem implements Listener {
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 1, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-        Bukkit.getPluginManager().registerEvents(this, SuperItems.getPlugin());
     }
 
     @Override

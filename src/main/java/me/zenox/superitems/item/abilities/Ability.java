@@ -2,6 +2,8 @@ package me.zenox.superitems.item.abilities;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.data.TranslatableList;
+import me.zenox.superitems.data.TranslatableText;
 import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
@@ -20,37 +22,55 @@ import java.util.function.BiPredicate;
 public abstract class Ability implements Serializable {
     public static List<Ability> registeredAbilities = new ArrayList<>();
 
-    private final String name;
+    private final TranslatableText name;
     private final String id;
     private final int manaCost;
     private final double cooldown;
 
     private final Class<? extends PlayerEvent> eventType;
     private final Slot slot;
-    private final List<String> lore = new ArrayList<>();
+    private TranslatableList lore;
 
+    @Deprecated
     public Ability(String name, String id, int manaCost, double cooldown, Class<? extends PlayerEvent> eventType, Slot slot) {
-        this.name = name;
+        this.id = id;
+        this.name = new TranslatableText(TranslatableText.TranslatableType.ABILITY_NAME + "-" + id);
+        this.lore = new TranslatableList(TranslatableText.TranslatableType.ABILITY_LORE + "-" + id);
         this.cooldown = cooldown;
         this.manaCost = manaCost;
-        this.id = id;
         this.eventType = eventType;
         this.slot = slot;
 
         Ability.registeredAbilities.add(this);
     }
 
-    public String getName() {
-        return name;
+    public Ability(String id, int manaCost, double cooldown, Class<? extends PlayerEvent> eventType, Slot slot) {
+        this.id = id;
+        this.name = new TranslatableText(TranslatableText.TranslatableType.ABILITY_NAME + "-" + id);
+        this.lore = new TranslatableList(TranslatableText.TranslatableType.ABILITY_LORE + "-" + id);
+        this.cooldown = cooldown;
+        this.manaCost = manaCost;
+        this.eventType = eventType;
+        this.slot = slot;
+
+        Ability.registeredAbilities.add(this);
     }
 
+    public String getDisplayName() {
+        return name.toString();
+    }
+
+    @Deprecated
     public List<String> addLineToLore(String line) {
-        lore.add(line);
-        return lore;
+        return lore.getList();
     }
 
     public List<String> getLore() {
-        return lore;
+        return lore.getList();
+    }
+
+    protected void setLore(TranslatableList list){
+        this.lore = list;
     }
 
     protected boolean checkEvent(PlayerEvent e){
@@ -68,7 +88,7 @@ public abstract class Ability implements Serializable {
         Double cooldown;
         try{
             cooldown = container.get(cooldownKey, PersistentDataType.DOUBLE);
-        } catch(IllegalArgumentException exception){
+        } catch (IllegalArgumentException exception){
             cooldown = Double.valueOf(container.get(cooldownKey, PersistentDataType.LONG));
             container.remove(cooldownKey);
             container.set(cooldownKey, PersistentDataType.DOUBLE, cooldown);

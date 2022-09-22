@@ -8,6 +8,8 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.data.TranslatableList;
+import me.zenox.superitems.data.TranslatableText;
 import me.zenox.superitems.util.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -27,19 +29,13 @@ import static me.zenox.superitems.util.Util.getNearbyBlocks;
 public class MagicMissile extends ItemAbility implements Serializable {
 
     private final boolean combustion;
-    private final int explosionpower;
-    public MagicMissile(int explosionpower, boolean combustion) {
+    private final int explosionPower;
+    public MagicMissile(int explosionPower, boolean combustion) {
         super("Magic Missile", "magic_missile", AbilityAction.RIGHT_CLICK_ALL, 0, 0);
-        this.explosionpower = explosionpower;
+        this.explosionPower = explosionPower;
         this.combustion = combustion;
+        if (combustion == true) this.setLore(new TranslatableList(TranslatableText.TranslatableType.ABILITY_LORE + "-" + getId() + "-combust"));
 
-        this.addLineToLore(ChatColor.GRAY + "Shoots a magic missile that explodes");
-        this.addLineToLore(ChatColor.GRAY + "on impact and deals massive" + ChatColor.RED + " damage.");
-
-        if (combustion == true) {
-            this.addLineToLore("");
-            this.addLineToLore(ChatColor.GRAY + "20% chance for the item to " + ChatColor.GOLD + "combust " + ChatColor.GRAY + "and dissapear.");
-        }
     }
 
     @Override
@@ -83,7 +79,7 @@ public class MagicMissile extends ItemAbility implements Serializable {
         trident.setGravity(false);
         trident.setPierceLevel(127);
 
-        int explosionPower = this.explosionpower;
+        int explosionPower = this.explosionPower;
 
         new BukkitRunnable() {
             int count = 0;

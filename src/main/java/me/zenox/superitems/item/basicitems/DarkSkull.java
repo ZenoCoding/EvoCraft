@@ -22,14 +22,4 @@ public class DarkSkull extends ComplexItem {
         List<String> lore = List.of(ChatColor.GRAY + "" + ChatColor.ITALIC + "Smoldering hot.");
         this.getMeta().setLore(lore);
     }
-
-    @Override
-    public List<Recipe> getRecipes() {
-        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
-        recipe.shape("MWM", "AWA", "AWA");
-        recipe.setIngredient('A', new RecipeChoice.ExactChoice(BURNING_ASHES.getItemStack(1)));
-        recipe.setIngredient('M', new RecipeChoice.ExactChoice(PURIFIED_MAGMA_DISTILLATE.getItemStack(1)));
-        recipe.setIngredient('W', Material.WITHER_SKELETON_SKULL);
-        return List.of(recipe);
-    }
 }

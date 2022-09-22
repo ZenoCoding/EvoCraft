@@ -9,6 +9,11 @@ import java.util.Arrays;
 public class ItemAbility extends Ability{
     private final AbilityAction action;
 
+    public ItemAbility(String id, AbilityAction action, int manaCost, double cooldown) {
+        super(id, manaCost, cooldown, PlayerInteractEvent.class, Slot.EITHER_HAND);
+        this.action = action;
+    }
+
     public ItemAbility(String name, String id, AbilityAction action, int manaCost, double cooldown) {
         super(name, id, manaCost, cooldown, PlayerInteractEvent.class, Slot.EITHER_HAND);
         this.action = action;

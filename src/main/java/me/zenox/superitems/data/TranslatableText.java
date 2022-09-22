@@ -22,7 +22,7 @@ public class TranslatableText {
     }
 
     public enum TranslatableType {
-        ITEM_NAME("item-name"), ITEM_LORE("item-lore"), COMMAND("cmd");
+        ITEM_NAME("item-name"), ITEM_LORE("item-lore"), ABILITY_NAME("ability-name"), ABILITY_LORE("ability_lore"), COMMAND("cmd"), MISC_MSG("msg");
 
         private String key;
 
