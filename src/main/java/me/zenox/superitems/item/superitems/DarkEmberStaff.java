@@ -28,10 +28,6 @@ public class DarkEmberStaff extends ComplexItem {
 
         this.getMeta().addEnchant(Enchantment.DAMAGE_ALL, 5, true);
         this.getMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "A fiery rod, taken from " + ChatColor.RED + "Blaziel" + ChatColor.GRAY + " and imbued with darkness.");
-        lore.add(ChatColor.GRAY + "Draws power from the user's " + ChatColor.AQUA + "mana.");
-        this.getMeta().setLore(lore);
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class VoidularRecall extends ItemAbility {
     public VoidularRecall() {
-        super("Voidular Recall", "void_recall", AbilityAction.SHIFT_LEFT_CLICK, 250, 0);
+        super("void_recall", AbilityAction.SHIFT_LEFT_CLICK, 250, 0);
 
         this.addLineToLore(ChatColor.GRAY + "Binds a nearby block to your " + ChatColor.AQUA + "soul.");
         this.addLineToLore(ChatColor.GRAY + "Teleports you back to the " + ChatColor.AQUA + "soulbound" + ChatColor.GRAY + " block.");

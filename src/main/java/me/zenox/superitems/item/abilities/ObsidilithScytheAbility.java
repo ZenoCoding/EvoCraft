@@ -23,7 +23,7 @@ public class ObsidilithScytheAbility extends ItemAbility {
 
 
     public ObsidilithScytheAbility() {
-        super("Obsidi-strike", "obsidian_projectile", AbilityAction.RIGHT_CLICK_ALL, 2, 0);
+        super("obsidian_projectile", AbilityAction.RIGHT_CLICK_ALL, 2, 0);
 
         this.addLineToLore(ChatColor.GRAY + "Shoots a sharpened shard of" + ChatColor.BLACK + "obsidian.");
         this.addLineToLore(ChatColor.GRAY + "Deals massive" + ChatColor.RED + " damage" + ChatColor.GRAY + " on impact.");

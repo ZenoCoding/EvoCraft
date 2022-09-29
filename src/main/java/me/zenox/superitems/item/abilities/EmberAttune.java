@@ -1,18 +1,14 @@
 package me.zenox.superitems.item.abilities;
 
-import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.item.*;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
@@ -24,7 +20,7 @@ public class EmberAttune extends ItemAbility {
                     loreEntry.setLore(List.of(ChatColor.AQUA + "Attunement: " + ((Attunement) variable.getValue()).getName())));
 
     public EmberAttune() {
-        super("Attune", "dark_ember_attune", AbilityAction.LEFT_CLICK_ALL, 0, 0);
+        super("dark_ember_attune", AbilityAction.LEFT_CLICK_ALL, 0, 0);
 
         this.addLineToLore(ChatColor.GRAY + "Changes the " + ChatColor.AQUA + "attunement" + ChatColor.GRAY + " of this staff,");
         this.addLineToLore(ChatColor.GRAY + "changing the domain it draws power from.");

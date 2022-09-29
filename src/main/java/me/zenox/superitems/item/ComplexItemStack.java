@@ -83,6 +83,7 @@ public class ComplexItemStack implements Cloneable{
 
         // Set CustomModelData
         meta.setCustomModelData(complexItem.getCustomModelData());
+        Util.logToConsole("CustomModelData of " + this.complexItem.getDisplayName() + " is: " + this.complexItem.getCustomModelData());
 
         item.setAmount(amount);
 

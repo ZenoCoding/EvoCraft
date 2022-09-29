@@ -4,7 +4,9 @@ import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 
-public class TranslatableText {
+import java.io.Serializable;
+
+public class TranslatableText implements Serializable {
     private String key;
 
     public TranslatableText(String key){
@@ -22,7 +24,7 @@ public class TranslatableText {
     }
 
     public enum TranslatableType {
-        ITEM_NAME("item-name"), ITEM_LORE("item-lore"), ABILITY_NAME("ability-name"), ABILITY_LORE("ability_lore"), COMMAND("cmd"), MISC_MSG("msg");
+        ITEM_NAME("item-name"), ITEM_LORE("item-lore"), ABILITY_NAME("ability-name"), ABILITY_LORE("ability-lore"), COMMAND("cmd"), MISC_MSG("msg");
 
         private String key;
 

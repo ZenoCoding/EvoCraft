@@ -1,6 +1,8 @@
 package me.zenox.superitems.item.abilities;
 
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.data.TranslatableList;
+import me.zenox.superitems.data.TranslatableText;
 import me.zenox.superitems.persistence.NBTEditor;
 import me.zenox.superitems.util.Util;
 import org.bukkit.*;
@@ -23,28 +25,17 @@ import java.util.Random;
 
 import static me.zenox.superitems.item.ItemRegistry.TOTEM_POLE;
 
-public class Centralize extends ItemAbility implements Listener {
+public class Centralize extends ItemAbility {
     private boolean corrupted;
     private int duration;
 
     public Centralize(boolean corrupted, int duration) {
-        super("Centralize", "totem_centralize", AbilityAction.RIGHT_CLICK_ALL, corrupted ? 150 : 125, 30);
+        super("centralize", AbilityAction.RIGHT_CLICK_ALL, corrupted ? 150 : 125, 30);
         this.corrupted = corrupted;
         this.duration = duration;
 
-        if(this.corrupted) {
-            this.addLineToLore(ChatColor.GRAY + "Place down a " + ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Totem" + ChatColor.GRAY + " which temporarily");
-            this.addLineToLore(ChatColor.GRAY + "grants " + ChatColor.RED + "Resistance II" + ChatColor.GRAY + " and " + ChatColor.GOLD + "Fire Resistance I");
-            this.addLineToLore(ChatColor.GRAY + "to you, yourself in a" + ChatColor.GREEN + " 45 block" + ChatColor.GRAY + " radius.");
-            this.addLineToLore("");
-            this.addLineToLore(ChatColor.LIGHT_PURPLE + "Corrupted Uses Left: " + ChatColor.DARK_PURPLE + "5");
-        } else {
-            this.addLineToLore(ChatColor.GRAY + "Place down a " + ChatColor.YELLOW + "" + ChatColor.BOLD + "Totem" + ChatColor.GRAY + " which temporarily");
-            this.addLineToLore(ChatColor.GRAY + "grants " + ChatColor.RED + "Resistance I" + ChatColor.GRAY + " and " + ChatColor.GOLD + "Fire Resistance I");
-            this.addLineToLore(ChatColor.GRAY + "to all players in a" + ChatColor.GREEN + " 30 block" + ChatColor.GRAY + " radius.");
-        }
+        if(this.corrupted)  this.setLore(new TranslatableList(TranslatableText.TranslatableType.ABILITY_LORE + "-" + getId() + "-corrupt"));
 
-        Bukkit.getPluginManager().registerEvents(this, SuperItems.getPlugin());
     }
 
     @Override

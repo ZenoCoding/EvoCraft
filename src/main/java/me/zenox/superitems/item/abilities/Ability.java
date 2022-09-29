@@ -18,6 +18,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+
+/**
+ * TODO: PLEASE MIGRATE ABILITY CLASS TO HAVE A REGISTRY AND GET ITEMS FROM REGISTRY
+ */
 
 public abstract class Ability implements Serializable {
     public static List<Ability> registeredAbilities = new ArrayList<>();
@@ -31,20 +36,29 @@ public abstract class Ability implements Serializable {
     private final Slot slot;
     private TranslatableList lore;
 
-    @Deprecated
-    public Ability(String name, String id, int manaCost, double cooldown, Class<? extends PlayerEvent> eventType, Slot slot) {
-        this.id = id;
-        this.name = new TranslatableText(TranslatableText.TranslatableType.ABILITY_NAME + "-" + id);
-        this.lore = new TranslatableList(TranslatableText.TranslatableType.ABILITY_LORE + "-" + id);
-        this.cooldown = cooldown;
-        this.manaCost = manaCost;
-        this.eventType = eventType;
-        this.slot = slot;
-
-        Ability.registeredAbilities.add(this);
-    }
+    // TODO: FIX THIS - ABILITIES WILL NOT WORK WITH THIS BEING TRANSIENT
+    private transient Consumer<PlayerEvent> executable;
 
     public Ability(String id, int manaCost, double cooldown, Class<? extends PlayerEvent> eventType, Slot slot) {
+        this(id, manaCost, cooldown, eventType, slot, true);
+        this.executable = this::runExecutable;
+    }
+
+    public Ability(String id, int manaCost, double cooldown, Class<? extends PlayerEvent> eventType, Slot slot, Consumer<PlayerEvent> executable) {
+        this(id, manaCost, cooldown, eventType, slot, true);
+        this.executable = executable;
+    }
+
+    /**
+     * Internal constructor because exectuable go brr
+     * @param id
+     * @param manaCost
+     * @param cooldown
+     * @param eventType
+     * @param slot
+     * @param internal paramater that never gets used just to differentiate it from the public variant
+     */
+    private Ability(String id, int manaCost, double cooldown, Class<? extends PlayerEvent> eventType, Slot slot, Boolean internal) {
         this.id = id;
         this.name = new TranslatableText(TranslatableText.TranslatableType.ABILITY_NAME + "-" + id);
         this.lore = new TranslatableList(TranslatableText.TranslatableType.ABILITY_LORE + "-" + id);
@@ -52,6 +66,11 @@ public abstract class Ability implements Serializable {
         this.manaCost = manaCost;
         this.eventType = eventType;
         this.slot = slot;
+
+        for (Ability ability :
+                registeredAbilities) {
+            if(ability.getId().equalsIgnoreCase(id)) throw new IllegalArgumentException("");
+        }
 
         Ability.registeredAbilities.add(this);
     }
@@ -66,6 +85,7 @@ public abstract class Ability implements Serializable {
     }
 
     public List<String> getLore() {
+        Util.logToConsole("Ability Lore: " + lore.getList());
         return lore.getList();
     }
 
@@ -114,7 +134,7 @@ public abstract class Ability implements Serializable {
         String manaMessage = this.manaCost > 0 ? ChatColor.AQUA + "-" + manaCost + " Mana " + "(" + ChatColor.GOLD + name + ChatColor.AQUA + ")" : ChatColor.GOLD + "Used " + name;
         Util.sendActionBar(e.getPlayer(), manaMessage);
 
-        this.runExecutable(e);
+        this.executable.accept(e);
 
         container.set(cooldownKey, PersistentDataType.DOUBLE, System.currentTimeMillis() + (getCooldown() * 1000));
     }

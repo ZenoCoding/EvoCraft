@@ -22,9 +22,4 @@ public class CorruptedTotemPole extends ComplexItem {
         this.setSkullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTk3YzI4NmI2ZDE2MjM5YTcxZmYxNjc0OTQ0MTZhZDk0MDcxNzIwNTEwY2Y4YTgyYWIxZjQ1MWZmNGE5MDkxNiJ9fX0=");
     }
 
-    @Override
-    public List<Recipe> getRecipes() {
-        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
-        return List.of();
-    }
 }

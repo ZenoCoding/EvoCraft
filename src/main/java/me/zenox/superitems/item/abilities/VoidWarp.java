@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class VoidWarp extends ItemAbility {
     public VoidWarp() {
-        super("Void Warp", "void_warp", AbilityAction.RIGHT_CLICK_ALL, 100, 1);
+        super("void_warp", AbilityAction.RIGHT_CLICK_ALL, 100, 1);
 
         this.addLineToLore(ChatColor.DARK_PURPLE + "Creates a rift in space and pulls you through it. Magic!");
 

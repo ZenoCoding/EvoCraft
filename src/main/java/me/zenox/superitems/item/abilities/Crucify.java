@@ -29,7 +29,7 @@ import static me.zenox.superitems.item.ItemRegistry.CRUCIFIED_AMULET;
 public class Crucify extends ItemAbility implements Listener {
 
     public Crucify() {
-        super("Crucify", "crucify", AbilityAction.RIGHT_CLICK_ALL, 0, 10);
+        super("crucify", AbilityAction.RIGHT_CLICK_ALL, 0, 10);
 
         this.addLineToLore(ChatColor.GRAY + "Disables all " + ChatColor.RED + "regeneration" + ChatColor.GRAY + " but gives");
         this.addLineToLore(ChatColor.GRAY + "a permanent " + ChatColor.RED + "strength and " + ChatColor.WHITE + " speed " + ChatColor.GRAY + "boost");

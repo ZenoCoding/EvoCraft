@@ -26,7 +26,6 @@ public class ItemRegistry {
     public static final ComplexItem GARDENER_SAPLING = registerItem(new GardenerSapling());
     public static final ComplexItem ENCHANTED_MAGMA_BLOCK = registerItem(new ComplexItem(new ItemSettings()
             .id("enchanted_magma_block")
-            .rarity(ComplexItem.Rarity.COMMON)
             .material(Material.MAGMA_BLOCK)));
     public static final ComplexItem PURIFIED_MAGMA_DISTILLATE = registerItem(new ComplexItem(new ItemSettings()
             .id("purified_magma_distillate")
@@ -44,12 +43,10 @@ public class ItemRegistry {
     public static final ComplexItem MOLTEN_POWDER = registerItem(new ComplexItem(new ItemSettings()
             .id("molten_powder")
             .material(Material.BLAZE_POWDER)
-            .rarity(ComplexItem.Rarity.RARE)
             .glow()));
     public static final ComplexItem ENCHANTED_ENDER_PEARL = registerItem(new ComplexItem(new ItemSettings()
             .id("enchanted_ender_pearl")
-            .material(Material.ENDER_PEARL)
-            .rarity(ComplexItem.Rarity.COMMON)));
+            .material(Material.ENDER_PEARL)));
     public static final ComplexItem ABSOLUTE_ENDER_PEARL = registerItem(new ComplexItem(new ItemSettings()
             .id("absolute_ender_pearl")
             .material(Material.ENDER_PEARL)
@@ -79,7 +76,7 @@ public class ItemRegistry {
             .material(Material.END_CRYSTAL)
             .rarity(ComplexItem.Rarity.RARE)
             .type(ComplexItem.Type.DEPLOYABLE)
-            .ability(new SoulRift())));
+            .ability(new ItemAbility("soul_rift", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 100, 50, ItemAbility::soulRiftAbility))));
 
     public static final ComplexItem FIERY_EMBER_STAFF = registerItem(new ComplexItem(new ItemSettings()
             .id("fiery_ember_staff")
@@ -96,29 +93,104 @@ public class ItemRegistry {
             .ability(new EmberAttune())
             .ability(new EmberShoot())));
 
-    public static final ComplexItem TORMENTED_BLADE = registerItem(new TormentedBlade());
-    public static final ComplexItem SPEEDY_GONZALES = registerItem(new SpeedyGonzales());
-    public static final ComplexItem JACKASS_GONZALES = registerItem(new JackassGonzales());
+    public static final ComplexItem TORMENTED_BLADE = registerItem(new ComplexItem(new ItemSettings()
+            .id("tormented_blade")
+            .material(Material.IRON_AXE)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.AXE)
+            .ability(new Tarhelm())));
+
+    // public static final ComplexItem SPEEDY_GONZALES = registerItem(new SpeedyGonzales());
+    // public static final ComplexItem JACKASS_GONZALES = registerItem(new JackassGonzales());
+
     public static final ComplexItem SWORD_OF_JUSTICE = registerItem(new SwordOfJustice());
-    public static final ComplexItem CRUCIFIED_AMULET = registerItem(new CrucifiedAmulet());
+
+    public static final ComplexItem CRUCIFIED_AMULET = registerItem(new ComplexItem(new ItemSettings()
+            .id("crucified_amulet")
+            .material(Material.PLAYER_HEAD)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .ability(new Crucify())));
+
+    // Need attribute system in order to migrate this because im lazy
     public static final ComplexItem DESECRATOR_HELMET = registerItem(new DesecratorHelmet());
     public static final ComplexItem DESECRATOR_CHESTPLATE = registerItem(new DesecratorChestplate());
     public static final ComplexItem DESECRATOR_LEGGINGS = registerItem(new DesecratorLeggings());
     public static final ComplexItem DESECRATOR_BOOTS = registerItem(new DesecratorBoots());
-    public static final ComplexItem DESECRATOR_SCALE = registerItem(new DesecratorScale());
-    public static final ComplexItem DESECRATOR_CLAW = registerItem(new DesecratorClaw());
-    public static final ComplexItem DESECRATOR_TOE = registerItem(new DesecratorToe());
-    public static final ComplexItem CRULEN_SHARD = registerItem(new CrulenShard());
-    public static final ComplexItem PYTHEMION_GEM = registerItem(new PythemionGem());
-    public static final ComplexItem PSYCHEDELIC_ORB = registerItem(new PsychedelicOrb());
-    public static final ComplexItem HYPER_CRUX = registerItem(new HyperCrux());
+
+    public static final ComplexItem DESECRATOR_SCALE = registerItem(new ComplexItem(new ItemSettings()
+            .id("desecrator_scale")
+            .material(Material.PHANTOM_MEMBRANE)));
+    public static final ComplexItem DESECRATOR_CLAW = registerItem(new ComplexItem(new ItemSettings()
+            .id("desecrator_claw")
+            .material(Material.DAMAGED_ANVIL)));
+
+    public static final ComplexItem DESECRATOR_TOE = registerItem(new ComplexItem(new ItemSettings()
+            .id("desecrator_toe")
+            .material(Material.PLAYER_HEAD)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjY1OGU3OTZmYTcxOTRjZjk1MTJkNDEwNjYxNWNmNDQ1MmUwYWNjNTM4OGVmMDA0ZTAxMDEzMjM0Y2Y5ZDg4In19fQ==")));
+
+    public static final ComplexItem CRULEN_SHARD = registerItem(new ComplexItem(new ItemSettings()
+            .id("crulen_shard")
+            .material(Material.QUARTZ)
+            .glow()));
+
+    public static final ComplexItem PYTHEMION_GEM = registerItem(new ComplexItem(new ItemSettings()
+            .id("pythemion_gem")
+            .material(Material.EMERALD)
+            .glow()));
+
+    public static final ComplexItem PSYCHEDELIC_ORB = registerItem(new ComplexItem(new ItemSettings()
+            .id("psychedelic_orb")
+            .material(Material.ENDER_PEARL)
+            .glow()));
+
+    public static final ComplexItem HYPER_CRUX = registerItem(new ComplexItem(new ItemSettings()
+            .id("hyper_crux")
+            .material(Material.PLAYER_HEAD)
+            .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzg4MWM4NzY0ZmJmOTNiMjMxNWNhMTEzNTczZmE3OTlmNGNmZGMwY2E4NjhjODM0MDUyNTVhN2Q1NTZhNzM5ZiJ9fX0=")
+            .glow()));
+
+    // Event stuff so no migration
     public static final ComplexItem RAVAGER_SKIN = registerItem(new RavagerSkin());
-    public static final ComplexItem TOUGH_FABRIC = registerItem(new ToughFabric());
-    public static final ComplexItem KEVLAR = registerItem(new Kevlar());
-    public static final ComplexItem TOTEM_POLE = registerItem(new TotemPole());
-    public static final ComplexItem CORRUPTED_TOTEM_POLE = registerItem(new CorruptedTotemPole());
-    public static final ComplexItem WARPED_CUBE = registerItem(new WarpedCube());
-    public static final ComplexItem VOID_STONE = registerItem(new VoidStone());
+
+    public static final ComplexItem TOUGH_FABRIC = registerItem(new ComplexItem(new ItemSettings()
+            .id("tough_fabric")
+            .material(Material.LEATHER)
+            .glow()));
+
+    public static final ComplexItem KEVLAR = registerItem(new ComplexItem(new ItemSettings()
+            .id("kevlar")
+            .material(Material.LEATHER)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .glow()));
+
+    public static final ComplexItem TOTEM_POLE = registerItem(new ComplexItem(new ItemSettings()
+            .id("totem_pole")
+            .material(Material.PLAYER_HEAD)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWU4MDkxMjhhMGU1YTQ0YzJlMzk1MzJlNmJiYzY4MjUyY2I4YzlkNWVjZDI0NmU1OTY1MDc3YzE0N2M3OTVlNyJ9fX0=")
+            .ability(new Centralize(false, 45))));
+
+    public static final ComplexItem CORRUPT_TOTEM_POLE = registerItem(new ComplexItem(new ItemSettings()
+            .id("corrupt_totem_pole")
+            .material(Material.PLAYER_HEAD)
+            .rarity(ComplexItem.Rarity.RARE)
+            .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTk3YzI4NmI2ZDE2MjM5YTcxZmYxNjc0OTQ0MTZhZDk0MDcxNzIwNTEwY2Y4YTgyYWIxZjQ1MWZmNGE5MDkxNiJ9fX0=")
+            .ability(new Centralize(false, 60))));
+
+    public static final ComplexItem WARPED_CUBE = registerItem(new ComplexItem(new ItemSettings()
+            .id("warped_cube")
+            .material(Material.PLAYER_HEAD)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjVjYjVkYTFjMmVlZDQzYmY2ODUxODllMDgwMjlmYzJhZWVlZGZhZTFjNmEyMTRlNzBmNzRiOGEzMjExYjBhIn19fQ==")));
+
+    public static final ComplexItem VOID_STONE = registerItem(new ComplexItem(new ItemSettings()
+            .id("void_stone")
+            .material(Material.PLAYER_HEAD)
+            .rarity(ComplexItem.Rarity.RARE)
+            .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWQ0ODc1MGJiNWFkYTI5ZGZmNjgyMGRiNjkzM2RjNjJhMGJmNmJkZTcyNzM0MWViN2RkMTg0NTNhMTBkNjQ5MyJ9fX0=")));
+
     public static final ComplexItem VOID_SCEPTER = registerItem(new VoidScepter());
     public static final ComplexItem OBSIDIAN_SCYTHE = registerItem(new ObsidianScythe());
     public static final ComplexItem VOID_HELMET = registerItem(new VoidMask());
@@ -133,6 +205,12 @@ public class ItemRegistry {
     public static final ComplexItem FLAMING_CHESTPLATE = registerItem(new FlamingChestplate());
     public static final ComplexItem FLAMING_LEGGINGS = registerItem(new FlamingLeggings());
     public static final ComplexItem FLAMING_BOOTS = registerItem(new FlamingBoots());
+
+    public static final ComplexItem VOLKEN_AXE = registerItem(new ComplexItem(new ItemSettings()
+            .id("volken_axe")
+            .material(Material.GOLDEN_AXE)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.AXE)));
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 

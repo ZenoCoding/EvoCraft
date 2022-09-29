@@ -19,8 +19,4 @@ public class HyperCrux extends ComplexItem {
         this.setSkullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzg4MWM4NzY0ZmJmOTNiMjMxNWNhMTEzNTczZmE3OTlmNGNmZGMwY2E4NjhjODM0MDUyNTVhN2Q1NTZhNzM5ZiJ9fX0=");
     }
 
-    @Override
-    public List<Recipe> getRecipes() {
-        return super.getRecipes();
-    }
 }

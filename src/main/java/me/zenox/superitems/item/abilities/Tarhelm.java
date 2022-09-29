@@ -10,7 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Tarhelm extends ItemAbility {
     public Tarhelm() {
-        super("Tarhelm", "tarhelm", AbilityAction.SHIFT_RIGHT_CLICK, 50, 120);
+        super("tarhelm", AbilityAction.SHIFT_RIGHT_CLICK, 50, 120);
 
         this.addLineToLore(ChatColor.GRAY + "Tarhelm.");
         this.addLineToLore(ChatColor.GRAY + "Gives you " + ChatColor.RED + "strength" + ChatColor.GRAY + " but drastically lowers your walk speed.");

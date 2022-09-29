@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,6 +35,11 @@ public class LanguageLoader {
             FileConfiguration translations = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "languages/" + plugin.getConfig().getString("locale") + ".yml"));
             for (String translation : translations.getKeys(false)) {
                 translationMap.put(translation, translations.getString(translation));
+                if (translation.contains("lore")) {
+                    StringBuilder concat = new StringBuilder();
+                    for(String s : translations.getStringList(translation)) concat.append(s + LIST_CONCAT_SEPERATOR);
+                    translationMap.put(translation, concat.toString());
+                }
             }
         } else {
             FileConfiguration translations = YamlConfiguration.loadConfiguration(defaultLanguageFile);
@@ -46,7 +52,6 @@ public class LanguageLoader {
                 }
             }
         }
-        Util.logToConsole("Translation Map: " + translationMap);
     }
 
     public String get(String path) {
@@ -55,6 +60,7 @@ public class LanguageLoader {
 
     public List<String> getList(String path) {
         if (translationMap.get(path) == null) return List.of();
-        return List.of(translationMap.get(path).split(LIST_CONCAT_SEPERATOR.toString()));
+        Util.logToConsole("TranslatableList (lang): " + Arrays.toString(translationMap.get(path).split(LIST_CONCAT_SEPERATOR.toString())));
+        return Arrays.asList(translationMap.get(path).split(LIST_CONCAT_SEPERATOR.toString()));
     }
 }

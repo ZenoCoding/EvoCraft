@@ -31,7 +31,7 @@ public class MagicMissile extends ItemAbility implements Serializable {
     private final boolean combustion;
     private final int explosionPower;
     public MagicMissile(int explosionPower, boolean combustion) {
-        super("Magic Missile", "magic_missile", AbilityAction.RIGHT_CLICK_ALL, 0, 0);
+        super("magic_missile", AbilityAction.RIGHT_CLICK_ALL, 0, 0);
         this.explosionPower = explosionPower;
         this.combustion = combustion;
         if (combustion == true) this.setLore(new TranslatableList(TranslatableText.TranslatableType.ABILITY_LORE + "-" + getId() + "-combust"));

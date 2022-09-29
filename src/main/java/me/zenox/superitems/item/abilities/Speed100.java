@@ -12,7 +12,7 @@ public class Speed100 extends ItemAbility {
     private final int speed;
 
     public Speed100(Integer speed, Integer manaCost) {
-        super("Speed " + (speed * 100), "speed100", AbilityAction.RIGHT_CLICK_ALL, manaCost, 30);
+        super("speed100", AbilityAction.RIGHT_CLICK_ALL, manaCost, 30);
 
         this.speed = speed;
 

@@ -17,7 +17,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class EmberShoot extends ItemAbility {
 
     public EmberShoot() {
-        super("Dark Embers", "dark_ember_shoot", AbilityAction.RIGHT_CLICK_ALL, 25, 0);
+        super("dark_ember_shoot", AbilityAction.RIGHT_CLICK_ALL, 25, 0);
 
         this.addLineToLore(ChatColor.GRAY + "Shoot a projectile based on the " + ChatColor.AQUA + "attunement");
         this.addLineToLore(ChatColor.GRAY + "of this weapon. Dark magic is cool, right?");

@@ -35,7 +35,7 @@ import java.util.List;
 public class Psychic extends ItemAbility implements Listener {
 
     public Psychic() {
-        super("Psychic", "psychic", AbilityAction.RIGHT_CLICK_ALL, 0, 0, Slot.MAIN_HAND);
+        super("psychic", AbilityAction.RIGHT_CLICK_ALL, 0, 0, Slot.MAIN_HAND);
 
         this.addLineToLore(ChatColor.GRAY + "Understanding " + ChatColor.WHITE + "thyself" + ChatColor.GRAY + " requires lots of patience.");
         this.addLineToLore(ChatColor.GRAY + "Or a magic orb! Gain" + ChatColor.AQUA + " +10 Wisdom");

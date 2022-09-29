@@ -1,3 +1,7 @@
+
+##########################################################################
+##                             ITEM NAMES                               ##
+##########################################################################
 item-name-gardener_sapling: Gardener's Sapling
 item-name-enchanted_magma_block: Enchanted Magma Block
 item-name-purified_magma_distillate: Purified Magma Distillate
@@ -67,6 +71,12 @@ item-name-flaming_chestplate: Flaming Chestplate
 item-name-flaming_leggings: Flaming Leggings
 item-name-flaming_boots: Flaming Boots
 
+item-name-volken_axe: Volken Axe
+
+##########################################################################
+##                              ITEM LORE                               ##
+##########################################################################
+
 item-lore-purified_magma_distillate:
   - '&c&oBurning Hot.'
   -
@@ -87,7 +97,7 @@ item-lore-titanium_cube:
 item-lore-magic_toy_stick:
   - '&c&oMagical.'
 
-item-lore-soul_rift:
+item-lore-soul_crystal:
   - "&8&oThe void-Sphere of Life was an anti-magic device, which could absorb the"
   - "&8&ospecial form of magic in the player. It could not be destroyed by magic"
   - "&8&oweapons. The soul crystal was left by an evil spirit of a mighty elf in that"
@@ -99,6 +109,73 @@ item-lore-soul_rift:
   - "&8&o"
   - "&8&oGenerated at: https://app.inferkit.com/demo"
 
+item-lore-fiery_ember_staff:
+  - 'A fiery rod, taken from &cBlaziel &7himself.'
+
+item-lore-dark_ember_staff:
+  - 'A fiery rod, taken from &cBlaziel &7himself.'
+  - "Draws power from the user's &bmana."
+
+item-lore-tormented_blade:
+  - 'Did you know that this item used be legendary?'
+
+item-lore-crucified_amulet:
+  - 'Sacrifices must be made.'
+
+item-lore-desecrator_scale:
+  - 'Tough as nails.'
+
+item-lore-desecrator_claw:
+  - 'Sharper than an blade.'
+
+item-lore-desecrator_toe:
+  - 'Stinky.'
+
+item-lore-crulen_shard:
+  - 'Talk to &e[NPC] &6Elmir&7!'
+
+item-lore-pythemion_gem:
+  - 'Really fricking hot.'
+
+item-lore-psychedelic_orb:
+  - '&oIn order for one to know the world around it, they must know about thyself.'
+  - ''
+  - 'Voodoo magic!'
+
+item-lore-ravager_skin:
+  - "Rough, isn't it?"
+
+item-lore-tough_fabric:
+  - 'Sewn together with blood, sweat, and tears.'
+
+item-lore-kevlar:
+  - 'Bulletproof.'
+
+item-lore-totem_pole:
+  - '&eCentralized Power.'
+
+item-lore-corrupt_totem_pole:
+  - '&cWith great power, eventually comes &dcorruption.'
+
+item-lore-void_scepter:
+  - 'Forged from the souls of corrupted endermen.'
+
+item-lore-obsidilith_scythe:
+  - "Mining away... I don't know.. what to miiine..."
+
+item-lore-dev_stick:
+  - 'A tribute to Andy Zhang. RIP.'
+  - ''
+  - '&8&oTo Andy Zhang: If you ever see this, where the &kF*CK &8&ois my content?'
+
+item-lore-volken_axe:
+  - 'A relic of the past. Fragile. &oDo Not Touch.'
+  - ''
+  - 'Did you really think this was &ofragile?'
+
+##########################################################################
+##                              ABILITIES                               ##
+##########################################################################
 ability-name-magic_missile: Magic Missile
 
 ability-lore-magic_missile:
@@ -136,3 +213,37 @@ ability-name-dark_ember_shoot: Dark Embers
 ability-lore-dark_ember_shoot:
   - 'Shoot a projectile based on the &battunement'
   - 'of this weapon. Dark magic is cool, right?'
+
+ability-name-tarhelm: Tarhelm
+
+ability-lore-tarhelm:
+  - 'Gives you &cstrength&7, but drastically lowers your walk speed.'
+
+ability-name-crucify: Crucify
+
+ablity-lore-crucify:
+  - 'Disables all &cregeneration&o, but gives a'
+  - 'permanent &cstrength &7and &fspeed &7boost.'
+
+ability-name-centralize: Centralize
+
+ability-lore-centralize:
+  - 'Place down a &e&lTotem &7which temporarily'
+  - 'grants &cResistance I &7and &6Fire Resistance I'
+  - 'to all players in a &a30 block &7radius.'
+    
+ability-lore-centralize-corrupt:
+  - 'Place down a &5&lTotem&7 which temporarily'
+  - 'grants &cResistance II&7 and &6Fire Resistance I'
+  - 'to you, yourself in a &a45 block &7radius.'
+
+ability-name-void_warp: Void Warp
+
+ability-lore-void_warp:
+  - 'Creates a &drift &7in space and pulls you through it.'
+
+ability-name-void_recall: Voidular Recall
+
+ability-lore-void_recall:
+  - 'Binds a nearby block to your &bsoul.'
+  - 'Teleports you back to the &bsoulbound &7block.'

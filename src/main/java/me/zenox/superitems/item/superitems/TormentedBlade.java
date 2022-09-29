@@ -25,15 +25,4 @@ public class TormentedBlade extends ComplexItem {
         lore.add(ChatColor.GRAY + "Created from a tortured soul.");
         this.getMeta().setLore(lore);
     }
-
-    @Override
-    public List<Recipe> getRecipes() {
-        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
-        recipe.shape("ITI", "MBI", " B ");
-        recipe.setIngredient('B', new RecipeChoice.ExactChoice(ENCHANTED_BLAZE_ROD.getItemStack(1)));
-        recipe.setIngredient('M', new RecipeChoice.ExactChoice(MOLTEN_POWDER.getItemStack(1)));
-        recipe.setIngredient('T', new RecipeChoice.ExactChoice(TORMENTED_SOUL.getItemStack(1)));
-        recipe.setIngredient('I', new RecipeChoice.ExactChoice(TITANIUM_CUBE.getItemStack(1)));
-        return List.of(recipe);
-    }
 }

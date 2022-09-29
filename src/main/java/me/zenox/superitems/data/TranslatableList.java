@@ -4,7 +4,9 @@ import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -12,7 +14,7 @@ import java.util.List;
  *
  * <p>TranslatableList object used for translating lists of strings/text that are translated as one group. (i.e. lore)</p>
  */
-public class TranslatableList {
+public class TranslatableList implements Serializable {
     private String key;
 
     /**
@@ -25,12 +27,11 @@ public class TranslatableList {
     }
 
     public List<String> getList() {
-        List<String> translation = new ArrayList<>(SuperItems.getPlugin().getLang().getList(key));
+        List<String> translation = SuperItems.getPlugin().getLang().getList(key);
         if(translation == null) {
             translation = new ArrayList<>();
         }
         for (String s : translation) translation.set(translation.indexOf(s), ChatColor.GRAY + ChatColor.translateAlternateColorCodes('&', s));
-
         return translation;
     }
 }
