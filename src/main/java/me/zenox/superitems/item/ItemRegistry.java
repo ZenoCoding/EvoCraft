@@ -1,6 +1,6 @@
 package me.zenox.superitems.item;
 
-import me.zenox.superitems.item.abilities.*;
+import me.zenox.superitems.abilities.*;
 import me.zenox.superitems.item.armoritems.*;
 import me.zenox.superitems.item.basicitems.*;
 import me.zenox.superitems.item.superitems.*;
@@ -9,6 +9,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -18,6 +22,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class ItemRegistry {
 
@@ -69,14 +74,14 @@ public class ItemRegistry {
             .material(Material.STICK)
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .type(ComplexItem.Type.WAND)
-            .ability(new MagicMissile(0, true))));
+            .ability(AbilityRegistry.MAGIC_MISSILE_COMBUST_6)));
 
     public static final ComplexItem SOUL_CRYSTAL = registerItem(new ComplexItem(new ItemSettings()
             .id("soul_crystal")
             .material(Material.END_CRYSTAL)
             .rarity(ComplexItem.Rarity.RARE)
             .type(ComplexItem.Type.DEPLOYABLE)
-            .ability(new ItemAbility("soul_rift", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 100, 50, ItemAbility::soulRiftAbility))));
+            .ability(AbilityRegistry.SOUL_RIFT)));
 
     public static final ComplexItem FIERY_EMBER_STAFF = registerItem(new ComplexItem(new ItemSettings()
             .id("fiery_ember_staff")
@@ -98,12 +103,19 @@ public class ItemRegistry {
             .material(Material.IRON_AXE)
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .type(ComplexItem.Type.AXE)
-            .ability(new Tarhelm())));
+            .ability(AbilityRegistry.TARHELM)));
 
-    // public static final ComplexItem SPEEDY_GONZALES = registerItem(new SpeedyGonzales());
-    // public static final ComplexItem JACKASS_GONZALES = registerItem(new JackassGonzales());
-
-    public static final ComplexItem SWORD_OF_JUSTICE = registerItem(new SwordOfJustice());
+    public static final ComplexItem SWORD_OF_JUSTICE = registerItem(new ComplexItem(new ItemSettings()
+            .id("sword_of_justice")
+            .material(Material.IRON_SWORD)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.SWORD)
+            .enchant(Enchantment.DAMAGE_ALL, 10)
+            .unbreakable()
+            .attribute(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "superitems:attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
+            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 10, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlot.HAND))
+            .ability(AbilityRegistry.JUSTICE)
+    ));
 
     public static final ComplexItem CRUCIFIED_AMULET = registerItem(new ComplexItem(new ItemSettings()
             .id("crucified_amulet")
@@ -170,14 +182,14 @@ public class ItemRegistry {
             .material(Material.PLAYER_HEAD)
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWU4MDkxMjhhMGU1YTQ0YzJlMzk1MzJlNmJiYzY4MjUyY2I4YzlkNWVjZDI0NmU1OTY1MDc3YzE0N2M3OTVlNyJ9fX0=")
-            .ability(new Centralize(false, 45))));
+            .ability(AbilityRegistry.CENTRALIZE)));
 
     public static final ComplexItem CORRUPT_TOTEM_POLE = registerItem(new ComplexItem(new ItemSettings()
             .id("corrupt_totem_pole")
             .material(Material.PLAYER_HEAD)
             .rarity(ComplexItem.Rarity.RARE)
             .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTk3YzI4NmI2ZDE2MjM5YTcxZmYxNjc0OTQ0MTZhZDk0MDcxNzIwNTEwY2Y4YTgyYWIxZjQ1MWZmNGE5MDkxNiJ9fX0=")
-            .ability(new Centralize(false, 60))));
+            .ability(AbilityRegistry.CENTRALIZE_CORRUPT)));
 
     public static final ComplexItem WARPED_CUBE = registerItem(new ComplexItem(new ItemSettings()
             .id("warped_cube")
@@ -199,7 +211,12 @@ public class ItemRegistry {
     public static final ComplexItem VOID_BOOTS = registerItem(new VoidBoots());
     public static final ComplexItem CORRUPT_PEARL = registerItem(new CorruptPearl());
 
-    public static final ComplexItem DEV_STICK = registerItem(new DevStick());
+    public static final ComplexItem DEV_STICK = registerItem(new ComplexItem(new ItemSettings()
+            .id("dev_stick")
+            .material(Material.STICK)
+            .rarity(ComplexItem.Rarity.VERY_SPECIAL)
+            .glow()
+            .ability(AbilityRegistry.MAGIC_MISSILE_DEV)));
 
     public static final ComplexItem FLAMING_HELMET = registerItem(new FlamingHelmet());
     public static final ComplexItem FLAMING_CHESTPLATE = registerItem(new FlamingChestplate());

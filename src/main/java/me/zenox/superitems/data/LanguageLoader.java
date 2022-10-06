@@ -34,21 +34,25 @@ public class LanguageLoader {
         if (plugin.getConfig().getString("locale") != null && plugin.getConfig().getString("locale").equals("en_US")) {
             FileConfiguration translations = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "languages/" + plugin.getConfig().getString("locale") + ".yml"));
             for (String translation : translations.getKeys(false)) {
-                translationMap.put(translation, translations.getString(translation));
+                // if the thing is a list (contains lore)
                 if (translation.contains("lore")) {
                     StringBuilder concat = new StringBuilder();
                     for(String s : translations.getStringList(translation)) concat.append(s + LIST_CONCAT_SEPERATOR);
                     translationMap.put(translation, concat.toString());
+                } else {
+                    translationMap.put(translation, translations.getString(translation));
                 }
             }
         } else {
             FileConfiguration translations = YamlConfiguration.loadConfiguration(defaultLanguageFile);
             for (String translation : translations.getKeys(false)) {
-                translationMap.put(translation, translations.getString(translation));
+                // if the thing is a list (contains lore)
                 if (translation.contains("lore")) {
                     StringBuilder concat = new StringBuilder();
                     for(String s : translations.getStringList(translation)) concat.append(s + LIST_CONCAT_SEPERATOR);
                     translationMap.put(translation, concat.toString());
+                } else {
+                    translationMap.put(translation, translations.getString(translation));
                 }
             }
         }
@@ -60,7 +64,6 @@ public class LanguageLoader {
 
     public List<String> getList(String path) {
         if (translationMap.get(path) == null) return List.of();
-        Util.logToConsole("TranslatableList (lang): " + Arrays.toString(translationMap.get(path).split(LIST_CONCAT_SEPERATOR.toString())));
         return Arrays.asList(translationMap.get(path).split(LIST_CONCAT_SEPERATOR.toString()));
     }
 }

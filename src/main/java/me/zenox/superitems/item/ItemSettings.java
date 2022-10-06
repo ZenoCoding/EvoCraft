@@ -1,9 +1,11 @@
 package me.zenox.superitems.item;
 
 import com.archyx.aureliumskills.stats.Stat;
-import me.zenox.superitems.item.abilities.Ability;
-import me.zenox.superitems.item.abilities.ItemAbility;
+import com.google.common.collect.Multimap;
+import me.zenox.superitems.abilities.Ability;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -118,6 +120,27 @@ public class ItemSettings {
         return this;
     }
 
+    public ItemSettings unbreakable(){
+        this.meta.setUnbreakable(true);
+        this.meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        return this;
+    }
+
+    public ItemSettings enchant(Enchantment enchantment, Integer level){
+        this.meta.addEnchant(enchantment, level, true);
+        return this;
+    }
+
+    public ItemSettings attribute(Attribute attribute, AttributeModifier modifier){
+        this.meta.addAttributeModifier(attribute, modifier);
+        return this;
+    }
+
+    public ItemSettings attribute(Multimap<Attribute, AttributeModifier> modifiers){
+        this.meta.setAttributeModifiers(modifiers);
+        return this;
+    }
+
     public ItemSettings stats(Map<Stat, Double> stats){
         this.stats = stats;
         return this;
@@ -138,17 +161,17 @@ public class ItemSettings {
         return this;
     }
 
-    public ItemSettings abilities(ItemAbility ... abilities){
+    public ItemSettings abilities(Ability ... abilities){
         this.abilities = List.of(abilities);
         return this;
     }
 
-    public ItemSettings addAbilities(ItemAbility ... abilities){
+    public ItemSettings addAbilities(Ability ... abilities){
         this.abilities.addAll(List.of(abilities));
         return this;
     }
 
-    public ItemSettings ability(ItemAbility ability){
+    public ItemSettings ability(Ability ability){
         this.abilities.add(ability);
         return this;
     }

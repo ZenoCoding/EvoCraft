@@ -1,9 +1,10 @@
-package me.zenox.superitems.item.abilities;
+package me.zenox.superitems.abilities;
 
 import com.google.common.primitives.Doubles;
 import me.zenox.superitems.SuperItems;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -15,6 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 public class VoidularRecall extends ItemAbility {
     public VoidularRecall() {
@@ -26,7 +28,7 @@ public class VoidularRecall extends ItemAbility {
     }
 
     @Override
-    public void runExecutable(PlayerEvent event) {
+    public void runExecutable(Event event) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Player p = e.getPlayer();
         ItemStack item = e.getItem();

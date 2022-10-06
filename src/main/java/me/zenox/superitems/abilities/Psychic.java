@@ -1,4 +1,4 @@
-package me.zenox.superitems.item.abilities;
+package me.zenox.superitems.abilities;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
 import com.archyx.aureliumskills.stats.Stats;
@@ -17,6 +17,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -31,6 +32,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class Psychic extends ItemAbility implements Listener {
 
@@ -46,7 +48,7 @@ public class Psychic extends ItemAbility implements Listener {
     }
 
     @Override
-    public void runExecutable(PlayerEvent event) {
+    public void runExecutable(Event event) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         e.setCancelled(true);
         Player p = e.getPlayer();

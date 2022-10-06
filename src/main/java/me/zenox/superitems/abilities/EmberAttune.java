@@ -1,16 +1,18 @@
-package me.zenox.superitems.item.abilities;
+package me.zenox.superitems.abilities;
 
 import me.zenox.superitems.item.*;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class EmberAttune extends ItemAbility {
     public static final VariableType ATTUNEMENT_VARIABLE_TYPE =
@@ -21,15 +23,10 @@ public class EmberAttune extends ItemAbility {
 
     public EmberAttune() {
         super("dark_ember_attune", AbilityAction.LEFT_CLICK_ALL, 0, 0);
-
-        this.addLineToLore(ChatColor.GRAY + "Changes the " + ChatColor.AQUA + "attunement" + ChatColor.GRAY + " of this staff,");
-        this.addLineToLore(ChatColor.GRAY + "changing the domain it draws power from.");
-        this.addLineToLore("");
-        this.addLineToLore(ChatColor.GRAY + "Swap between " + ChatColor.GOLD + "Blazeborn" + ChatColor.GRAY + " and " + ChatColor.DARK_GRAY + "Darksoul");
     }
 
     @Override
-    public void runExecutable(PlayerEvent event) {
+    public void runExecutable(Event event) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Player p = e.getPlayer();
         ItemStack item = e.getItem();
@@ -62,7 +59,7 @@ public class EmberAttune extends ItemAbility {
 
         private String name;
 
-        private Attunement(String name){
+        Attunement(String name){
             this.name = name;
         }
 

@@ -44,23 +44,4 @@ public class SwordOfJustice extends ComplexItem implements Listener {
         Bukkit.getPluginManager().registerEvents(this, SuperItems.getPlugin());
     }
 
-    @EventHandler
-    public void onDamageEntityEvent(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player) {
-            Player p = (Player) e.getDamager();
-            ItemStack item = p.getInventory().getItemInMainHand();
-            ComplexItem complexItem = ItemRegistry.getBasicItemFromItemStack(item);
-            if (!(complexItem == null) && complexItem.getId() == "sword_of_justice" && e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 0));
-                p.playSound(p.getLocation(), Sound.ITEM_AXE_SCRAPE, 1, 1.4f);
-                if (new Random().nextInt(3) == 0) e.getEntity().getWorld().strikeLightning(e.getEntity().getLocation());
-            }
-        }
-    }
-
-    @Override
-    public List<Recipe> getRecipes() {
-        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
-        return List.of();
-    }
 }

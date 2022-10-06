@@ -1,9 +1,10 @@
-package me.zenox.superitems.item.abilities;
+package me.zenox.superitems.abilities;
 
 import me.zenox.superitems.SuperItems;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -11,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
+import java.util.function.Consumer;
 
 public class VoidWarp extends ItemAbility {
     public VoidWarp() {
@@ -21,7 +23,7 @@ public class VoidWarp extends ItemAbility {
     }
 
     @Override
-    public void runExecutable(PlayerEvent event) {
+    public void runExecutable(Event event) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Player p = e.getPlayer();
         ItemStack item = e.getItem();

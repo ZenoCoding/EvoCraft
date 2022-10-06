@@ -2,7 +2,7 @@ package me.zenox.superitems.item.superitems;
 
 import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.superitems.item.ComplexItem;
-import me.zenox.superitems.item.abilities.Crucify;
+import me.zenox.superitems.abilities.Crucify;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Recipe;

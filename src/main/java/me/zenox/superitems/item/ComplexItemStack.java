@@ -1,21 +1,19 @@
 package me.zenox.superitems.item;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
-import com.archyx.aureliumskills.modifier.StatModifier;
 import com.archyx.aureliumskills.stats.Stat;
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.item.abilities.Ability;
+import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.persistence.SerializedPersistentType;
 import me.zenox.superitems.util.Util;
 import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -36,7 +34,6 @@ public class ComplexItemStack implements Cloneable{
     private final ComplexItem complexItem;
     private final UUID uuid;
     private ComplexItemMeta complexMeta;
-    private final List<Ability> abilities;
 
     private String skullURL = "";
 
@@ -58,7 +55,6 @@ public class ComplexItemStack implements Cloneable{
     public ComplexItemStack(ComplexItem complexItem, ItemStack item){
         this.complexItem = complexItem;
         this.uuid = complexItem.isUnique() ? UUID.randomUUID() : null;
-        this.abilities = complexItem.getAbilities() == null ? new ArrayList<>() : new ArrayList<>(complexItem.getAbilities());
         this.skullURL = complexItem.getSkullURL();
         this.item = item;
 
@@ -80,6 +76,9 @@ public class ComplexItemStack implements Cloneable{
         item.setItemMeta(complexItem.getMeta());
 
         ItemMeta meta = item.getItemMeta();
+
+        // Make Enchants INVISIBLE
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         // Set CustomModelData
         meta.setCustomModelData(complexItem.getCustomModelData());
@@ -184,7 +183,7 @@ public class ComplexItemStack implements Cloneable{
     }
 
     public List<Ability> getAbilities() {
-        return this.abilities;
+        return this.complexMeta.getAbilities();
     }
 
     public ComplexItem getComplexItem() {

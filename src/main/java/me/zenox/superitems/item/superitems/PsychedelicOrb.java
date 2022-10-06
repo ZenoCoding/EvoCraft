@@ -2,7 +2,7 @@ package me.zenox.superitems.item.superitems;
 
 import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.superitems.item.ComplexItem;
-import me.zenox.superitems.item.abilities.Psychic;
+import me.zenox.superitems.abilities.Psychic;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

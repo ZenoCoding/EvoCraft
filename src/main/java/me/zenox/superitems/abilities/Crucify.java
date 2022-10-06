@@ -1,4 +1,4 @@
-package me.zenox.superitems.item.abilities;
+package me.zenox.superitems.abilities;
 
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.item.ComplexItem;
@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -23,6 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 import static me.zenox.superitems.item.ItemRegistry.CRUCIFIED_AMULET;
 
@@ -41,7 +43,7 @@ public class Crucify extends ItemAbility implements Listener {
     }
 
     @Override
-    public void runExecutable(PlayerEvent event) {
+    public void runExecutable(Event event) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Player p = e.getPlayer();
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 2));

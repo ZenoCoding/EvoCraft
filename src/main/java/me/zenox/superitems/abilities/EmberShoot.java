@@ -1,4 +1,4 @@
-package me.zenox.superitems.item.abilities;
+package me.zenox.superitems.abilities;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
 import me.zenox.superitems.SuperItems;
@@ -10,9 +10,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.WitherSkull;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+
+import java.util.function.Consumer;
 
 public class EmberShoot extends ItemAbility {
 
@@ -24,7 +27,7 @@ public class EmberShoot extends ItemAbility {
     }
 
     @Override
-    public void runExecutable(PlayerEvent event) {
+    public void runExecutable(Event event) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Player p = e.getPlayer();
         ComplexItemMeta complexMeta = ComplexItemStack.of(e.getItem()).getComplexMeta();

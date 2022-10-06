@@ -2,7 +2,7 @@ package me.zenox.superitems.item.superitems;
 
 import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.superitems.item.ComplexItem;
-import me.zenox.superitems.item.abilities.EmberShootSmall;
+import me.zenox.superitems.abilities.EmberShootSmall;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

@@ -3,8 +3,8 @@ package me.zenox.superitems.item;
 import com.archyx.aureliumskills.modifier.ModifierType;
 import com.archyx.aureliumskills.modifier.StatModifier;
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.item.abilities.Ability;
-import me.zenox.superitems.item.abilities.ItemAbility;
+import me.zenox.superitems.abilities.Ability;
+import me.zenox.superitems.abilities.ItemAbility;
 import me.zenox.superitems.persistence.ArrayListType;
 import me.zenox.superitems.persistence.SerializedPersistentType;
 import me.zenox.superitems.util.Romans;
@@ -102,7 +102,7 @@ public class ComplexItemMeta {
 
         // Write Abilities
         writeAbilityLore(lore);
-        dataContainer.set(ABILITY_ID, new ArrayListType<Ability>(), new ArrayList(abilities));
+        dataContainer.set(ABILITY_ID, new ArrayListType<String>(), new ArrayList(abilities.stream().map(ability -> ability.getId()).toList()));
 
         writeVariables(VariableType.Priority.BELOW_ABILITIES, dataContainer, lore, true);
 
@@ -124,7 +124,13 @@ public class ComplexItemMeta {
         ItemMeta meta = item.getItemMeta();
 
         PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
-        if(force) this.abilities = dataContainer.get(ABILITY_ID, new ArrayListType<>()) == null ? new ArrayList<>() : new ArrayList<>(dataContainer.get(ABILITY_ID, new ArrayListType<>()));
+        if(force) {
+            this.abilities = (dataContainer
+                    .get(ABILITY_ID, new ArrayListType<>()) == null ? new ArrayList<>() : new ArrayList<>(dataContainer.get(ABILITY_ID, new ArrayListType<>()))).stream().map(o -> {
+                        if(o instanceof String) return Ability.getAbility(((String) o));
+                        else return Ability.getAbility(((Ability) o).getId());
+            }).toList();
+        }
         dataContainer.getKeys().stream()
             .filter(namespacedKey -> namespacedKey.getKey().startsWith(VAR_PREFIX))
             .forEach(namespacedKey -> setVariable(VariableType.getVariableByPrefix(namespacedKey.getKey().substring(VAR_PREFIX.length())), dataContainer.get(namespacedKey, new SerializedPersistentType<>())));
@@ -183,4 +189,7 @@ public class ComplexItemMeta {
         return variableList;
     }
 
+    public List<Ability> getAbilities() {
+        return abilities;
+    }
 }
