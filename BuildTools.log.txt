@@ -1,19 +1,102 @@
 Loading BuildTools version: git-BuildTools-668e05a-148 (#148)
-Java Version: Java 8
-Current Path: C:\Users\zhang\Documents\GitHub\SuperItems\.
-*** Could not find PortableGit installation, downloading. ***
-Starting download of https://github.com/git-for-windows/git/releases/download/v2.30.0.windows.1/PortableGit-2.30.0-64-bit.7z.exe
-Downloaded file: PortableGit-2.30.0-64-bit\PortableGit-2.30.0-64-bit.7z.exe with hash: 6497e30fc6141e3c27af6cc3a081861043a7666dd54f395d47184e8eb75f5d61
-Extracting downloaded git install
-Exception in thread "main" java.io.IOException: Cannot run program "COMMAND.COM" (in directory "PortableGit-2.30.0-64-bit"): CreateProcess error=2, The system cannot find the file specified
-	at java.lang.ProcessBuilder.start(ProcessBuilder.java:1048)
-	at org.spigotmc.builder.Builder.runProcess0(Builder.java:964)
-	at org.spigotmc.builder.Builder.runProcess(Builder.java:904)
-	at org.spigotmc.builder.Builder.main(Builder.java:220)
-	at org.spigotmc.builder.Bootstrap.main(Bootstrap.java:27)
-Caused by: java.io.IOException: CreateProcess error=2, The system cannot find the file specified
-	at java.lang.ProcessImpl.create(Native Method)
-	at java.lang.ProcessImpl.<init>(ProcessImpl.java:453)
-	at java.lang.ProcessImpl.start(ProcessImpl.java:140)
-	at java.lang.ProcessBuilder.start(ProcessBuilder.java:1029)
-	... 4 more
+Java Version: Java 18
+Current Path: /Users/Tycho2/projects/SuperItems/.
+git version 2.32.1 (Apple Git-133)
+ZenoCoding
+51522505+ZenoCoding@users.noreply.github.com
+Picked up _JAVA_OPTIONS: -Djdk.net.URLClassPath.disableClassPathURLCheck=true
+java version "18" 2022-03-22
+Java(TM) SE Runtime Environment (build 18+36-2087)
+Java HotSpot(TM) 64-Bit Server VM (build 18+36-2087, mixed mode, sharing)
+Attempting to build version: 'latest' use --rev <version> to override
+Found version
+{
+	"name": "3575",
+	"description": "Jenkins build 3575",
+	"refs": {
+		"BuildData": "d96ad8e1e64b7c35bb632339c23621353be1f028",
+		"Bukkit": "ecc290fdbce58b13f5353fbb6f6a906f8f38dc22",
+		"CraftBukkit": "370eecefff28aca6ac7a8fceccf412cfe5235a80",
+		"Spigot": "450dcaa86efd759674bbdeae0f6a37c97977618e"
+	},
+	"toolsVersion": 148,
+	"javaVersions": [61, 62]
+}
+
+Starting clone of https://hub.spigotmc.org/stash/scm/spigot/bukkit.git to Bukkit
+Cloned git repository https://hub.spigotmc.org/stash/scm/spigot/bukkit.git to /Users/Tycho2/projects/SuperItems/Bukkit. Current HEAD: ecc290fdbce58b13f5353fbb6f6a906f8f38dc22
+Starting clone of https://hub.spigotmc.org/stash/scm/spigot/craftbukkit.git to CraftBukkit
+Cloned git repository https://hub.spigotmc.org/stash/scm/spigot/craftbukkit.git to /Users/Tycho2/projects/SuperItems/CraftBukkit. Current HEAD: 370eecefff28aca6ac7a8fceccf412cfe5235a80
+Starting clone of https://hub.spigotmc.org/stash/scm/spigot/spigot.git to Spigot
+Cloned git repository https://hub.spigotmc.org/stash/scm/spigot/spigot.git to /Users/Tycho2/projects/SuperItems/Spigot. Current HEAD: 450dcaa86efd759674bbdeae0f6a37c97977618e
+Starting clone of https://hub.spigotmc.org/stash/scm/spigot/builddata.git to BuildData
+Cloned git repository https://hub.spigotmc.org/stash/scm/spigot/builddata.git to /Users/Tycho2/projects/SuperItems/BuildData. Current HEAD: d96ad8e1e64b7c35bb632339c23621353be1f028
+Pulling updates for /Users/Tycho2/projects/SuperItems/BuildData/.git
+Successfully fetched updates!
+Checked out: d96ad8e1e64b7c35bb632339c23621353be1f028
+Pulling updates for /Users/Tycho2/projects/SuperItems/Bukkit/.git
+Successfully fetched updates!
+Checked out: ecc290fdbce58b13f5353fbb6f6a906f8f38dc22
+Pulling updates for /Users/Tycho2/projects/SuperItems/CraftBukkit/.git
+Successfully fetched updates!
+Checked out: 370eecefff28aca6ac7a8fceccf412cfe5235a80
+Pulling updates for /Users/Tycho2/projects/SuperItems/Spigot/.git
+Successfully fetched updates!
+Checked out: 450dcaa86efd759674bbdeae0f6a37c97977618e
+Attempting to build Minecraft with details: VersionInfo(minecraftVersion=1.19.2, accessTransforms=bukkit-1.19.2.at, classMappings=bukkit-1.19.2-cl.csrg, memberMappings=null, packageMappings=package.srg, minecraftHash=a8e754103548640e4235573a05e19c3c9dfea5ccd90f73c8298a665a970f00c2, classMapCommand=java -jar BuildData/bin/SpecialSource-2.jar map --auto-lvt BASIC -e BuildData/mappings/bukkit-1.19.2.exclude -i {0} -m {1} -o {2}, memberMapCommand=java -jar BuildData/bin/SpecialSource-2.jar map --auto-member TOKENS -i {0} -m {1} -o {2}, finalMapCommand=java -jar BuildData/bin/SpecialSource.jar -i {0} --access-transformer {1} -m {2} -o {3}, decompileCommand=java -jar BuildData/bin/fernflower.jar -dgs=1 -hdc=0 -asc=1 -udv=0 -rsy=1 -aoa=1 {0} {1}, serverUrl=https://piston-data.mojang.com/v1/objects/f69c284232d7c7580bd89a5a4931c3581eae1378/server.jar, mappingsUrl=https://piston-data.mojang.com/v1/objects/ed5e6e8334ad67f5af0150beed0f3d156d74bd57/server.txt, spigotVersion=1.19.2-R0.1-SNAPSHOT, toolsVersion=148)
+Starting download of https://piston-data.mojang.com/v1/objects/f69c284232d7c7580bd89a5a4931c3581eae1378/server.jar
+Downloaded file: work/minecraft_server.1.19.2.jar with hash: f69c284232d7c7580bd89a5a4931c3581eae1378
+Final mapped jar: work/mapped.8b4db36a.jar does not exist, creating (please wait)!
+Starting download of https://piston-data.mojang.com/v1/objects/ed5e6e8334ad67f5af0150beed0f3d156d74bd57/server.txt
+Downloaded file: work/minecraft_server.1.19.2.txt with hash: ed5e6e8334ad67f5af0150beed0f3d156d74bd57
+Picked up _JAVA_OPTIONS: -Djdk.net.URLClassPath.disableClassPathURLCheck=true
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< me.zenox:superitems >-------------------------
+[INFO] Building SuperItems 0.1.2-BETA
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-install-plugin:2.4:install-file (default-cli) @ superitems ---
+[INFO] Installing /Users/Tycho2/projects/SuperItems/work/bukkit-8b4db36a-members.csrg to /Users/Tycho2/.m2/repository/org/spigotmc/minecraft-server/1.19.2-R0.1-SNAPSHOT/minecraft-server-1.19.2-R0.1-SNAPSHOT-maps-spigot-members.csrg
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.977 s
+[INFO] Finished at: 2022-08-22T21:06:37-07:00
+[INFO] ------------------------------------------------------------------------
+[WARNING] The requested profile "remapped" could not be activated because it does not exist.
+Picked up _JAVA_OPTIONS: -Djdk.net.URLClassPath.disableClassPathURLCheck=true
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< me.zenox:superitems >-------------------------
+[INFO] Building SuperItems 0.1.2-BETA
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-install-plugin:2.4:install-file (default-cli) @ superitems ---
+[INFO] Installing /Users/Tycho2/projects/SuperItems/BuildData/mappings/bukkit-1.19.2-cl.csrg to /Users/Tycho2/.m2/repository/org/spigotmc/minecraft-server/1.19.2-R0.1-SNAPSHOT/minecraft-server-1.19.2-R0.1-SNAPSHOT-maps-spigot.csrg
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.015 s
+[INFO] Finished at: 2022-08-22T21:06:41-07:00
+[INFO] ------------------------------------------------------------------------
+[WARNING] The requested profile "remapped" could not be activated because it does not exist.
+Picked up _JAVA_OPTIONS: -Djdk.net.URLClassPath.disableClassPathURLCheck=true
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< me.zenox:superitems >-------------------------
+[INFO] Building SuperItems 0.1.2-BETA
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-install-plugin:2.4:install-file (default-cli) @ superitems ---
+[INFO] Installing /Users/Tycho2/projects/SuperItems/work/minecraft_server.1.19.2.txt to /Users/Tycho2/.m2/repository/org/spigotmc/minecraft-server/1.19.2-R0.1-SNAPSHOT/minecraft-server-1.19.2-R0.1-SNAPSHOT-maps-mojang.txt
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.679 s
+[INFO] Finished at: 2022-08-22T21:06:45-07:00
+[INFO] ------------------------------------------------------------------------
+[WARNING] The requested profile "remapped" could not be activated because it does not exist.
+Picked up _JAVA_OPTIONS: -Djdk.net.URLClassPath.disableClassPathURLCheck=true
+
+Picked up _JAVA_OPTIONS: -Djdk.net.URLClassPath.disableClassPathURLCheck=true

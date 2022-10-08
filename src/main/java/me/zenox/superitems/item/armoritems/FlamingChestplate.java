@@ -37,9 +37,4 @@ public class FlamingChestplate extends ArmorItem {
         this.getMeta().setUnbreakable(true);
     }
 
-    @Override
-    public List<Recipe> getRecipes() {
-        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
-        return List.of();
-    }
 }

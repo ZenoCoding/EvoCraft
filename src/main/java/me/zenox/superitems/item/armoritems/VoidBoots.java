@@ -22,15 +22,15 @@ import java.util.UUID;
 
 public class VoidBoots extends ArmorItem {
     public VoidBoots() {
-        super("void_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 2d, Stats.HEALTH, 5d, Stats.WISDOM, 30d, Stats.REGENERATION, 5d));
+        super("void_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 2d, Stats.HEALTH, 5d, Stats.WISDOM, 50d, Stats.REGENERATION, 5d));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Who the heck is this \"Void Lord\" guy?");
         this.getMeta().setLore(lore);
-        ((LeatherArmorMeta) this.getMeta()).setColor(Color.ORANGE);
+        ((LeatherArmorMeta) this.getMeta()).setColor(Color.TEAL);
 
         Multimap<Attribute, AttributeModifier> attributeMap = ArrayListMultimap.create();
-        attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
+        attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
         attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET));
 
         this.getMeta().setAttributeModifiers(attributeMap);

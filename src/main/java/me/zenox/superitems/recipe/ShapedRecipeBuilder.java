@@ -18,6 +18,7 @@ public class ShapedRecipeBuilder {
     private Map<Character, RecipeChoice> choiceMap = new HashMap<>();
 
     public ShapedRecipeBuilder(){
+        this.choiceMap = new HashMap<>();
 
     }
 

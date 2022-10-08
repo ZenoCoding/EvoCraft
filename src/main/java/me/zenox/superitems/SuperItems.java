@@ -7,6 +7,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.mojang.bridge.game.Language;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.ticxo.modelengine.api.ModelEngineAPI;
 import me.zenox.superitems.command.MainCommand;
 import me.zenox.superitems.data.ConfigLoader;
 import me.zenox.superitems.data.LanguageLoader;
@@ -22,6 +23,7 @@ import org.enginehub.piston.config.Config;
 public final class SuperItems extends JavaPlugin {
 
     private static SuperItems plugin;
+
     private LanguageLoader languageLoader;
     private ConfigLoader configLoader;
     private ProtocolManager protocolManager;
@@ -33,7 +35,6 @@ public final class SuperItems extends JavaPlugin {
     public static SuperItems getPlugin() {
         return plugin;
     }
-
 
     @Override
     public void onEnable() {

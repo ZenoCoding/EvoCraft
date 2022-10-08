@@ -22,28 +22,19 @@ import java.util.UUID;
 
 public class VoidLeggings extends ArmorItem {
     public VoidLeggings() {
-        super("void_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 5d, Stats.WISDOM, 35d, Stats.REGENERATION, 5d));
+        super("void_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 5d, Stats.WISDOM, 75d, Stats.REGENERATION, 5d));
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "Rumored to talk and share knowledge to the wearer...");
+        lore.add(ChatColor.GRAY + "Whispering secrets of magic.");
         this.getMeta().setLore(lore);
-        this.getMeta().addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
-        this.getMeta().addEnchant(Enchantment.THORNS, 3, true);
-        this.getMeta().addEnchant(Enchantment.WATER_WORKER, 1, true);
         ((LeatherArmorMeta) this.getMeta()).setColor(Color.TEAL);
 
         Multimap<Attribute, AttributeModifier> attributeMap = ArrayListMultimap.create();
-        attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
-        attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
+        attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 7, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
+        attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS));
 
 
         this.getMeta().setAttributeModifiers(attributeMap);
         this.getMeta().setUnbreakable(true);
-    }
-
-    @Override
-    public List<Recipe> getRecipes() {
-        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
-        return List.of();
     }
 }

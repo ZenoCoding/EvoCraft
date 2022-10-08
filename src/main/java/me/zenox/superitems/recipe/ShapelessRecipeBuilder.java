@@ -16,7 +16,6 @@ public class ShapelessRecipeBuilder {
     private List<RecipeChoice> choiceList = new ArrayList<>();
 
     public ShapelessRecipeBuilder(){
-
     }
 
     public String getId() {

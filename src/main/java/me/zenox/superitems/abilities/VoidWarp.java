@@ -18,7 +18,8 @@ public class VoidWarp extends ItemAbility {
     public VoidWarp() {
         super("void_warp", AbilityAction.RIGHT_CLICK_ALL, 100, 1);
 
-        this.addLineToLore(ChatColor.DARK_PURPLE + "Creates a rift in space and pulls you through it. Magic!");
+        this.addLineToLore(ChatColor.GRAY + "Creates a rift in space and pulls you through");
+        this.addLineToLore(ChatColor.GRAY + "it, teleporting you up to 75 blocks.");
 
     }
 
@@ -38,10 +39,10 @@ public class VoidWarp extends ItemAbility {
                 if(count >= 20){
                     p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 0.8f);
 
-                    Block endblock = p.getTargetBlockExact(25, FluidCollisionMode.NEVER);
+                    Block endblock = p.getTargetBlockExact(75, FluidCollisionMode.NEVER);
                     Vector dir = p.getLocation().getDirection();
                     if(endblock == null){
-                        p.teleport(p.getLocation().add(dir.normalize().multiply(25)).add(0, 1, 0).setDirection(dir));
+                        p.teleport(p.getLocation().add(dir.normalize().multiply(75)).add(0, 1, 0).setDirection(dir));
                     } else {
                         p.teleport(endblock.getLocation().add(0, 1, 0).setDirection(dir));
                     }

@@ -21,19 +21,16 @@ import java.util.UUID;
 
 public class VoidCloak extends ArmorItem {
     public VoidCloak() {
-        super("void_cloak", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 5d, Stats.WISDOM, 45d, Stats.REGENERATION, 5d));
+        super("void_cloak", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 20d, Stats.WISDOM, 100d, Stats.REGENERATION, 10d));
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "The ultimate source of wisdom");
+        lore.add(ChatColor.GRAY + "An ultimate source of wisdom, bringing great power to the wearer");
         this.getMeta().setLore(lore);
-        this.getMeta().addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 7, true);
-        this.getMeta().addEnchant(Enchantment.THORNS, 3, true);
-        this.getMeta().addEnchant(Enchantment.WATER_WORKER, 1, true);
         ((LeatherArmorMeta) this.getMeta()).setColor(Color.TEAL);
 
         Multimap<Attribute, AttributeModifier> attributeMap = ArrayListMultimap.create();
-        attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 8, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
-        attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
+        attributeMap.put(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
+        attributeMap.put(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST));
 
 
         this.getMeta().setAttributeModifiers(attributeMap);

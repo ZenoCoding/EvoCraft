@@ -40,7 +40,7 @@ public class Psychic extends ItemAbility implements Listener {
         super("psychic", AbilityAction.RIGHT_CLICK_ALL, 0, 0, Slot.MAIN_HAND);
 
         this.addLineToLore(ChatColor.GRAY + "Understanding " + ChatColor.WHITE + "thyself" + ChatColor.GRAY + " requires lots of patience.");
-        this.addLineToLore(ChatColor.GRAY + "Or a magic orb! Gain" + ChatColor.AQUA + " +10 Wisdom");
+        this.addLineToLore(ChatColor.GRAY + "Or a magic orb! Gain" + ChatColor.AQUA + " +50 Wisdom");
         this.addLineToLore("");
         this.addLineToLore(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Capped at " + ChatColor.AQUA + "+50 Wisdom");
 
@@ -97,17 +97,17 @@ public class Psychic extends ItemAbility implements Listener {
             }.runTaskTimer(SuperItems.getPlugin(), 10, 40);
 
         } else {
-            List<String> stringList = List.of(ChatColor.GRAY + "You feel your mind expanding, your knowledge deepens." + ChatColor.AQUA + " +10 Wisdom (" + count + "/5)",
-                    ChatColor.GRAY + "Your understanding of the world is greater than anyone ever before." + ChatColor.AQUA + " +10 Wisdom (" + count + "/5)",
-                    ChatColor.GRAY + "You now understand the deepest and most complex concepts, your IQ among Albert Einstein and the greats." + ChatColor.AQUA + " +10 Wisdom (" + count + "/5)",
-                    ChatColor.GRAY + "Your brain is physically bigger than most, many praise you around the world for your prodigy." + ChatColor.AQUA + " +10 Wisdom (" + count + "/5)",
-                    ChatColor.GRAY + "You have achieved true meaning, understanding things so profound and taking leaps for humanity." + ChatColor.AQUA + " +10 Wisdom (" + count + "/5)");
+            List<String> stringList = List.of(ChatColor.GRAY + "You feel your mind expanding, your knowledge deepens." + ChatColor.AQUA + " +50 Wisdom (" + count + "/5)",
+                    ChatColor.GRAY + "Your understanding of the world is greater than anyone ever before." + ChatColor.AQUA + " +50 Wisdom (" + count + "/5)",
+                    ChatColor.GRAY + "You now understand the deepest and most complex concepts, your IQ among Albert Einstein and the greats." + ChatColor.AQUA + " +50 Wisdom (" + count + "/5)",
+                    ChatColor.GRAY + "Your brain is physically bigger than most, many praise you around the world for your prodigy." + ChatColor.AQUA + " +50 Wisdom (" + count + "/5)",
+                    ChatColor.GRAY + "You have achieved true meaning, understanding things so profound and taking leaps for humanity." + ChatColor.AQUA + " +50 Wisdom (" + count + "/5)");
             Util.sendMessage(p, stringList.get(count - 1), false);
         }
 
         dataContainer.set(key, PersistentDataType.INTEGER, count);
         p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1, 1.2f);
-        AureliumAPI.addStatModifier(p, "superitems:psychic_wisdom_buff_" + count, Stats.WISDOM, 10d);
+        AureliumAPI.addStatModifier(p, "superitems:psychic_wisdom_buff_" + count, Stats.WISDOM, 50d);
     }
 
     private void killPlayer(Player p, NamespacedKey key, PersistentDataContainer dataContainer) {
