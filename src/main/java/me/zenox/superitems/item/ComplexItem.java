@@ -25,12 +25,15 @@ import java.util.Map;
 public class ComplexItem {
 
     public static final NamespacedKey GLOBAL_ID = new NamespacedKey(SuperItems.getPlugin(), "superitem");
+    public static final NamespacedKey GLOW_ID = new NamespacedKey(SuperItems.getPlugin(), "glow");
+    public static final NamespacedKey UUID_ID= new NamespacedKey(SuperItems.getPlugin(), "uuid");
     private String id;
     private NamespacedKey key;
     private TranslatableText name;
     private TranslatableList lore;
     private int customModelData;
     private final boolean unique;
+    private boolean glow = false;
     private Rarity rarity;
     private Type type;
     private Material material;
@@ -47,6 +50,24 @@ public class ComplexItem {
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
         this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
         this.unique = unique;
+        this.rarity = rarity;
+        this.type = type;
+        this.material = material;
+        this.meta = new ItemStack(this.material).getItemMeta();
+        this.stats = stats;
+        this.skullURL = "";
+        this.abilities = abilities;
+        this.glow = false;
+    }
+
+    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
+        this.id = id;
+        this.name = new TranslatableText(TranslatableText.TranslatableType.ITEM_NAME + "-" + id);
+        this.lore = new TranslatableList(TranslatableText.TranslatableType.ITEM_LORE + "-" + id);
+        this.key = new NamespacedKey(SuperItems.getPlugin(), id);
+        this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
+        this.unique = unique;
+        this.glow = glow;
         this.rarity = rarity;
         this.type = type;
         this.material = material;
@@ -76,6 +97,7 @@ public class ComplexItem {
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
         this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
         this.unique = settings.isUnique();
+        this.glow = settings.doesGlow();
         this.rarity = settings.getRarity();
         this.type = settings.getType();
         this.material = settings.getMaterial();
@@ -169,21 +191,16 @@ public class ComplexItem {
 
     public Boolean isUnique() {return unique;}
 
+    public boolean doesGlow() {
+        return glow;
+    }
+
     public Rarity getRarity() {
         return rarity;
     }
 
-    public void setRarity(Rarity rarity) {
-        this.rarity = rarity;
-    }
-
-
     public Material getMaterial() {
         return material;
-    }
-
-    public void setMaterial(Material material) {
-        this.material = material;
     }
 
     public ItemMeta getMeta() {
@@ -192,10 +209,6 @@ public class ComplexItem {
 
     public Type getType() {
         return this.type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
     public Map<Stat, Double> getStats() {

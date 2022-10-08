@@ -18,6 +18,7 @@ public class ItemSettings {
 
     private String id;
     private Boolean unique;
+    private Boolean glow;
     private ComplexItem.Rarity rarity;
     private ComplexItem.Type type;
     private Material material;
@@ -30,6 +31,7 @@ public class ItemSettings {
     public ItemSettings(){
         this.id = "undefined_" + UUID.randomUUID();
         this.unique = false;
+        this.glow = false;
         this.rarity = ComplexItem.Rarity.COMMON;
         this.type = ComplexItem.Type.MISC;
         this.material = Material.BARRIER;
@@ -39,9 +41,10 @@ public class ItemSettings {
         this.abilities = new ArrayList<>();
     }
 
-    public ItemSettings(String id, Boolean unique, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities){
+    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities){
         this.id = id;
         this.unique = unique;
+        this.glow = glow;
         this.rarity = rarity;
         this.type = type;
         this.material = material;
@@ -52,11 +55,11 @@ public class ItemSettings {
     }
 
     public static ItemSettings of(ComplexItem item){
-        return new ItemSettings(item.getId(), item.isUnique() ,item.getRarity(), item.getType(), item.getMaterial(), item.getMeta(), item.getStats(), item.getSkullURL(), new ArrayList<>());
+        return new ItemSettings(item.getId(), item.isUnique(), item.doesGlow(), item.getRarity(), item.getType(), item.getMaterial(), item.getMeta(), item.getStats(), item.getSkullURL(), new ArrayList<>());
     }
 
     public static ItemSettings of(ItemStack item){
-        return new ItemSettings(item.getType().name(), false, ComplexItem.Rarity.COMMON,
+        return new ItemSettings(item.getType().name(), false, false, ComplexItem.Rarity.COMMON,
                 ComplexItem.Type.MISC, item.getType(), item.getItemMeta(), new HashMap(),
                 (item.getItemMeta() instanceof SkullMeta) ? ((SkullMeta) item.getItemMeta()).getOwnerProfile().getTextures().getSkin().toString() : "", new ArrayList());
     }
@@ -66,6 +69,10 @@ public class ItemSettings {
     }
 
     public Boolean isUnique(){ return unique;}
+
+    public Boolean doesGlow() {
+        return glow;
+    }
 
     public ComplexItem.Rarity getRarity() {
         return rarity;
@@ -177,10 +184,7 @@ public class ItemSettings {
     }
 
     public ItemSettings glow(){
-        ItemMeta meta = new ItemStack(this.getMaterial()).getItemMeta();
-        meta.addEnchant(this.getMaterial() == Material.BOW ? Enchantment.PROTECTION_ENVIRONMENTAL : Enchantment.ARROW_INFINITE, 1, true);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        this.meta = meta;
+        this.glow = true;
         return this;
     }
 }

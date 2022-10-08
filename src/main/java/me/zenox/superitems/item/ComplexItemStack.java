@@ -2,11 +2,17 @@ package me.zenox.superitems.item;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
 import com.archyx.aureliumskills.stats.Stat;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.reflect.StructureModifier;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.persistence.SerializedPersistentType;
 import me.zenox.superitems.util.Util;
+import net.minecraft.world.item.Items;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -141,8 +147,9 @@ public class ComplexItemStack implements Cloneable{
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         container.set(ComplexItem.GLOBAL_ID, PersistentDataType.STRING, this.getId());
+        container.set(ComplexItem.GLOW_ID, PersistentDataType.INTEGER, complexItem.doesGlow() ? 1 : 0);
 
-        if(this.uuid != null) container.set(new NamespacedKey(SuperItems.getPlugin(), "uuid"), new SerializedPersistentType<UUID>(), uuid);
+        if(this.uuid != null) container.set(ComplexItem.UUID_ID, new SerializedPersistentType<UUID>(), uuid);
 
         // Set ItemMeta so that ComplexItemMeta can use it
         item.setItemMeta(meta);
