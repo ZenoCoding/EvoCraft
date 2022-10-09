@@ -37,7 +37,7 @@ public class Variable<T extends Serializable> {
         return this;
     }
 
-    public void write(PersistentDataContainer container, LoreBuilder loreBuilder) throws CloneNotSupportedException{
+    public void write(PersistentDataContainer container, LoreBuilder loreBuilder) throws CloneNotSupportedException {
         LoreEntry entry = (LoreEntry) type.getLoreEntry().clone();
         type.getLoreModifier().accept(entry, this);
         container.set(new NamespacedKey(SuperItems.getPlugin(), ComplexItemMeta.VAR_PREFIX + type.getName()), new SerializedPersistentType<T>(), value);
@@ -45,7 +45,7 @@ public class Variable<T extends Serializable> {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "[Variable: {Type: " + value.getClass().getName() + ", Value: " + value + "}]";
     }
 

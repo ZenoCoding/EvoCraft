@@ -3,9 +3,10 @@ package me.zenox.superitems.item.superitems;
 import com.archyx.aureliumskills.stats.Stats;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.abilities.VoidWarp;
 import me.zenox.superitems.abilities.VoidularRecall;
+import me.zenox.superitems.item.ComplexItem;
+import me.zenox.superitems.item.ItemRegistry;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -18,8 +19,6 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import static me.zenox.superitems.items.ItemRegistry.*;
 
 public class VoidScepter extends ComplexItem {
     public VoidScepter() {
@@ -42,8 +41,8 @@ public class VoidScepter extends ComplexItem {
     public List<Recipe> getRecipes() {
         ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
         recipe.shape("CVC", "NDN", "CDC");
-        recipe.setIngredient('C', new RecipeChoice.ExactChoice(CORRUPT_PEARL.getItemStack(1)));
-        recipe.setIngredient('V', new RecipeChoice.ExactChoice(VOID_STONE.getItemStack(1)));
+        recipe.setIngredient('C', new RecipeChoice.ExactChoice(ItemRegistry.CORRUPT_PEARL.getItemStack(1)));
+        recipe.setIngredient('V', new RecipeChoice.ExactChoice(ItemRegistry.VOID_STONE.getItemStack(1)));
         recipe.setIngredient('N', Material.NETHER_STAR);
         recipe.setIngredient('D', Material.DEBUG_STICK);
         return List.of(recipe);

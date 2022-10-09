@@ -1,18 +1,19 @@
 package me.zenox.superitems.abilities;
 
-import me.zenox.superitems.item.*;
+import me.zenox.superitems.item.ComplexItemMeta;
+import me.zenox.superitems.item.ComplexItemStack;
+import me.zenox.superitems.item.LoreEntry;
+import me.zenox.superitems.item.VariableType;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class EmberAttune extends ItemAbility {
     public static final VariableType ATTUNEMENT_VARIABLE_TYPE =
@@ -36,16 +37,16 @@ public class EmberAttune extends ItemAbility {
         Attunement attunement;
         try {
             attunement = (Attunement) complexMeta.getVariable(ATTUNEMENT_VARIABLE_TYPE).getValue();
-        } catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             attunement = Attunement.BLAZEBORN;
             complexMeta.setVariable(ATTUNEMENT_VARIABLE_TYPE, attunement);
         }
         if (attunement.equals(Attunement.BLAZEBORN)) {
             complexMeta.setVariable(ATTUNEMENT_VARIABLE_TYPE, Attunement.DARKSOUL);
-            meta.setCustomModelData(meta.getCustomModelData()+1);
+            meta.setCustomModelData(meta.getCustomModelData() + 1);
         } else {
             complexMeta.setVariable(ATTUNEMENT_VARIABLE_TYPE, Attunement.BLAZEBORN);
-            meta.setCustomModelData(meta.getCustomModelData()-1);
+            meta.setCustomModelData(meta.getCustomModelData() - 1);
         }
         Util.sendActionBar(p, ((Attunement) complexMeta.getVariable(ATTUNEMENT_VARIABLE_TYPE).getValue()).getName());
         p.playSound(p.getLocation(), Sound.BLOCK_STONE_BUTTON_CLICK_OFF, 1, 1f);
@@ -57,13 +58,13 @@ public class EmberAttune extends ItemAbility {
     enum Attunement {
         DARKSOUL(ChatColor.DARK_GRAY + "Darksoul"), BLAZEBORN(ChatColor.GOLD + "Blazeborn");
 
-        private String name;
+        private final String name;
 
-        Attunement(String name){
+        Attunement(String name) {
             this.name = name;
         }
 
-        public String getName(){
+        public String getName() {
             return name;
         }
     }

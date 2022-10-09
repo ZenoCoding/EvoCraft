@@ -4,10 +4,10 @@ import com.archyx.aureliumskills.api.AureliumAPI;
 import com.archyx.aureliumskills.stats.Stat;
 import com.google.common.primitives.Ints;
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.data.TranslatableList;
-import me.zenox.superitems.data.TranslatableText;
 import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.abilities.ItemAbility;
+import me.zenox.superitems.data.TranslatableList;
+import me.zenox.superitems.data.TranslatableText;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -26,20 +26,20 @@ public class ComplexItem {
 
     public static final NamespacedKey GLOBAL_ID = new NamespacedKey(SuperItems.getPlugin(), "superitem");
     public static final NamespacedKey GLOW_ID = new NamespacedKey(SuperItems.getPlugin(), "glow");
-    public static final NamespacedKey UUID_ID= new NamespacedKey(SuperItems.getPlugin(), "uuid");
-    private String id;
-    private NamespacedKey key;
-    private TranslatableText name;
-    private TranslatableList lore;
-    private int customModelData;
+    public static final NamespacedKey UUID_ID = new NamespacedKey(SuperItems.getPlugin(), "uuid");
     private final boolean unique;
+    private final String id;
+    private final NamespacedKey key;
+    private final TranslatableText name;
+    private final TranslatableList lore;
+    private final int customModelData;
     private boolean glow = false;
-    private Rarity rarity;
-    private Type type;
-    private Material material;
-    private ItemMeta meta;
-    private Map<Stat, Double> stats;
-    private List<Ability> abilities;
+    private final Rarity rarity;
+    private final Type type;
+    private final Material material;
+    private final ItemMeta meta;
+    private final Map<Stat, Double> stats;
+    private final List<Ability> abilities;
 
     private String skullURL = "";
 
@@ -78,19 +78,19 @@ public class ComplexItem {
 
     }
 
-    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique){
+    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique) {
         this(id, unique, rarity, type, material, stats, List.of());
     }
 
-    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities){
+    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
         this(id, false, rarity, type, material, stats, abilities);
     }
 
-    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats){
+    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats) {
         this(id, false, rarity, type, material, stats, List.of());
     }
 
-    public ComplexItem(ItemSettings settings){
+    public ComplexItem(ItemSettings settings) {
         this.name = new TranslatableText(TranslatableText.TranslatableType.ITEM_NAME + "-" + settings.getId());
         this.id = settings.getId();
         this.lore = new TranslatableList(TranslatableText.TranslatableType.ITEM_LORE + "-" + id);
@@ -163,8 +163,10 @@ public class ComplexItem {
             lore.add(ChatColor.GOLD + "Ability: " + ability.getDisplayName() + ChatColor.YELLOW + ChatColor.BOLD + " " + (ability instanceof ItemAbility ? ((ItemAbility) ability).getAction().getName() : ""));
             lore.addAll(ability.getLore());
 
-            if (ability.getManaCost() > 0) lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + ability.getManaCost());
-            if (ability.getCooldown() > 0) lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + ability.getCooldown() + "s");
+            if (ability.getManaCost() > 0)
+                lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + ability.getManaCost());
+            if (ability.getCooldown() > 0)
+                lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + ability.getCooldown() + "s");
 
         }
     }
@@ -177,7 +179,7 @@ public class ComplexItem {
         return this.rarity.color() + this.name.toString();
     }
 
-    public List<String> getDefaultLore(){
+    public List<String> getDefaultLore() {
         return lore.getList();
     }
 
@@ -189,7 +191,9 @@ public class ComplexItem {
         return customModelData;
     }
 
-    public Boolean isUnique() {return unique;}
+    public Boolean isUnique() {
+        return unique;
+    }
 
     public boolean doesGlow() {
         return glow;
@@ -219,12 +223,12 @@ public class ComplexItem {
         return key;
     }
 
-    public void setSkullURL(String URL) {
-        this.skullURL = URL;
-    }
-
     public String getSkullURL() {
         return this.skullURL;
+    }
+
+    public void setSkullURL(String URL) {
+        this.skullURL = URL;
     }
 
     public List<Ability> getAbilities() {

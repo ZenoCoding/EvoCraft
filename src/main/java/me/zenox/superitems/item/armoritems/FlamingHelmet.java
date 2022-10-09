@@ -24,7 +24,7 @@ public class FlamingHelmet extends ArmorItem {
         super("flaming_helmet", Rarity.EPIC, Type.HELMET, Material.LEATHER_HELMET, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 2d));
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "Seriously hot." );
+        lore.add(ChatColor.GRAY + "Seriously hot.");
         this.getMeta().setLore(lore);
         this.getMeta().addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
         this.getMeta().addEnchant(Enchantment.THORNS, 3, true);
@@ -49,6 +49,6 @@ public class FlamingHelmet extends ArmorItem {
     @Override
     public List<Recipe> getRecipes() {
 //        ShapedRecipe recipe = new ShapedRecipe(this.getKey(), this.getItemStack(1));
-          return List.of();
+        return List.of();
     }
 }

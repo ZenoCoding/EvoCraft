@@ -17,7 +17,7 @@ public class ShapedRecipeBuilder {
     private ItemStack result;
     private Map<Character, RecipeChoice> choiceMap = new HashMap<>();
 
-    public ShapedRecipeBuilder(){
+    public ShapedRecipeBuilder() {
         this.choiceMap = new HashMap<>();
 
     }
@@ -35,8 +35,8 @@ public class ShapedRecipeBuilder {
         return shape;
     }
 
-    public ShapedRecipeBuilder shape(String ... shape) {
-        if(shape.length != 3 || shape[0].length() != 3 || shape[1].length() != 3 || shape[2].length() != 3) {
+    public ShapedRecipeBuilder shape(String... shape) {
+        if (shape.length != 3 || shape[0].length() != 3 || shape[1].length() != 3 || shape[2].length() != 3) {
             throw new IllegalArgumentException("Matrix RecipeBuilder#shape(shape) must be 3x3");
         }
         this.shape = List.of(shape);
@@ -61,15 +61,15 @@ public class ShapedRecipeBuilder {
         return this;
     }
 
-    public ShapedRecipeBuilder addChoice(Character character, RecipeChoice choice){
+    public ShapedRecipeBuilder addChoice(Character character, RecipeChoice choice) {
         this.choiceMap.put(character, choice);
         return this;
     }
 
-    public ShapedRecipe build(){
+    public ShapedRecipe build() {
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(SuperItems.getPlugin(), id), result);
         recipe.shape(shape.get(0), shape.get(1), shape.get(2));
-        for(Map.Entry<Character, RecipeChoice> entry : choiceMap.entrySet()){
+        for (Map.Entry<Character, RecipeChoice> entry : choiceMap.entrySet()) {
             recipe.setIngredient(entry.getKey(), entry.getValue());
         }
         return recipe;

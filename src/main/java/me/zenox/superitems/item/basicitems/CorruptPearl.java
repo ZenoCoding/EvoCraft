@@ -40,8 +40,8 @@ public class CorruptPearl extends ComplexItem implements Listener {
     }
 
     @EventHandler
-    public void dropEvent(EntityDeathEvent event){
-        if(!(event.getEntity().getType() == EntityType.ENDERMAN)){
+    public void dropEvent(EntityDeathEvent event) {
+        if (!(event.getEntity().getType() == EntityType.ENDERMAN)) {
             return;
         }
 
@@ -51,9 +51,9 @@ public class CorruptPearl extends ComplexItem implements Listener {
         World w = entity.getWorld();
         Location loc = entity.getLocation();
 
-        if(r.nextDouble() < 0.01){
+        if (r.nextDouble() < 0.01) {
 
-            Enderman specialEnderman = (Enderman) w.spawnEntity(loc.clone().add(Math.sin(r.nextDouble(2)*Math.PI)*r.nextDouble(2), 1, Math.sin(r.nextDouble(2)*Math.PI)*r.nextDouble(2)), EntityType.ENDERMAN);
+            Enderman specialEnderman = (Enderman) w.spawnEntity(loc.clone().add(Math.sin(r.nextDouble(2) * Math.PI) * r.nextDouble(2), 1, Math.sin(r.nextDouble(2) * Math.PI) * r.nextDouble(2)), EntityType.ENDERMAN);
 
             specialEnderman.setCarriedBlock(Material.END_PORTAL_FRAME.createBlockData());
             specialEnderman.setMetadata("corrupted", new FixedMetadataValue(SuperItems.getPlugin(), true));

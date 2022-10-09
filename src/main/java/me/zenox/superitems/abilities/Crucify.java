@@ -12,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -24,7 +23,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.Random;
-import java.util.function.Consumer;
 
 import static me.zenox.superitems.item.ItemRegistry.CRUCIFIED_AMULET;
 
@@ -57,21 +55,15 @@ public class Crucify extends ItemAbility implements Listener {
 
             final int height = 2;
             final double yIncrement = 0.02;
-
+            final int wings = 6;
+            final Random r = new Random();
+            final Location loc = p.getLocation();
+            final double radius = 0.8;
             double a = 0;
             int count = 0;
-
             double x = 0;
             double y = 0;
             double z = 0;
-
-            final int wings = 6;
-
-            final Random r = new Random();
-
-            final Location loc = p.getLocation();
-
-            final double radius = 0.8;
 
             @Override
             public void run() {
@@ -127,20 +119,14 @@ public class Crucify extends ItemAbility implements Listener {
 
                         final int height = 2;
                         final double yIncrement = 0.02;
-
+                        final int wings = 6;
+                        final Random r = new Random();
+                        final Location loc = p.getLocation();
                         double a = 0;
                         int count = 0;
-
                         double x = 0;
                         double y = 0;
                         double z = 0;
-
-                        final int wings = 6;
-
-                        final Random r = new Random();
-
-                        final Location loc = p.getLocation();
-
                         double radius = 0.8;
 
                         @Override

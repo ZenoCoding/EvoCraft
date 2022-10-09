@@ -7,6 +7,8 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
+import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.model.ModeledEntity;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.persistence.NBTEditor;
 import me.zenox.superitems.util.Geo;
@@ -16,7 +18,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -36,6 +37,8 @@ import static me.zenox.superitems.item.ItemRegistry.TOTEM_POLE;
 import static me.zenox.superitems.util.Util.getNearbyBlocks;
 
 public class ItemAbility extends Ability {
+    private static final int SHARD_SPEED = 3;
+    private static final int SHARD_RADIUS = 3;
     private final AbilityAction action;
 
     public ItemAbility(String id, AbilityAction action, int manaCost, double cooldown) {
@@ -51,49 +54,6 @@ public class ItemAbility extends Ability {
     public ItemAbility(String id, AbilityAction action, int manaCost, double cooldown, Consumer<Event> exectuable) {
         super(id, manaCost, cooldown, PlayerInteractEvent.class, Slot.EITHER_HAND, exectuable);
         this.action = action;
-    }
-
-    public AbilityAction getAction() {
-        return action;
-    }
-
-    @Override
-    public boolean checkEvent(Event event) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        if (!super.checkEvent(e)) return false;
-        return action.isAction(e.getAction(), e.getPlayer().isSneaking());
-    }
-
-    @Override
-    protected void runExecutable(Event e) {
-        super.runExecutable(e);
-    }
-
-    public enum AbilityAction {
-
-        LEFT_CLICK_BLOCK("LEFT CLICK", new Action[]{Action.LEFT_CLICK_BLOCK}, false), LEFT_CLICK_AIR("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR}, false), LEFT_CLICK_ALL("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, false), SHIFT_LEFT_CLICK("SHIFT LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, true),
-        RIGHT_CLICK_BLOCK("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR}, false), RIGHT_CLICK_AIR("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK}, false), RIGHT_CLICK_ALL("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR}, false), SHIFT_RIGHT_CLICK("SHIFT RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK}, true);
-
-        private final String name;
-        private final Action[] actionList;
-        private final boolean requiresShift;
-
-        AbilityAction(String name, Action[] actionList, boolean requiresShift) {
-            this.name = name;
-            this.actionList = actionList;
-            this.requiresShift = requiresShift;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        public boolean isAction(Action action, boolean isCrouching) {
-            if (this.requiresShift && !isCrouching) return false;
-
-            return Arrays.asList(actionList).contains(action);
-
-        }
     }
 
     /**
@@ -137,7 +97,7 @@ public class ItemAbility extends Ability {
             @Override
             public void run() {
                 // Particle Magic
-                List<Vector> dodecahedron = Geo.MakeDodecahedron(loc.toVector(), 2);
+                List<Vector> dodecahedron = Geo.makeDodecahedron(loc.toVector(), 2);
                 for (Vector v : dodecahedron) {
                     Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 187, 215), 0.5F);
                     w.spawnParticle(Particle.REDSTONE, v.toLocation(w).add(0, 0.5 + Math.sin(count) / 4, 0), 1, dustOptions);
@@ -422,18 +382,14 @@ public class ItemAbility extends Ability {
         }
 
         new BukkitRunnable() {
+            final int wings = 6;
+            final Location loc = totem.getLocation();
+            final double startradius = 4;
             double a = 0;
             int count = 0;
-
             double x = 0;
             double y = 0;
             double z = 0;
-
-            final int wings = 6;
-
-            final Location loc = totem.getLocation();
-
-            final double startradius = 4;
             double radius = startradius;
 
             @Override
@@ -487,70 +443,154 @@ public class ItemAbility extends Ability {
 
     public static void obsidianShardAbility(Event event) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Random r = new Random();
         Player p = e.getPlayer();
         World w = p.getWorld();
 
-        DragonFireball fireball = (DragonFireball) w.spawnEntity(p.getLocation().add(0, 1.8, 0), EntityType.DRAGON_FIREBALL);
+        for (float i = 0; i < 3; i++) {
+            i += .5;
+            shootShard(p, new Vector(Math.cos((i) * (Math.PI / 4)) * SHARD_RADIUS, Math.sin((i) * (Math.PI / 3)) * SHARD_RADIUS, 0d).rotateAroundY(p.getLocation().getYaw() % 180).toLocation(p.getWorld()), (i + 1) * 0.2);
+            i -= .5;
+        }
+
+        shootShard(p, new Location(p.getWorld(), 0, 1.8, 0), 0);
+    }
+
+    // Obsidian Shard Helper Method
+    private static void shootShard(Player p, Location deltaLoc, double delay) {
+        Random r = new Random();
+        World w = p.getWorld();
+
+        Arrow arrow = (Arrow) w.spawnEntity(p.getLocation().add(deltaLoc), EntityType.ARROW);
         Vector v = p.getLocation().getDirection().normalize().clone();
-        Vector v2 = v.multiply(10);
-        fireball.setVelocity(v2);
-        fireball.setShooter(p);
-        fireball.setGravity(false);
-        fireball.setBounce(true);
-        fireball.setIsIncendiary(true);
-        fireball.setGlowing(true);
+        Vector v2 = v.multiply(SHARD_SPEED);
+        arrow.setShooter(p);
+        arrow.setGravity(false);
+        arrow.setPierceLevel(123);
+        arrow.getLocation().setDirection(v);
+        arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+        arrow.setInvulnerable(true);
+        arrow.setKnockbackStrength(0);
+        arrow.setCritical(false);
+        arrow.setDamage(0d);
+
+        ModeledEntity shard = ModelEngineAPI.createModeledEntity(arrow);
+        shard.addModel(ModelEngineAPI.createActiveModel("obsidianshard"), true);
+        shard.getLookController().setBodyYaw(p.getLocation().getYaw());
+//        Util.sendMessage(p, "Yaw: " + p.getLocation().getYaw());
+//        Util.sendMessage(p, "Pitch: " + p.getLocation().getPitch());
+        //shard.getLookController().setPitch(p.getLocation().getPitch());
+        shard.getModel("obsidianshard").setLockPitch(true);
+        shard.getModel("obsidianshard").setLockYaw(true);
+
+        w.playSound(p.getLocation(), Sound.ENTITY_BEE_HURT, 1, 0.2f);
 
         new BukkitRunnable() {
-            int count = 0;
+            double count = 0;
 
             @Override
             public void run() {
 
-                Location loc = fireball.getLocation();
+                Location loc = arrow.getLocation();
                 for (Entity entity :
-                        fireball.getNearbyEntities(0.5, 2, 0.5)) {
+                        arrow.getNearbyEntities(0.5, 2, 0.5)) {
+                    if (SuperItems.getPlugin().isUsingWorldGuard) {
+                        LocalPlayer localPlayer2 = WorldGuardPlugin.inst().wrapPlayer(p);
+                        com.sk89q.worldedit.util.Location guardLoc2 = BukkitAdapter.adapt(arrow.getLocation());
+                        RegionContainer container2 = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                        RegionQuery query2 = container2.createQuery();
+                        if (!query2.testState(guardLoc2, localPlayer2, Flags.BUILD)) {
+                            break;
+                        }
+
+                    }
                     if (entity instanceof Damageable && !entity.equals(p)) {
-                        ((Damageable) entity).damage(10, p);
+                        ((Damageable) entity).damage(20, p);
+                        if (entity instanceof LivingEntity)
+                            ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
                     }
                 }
 
-                if(count/20 > 30) {
-                    fireball.remove();
+                if (count / 20 == delay) {
+                    w.playSound(loc, Sound.ITEM_AXE_WAX_OFF, 1, 1.2f);
+                } else if (count / 20 > delay) {
+                    arrow.setVelocity(v2);
+                    if (count % 20 == 0) {
+                        w.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 0.7f, 0.4f);
+                    }
+                }
+
+                if (count / 20 > 30) {
                     cancel();
+                    arrow.remove();
                 }
 
-                for (int i = 0; i < 5; i++) {
-                    w.spawnParticle(Particle.ELECTRIC_SPARK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
-                    w.spawnParticle(Particle.BLOCK_CRACK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2, Material.OBSIDIAN.createBlockData());
-                    w.spawnParticle(Particle.SQUID_INK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
-                    w.spawnParticle(Particle.REVERSE_PORTAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
-                    w.spawnParticle(Particle.BLOCK_CRACK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2, Material.OBSIDIAN.createBlockData());
-                    w.spawnParticle(Particle.SMOKE_NORMAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
-                }
-                if (SuperItems.getPlugin().isUsingWorldGuard) {
-                    LocalPlayer localPlayer2 = WorldGuardPlugin.inst().wrapPlayer(p);
-                    com.sk89q.worldedit.util.Location guardLoc2 = BukkitAdapter.adapt(fireball.getLocation());
-                    RegionContainer container2 = WorldGuard.getInstance().getPlatform().getRegionContainer();
-                    RegionQuery query2 = container2.createQuery();
-                    if (!query2.testState(guardLoc2, localPlayer2, Flags.BUILD)) {
-                        fireball.remove();
-                        Util.sendMessage(p, "You cannot shoot this item into a worldguard region! Flags: [PVP]");
-                        cancel();
+                if (arrow.isInBlock()) {
+                    arrow.remove();
+                    cancel();
+                } else {
+                    for (int i = 0; i < 2; i++) {
+                        w.spawnParticle(Particle.SQUID_INK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
+                        w.spawnParticle(Particle.REVERSE_PORTAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
+                        w.spawnParticle(Particle.BLOCK_CRACK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2, Material.OBSIDIAN.createBlockData());
+                        w.spawnParticle(Particle.SMOKE_NORMAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
                     }
-
                 }
+
+                count = count + 1;
 
             }
         }.runTaskTimer(SuperItems.getPlugin(), 0, 1);
     }
 
-    public static void tarhelmAbility(Event event){
+    public static void tarhelmAbility(Event event) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Player p = e.getPlayer();
         p.playSound(p.getLocation(), Sound.ENTITY_RAVAGER_ATTACK, 1, 0);
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 3));
         p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 300, 0));
         p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 400, 0));
+    }
+
+    public AbilityAction getAction() {
+        return action;
+    }
+
+    @Override
+    public boolean checkEvent(Event event) {
+        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+        if (!super.checkEvent(e)) return false;
+        return action.isAction(e.getAction(), e.getPlayer().isSneaking());
+    }
+
+    @Override
+    protected void runExecutable(Event e) {
+        super.runExecutable(e);
+    }
+
+    public enum AbilityAction {
+
+        LEFT_CLICK_BLOCK("LEFT CLICK", new Action[]{Action.LEFT_CLICK_BLOCK}, false), LEFT_CLICK_AIR("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR}, false), LEFT_CLICK_ALL("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, false), SHIFT_LEFT_CLICK("SHIFT LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, true),
+        RIGHT_CLICK_BLOCK("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR}, false), RIGHT_CLICK_AIR("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK}, false), RIGHT_CLICK_ALL("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR}, false), SHIFT_RIGHT_CLICK("SHIFT RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK}, true);
+
+        private final String name;
+        private final Action[] actionList;
+        private final boolean requiresShift;
+
+        AbilityAction(String name, Action[] actionList, boolean requiresShift) {
+            this.name = name;
+            this.actionList = actionList;
+            this.requiresShift = requiresShift;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public boolean isAction(Action action, boolean isCrouching) {
+            if (this.requiresShift && !isCrouching) return false;
+
+            return Arrays.asList(actionList).contains(action);
+
+        }
     }
 }

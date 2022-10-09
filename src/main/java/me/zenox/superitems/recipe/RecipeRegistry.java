@@ -5,12 +5,12 @@ import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static me.zenox.superitems.item.ItemRegistry.FIERY_EMBER_STAFF;
 
 public class RecipeRegistry {
 
@@ -52,6 +52,13 @@ public class RecipeRegistry {
                 .addChoice('M', new RecipeChoice.ExactChoice(ItemRegistry.ENCHANTED_MAGMA_BLOCK.getItemStack(1)))
                 .addChoice('L', new RecipeChoice.MaterialChoice(Material.LAVA_BUCKET))
                 .addChoice('T', new RecipeChoice.MaterialChoice(Material.GHAST_TEAR))
+                .build());
+
+        final Recipe TITANIUM_CUBE = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.PURIFIED_MAGMA_DISTILLATE).getItem())
+                .id("purified_magma_distillate")
+                .shape("III", "III", "III")
+                .addChoice('I', new RecipeChoice.MaterialChoice(Material.IRON_BLOCK))
                 .build());
 
         final Recipe MAGIC_TOY_STICK = registerRecipe(new ShapedRecipeBuilder()
@@ -144,14 +151,117 @@ public class RecipeRegistry {
                 .addChoice('N', new RecipeChoice.MaterialChoice(Material.NETHER_STAR))
                 .addChoice('T', new RecipeChoice.MaterialChoice(Material.TOTEM_OF_UNDYING))
                 .build());
+
+        final Recipe PAGES_OF_AGONY = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.PAGES_OF_AGONY).getItem())
+                .id("pages_of_agony")
+                .shape("PPP", "PTP", "PPP")
+                .addChoice('P', new RecipeChoice.MaterialChoice(Material.PAPER))
+                .addChoice('T', new RecipeChoice.ExactChoice(ItemRegistry.TORMENTED_SOUL.getItemStack(1)))
+                .build());
+
+        final Recipe DIMENSIONAL_JOURNAL = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.DIMENSIONAL_JOURNAL).getItem())
+                .id("dimensional_journal")
+                .shape("GNE", "PPP", "KKK")
+                .addChoice('G', new RecipeChoice.MaterialChoice(Material.GRASS_BLOCK))
+                .addChoice('N', new RecipeChoice.MaterialChoice(Material.NETHERRACK))
+                .addChoice('E', new RecipeChoice.MaterialChoice(Material.END_STONE))
+                .addChoice('P', new RecipeChoice.ExactChoice(ItemRegistry.PAGES_OF_AGONY.getItemStack(1)))
+                .addChoice('K', new RecipeChoice.ExactChoice(ItemRegistry.KEVLAR.getItemStack(1))).build());
+
+        final Recipe ENCHANTED_OBSIDIAN = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.ENCHANTED_OBSIDIAN).getItem())
+                .id("enchanted_obsidian")
+                .shape("OOO", "OOO", "OOO")
+                .addChoice('O', new RecipeChoice.MaterialChoice(Material.OBSIDIAN))
+                .build());
+
+        final Recipe COMPACT_OBSIDIAN = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.COMPACT_OBSIDIAN).getItem())
+                .id("compact_obsidian")
+                .shape("OOO", "OCO", "OOO")
+                .addChoice('O', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.ENCHANTED_OBSIDIAN).getItem()))
+                .addChoice('C', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.CORRUPT_PEARL).getItem()))
+                .build());
+
+        final Recipe CORRUPT_OBSIDIAN = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.CORRUPT_OBSIDIAN).getItem())
+                .id("corrupt_obsidian")
+                .shape("COO", "ONO", "OOC")
+                .addChoice('O', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.COMPACT_OBSIDIAN).getItem()))
+                .addChoice('C', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.CORRUPT_PEARL).getItem()))
+                .addChoice('O', new RecipeChoice.MaterialChoice(Material.NETHER_STAR))
+                .build());
+
+        final Recipe CRESTFALLEN_MONOLITH = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.CRESTFALLEN_MONOLITH).getItem())
+                .id("crestfallen_monolith")
+                .shape("ANO", "C2C", "ONA")
+                .addChoice('A', new RecipeChoice.ExactChoice(ItemRegistry.ABSOLUTE_ENDER_PEARL.getItemStack(1)))
+                .addChoice('N', new RecipeChoice.MaterialChoice(Material.NETHER_STAR))
+                .addChoice('O', new RecipeChoice.ExactChoice(ItemRegistry.COMPACT_OBSIDIAN.getItemStack(1)))
+                .addChoice('C', new RecipeChoice.ExactChoice(ItemRegistry.CORRUPT_PEARL.getItemStack(1)))
+                .addChoice('2', new RecipeChoice.ExactChoice(ItemRegistry.CORRUPT_OBSIDIAN.getItemStack(1))).build());
+
+        final Recipe VOID_STONE = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.VOID_STONE).getItem())
+                .id("void_stone")
+                .shape("CKC", "CVC", "CCC")
+                .addChoice('C', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.CORRUPT_PEARL).getItem()))
+                .addChoice('K', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.KEVLAR).getItem()))
+                .addChoice('V', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.ROUGH_VOID_STONE).getItem()))
+                .build());
+
+        final Recipe VOID_HELMET = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.VOID_HELMET).getItem())
+                .id("void_helmet")
+                .shape("N2N", "CHC", "   ")
+                .addChoice('N', new RecipeChoice.MaterialChoice(Material.NETHER_STAR))
+                .addChoice('H', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.HYPER_CRUX).getItem()))
+                .addChoice('2', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.CORRUPT_OBSIDIAN).getItem()))
+                .addChoice('C', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.CORRUPT_PEARL).getItem()))
+                .build());
+
+        final Recipe VOID_CHESTPLATE = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.VOID_CHESTPLATE).getItem())
+                .id("void_chestplate")
+                .shape("K K", "DMD", "HOH")
+                .addChoice('K', new RecipeChoice.ExactChoice(ItemRegistry.KEVLAR.getItemStack(1)))
+                .addChoice('O', new RecipeChoice.ExactChoice(ItemRegistry.COMPACT_OBSIDIAN.getItemStack(1)))
+                .addChoice('D', new RecipeChoice.ExactChoice(ItemRegistry.DARK_SKULL.getItemStack(1)))
+                .addChoice('H', new RecipeChoice.ExactChoice(ItemRegistry.HYPER_CRUX.getItemStack(1)))
+                .addChoice('M', new RecipeChoice.ExactChoice(ItemRegistry.CRESTFALLEN_MONOLITH.getItemStack(1)))
+                .build());
+
+        final Recipe VOID_LEGGINGS = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.VOID_LEGGINGS).getItem())
+                .id("void_leggings")
+                .shape("OMO", "C C", "K K")
+                .addChoice('K', new RecipeChoice.ExactChoice(ItemRegistry.KEVLAR.getItemStack(1)))
+                .addChoice('O', new RecipeChoice.ExactChoice(ItemRegistry.COMPACT_OBSIDIAN.getItemStack(1)))
+                .addChoice('M', new RecipeChoice.ExactChoice(ItemRegistry.CRESTFALLEN_MONOLITH.getItemStack(1)))
+                .addChoice('C', new RecipeChoice.ExactChoice(ItemRegistry.CORRUPT_PEARL.getItemStack(1)))
+                .build());
+
+        final Recipe VOID_BOOTS = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.VOID_BOOTS).getItem())
+                .id("void_boots")
+                .shape("KDK", "ACA", "OCO")
+                .addChoice('K', new RecipeChoice.ExactChoice(ItemRegistry.KEVLAR.getItemStack(1)))
+                .addChoice('O', new RecipeChoice.ExactChoice(ItemRegistry.COMPACT_OBSIDIAN.getItemStack(1)))
+                .addChoice('D', new RecipeChoice.ExactChoice(ItemRegistry.DARK_SKULL.getItemStack(1)))
+                .addChoice('C', new RecipeChoice.ExactChoice(ItemRegistry.CORRUPT_PEARL.getItemStack(1)))
+                .addChoice('A', new RecipeChoice.ExactChoice(ItemRegistry.ABSOLUTE_ENDER_PEARL.getItemStack(1)))
+                .build());
     }
 
-    private static Recipe registerRecipe(Recipe recipe){
+    private static Recipe registerRecipe(Recipe recipe) {
         registeredRecipes.add(recipe);
         return recipe;
     }
 
-    public static void registerRecipes(){
+    public static void registerRecipes() {
         Util.logToConsole(ChatColor.WHITE + "Registering " + ChatColor.GOLD + registeredRecipes.size() + ChatColor.WHITE + " recipes.");
     }
 }

@@ -1,17 +1,14 @@
 package me.zenox.superitems.events;
 
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.abilities.AttackAbility;
 import me.zenox.superitems.abilities.ItemAbility;
-import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.item.ComplexItemStack;
-import me.zenox.superitems.item.ItemRegistry;
-import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.util.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredListener;
@@ -29,7 +26,7 @@ public class PlayerUseItemEvent implements Listener {
 
     @EventHandler
     public void useEvent(Event event) {
-        if(event instanceof EntityDamageByEntityEvent){
+        if (event instanceof EntityDamageByEntityEvent) {
             EntityDamageByEntityEvent e = ((EntityDamageByEntityEvent) event);
             if (e.getDamager() instanceof Player) {
                 Player p = ((Player) e.getDamager());
@@ -43,13 +40,13 @@ public class PlayerUseItemEvent implements Listener {
             }
         }
 
-        if(event instanceof PlayerInteractEvent){
+        if (event instanceof PlayerInteractEvent) {
             interact(((PlayerInteractEvent) event));
             return;
         }
     }
 
-    private boolean interact(PlayerInteractEvent event){
+    private boolean interact(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
         if (item == null) return false;
         ComplexItemStack complexItem = ComplexItemStack.of(item);

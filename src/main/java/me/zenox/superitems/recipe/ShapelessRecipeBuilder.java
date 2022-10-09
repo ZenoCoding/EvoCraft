@@ -15,7 +15,7 @@ public class ShapelessRecipeBuilder {
     private ItemStack result;
     private List<RecipeChoice> choiceList = new ArrayList<>();
 
-    public ShapelessRecipeBuilder(){
+    public ShapelessRecipeBuilder() {
     }
 
     public String getId() {
@@ -45,14 +45,14 @@ public class ShapelessRecipeBuilder {
         return this;
     }
 
-    public ShapelessRecipeBuilder addChoice(RecipeChoice choice){
+    public ShapelessRecipeBuilder addChoice(RecipeChoice choice) {
         this.choiceList.add(choice);
         return this;
     }
 
-    public ShapelessRecipe build(){
+    public ShapelessRecipe build() {
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(SuperItems.getPlugin(), id), result);
-        for(RecipeChoice choice : choiceList){
+        for (RecipeChoice choice : choiceList) {
             recipe.addIngredient(choice);
         }
         return recipe;

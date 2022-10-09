@@ -12,8 +12,9 @@ import me.zenox.superitems.util.Geo;
 import me.zenox.superitems.util.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
-import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -75,26 +76,17 @@ public class Corruption extends ItemAbility {
 
             final double height = rad;
             final double yIncrement = 0.02;
-
+            final int wings = 6;
+            final Random r = new Random();
+            final Location loc = p.getLocation();
+            final double maxRadius = rad;
+            final List<FallingBlock> fBlocks = new ArrayList<>();
             double a = 0;
             int count = 0;
-
             double x = 0;
             double y = 0;
             double z = 0;
-
-            final int wings = 6;
-
-            final Random r = new Random();
-
-            final Location loc = p.getLocation();
-
             double radius = 0.8;
-
-            final double maxRadius = rad;
-
-
-            final List<FallingBlock> fBlocks = new ArrayList<>();
 
             @Override
             public void run() {
@@ -103,7 +95,7 @@ public class Corruption extends ItemAbility {
                 Random r = new Random();
                 Block block = blocks.get(r.nextInt(blocks.size() - 0) + 0);
 
-                if(blackhole) {
+                if (blackhole) {
                     if (!(block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD))) {
                         FallingBlock fBlock = w.spawnFallingBlock(block.getLocation(), block.getBlockData());
                         fBlock.setVelocity((fBlock.getLocation().toVector().subtract(loc.toVector()).multiply(-10).normalize()));
@@ -115,7 +107,7 @@ public class Corruption extends ItemAbility {
                         fBlocks.add(fBlock);
                     }
 
-                    if(fBlocks.size() > 25){
+                    if (fBlocks.size() > 25) {
                         fBlocks.get(0).setGravity(true);
                         fBlocks.remove(0);
                     }
@@ -127,10 +119,10 @@ public class Corruption extends ItemAbility {
                     }
                 }
                 for (int i = 0; i < wings; i++) {
-                    x = Math.cos(a + i * (2 * Math.PI / wings)) * radius%maxRadius;
-                    z = Math.sin(a + i * (2 * Math.PI / wings)) * radius%maxRadius;
+                    x = Math.cos(a + i * (2 * Math.PI / wings)) * radius % maxRadius;
+                    z = Math.sin(a + i * (2 * Math.PI / wings)) * radius % maxRadius;
 
-                    Location loc2 = new Location(loc.getWorld(), (float) (loc.getX() + x), (float) (loc.getY() + y%height + 1), (float) (loc.getZ() + z));
+                    Location loc2 = new Location(loc.getWorld(), (float) (loc.getX() + x), (float) (loc.getY() + y % height + 1), (float) (loc.getZ() + z));
                     p.getWorld().spawnParticle(Particle.SOUL, loc2, 0);
                     p.getWorld().spawnParticle(Particle.REVERSE_PORTAL, loc2, 0);
                     p.getWorld().spawnParticle(Particle.SQUID_INK, loc2, 0);
@@ -143,7 +135,7 @@ public class Corruption extends ItemAbility {
                     count++;
 
 
-                    if (count/20 >= duration) {
+                    if (count / 20 >= duration) {
                         displayPentagon(p, loc, rad);
                         cancel();
                         return;
@@ -153,27 +145,28 @@ public class Corruption extends ItemAbility {
         }.runTaskTimer(SuperItems.getPlugin(), 1, 1);
     }
 
-    private void displayPentagon(Player p, Location loc, double radius){
-        loc.add(0, radius*3/2, 0);
-        List<Vector> points = Geo.makeDodecahedron(loc.toVector(), radius*3/2);
+    private void displayPentagon(Player p, Location loc, double radius) {
+        loc.add(0, radius * 3 / 2, 0);
+        List<Vector> points = Geo.makeDodecahedron(loc.toVector(), radius * 3 / 2);
         World w = loc.getWorld();
-        new BukkitRunnable(){
+        new BukkitRunnable() {
             double count = 0;
+
             @Override
             public void run() {
-                for(Vector v : points){
+                for (Vector v : points) {
                     Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(230, 103, 215), 2.5F);
-                    w.spawnParticle(Particle.REDSTONE, v.rotateAroundAxis(loc.toVector(), count%360).toLocation(loc.getWorld()), 1, dustOptions);
+                    w.spawnParticle(Particle.REDSTONE, v.rotateAroundAxis(loc.toVector(), count % 360).toLocation(loc.getWorld()), 1, dustOptions);
                 }
 
-                if(count/20 > 5){
+                if (count / 20 > 5) {
                     cancel();
-                    for(Vector v : points){
+                    for (Vector v : points) {
                         w.createExplosion(v.toLocation(loc.getWorld()), 10, false, true);
                     }
                 }
 
-                count+=2;
+                count += 2;
             }
         }.runTaskTimer(SuperItems.getPlugin(), 0, 1);
     }

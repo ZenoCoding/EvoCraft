@@ -1,7 +1,6 @@
 package me.zenox.superitems.util;
 
 import org.bukkit.util.Vector;
-import org.codehaus.plexus.util.dag.Vertex;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +8,9 @@ import java.util.List;
 public class Geo {
 
     /// Generates a list of vertices (in arbitrary order) for a tetrahedron centered on the origin.
-    public static List<Vector> makeDodecahedron(Vector vec, double r)
-    {
+    public static List<Vector> makeDodecahedron(Vector vec, double r) {
         // Calculate constants that will be used to generate vertices
-        float phi = (float)(Math.sqrt(5) - 1) / 2; // The golden ratio
+        float phi = (float) (Math.sqrt(5) - 1) / 2; // The golden ratio
 
         double a = 1 / Math.sqrt(3);
         double b = a / phi;
@@ -20,10 +18,8 @@ public class Geo {
 
         // Generate each vertex
         List<Vector> vertices = new ArrayList<>();
-        for (int i : new Integer[]{ -1, 1 })
-        {
-            for (int j : new Integer[] { -1, 1 })
-            {
+        for (int i : new Integer[]{-1, 1}) {
+            for (int j : new Integer[]{-1, 1}) {
                 vertices.add(new Vector(
                         0,
                         i * c * r,
@@ -37,43 +33,43 @@ public class Geo {
                         0,
                         j * c * r));
 
-                for (int k : new Integer[] { -1, 1 })
-                vertices.add(new Vector(
-                        i * a * r,
-                        j * a * r,
-                        k * a * r));
+                for (int k : new Integer[]{-1, 1})
+                    vertices.add(new Vector(
+                            i * a * r,
+                            j * a * r,
+                            k * a * r));
             }
         }
 
-        for(Vector vector : vertices){
+        for (Vector vector : vertices) {
             vector.add(vec);
         }
         return vertices;
     }
 
-    public static List<Vector> lerpEdges(List<Vector> vertices, int steps){
+    public static List<Vector> lerpEdges(List<Vector> vertices, int steps) {
         List<Vector> result = new ArrayList<>();
 
         double minLengthSquared = Double.MAX_VALUE;
-        for(Vector vertex : vertices){
-            if(vertex == vertices.get(0)) continue;
+        for (Vector vertex : vertices) {
+            if (vertex == vertices.get(0)) continue;
             double distSqr = vertices.get(0).distanceSquared(vertex);
-            if(distSqr < minLengthSquared) minLengthSquared = Math.round(distSqr*100.0)/100.0;
+            if (distSqr < minLengthSquared) minLengthSquared = Math.round(distSqr * 100.0) / 100.0;
         }
 
 
         List<Vector> connected = new ArrayList<>();
 
-        for(Vector vertex : vertices){
+        for (Vector vertex : vertices) {
             List<Vector> lConnected = new ArrayList<>();
-            for(Vector v : vertices){
-                if(lConnected.size() == 3) break;
-                if(v.equals(vertex) || connected.contains(v)) continue;
-                if(Math.round(vertex.distanceSquared(v)*100.0)/100.0 == minLengthSquared){
+            for (Vector v : vertices) {
+                if (lConnected.size() == 3) break;
+                if (v.equals(vertex) || connected.contains(v)) continue;
+                if (Math.round(vertex.distanceSquared(v) * 100.0) / 100.0 == minLengthSquared) {
                     lConnected.add(v);
-                    for(int i = 0;i < steps;i++){
+                    for (int i = 0; i < steps; i++) {
                         Vector diff = vertex.clone().subtract(v);
-                        result.add(vertex.clone().subtract(diff.multiply(1d/steps*(i+1))));
+                        result.add(vertex.clone().subtract(diff.multiply(1d / steps * (i + 1))));
                     }
                 }
             }

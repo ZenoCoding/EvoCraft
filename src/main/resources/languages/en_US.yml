@@ -64,6 +64,15 @@ item-name-void_leggings: Void Leggings
 item-name-void_boots: Void Boots
 
 item-name-corrupt_pearl: Corrupt Pearl
+
+item-name-enchanted_obsidian: Enchanted Obsidian
+item-name-compact_obsidian: Compact Obsidian
+item-name-corrupt_obsidian: Corrupt Obsidian
+item-name-crestfallen_monolith: Crestfallen Monolith
+
+item-name-pages_of_agony: Pages of Agony
+item-name-dimensional_journal: Dimensional Journal
+
 item-name-dev_stick: Dev Stick
 
 item-name-flaming_helmet: Flaming Helmet
@@ -162,6 +171,21 @@ item-lore-void_scepter:
 
 item-lore-obsidilith_scythe:
   - "Mining away... I don't know.. what to miiine..."
+
+item-lore-enchanted_obsidian:
+  - "Breaking the laws of physics, it's gravitational attraction warps space-time."
+
+item-lore-compact_obsidian:
+  - "Breaking the laws of physics, it's gravitational attraction warps space-time."
+
+item-lore-corrupt_obsidian:
+  - "Spaghettification!"
+
+item-lore-pages_of_agony:
+  - "Painful to the touch."
+
+item-lore-dimensional_journal:
+  - "... and the Multiverse of Madness™"
 
 item-lore-dev_stick:
   - "A tribute to Andy Zhang. RIP."

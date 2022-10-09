@@ -1,12 +1,15 @@
 package me.zenox.superitems.item.superitems;
 
 import com.archyx.aureliumskills.stats.Stats;
-import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.abilities.Psychic;
+import me.zenox.superitems.item.ComplexItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.List;
 import java.util.Map;

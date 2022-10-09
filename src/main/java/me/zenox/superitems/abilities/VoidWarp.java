@@ -5,14 +5,12 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
-import java.util.function.Consumer;
 
 public class VoidWarp extends ItemAbility {
     public VoidWarp() {
@@ -32,16 +30,17 @@ public class VoidWarp extends ItemAbility {
 
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 0.6f);
 
-        new BukkitRunnable(){
+        new BukkitRunnable() {
             int count = 0;
+
             @Override
             public void run() {
-                if(count >= 20){
+                if (count >= 20) {
                     p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 0.8f);
 
                     Block endblock = p.getTargetBlockExact(75, FluidCollisionMode.NEVER);
                     Vector dir = p.getLocation().getDirection();
-                    if(endblock == null){
+                    if (endblock == null) {
                         p.teleport(p.getLocation().add(dir.normalize().multiply(75)).add(0, 1, 0).setDirection(dir));
                     } else {
                         p.teleport(endblock.getLocation().add(0, 1, 0).setDirection(dir));
@@ -49,9 +48,9 @@ public class VoidWarp extends ItemAbility {
                     cancel();
                 }
 
-                if(count%4 == 0) p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_HURT, 1, 1.4f);
+                if (count % 4 == 0) p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_HURT, 1, 1.4f);
 
-                for(int i = 0; i < 4; i++) {
+                for (int i = 0; i < 4; i++) {
                     Location loc = p.getLocation().clone().add(r.nextDouble() - 0.5, r.nextDouble() + 0.1, r.nextDouble() - 0.5);
                     World w = p.getWorld();
                     w.spawnParticle(Particle.ELECTRIC_SPARK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
@@ -60,7 +59,7 @@ public class VoidWarp extends ItemAbility {
                     w.spawnParticle(Particle.BLOCK_CRACK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2, Material.OBSIDIAN.createBlockData());
                     w.spawnParticle(Particle.SMOKE_NORMAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
                 }
-                count ++;
+                count++;
             }
         }.runTaskTimer(SuperItems.getPlugin(), 5, 1);
     }

@@ -12,7 +12,7 @@ import me.zenox.superitems.util.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
-import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -23,9 +23,11 @@ import java.util.Random;
 
 import static me.zenox.superitems.util.Util.getNearbyBlocks;
 
+@Deprecated(forRemoval = true)
 public class DarkMissile extends ItemAbility {
 
     private final int explosionpower;
+
     public DarkMissile(int explosionpower) {
         super("dark_missile", AbilityAction.RIGHT_CLICK_ALL, 0, 0);
         this.explosionpower = explosionpower;

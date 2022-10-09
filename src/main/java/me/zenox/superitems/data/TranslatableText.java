@@ -7,16 +7,16 @@ import org.bukkit.ChatColor;
 import java.io.Serializable;
 
 public class TranslatableText implements Serializable {
-    private String key;
+    private final String key;
 
-    public TranslatableText(String key){
+    public TranslatableText(String key) {
         this.key = key;
     }
 
     @Override
     public String toString() {
         String translation = SuperItems.getPlugin().getLang().get(key);
-        if(translation == null) {
+        if (translation == null) {
             translation = key;
             Util.logToConsole(ChatColor.RED + "[ERROR] " + ChatColor.WHITE + "Unregistered translatable string: " + key);
         }
@@ -26,9 +26,9 @@ public class TranslatableText implements Serializable {
     public enum TranslatableType {
         ITEM_NAME("item-name"), ITEM_LORE("item-lore"), ABILITY_NAME("ability-name"), ABILITY_LORE("ability-lore"), COMMAND("cmd"), MISC_MSG("msg");
 
-        private String key;
+        private final String key;
 
-        TranslatableType(String key){
+        TranslatableType(String key) {
             this.key = key;
         }
 

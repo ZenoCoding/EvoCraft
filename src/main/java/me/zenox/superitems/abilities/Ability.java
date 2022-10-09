@@ -5,7 +5,6 @@ import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.data.TranslatableList;
 import me.zenox.superitems.data.TranslatableText;
 import me.zenox.superitems.item.ComplexItemStack;
-import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -55,12 +54,13 @@ public abstract class Ability implements Serializable {
 
     /**
      * Internal constructor because exectuable go brr
+     *
      * @param id
      * @param manaCost
      * @param cooldown
      * @param eventType
      * @param slot
-     * @param internal parameter that never gets used just to differentiate it from the public variant
+     * @param internal  parameter that never gets used just to differentiate it from the public variant
      */
     private Ability(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot, Boolean internal) {
         this.id = id;
@@ -73,13 +73,26 @@ public abstract class Ability implements Serializable {
 
         for (Ability ability :
                 registeredAbilities) {
-            if(ability.getId().equalsIgnoreCase(id)) {
+            if (ability.getId().equalsIgnoreCase(id)) {
                 Util.logToConsole("Duplicate Ability ID: " + id + " | Exact Match: " + ability.equals(this));
                 throw new IllegalArgumentException("Ability ID cannot be duplicate");
             }
         }
 
         Ability.registeredAbilities.add(this);
+    }
+
+    /**
+     * method getAbility <br>
+     * gets the ability corresponding to the id
+     *
+     * @param id the id to search for
+     * @return the ability- null if not found
+     */
+    @Nullable
+    public static Ability getAbility(String id) {
+        for (Ability ability : registeredAbilities) if (ability.getId() == id) return ability;
+        return null;
     }
 
     public String getDisplayName() {
@@ -95,24 +108,24 @@ public abstract class Ability implements Serializable {
         return lore.getList();
     }
 
-    protected void setLore(TranslatableList list){
+    protected void setLore(TranslatableList list) {
         this.lore = list;
     }
 
-    protected boolean checkEvent(Event e){
+    protected boolean checkEvent(Event e) {
         return this.eventType.isInstance(e);
     }
 
     public void useAbility(Event e) {
-        if(!checkEvent(e)) return;
+        if (!checkEvent(e)) return;
         Player p = getPlayerOfEvent(e);
 
         PersistentDataContainer container = p.getPersistentDataContainer();
         NamespacedKey cooldownKey = new NamespacedKey(SuperItems.getPlugin(), getId() + "_cooldown");
         Double cooldown;
-        try{
+        try {
             cooldown = container.get(cooldownKey, PersistentDataType.DOUBLE);
-        } catch (IllegalArgumentException exception){
+        } catch (IllegalArgumentException exception) {
             cooldown = Double.valueOf(container.get(cooldownKey, PersistentDataType.LONG));
             container.remove(cooldownKey);
             container.set(cooldownKey, PersistentDataType.DOUBLE, cooldown);
@@ -144,16 +157,20 @@ public abstract class Ability implements Serializable {
     }
 
     protected void runExecutable(Event e) {
-        if(e instanceof PlayerEvent) Util.sendMessage(((PlayerEvent) e).getPlayer(), "Used the " + this.id + " ability");
-        else if(e instanceof EntityEvent) Util.sendMessage(((EntityEvent) e).getEntity(), "Used the " + this.id + " ability");
-        else Util.logToConsole("Attempted to use ability " + this.id + "but was unable to find the corresponding entity.");
+        if (e instanceof PlayerEvent)
+            Util.sendMessage(((PlayerEvent) e).getPlayer(), "Used the " + this.id + " ability");
+        else if (e instanceof EntityEvent)
+            Util.sendMessage(((EntityEvent) e).getEntity(), "Used the " + this.id + " ability");
+        else
+            Util.logToConsole("Attempted to use ability " + this.id + "but was unable to find the corresponding entity.");
     }
 
-    private Player getPlayerOfEvent(Event e){
-        if(e instanceof PlayerEvent) return ((PlayerEvent) e).getPlayer();
-        else if(e instanceof EntityDamageByEntityEvent) return ((Player) ((EntityDamageByEntityEvent) e).getDamager());
-        // create implemenations for every event registered
-        else Util.logToConsole("Ability#getPlayerOfEvent: Attempted to use ability " + this.id + "but was unable to find the corresponding entity.");
+    private Player getPlayerOfEvent(Event e) {
+        if (e instanceof PlayerEvent) return ((PlayerEvent) e).getPlayer();
+        else if (e instanceof EntityDamageByEntityEvent) return ((Player) ((EntityDamageByEntityEvent) e).getDamager());
+            // create implemenations for every event registered
+        else
+            Util.logToConsole("Ability#getPlayerOfEvent: Attempted to use ability " + this.id + "but was unable to find the corresponding entity.");
         return null;
     }
 
@@ -173,19 +190,6 @@ public abstract class Ability implements Serializable {
         return this.slot;
     }
 
-
-    /**
-     * method getAbility <br>
-     * gets the ability corresponding to the id
-     * @param id the id to search for
-     * @return the ability- null if not found
-     */
-    @Nullable
-    public static Ability getAbility(String id){
-        for(Ability ability: registeredAbilities) if (ability.getId() == id) return ability;
-        return null;
-    }
-
     public enum Slot {
         MAIN_HAND((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getItemInMainHand()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getItemInMainHand()),
         OFF_HAND((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getItemInOffHand()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getItemInOffHand()),
@@ -194,41 +198,35 @@ public abstract class Ability implements Serializable {
         CHEST((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getChestplate()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getChestplate()),
         LEGS((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getLeggings()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getLeggings()),
         BOOTS((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getBoots()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getBoots()),
-        ARMOR((PlayerInventory inv, Ability ability) -> { for (ItemStack item : inv.getArmorContents()) if(ComplexItemStack.of(item).getAbilities().contains(ability)) return true; return false;}, (PlayerInventory inv) -> inv.getHelmet()),
-        INVENTORY((PlayerInventory inv, Ability ability) -> { for (ItemStack item : inv.getContents()) if(ComplexItemStack.of(item).getAbilities().contains(ability)) return true; return false;}, (PlayerInventory inv) -> inv.getItemInMainHand()),;
+        ARMOR((PlayerInventory inv, Ability ability) -> {
+            for (ItemStack item : inv.getArmorContents())
+                if (ComplexItemStack.of(item).getAbilities().contains(ability)) return true;
+            return false;
+        }, (PlayerInventory inv) -> inv.getHelmet()),
+        INVENTORY((PlayerInventory inv, Ability ability) -> {
+            for (ItemStack item : inv.getContents())
+                if (ComplexItemStack.of(item).getAbilities().contains(ability)) return true;
+            return false;
+        }, (PlayerInventory inv) -> inv.getItemInMainHand()),
+        ;
 
-        private BiPredicate<PlayerInventory, Ability> predicate;
+        private final BiPredicate<PlayerInventory, Ability> predicate;
 
         //groups that apply to multiple items will return the first item applicable
-        private Function<PlayerInventory, ItemStack> getItem;
+        private final Function<PlayerInventory, ItemStack> getItem;
 
         Slot(BiPredicate<PlayerInventory, Ability> predicate, Function<PlayerInventory, ItemStack> getItem) {
             this.predicate = predicate;
             this.getItem = getItem;
         }
 
-        public Boolean evaluate(PlayerInventory inv, Ability ability){
-            try {
-                return this.predicate.test(inv, ability);
-            } catch (NullPointerException e){
-                return false;
-            }
-        }
-
-        public ItemStack item(PlayerInventory inv){
-            return this.getItem.apply(inv);
-        }
-
-        public ItemStack item(Player p){
-            return this.getItem.apply(p.getInventory());
-        }
-
         /**
          * Gets all the unique abilities of a player's equipped gear.
+         *
          * @param p The player
          * @return A list of unique abilities.
          */
-        public static List<Ability> uniqueEquipped(Player p){
+        public static List<Ability> uniqueEquipped(Player p) {
             List<ItemStack> items = List.of(MAIN_HAND.item(p), OFF_HAND.item(p), HEAD.item(p), CHEST.item(p), LEGS.item(p), BOOTS.item(p));
             List<Ability> abilities = new ArrayList<>();
             items.stream()
@@ -236,6 +234,22 @@ public abstract class Ability implements Serializable {
                     .filter(Objects::nonNull)
                     .forEach((complexItemStack) -> abilities.addAll(complexItemStack.getAbilities()));
             return abilities.stream().distinct().toList();
+        }
+
+        public Boolean evaluate(PlayerInventory inv, Ability ability) {
+            try {
+                return this.predicate.test(inv, ability);
+            } catch (NullPointerException e) {
+                return false;
+            }
+        }
+
+        public ItemStack item(PlayerInventory inv) {
+            return this.getItem.apply(inv);
+        }
+
+        public ItemStack item(Player p) {
+            return this.getItem.apply(p.getInventory());
         }
     }
 

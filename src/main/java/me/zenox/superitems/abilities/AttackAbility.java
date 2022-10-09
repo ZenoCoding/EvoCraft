@@ -28,13 +28,8 @@ public class AttackAbility extends Ability {
         super(id, manaCost, cooldown, EntityDamageByEntityEvent.class, Slot.MAIN_HAND, exectuable);
     }
 
-    @Override
-    public boolean checkEvent(Event e) {
-        return super.checkEvent(e);
-    }
-
     // Static ability executables
-    public static void justiceAbility(Event event){
+    public static void justiceAbility(Event event) {
         EntityDamageByEntityEvent e = ((EntityDamageByEntityEvent) event);
         if (e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
@@ -46,6 +41,11 @@ public class AttackAbility extends Ability {
                 if (new Random().nextInt(3) == 0) e.getEntity().getWorld().strikeLightning(e.getEntity().getLocation());
             }
         }
+    }
+
+    @Override
+    public boolean checkEvent(Event e) {
+        return super.checkEvent(e);
     }
 
 }

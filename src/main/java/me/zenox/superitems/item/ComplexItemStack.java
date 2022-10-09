@@ -2,17 +2,11 @@ package me.zenox.superitems.item;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
 import com.archyx.aureliumskills.stats.Stat;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.reflect.StructureModifier;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.persistence.SerializedPersistentType;
 import me.zenox.superitems.util.Util;
-import net.minecraft.world.item.Items;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -26,24 +20,24 @@ import java.util.UUID;
 
 /**
  * Class that represents a "custom" ItemStack.
- *
+ * <p>
  * Converted and loaded upon loading a "basic" ItemStack
  * Contains data about the item that Minecraft/Bukkit doesn't store, ie. Upgrades, Abilities, etc.
  * Also used for converting/updating "custom" items and differing them from normal minecraft items, containing Utility methods to manipulate the item and then update it in Minecraft
- *
+ * <p>
  * Planned for future implementation
  */
-public class ComplexItemStack implements Cloneable{
+public class ComplexItemStack implements Cloneable {
 
-    // Bound ItemStack that represents this ComplexItemStack
-    private ItemStack item;
     private final ComplexItem complexItem;
     private final UUID uuid;
+    // Bound ItemStack that represents this ComplexItemStack
+    private ItemStack item;
     private ComplexItemMeta complexMeta;
 
     private String skullURL = "";
 
-    public ComplexItemStack(ComplexItem complexItem, int amount){
+    public ComplexItemStack(ComplexItem complexItem, int amount) {
         this(complexItem, new ItemStack(complexItem.getMaterial()));
         this.item = buildItem(amount);
 
@@ -54,11 +48,11 @@ public class ComplexItemStack implements Cloneable{
         item.setItemMeta(meta);
     }
 
-    public ComplexItemStack(ComplexItem complexItem){
+    public ComplexItemStack(ComplexItem complexItem) {
         this(complexItem, 1);
     }
 
-    public ComplexItemStack(ComplexItem complexItem, ItemStack item){
+    public ComplexItemStack(ComplexItem complexItem, ItemStack item) {
         this.complexItem = complexItem;
         this.uuid = complexItem.isUnique() ? UUID.randomUUID() : null;
         this.skullURL = complexItem.getSkullURL();
@@ -75,7 +69,18 @@ public class ComplexItemStack implements Cloneable{
         // Util.logToConsole("Item Name: " + meta.getDisplayName());
     }
 
-    private ItemStack buildItem(int amount){
+    @Nullable
+    public static ComplexItemStack of(ItemStack item) {
+        ComplexItem complexItem = ItemRegistry.getBasicItemFromItemStack(item);
+        if (complexItem == null) {
+            // Util.logToConsole("Returned null because item " + item.getItemMeta().getDisplayName() + " had no complex registry.");
+            return null;
+        }
+        ComplexItemStack complexItemStack = new ComplexItemStack(complexItem, item);
+        return complexItemStack;
+    }
+
+    private ItemStack buildItem(int amount) {
         item = new ItemStack(this.complexItem.getMaterial());
 
         // Set Initial ComplexItem Modifications
@@ -105,7 +110,8 @@ public class ComplexItemStack implements Cloneable{
 
         container.set(ComplexItem.GLOBAL_ID, PersistentDataType.STRING, this.getId());
 
-        if(this.uuid != null) container.set(new NamespacedKey(SuperItems.getPlugin(), "uuid"), new SerializedPersistentType<UUID>(), uuid);
+        if (this.uuid != null)
+            container.set(new NamespacedKey(SuperItems.getPlugin(), "uuid"), new SerializedPersistentType<UUID>(), uuid);
 
         // Set ItemMeta so that ComplexItemMeta can use it
         item.setItemMeta(meta);
@@ -122,7 +128,7 @@ public class ComplexItemStack implements Cloneable{
         return item;
     }
 
-    public ComplexItemStack update(boolean force){
+    public ComplexItemStack update(boolean force) {
         ItemMeta meta = item.getItemMeta();
 
         // Set CustomModelData
@@ -149,7 +155,7 @@ public class ComplexItemStack implements Cloneable{
         container.set(ComplexItem.GLOBAL_ID, PersistentDataType.STRING, this.getId());
         container.set(ComplexItem.GLOW_ID, PersistentDataType.INTEGER, complexItem.doesGlow() ? 1 : 0);
 
-        if(this.uuid != null) container.set(ComplexItem.UUID_ID, new SerializedPersistentType<UUID>(), uuid);
+        if (this.uuid != null) container.set(ComplexItem.UUID_ID, new SerializedPersistentType<UUID>(), uuid);
 
         // Set ItemMeta so that ComplexItemMeta can use it
         item.setItemMeta(meta);
@@ -164,17 +170,6 @@ public class ComplexItemStack implements Cloneable{
         item = this.skullURL.isBlank() ? item : Util.makeSkull(item, this.skullURL);
 
         return this;
-    }
-
-    @Nullable
-    public static ComplexItemStack of(ItemStack item){
-        ComplexItem complexItem = ItemRegistry.getBasicItemFromItemStack(item);
-        if(complexItem == null) {
-            // Util.logToConsole("Returned null because item " + item.getItemMeta().getDisplayName() + " had no complex registry.");
-            return null;
-        }
-        ComplexItemStack complexItemStack = new ComplexItemStack(complexItem, item);
-        return complexItemStack;
     }
 
     public ItemStack getItem() {

@@ -19,7 +19,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,7 +31,7 @@ import java.util.UUID;
 
 public class VertexicalBlade extends ComplexItem implements Listener {
     public VertexicalBlade() {
-        super("Vertexical Blade", "vertex_blade", Rarity.LEGENDARY, Type.MISC, Material.AMETHYST_SHARD, Map.of(Stats.STRENGTH, 50d, Stats.WISDOM, 300d), List.of());
+        super("vertex_blade", true, true, Rarity.RARE, Type.MISC, Material.AMETHYST_SHARD, Map.of(Stats.STRENGTH, 100d, Stats.WISDOM, 300d), List.of());
 
         List<String> lore = List.of(ChatColor.GRAY + "Using " + ChatColor.LIGHT_PURPLE + "vertexical math and convex geometry,",
                 ChatColor.GRAY + "this blade bends the fabric of " + ChatColor.DARK_GRAY + "space-time.",
@@ -74,7 +73,7 @@ public class VertexicalBlade extends ComplexItem implements Listener {
                 List<MetadataValue> idValues = p.getMetadata("vertex_hit_id");
                 if (!stackValues.isEmpty() && !idValues.isEmpty() && idValues.get(0).asInt() == e.getEntity().getEntityId()) {
                     stacks = stackValues.get(0).asInt();
-                    p.setMetadata("vertex_stack", new FixedMetadataValue(SuperItems.getPlugin(), stacks+1));
+                    p.setMetadata("vertex_stack", new FixedMetadataValue(SuperItems.getPlugin(), stacks + 1));
                 } else {
                     p.setMetadata("vertex_stack", new FixedMetadataValue(SuperItems.getPlugin(), 1));
                 }
@@ -83,17 +82,18 @@ public class VertexicalBlade extends ComplexItem implements Listener {
                 Util.sendMessage(p, "Stacks: " + stacks);
 
 
-                if(stacks >= 3){
-                    e.setDamage(e.getDamage()*(1+0.04*stacks));
+                if (stacks >= 3) {
+                    e.setDamage(e.getDamage() * (1 + 0.04 * stacks));
                 }
 
 
                 List<MetadataValue> taskIdValues = p.getMetadata("vertex_task_id");
                 if (taskIdValues.isEmpty() || !Bukkit.getScheduler().isQueued(taskIdValues.get(0).asInt())) {
-                    BukkitTask vertexDisplayTask = new BukkitRunnable(){
+                    BukkitTask vertexDisplayTask = new BukkitRunnable() {
                         int count = 1;
                         int truecount = 0;
                         int oldstacks = -1;
+
                         @Override
                         public void run() {
 
@@ -104,30 +104,30 @@ public class VertexicalBlade extends ComplexItem implements Listener {
                                 stacks = countValues.get(0).asInt();
                             }
 
-                            if (truecount % (Math.round(15 / Math.sqrt(count)) + 5)== 0 && oldstacks == stacks) {
+                            if (truecount % (Math.round(15 / Math.sqrt(count)) + 5) == 0 && oldstacks == stacks) {
                                 p.setMetadata("vertex_stack", new FixedMetadataValue(SuperItems.getPlugin(), stacks -= 1));
                             }
 
                             oldstacks = stacks;
 
-                            if(stacks <= 0) {
+                            if (stacks <= 0) {
                                 cancel();
                                 p.setMetadata("vertex_stack", new FixedMetadataValue(SuperItems.getPlugin(), 0));
                             }
 
 
-                            if(stacks >= 3) {
+                            if (stacks >= 3) {
                                 // Create Dodecahedron
                                 List<Vector> edgedDodecahedron = Geo.lerpEdges(Geo.makeDodecahedron(p.getLocation().toVector(), 2), 7);
 
                                 for (Vector v : edgedDodecahedron) {
                                     Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(5, 165, 255), 0.6F);
-                                    w.spawnParticle(Particle.REDSTONE, v.rotateAroundAxis(p.getLocation().toVector(), Math.toRadians(count/4 % 360)).toLocation(w).add(0, 1.5, 0), 1, dustOptions);
+                                    w.spawnParticle(Particle.REDSTONE, v.rotateAroundAxis(p.getLocation().toVector(), Math.toRadians(count / 4 % 360)).toLocation(w).add(0, 1.5, 0), 1, dustOptions);
                                 }
                             }
 
-                            count += Math.sqrt(stacks)*6;
-                            truecount ++;
+                            count += Math.sqrt(stacks) * 6;
+                            truecount++;
                         }
                     }.runTaskTimer(SuperItems.getPlugin(), 0, 7);
 

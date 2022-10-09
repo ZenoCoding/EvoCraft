@@ -1,9 +1,15 @@
 package me.zenox.superitems.item;
 
+import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.superitems.abilities.*;
+import me.zenox.superitems.abilities.Transcendence;
 import me.zenox.superitems.item.armoritems.*;
-import me.zenox.superitems.item.basicitems.*;
-import me.zenox.superitems.item.superitems.*;
+import me.zenox.superitems.item.basicitems.CorruptPearl;
+import me.zenox.superitems.item.basicitems.GardenerSapling;
+import me.zenox.superitems.item.basicitems.RavagerSkin;
+import me.zenox.superitems.item.basicitems.TormentedSoul;
+import me.zenox.superitems.item.superitems.ObsidilithScythe;
+import me.zenox.superitems.item.superitems.VoidScepter;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -197,19 +203,74 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjVjYjVkYTFjMmVlZDQzYmY2ODUxODllMDgwMjlmYzJhZWVlZGZhZTFjNmEyMTRlNzBmNzRiOGEzMjExYjBhIn19fQ==")));
 
+    public static final ComplexItem ROUGH_VOID_STONE = registerItem(new ComplexItem(new ItemSettings()
+            .id("rough_void_stone")
+            .material(Material.PLAYER_HEAD)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWQ0ODc1MGJiNWFkYTI5ZGZmNjgyMGRiNjkzM2RjNjJhMGJmNmJkZTcyNzM0MWViN2RkMTg0NTNhMTBkNjQ5MyJ9fX0=")));
+
     public static final ComplexItem VOID_STONE = registerItem(new ComplexItem(new ItemSettings()
             .id("void_stone")
             .material(Material.PLAYER_HEAD)
-            .rarity(ComplexItem.Rarity.RARE)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
             .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWQ0ODc1MGJiNWFkYTI5ZGZmNjgyMGRiNjkzM2RjNjJhMGJmNmJkZTcyNzM0MWViN2RkMTg0NTNhMTBkNjQ5MyJ9fX0=")));
 
+    public static final ComplexItem OBSIDIAN_TABLET = registerItem(new ComplexItem(new ItemSettings()
+            .id("obsidian_tablet")
+            .material(Material.PLAYER_HEAD)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWExNTlkOWFjMmZkYjE2NDg1OGI2MzUwZTAzYzE5MjRmMTdlNWFhODYxMWEzNDdkNTViNmI4OTgyMGZhZjA5NCJ9fX0=")));
+
+
     public static final ComplexItem VOID_SCEPTER = registerItem(new VoidScepter());
-    public static final ComplexItem OBSIDIAN_SCYTHE = registerItem(new ObsidianScythe());
+    public static final ComplexItem OBSIDIAN_SCYTHE = registerItem(new ObsidilithScythe());
+
     public static final ComplexItem VOID_HELMET = registerItem(new VoidMask());
-    public static final ComplexItem VOID_CLOAK = registerItem(new VoidCloak());
+    public static final ComplexItem VOID_CHESTPLATE = registerItem(new VoidCloak());
     public static final ComplexItem VOID_LEGGINGS = registerItem(new VoidLeggings());
     public static final ComplexItem VOID_BOOTS = registerItem(new VoidBoots());
+
     public static final ComplexItem CORRUPT_PEARL = registerItem(new CorruptPearl());
+
+    // Obsidian
+    public static final ComplexItem ENCHANTED_OBSIDIAN = registerItem(new ComplexItem(new ItemSettings()
+            .id("enchanted_obsidian")
+            .material(Material.OBSIDIAN)
+            .glow()));
+
+    public static final ComplexItem COMPACT_OBSIDIAN = registerItem(new ComplexItem(new ItemSettings()
+            .id("compact_obsidian")
+            .material(Material.PLAYER_HEAD)
+            .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDE5MjZiZmE5Y2FmOGJjYTkwNjkyNzgwOTc4YjVjNzRkNzEzZTg2NWY1YmRkMzc5MjA5N2IxODc5OTk3ZTU1NyJ9fX0=")));
+
+    public static final ComplexItem CORRUPT_OBSIDIAN = registerItem(new ComplexItem(new ItemSettings()
+            .id("corrupt_obsidian")
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .material(Material.PLAYER_HEAD)
+            .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDFjODc0NTRmMWVlNTg1YjkwZmRiM2EzZTQwOTUyYTVjMmY4MGMwYTQ5ZGZlYzYyODcwZmRmZjE4Mzk2N2E4NCJ9fX0=")));
+
+    public static final ComplexItem CRESTFALLEN_MONOLITH = registerItem(new ComplexItem(new ItemSettings()
+            .id("crestfallen_monolith")
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .material(Material.PLAYER_HEAD)
+            .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmIzOWMwZTUzZTc5ZTdlYmQ0ZGI2YzZkMDk2YzlkOWExNjBjZmYyNzgyMmMwNzdmYjhmNWQ0NTk2OWNjNDk3MiJ9fX0=")));
+
+    public static final ComplexItem PAGES_OF_AGONY = registerItem(new ComplexItem(new ItemSettings()
+            .id("pages_of_agony")
+            .material(Material.PAPER)));
+
+    public static final ComplexItem DIMENSIONAL_JOURNAL = registerItem(new ComplexItem(new ItemSettings()
+            .id("dimensional_journal")
+            .material(Material.BOOK)
+            .rarity(ComplexItem.Rarity.RARE)
+            .stat(Stats.WISDOM, 100d)
+            .abilities(new Transcendence())));
+
+    public static final ComplexItem VERTEXICAL_CORE = registerItem(new ComplexItem(new ItemSettings()
+            .id("vertexical_core")
+            .material(Material.PLAYER_HEAD)
+            .rarity(ComplexItem.Rarity.RARE)
+            .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWYwMjMwNTExYjg0NGNmM2FmZjBjZWRiNDRjMTMyNDI3OTlkMzMxNTIyMzVmMTdjZWU1NzQ2NTE4NzhlZDVkMCJ9fX0=")));
 
     public static final ComplexItem DEV_STICK = registerItem(new ComplexItem(new ItemSettings()
             .id("dev_stick")

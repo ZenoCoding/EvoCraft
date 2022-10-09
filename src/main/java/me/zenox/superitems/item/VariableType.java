@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class VariableType<T extends Serializable> {
-    private static List<VariableType> variableList = new ArrayList<>();
+    private static final List<VariableType> variableList = new ArrayList<>();
 
     private final String name;
     private final LoreEntry loreEntry;
@@ -33,7 +33,7 @@ public class VariableType<T extends Serializable> {
             return variableList.stream().filter(variableType -> {
                 return variableType.getName().equalsIgnoreCase(name);
             }).toList().get(0);
-        } catch(IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             Util.logToConsole(ChatColor.RED + "[ERROR] Variable with name " + name + " doesn't seem to be registered!");
             return null;
         }
@@ -43,7 +43,7 @@ public class VariableType<T extends Serializable> {
         return new Variable<T>(meta, this, value);
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
@@ -71,7 +71,7 @@ public class VariableType<T extends Serializable> {
     public enum Priority {
         ABOVE_STATS(0), ABOVE_LORE(1), ABOVE_ENCHANTS(2), ABOVE_ABILITIES(3), BELOW_ABILITIES(4), BELOW(Integer.MAX_VALUE);
 
-        private int weight;
+        private final int weight;
 
         Priority(int weight) {
             this.weight = weight;

@@ -30,11 +30,9 @@ public abstract class ClientItemFilter {
                     if (itemStack != null && itemStack.getType() != Material.AIR) {
                         filterItem(itemStack);
                     }
-                }
-
-                else if (event.getPacketType() == PacketType.Play.Server.WINDOW_ITEMS && event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+                } else if (event.getPacketType() == PacketType.Play.Server.WINDOW_ITEMS && event.getPlayer().getGameMode() != GameMode.CREATIVE) {
                     List<ItemStack> itemStacks = packet.getItemListModifier().read(0);
-                    for (ItemStack itemStack: itemStacks) {
+                    for (ItemStack itemStack : itemStacks) {
                         if (itemStack != null && itemStack.getType() != Material.AIR) {
                             filterItem(itemStack);
                         }

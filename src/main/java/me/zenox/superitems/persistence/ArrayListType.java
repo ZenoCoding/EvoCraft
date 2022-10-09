@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 /**
  * ArrayList implementation of PersistentDataType
+ *
  * @param <T> The type of ArrayList object
  */
 public class ArrayListType<T> implements PersistentDataType<byte[], ArrayList<T>> {
@@ -21,7 +22,7 @@ public class ArrayListType<T> implements PersistentDataType<byte[], ArrayList<T>
     @NotNull
     @Override
     public Class<ArrayList<T>> getComplexType() {
-        return ((Class<ArrayList<T>>)((Class<?>) ArrayList.class));
+        return ((Class<ArrayList<T>>) ((Class<?>) ArrayList.class));
     }
 
     @NotNull

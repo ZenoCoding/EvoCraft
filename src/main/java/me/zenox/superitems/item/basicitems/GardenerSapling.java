@@ -20,8 +20,6 @@ public class GardenerSapling extends ComplexItem {
         lore.add("");
         lore.add(ChatColor.GRAY + "A thanks to the beta testers who helped along the way.");
         lore.add("");
-        lore.add(ChatColor.RED + "DO NOT PLACE YOU WILL NOT GET IT BACK");
-        lore.add("");
         lore.add(ChatColor.GRAY + "Issued to: " + ChatColor.YELLOW + "%s");
         lore.add(ChatColor.GRAY + "Issued From: " + ChatColor.YELLOW + "%s");
         lore.add(ChatColor.GRAY + "Date Issued: " + ChatColor.YELLOW + "%s");

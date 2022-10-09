@@ -19,14 +19,7 @@ package me.zenox.superitems.util;
 
 import org.apache.commons.lang.SerializationException;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * <b>COPY FROM APACHE COMMONS LANG</b>
@@ -44,14 +37,15 @@ import java.io.Serializable;
  * Each method documents its behaviour in more detail.</p>
  *
  * <p>#ThreadSafe#</p>
+ *
  * @author Apache Software Foundation
  * @author <a href="mailto:nissim@nksystems.com">Nissim Karpenstein</a>
  * @author <a href="mailto:janekdb@yahoo.co.uk">Janek Bogucki</a>
  * @author Daniel L. Rall
  * @author Jeff Varszegi
  * @author Gary Gregory
- * @since 1.0
  * @version $Id: SerializationUtils.java 1056988 2011-01-09 17:58:53Z niallp $
+ * @since 1.0
  */
 public class SerializationUtils {
 
@@ -61,6 +55,7 @@ public class SerializationUtils {
      *
      * <p>This constructor is public to permit tools that require a JavaBean instance
      * to operate.</p>
+     *
      * @since 2.0
      */
     public SerializationUtils() {
@@ -69,6 +64,7 @@ public class SerializationUtils {
 
     // Clone
     //-----------------------------------------------------------------------
+
     /**
      * <p>Deep clone an <code>Object</code> using serialization.</p>
      *
@@ -78,7 +74,7 @@ public class SerializationUtils {
      * be a simple alternative implementation. Of course all the objects
      * must be <code>Serializable</code>.</p>
      *
-     * @param object  the <code>Serializable</code> object to clone
+     * @param object the <code>Serializable</code> object to clone
      * @return the cloned object
      * @throws SerializationException (runtime) if the serialization fails
      */
@@ -88,6 +84,7 @@ public class SerializationUtils {
 
     // Serialize
     //-----------------------------------------------------------------------
+
     /**
      * <p>Serializes an <code>Object</code> to the specified stream.</p>
      *
@@ -98,10 +95,10 @@ public class SerializationUtils {
      * <p>The stream passed in is not buffered internally within this method.
      * This is the responsibility of your application if desired.</p>
      *
-     * @param obj  the object to serialize to bytes, may be null
-     * @param outputStream  the stream to write to, must not be null
+     * @param obj          the object to serialize to bytes, may be null
+     * @param outputStream the stream to write to, must not be null
      * @throws IllegalArgumentException if <code>outputStream</code> is <code>null</code>
-     * @throws SerializationException (runtime) if the serialization fails
+     * @throws SerializationException   (runtime) if the serialization fails
      */
     public static void serialize(Serializable obj, OutputStream outputStream) {
         if (outputStream == null) {
@@ -130,7 +127,7 @@ public class SerializationUtils {
      * <p>Serializes an <code>Object</code> to a byte array for
      * storage/serialization.</p>
      *
-     * @param obj  the object to serialize to bytes
+     * @param obj the object to serialize to bytes
      * @return a byte[] with the converted Serializable
      * @throws SerializationException (runtime) if the serialization fails
      */
@@ -142,6 +139,7 @@ public class SerializationUtils {
 
     // Deserialize
     //-----------------------------------------------------------------------
+
     /**
      * <p>Deserializes an <code>Object</code> from the specified stream.</p>
      *
@@ -152,10 +150,10 @@ public class SerializationUtils {
      * <p>The stream passed in is not buffered internally within this method.
      * This is the responsibility of your application if desired.</p>
      *
-     * @param inputStream  the serialized object input stream, must not be null
+     * @param inputStream the serialized object input stream, must not be null
      * @return the deserialized object
      * @throws IllegalArgumentException if <code>inputStream</code> is <code>null</code>
-     * @throws SerializationException (runtime) if the serialization fails
+     * @throws SerializationException   (runtime) if the serialization fails
      */
     public static Object deserialize(InputStream inputStream) {
         if (inputStream == null) {
@@ -185,10 +183,10 @@ public class SerializationUtils {
     /**
      * <p>Deserializes a single <code>Object</code> from an array of bytes.</p>
      *
-     * @param objectData  the serialized object, must not be null
+     * @param objectData the serialized object, must not be null
      * @return the deserialized object
      * @throws IllegalArgumentException if <code>objectData</code> is <code>null</code>
-     * @throws SerializationException (runtime) if the serialization fails
+     * @throws SerializationException   (runtime) if the serialization fails
      */
     public static Object deserialize(byte[] objectData) {
         if (objectData == null) {

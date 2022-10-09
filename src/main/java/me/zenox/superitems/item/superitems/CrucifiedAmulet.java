@@ -1,8 +1,8 @@
 package me.zenox.superitems.item.superitems;
 
 import com.archyx.aureliumskills.stats.Stats;
-import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.abilities.Crucify;
+import me.zenox.superitems.item.ComplexItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Recipe;
@@ -17,7 +17,7 @@ import static me.zenox.superitems.item.ItemRegistry.*;
 
 public class CrucifiedAmulet extends ComplexItem {
     public CrucifiedAmulet() {
-        super( "crucified_amulet", ComplexItem.Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of(Stats.WISDOM, 5d), List.of(new Crucify()));
+        super("crucified_amulet", ComplexItem.Rarity.RARE, Type.MISC, Material.PLAYER_HEAD, Map.of(Stats.WISDOM, 5d), List.of(new Crucify()));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.RED + "Inevitable demise.");

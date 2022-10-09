@@ -97,10 +97,7 @@ public class MaterialAmountChoice implements RecipeChoice {
             return false;
         }
         final MaterialAmountChoice other = (MaterialAmountChoice) obj;
-        if (!Objects.equals(this.choices, other.choices)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.choices, other.choices);
     }
 
     @Override

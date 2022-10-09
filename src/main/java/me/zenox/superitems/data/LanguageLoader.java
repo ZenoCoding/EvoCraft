@@ -1,7 +1,6 @@
 package me.zenox.superitems.data;
 
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.util.Util;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -37,7 +36,7 @@ public class LanguageLoader {
                 // if the thing is a list (contains lore)
                 if (translation.contains("lore")) {
                     StringBuilder concat = new StringBuilder();
-                    for(String s : translations.getStringList(translation)) concat.append(s + LIST_CONCAT_SEPERATOR);
+                    for (String s : translations.getStringList(translation)) concat.append(s + LIST_CONCAT_SEPERATOR);
                     translationMap.put(translation, concat.toString());
                 } else {
                     translationMap.put(translation, translations.getString(translation));
@@ -49,7 +48,7 @@ public class LanguageLoader {
                 // if the thing is a list (contains lore)
                 if (translation.contains("lore")) {
                     StringBuilder concat = new StringBuilder();
-                    for(String s : translations.getStringList(translation)) concat.append(s + LIST_CONCAT_SEPERATOR);
+                    for (String s : translations.getStringList(translation)) concat.append(s + LIST_CONCAT_SEPERATOR);
                     translationMap.put(translation, concat.toString());
                 } else {
                     translationMap.put(translation, translations.getString(translation));

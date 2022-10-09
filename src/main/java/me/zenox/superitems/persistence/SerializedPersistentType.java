@@ -1,7 +1,5 @@
 package me.zenox.superitems.persistence;
 
-import me.zenox.superitems.item.ComplexItem;
-import me.zenox.superitems.util.Util;
 import me.zenox.superitems.util.SerializationUtils;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
@@ -9,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.Arrays;
 
 public class SerializedPersistentType<T extends Serializable> implements PersistentDataType<byte[], T> {
     @NotNull

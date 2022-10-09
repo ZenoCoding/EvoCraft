@@ -6,7 +6,6 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -16,7 +15,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.Random;
-import java.util.function.Consumer;
 
 public class VoidularRecall extends ItemAbility {
     public VoidularRecall() {
@@ -37,10 +35,9 @@ public class VoidularRecall extends ItemAbility {
         Location locationOfBlock;
 
 
-
         PersistentDataContainer container = p.getPersistentDataContainer();
         NamespacedKey locationKey = new NamespacedKey(SuperItems.getPlugin(), "voidular_recall");
-        if(container.has(locationKey, PersistentDataType.STRING)){
+        if (container.has(locationKey, PersistentDataType.STRING)) {
             String locationString = container.get(locationKey, PersistentDataType.STRING);
             List<String> locationStringList = List.of(locationString.split("\\|"));
             container.remove(locationKey);
@@ -59,7 +56,7 @@ public class VoidularRecall extends ItemAbility {
 
             try {
                 p.teleport(locationOfBlock);
-            } catch(Exception error){
+            } catch (Exception error) {
 
             }
 
@@ -73,19 +70,19 @@ public class VoidularRecall extends ItemAbility {
                 locationOfBlock = e.getClickedBlock().getLocation();
             }
 
-            String locationString = locationOfBlock.getWorld().getName() + "|" + locationOfBlock.getX() + "|" + + locationOfBlock.getY() + "|" + locationOfBlock.getZ();
+            String locationString = locationOfBlock.getWorld().getName() + "|" + locationOfBlock.getX() + "|" + +locationOfBlock.getY() + "|" + locationOfBlock.getZ();
             container.set(locationKey, PersistentDataType.STRING, locationString);
 
             // Cosmetic Effects
             p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_DEATH, 2f, 0.7f);
 
-            new BukkitRunnable(){
+            new BukkitRunnable() {
                 @Override
                 public void run() {
                     World w = p.getWorld();
                     w.spawnParticle(Particle.SCULK_SOUL, locationOfBlock.clone().add(r.nextDouble() - 0.5, 0.5, r.nextDouble() - 0.5), 0, r.nextDouble(), r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
 
-                    if(!container.has(locationKey, PersistentDataType.STRING)){
+                    if (!container.has(locationKey, PersistentDataType.STRING)) {
                         cancel();
                     }
 
@@ -93,9 +90,6 @@ public class VoidularRecall extends ItemAbility {
             }.runTaskTimer(SuperItems.getPlugin(), 0, 3);
 
         }
-
-
-
 
 
     }

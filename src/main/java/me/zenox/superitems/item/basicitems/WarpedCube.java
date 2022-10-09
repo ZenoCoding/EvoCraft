@@ -5,7 +5,6 @@ import me.zenox.superitems.item.ComplexItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.Recipe;
 
 import java.util.List;
 import java.util.Map;
