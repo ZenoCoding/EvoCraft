@@ -4,9 +4,8 @@ main: me.zenox.superitems.SuperItems
 api-version: 1.19
 authors: [ ZenoX ]
 description: Implements custom hypixel inspired items!
-softdepend: [WorldGuard, WorldEdit]
-depend:
-  - AureliumSkills
+softdepend: [ WorldGuard, WorldEdit ]
+depend: [ AureliumSkills, ProtocolLib ]
 
 commands:
   superitems:

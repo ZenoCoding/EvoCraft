@@ -22,6 +22,8 @@ import java.util.Random;
 import java.util.UUID;
 
 public class Util {
+
+
     public static void sendMessage(Player p, String message) {
         sendMessage(p, message, true);
     }

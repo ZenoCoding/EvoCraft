@@ -1,8 +1,8 @@
 package me.zenox.superitems.events;
 
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.ComplexItem;
-import me.zenox.superitems.items.ItemRegistry;
+import me.zenox.superitems.item.ComplexItem;
+import me.zenox.superitems.item.ItemRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Explosive;
@@ -41,6 +41,7 @@ public class OtherEvent implements Listener {
         List<MetadataValue> kbValues = entity.getMetadata("knockback");
         if (!kbValues.isEmpty()) {
             for (Entity nearbyEntity : entity.getLocation().getWorld().getNearbyEntities(entity.getLocation(), 3, 3, 3)) {
+                if (nearbyEntity.isInvulnerable()) continue;
                 nearbyEntity.setVelocity(nearbyEntity.getVelocity().add(nearbyEntity.getLocation().toVector().subtract(entity.getLocation().add(0, -0.3, 0).toVector()).normalize().multiply(kbValues.get(0).asInt())));
             }
         }

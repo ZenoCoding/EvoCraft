@@ -1,14 +1,12 @@
 package me.zenox.superitems.loot;
 
-import me.zenox.superitems.loot.LootTable;
-import me.zenox.superitems.loot.LootTableEntry;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.zenox.superitems.items.ItemRegistry.*;
+import static me.zenox.superitems.item.ItemRegistry.*;
 
 public class LootTableRegistry {
 

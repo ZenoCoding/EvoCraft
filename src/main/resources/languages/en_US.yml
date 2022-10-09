@@ -1,0 +1,288 @@
+
+##########################################################################
+##                             ITEM NAMES                               ##
+##########################################################################
+item-name-gardener_sapling: Gardener's Sapling
+item-name-enchanted_magma_block: Enchanted Magma Block
+item-name-purified_magma_distillate: Purified Magma Distillate
+item-name-enchanted_blaze_rod: Enchanted Blaze Rod
+item-name-burning_ashes: Burning Ashes
+item-name-molten_powder: Molten Powder
+
+item-name-enchanted_ender_pearl: Enchanted Ender Pearl
+item-name-absolute_ender_pearl: Absolute Ender Pearl
+
+item-name-dark_skull: Dark Skull
+item-name-tormented_soul: Tormented Soul
+item-name-titanium_cube: Enchanted Iron Block
+
+item-name-magic_toy_stick: Magic Toy Stick
+item-name-soul_crystal: Soul Crystal
+
+item-name-fiery_ember_staff: Fiery Ember Staff
+item-name-dark_ember_staff: Dark Ember Staff
+
+item-name-tormented_blade: Tormented Blade
+
+item-name-speed_sword: Rush Sword
+item-name-speed_sword_2: Sonic Sword
+
+item-name-sword_of_justice: Sword of Justice
+item-name-crucified_amulet: Crucified Amulet
+
+item-name-desecrator_helmet: Desecrator Helmet
+item-name-desecrator_chestplate: Desecrator Chestplate
+item-name-desecrator_leggings: Desecrator Leggings
+item-name-desecrator_boots: Desecrator Boots
+
+item-name-desecrator_scale: Desecrator Scale
+item-name-desecrator_claw: Desecrator Claw
+item-name-desecrator_toe: Desecrator Toe
+
+item-name-crulen_shard: Crulen Shard
+item-name-pythemion_gem: Pythemion Gem
+item-name-psychedelic_orb: Psychedelic Orb
+item-name-hyper_crux: Hyper Crux
+
+item-name-ravager_skin: Ravager Skin
+item-name-tough_fabric: Tough Fabric
+item-name-kevlar: Kevlar
+
+item-name-totem_pole: Totem Pole
+item-name-corrupted_totem_pole: Corrupted Totem Pole
+
+item-name-warped_cube: Warped Cube
+
+item-name-void_stone: Void Stone
+item-name-void_scepter: Void Scepter
+
+item-name-obsidian_scythe: Obsidian Scythe
+
+item-name-void_helmet: Void Helmet
+item-name-void_chestplate: Void Chestplate
+item-name-void_leggings: Void Leggings
+item-name-void_boots: Void Boots
+
+item-name-corrupt_pearl: Corrupt Pearl
+
+item-name-enchanted_obsidian: Enchanted Obsidian
+item-name-compact_obsidian: Compact Obsidian
+item-name-corrupt_obsidian: Corrupt Obsidian
+item-name-crestfallen_monolith: Crestfallen Monolith
+
+item-name-pages_of_agony: Pages of Agony
+item-name-dimensional_journal: Dimensional Journal
+
+item-name-dev_stick: Dev Stick
+
+item-name-flaming_helmet: Flaming Helmet
+item-name-flaming_chestplate: Flaming Chestplate
+item-name-flaming_leggings: Flaming Leggings
+item-name-flaming_boots: Flaming Boots
+
+item-name-volken_axe: Volken Axe
+
+##########################################################################
+##                              ITEM LORE                               ##
+##########################################################################
+
+item-lore-purified_magma_distillate:
+  - "&c&oBurning Hot."
+  -
+  - "&7Rumors are that a single drop could power a city for generations."
+
+item-lore-absolute_ender_pearl:
+  - "Made from the souls of thousands of endermen."
+
+item-lore-dark_skull:
+  - "&oBurning through your soul."
+
+item-lore-tormented_soul:
+  - "A trapped soul, facing torture for generations."
+
+item-lore-titanium_cube:
+  - "Heavyweight."
+
+item-lore-magic_toy_stick:
+  - "&c&oMagical."
+
+item-lore-soul_crystal:
+  - "&8&oThe void-Sphere of Life was an anti-magic device, which could absorb the"
+  - "&8&ospecial form of magic in the player. It could not be destroyed by magic"
+  - "&8&oweapons. The soul crystal was left by an evil spirit of a mighty elf in that"
+  - "&8&osphere. When you wore the orb, your magic power would be raised, while"
+  - "&8&oyou could control people and objects with you. The soul crystal had a"
+  - "&8&omaximum energy level of 3. There are a few Dark elves whose souls were"
+  - "&8&oshattered by the sphere, and they tried to absorb the magic from its"
+  - "&8&oremains, but they are too weak and starved and died."
+  - "&8&o"
+  - "&8&oGenerated at: https://app.inferkit.com/demo"
+
+item-lore-fiery_ember_staff:
+  - "A fiery rod, taken from &cBlaziel &7himself."
+
+item-lore-dark_ember_staff:
+  - "A fiery rod, taken from &cBlaziel &7himself."
+  - "Draws power from the user's &bmana."
+
+item-lore-tormented_blade:
+  - "Did you know that this item used be legendary?"
+
+item-lore-crucified_amulet:
+  - "Sacrifices must be made."
+
+item-lore-desecrator_scale:
+  - "Tough as nails."
+
+item-lore-desecrator_claw:
+  - "Sharper than an blade."
+
+item-lore-desecrator_toe:
+  - "Stinky."
+
+item-lore-crulen_shard:
+  - "Talk to &e[NPC] &6Elmir&7!"
+
+item-lore-pythemion_gem:
+  - "Really fricking hot."
+
+item-lore-psychedelic_orb:
+  - "&oIn order for one to know the world around it, they must know about thyself."
+  - ""
+  - "Voodoo magic!"
+
+item-lore-ravager_skin:
+  - "Rough, isn't it?"
+
+item-lore-tough_fabric:
+  - "Sewn together with blood, sweat, and tears."
+
+item-lore-kevlar:
+  - "Bulletproof."
+
+item-lore-totem_pole:
+  - "&eCentralized Power."
+
+item-lore-corrupt_totem_pole:
+  - "&cWith great power, eventually comes &dcorruption."
+
+item-lore-void_scepter:
+  - "Forged from the souls of corrupted endermen."
+
+item-lore-obsidilith_scythe:
+  - "Mining away... I don't know.. what to miiine..."
+
+item-lore-enchanted_obsidian:
+  - "Breaking the laws of physics, it's gravitational attraction warps space-time."
+
+item-lore-compact_obsidian:
+  - "Breaking the laws of physics, it's gravitational attraction warps space-time."
+
+item-lore-corrupt_obsidian:
+  - "Spaghettification!"
+
+item-lore-pages_of_agony:
+  - "Painful to the touch."
+
+item-lore-dimensional_journal:
+  - "... and the Multiverse of Madness™"
+
+item-lore-dev_stick:
+  - "A tribute to Andy Zhang. RIP."
+  - ""
+  - "&8&oTo Andy Zhang: If you ever see this, where the &kF*CK &8&ois my content?"
+
+item-lore-volken_axe:
+  - "A relic of the past. Fragile. &oDo Not Touch."
+  - ""
+  - "Did you really think this was &ofragile?"
+
+##########################################################################
+##                              ABILITIES                               ##
+##########################################################################
+ability-name-magic_missile: Magic Missile
+
+ability-lore-magic_missile_dev:
+  - "Shoots a magic missile that explodes"
+  - "on impact and deals massive &cdamage."
+
+ability-lore-magic_missile:
+  - "Shoots a magic missile that explodes"
+  - "on impact and deals massive &cdamage."
+  -
+  - "20% chance for the item to &6combust &7and disappear."
+
+ability-name-soul_rift: Soul Rift
+
+ability-lore-soul_rift:
+  - "Deploys a &bsoul crystal&7, which lasts for &a5s &7and"
+  - "pulls entities in, dealing &ctrue damage &7every second."
+
+ability-name-fiery_ember_shoot: Fiery Embers
+
+ability-lore-fiery_ember_shoot:
+  - "Shoot a &cfireball &7 that explodes"
+  - "on impact. Fiery Explosions!"
+
+ability-name-dark_ember_attune: Attune
+
+ability-lore-dark_ember_attune:
+  - "Changes the &battunement &7of this staff,"
+  - "changing the domain it draws power from."
+  - ""
+  - "Swap between &6Blazeborn &7and &8Darksoul"
+
+ability-name-dark_ember_shoot: Dark Embers
+
+ability-lore-dark_ember_shoot:
+  - "Shoot a projectile based on the &battunement"
+  - "of this weapon. Dark magic is cool, right?"
+
+ability-name-tarhelm: Tarhelm
+
+ability-lore-tarhelm:
+  - "Gives you &cstrength&7, but drastically lowers your walk speed."
+
+ability-name-crucify: Crucify
+
+ablity-lore-crucify:
+  - "Disables all &cregeneration&o, but gives a"
+  - "permanent &cstrength &7and &fspeed &7boost."
+  - ""
+  - "On death, this item and it's effects will disappear and"
+  - "create a large explosion, destroying everything in its path"
+
+ability-name-centralize: Centralize
+ability-name-centralize_corrupt: Centralize
+
+ability-lore-centralize:
+  - "Place down a &e&lTotem &7which temporarily"
+  - "grants &cResistance I &7and &6Fire Resistance I"
+  - "to all players in a &a30 block &7radius."
+    
+ability-lore-centralize_corrupt:
+  - "Place down a &5&lTotem&7 which temporarily"
+  - "grants &cResistance II&7 and &6Fire Resistance I"
+  - "to you, yourself in a &a45 block &7radius."
+
+ability-name-void_warp: Void Warp
+
+ability-lore-void_warp:
+  - "Creates a &drift &7in space and pulls you through it."
+
+ability-name-void_recall: Voidular Recall
+
+ability-lore-void_recall:
+  - "Binds a nearby block to your &bsoul."
+  - "Teleports you back to the &bsoulbound &7block."
+
+ability-name-obsidian_shard: Obsidian Shards
+
+ability-lore-obsidian_shard:
+  - "Shoots a extremely sharp shard of &8obsidian."
+  - "Deals massive &cdamage &7on impact."
+
+ability-name-justice: Justice
+
+ability-lore-justice:
+  - "Strikes &flighting &7and gives &cRegeneration I&7 on hit."

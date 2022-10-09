@@ -6,7 +6,7 @@
 
     <groupId>me.zenox</groupId>
     <artifactId>superitems</artifactId>
-    <version>0.1.2-BETA</version>
+    <version>1.1.2-ALPHA</version>
     <packaging>jar</packaging>
 
     <name>SuperItems</name>
@@ -71,6 +71,10 @@
             <url>https://jitpack.io</url>
         </repository>
         <repository>
+            <id>dmulloy2-repo</id>
+            <url>https://repo.dmulloy2.net/repository/public/</url>
+        </repository>
+        <repository>
             <id>nexus</id>
             <name>Lumine Releases</name>
             <url>http://mvn.lumine.io/repository/maven-public/</url>
@@ -94,6 +98,22 @@
             <groupId>com.github.Archy-X</groupId>
             <artifactId>AureliumSkills</artifactId>
             <version>Beta1.3.6</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.moandjiezana.toml</groupId>
+            <artifactId>toml4j</artifactId>
+            <version>0.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>4.7.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

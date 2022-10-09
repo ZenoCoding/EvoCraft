@@ -2,10 +2,11 @@ package me.zenox.superitems.command;
 
 import com.google.common.primitives.Ints;
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.items.ComplexItem;
-import me.zenox.superitems.items.ItemRegistry;
-import me.zenox.superitems.loot.LootTableRegistry;
+import me.zenox.superitems.item.ComplexItem;
+import me.zenox.superitems.item.ComplexItemStack;
+import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.loot.LootTable;
+import me.zenox.superitems.loot.LootTableRegistry;
 import me.zenox.superitems.tabcompleter.MainTabCompleter;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
@@ -14,9 +15,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 public class MainCommand implements CommandExecutor {
@@ -69,9 +67,8 @@ public class MainCommand implements CommandExecutor {
                     } else {
                         amount = 1;
                     }
-                    List<String> argsection = args.length > 4 ? List.of(Arrays.copyOfRange(args, 5, args.length)) : new ArrayList<>();
 
-                    givento.getInventory().addItem(itemtype.getItemStackWithData((int) amount, argsection));
+                    givento.getInventory().addItem(new ComplexItemStack(itemtype, (int) amount).getItem());
                     Util.sendMessage(p, "You gave " + givento.getDisplayName() + " x" + amount + " [" + itemtype.getDisplayName() + ChatColor.GOLD + "]");
                 }
                 return true;
@@ -130,9 +127,8 @@ public class MainCommand implements CommandExecutor {
                     } else {
                         amount = 1;
                     }
-                    List<String> argsection = args.length > 4 ? List.of(Arrays.copyOfRange(args, 5, args.length)) : new ArrayList<>();
 
-                    dropgivento.getWorld().dropItemNaturally(dropgivento.getLocation(), itemtypetodrop.getItemStackWithData((int) amount, argsection));
+                    dropgivento.getWorld().dropItemNaturally(dropgivento.getLocation(), new ComplexItemStack(itemtypetodrop, (int) amount).getItem());
                     Util.sendMessage(sender, "You gave " + dropgivento.getDisplayName() + " x" + amount + " [" + itemtypetodrop.getDisplayName() + ChatColor.GOLD + "]");
                 }
                 break;
@@ -154,6 +150,11 @@ public class MainCommand implements CommandExecutor {
                     }
                 }
                 return false;
+            case "reload":
+                plugin.reload();
+                Util.sendMessage(sender, ChatColor.WHITE + "SuperItems " + ChatColor.GOLD + "v" + plugin.getDescription().getVersion() + ChatColor.WHITE + " has been reloaded.");
+
+                return true;
             default:
                 Util.sendMessage(sender, "SuperItems Help Page.");
                 break;
