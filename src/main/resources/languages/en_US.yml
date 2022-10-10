@@ -82,6 +82,8 @@ item-name-flaming_boots: Flaming Boots
 
 item-name-volken_axe: Volken Axe
 
+item-name-chromotonin: Chromotonin
+
 ##########################################################################
 ##                              ITEM LORE                               ##
 ##########################################################################
@@ -196,6 +198,9 @@ item-lore-volken_axe:
   - "A relic of the past. Fragile. &oDo Not Touch."
   - ""
   - "Did you really think this was &ofragile?"
+
+item-lore-chromotonin:
+  - "it consists of DNA and proteins and also helped a dev fail bio class :)"
 
 ##########################################################################
 ##                              ABILITIES                               ##

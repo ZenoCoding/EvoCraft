@@ -232,6 +232,8 @@ public class ItemRegistry {
 
     public static final ComplexItem CORRUPT_PEARL = registerItem(new CorruptPearl());
 
+
+
     // Obsidian
     public static final ComplexItem ENCHANTED_OBSIDIAN = registerItem(new ComplexItem(new ItemSettings()
             .id("enchanted_obsidian")
@@ -289,6 +291,15 @@ public class ItemRegistry {
             .material(Material.GOLDEN_AXE)
             .rarity(ComplexItem.Rarity.RARE)
             .type(ComplexItem.Type.AXE)));
+
+
+    public static final ComplexItem CHROMOTONIN = registerItem(new ComplexItem(new ItemSettings()
+            .id ("chromotonin")
+            .material(Material.LEAD)
+            .rarity(ComplexItem.Rarity.SPECIAL)
+            .type(ComplexItem.Type.MISC)
+//play valorant when
+    ));
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
