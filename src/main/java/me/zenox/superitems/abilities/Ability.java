@@ -12,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -115,8 +116,6 @@ public abstract class Ability implements Serializable {
         ItemStack item = getItem(p);
         if(ComplexItemStack.of(item) == null) return;
         if(!ComplexItemStack.of(item).getAbilities().contains(this)) return;
-
-        Util.sendMessage(p, "Used Ability " + this.id + " |  Event: " + e.getClass());
 
         PersistentDataContainer container = p.getPersistentDataContainer();
         NamespacedKey cooldownKey = new NamespacedKey(SuperItems.getPlugin(), getId() + "_cooldown");
