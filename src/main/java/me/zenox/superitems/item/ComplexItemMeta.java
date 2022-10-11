@@ -5,6 +5,8 @@ import com.archyx.aureliumskills.modifier.StatModifier;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.abilities.ItemAbility;
+import me.zenox.superitems.enchant.ComplexEnchantment;
+import me.zenox.superitems.enchant.EnchantRegistry;
 import me.zenox.superitems.persistence.ArrayListType;
 import me.zenox.superitems.persistence.SerializedPersistentType;
 import me.zenox.superitems.util.Romans;
@@ -40,8 +42,10 @@ public class ComplexItemMeta {
                 RARITY_VAR.getName()).get(0).setLore(List.of(loreBuilder.getLoreEntryById(RARITY_VAR.getName()).get(0).getLore().get(0) + " " + loreEntry.getLore().get(0)));
         loreEntry.setLore(List.of());
     })), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Type) variable.getValue()).getName())));
+    private static final NamespacedKey ENCHANT_KEY = new NamespacedKey(SuperItems.getPlugin(), "complexEnchants");
     private List<Ability> abilities;
     private final List<Variable> variableList = new ArrayList<>();
+    private HashMap<ComplexEnchantment, Integer> complexEnchantments = new HashMap<>();
     private final ComplexItemStack complexItemStack;
 
     public ComplexItemMeta(ComplexItemStack complexItemStack, List<Ability> abilities) {
@@ -100,7 +104,24 @@ public class ComplexItemMeta {
             lore.entry(new LoreEntry("enchant_" + e.getKey().getKey().getKey(), List.of(color + enchantName.toString() + Romans.encode(e.getValue()))));
         }
 
-        if (!meta.getEnchants().isEmpty()) lore.entry(new LoreEntry("newline", List.of("")));
+        HashMap<String, Integer> complexEnchMap = new HashMap<>();
+        for (Map.Entry<ComplexEnchantment, Integer> entry :
+                this.complexEnchantments.entrySet()) {
+            complexEnchMap.put(entry.getKey().getId(), entry.getValue());
+        }
+
+        // Write ComplexEnchants
+        dataContainer.set(ENCHANT_KEY, new SerializedPersistentType<HashMap>(), complexEnchMap);
+
+        for (Map.Entry<ComplexEnchantment, Integer> e : this.complexEnchantments.entrySet()) {
+            ChatColor color = ChatColor.GRAY;
+            String enchantName = e.getKey().getName().toString();
+            if (e.getValue() == e.getKey().getMaxLevel()) color = ChatColor.AQUA;
+            if (e.getValue() > e.getKey().getMaxLevel()) color = ChatColor.LIGHT_PURPLE;
+            lore.entry(new LoreEntry("enchant_" + e.getKey().getId(), List.of(color + enchantName + " " + Romans.encode(e.getValue()))));
+        }
+
+        if (!meta.getEnchants().isEmpty() || !this.complexEnchantments.isEmpty()) lore.entry(new LoreEntry("newline", List.of("")));
 
         writeVariables(VariableType.Priority.ABOVE_ABILITIES, dataContainer, lore, true);
 
@@ -138,6 +159,13 @@ public class ComplexItemMeta {
                 else return Ability.getAbility(((Ability) o).getId());
             }).toList();
         }
+
+        HashMap<String, Integer> complexEnchMap = dataContainer.has(ENCHANT_KEY, new SerializedPersistentType<>()) ? dataContainer.get(ENCHANT_KEY, new SerializedPersistentType<>()) : new HashMap<>();
+
+        for (Map.Entry<String, Integer> entry: complexEnchMap.entrySet()){
+            this.complexEnchantments.put(ComplexEnchantment.byId(entry.getKey()), entry.getValue());
+        }
+
         dataContainer.getKeys().stream()
                 .filter(namespacedKey -> namespacedKey.getKey().startsWith(VAR_PREFIX))
                 .forEach(namespacedKey -> setVariable(VariableType.getVariableByPrefix(namespacedKey.getKey().substring(VAR_PREFIX.length())), dataContainer.get(namespacedKey, new SerializedPersistentType<>())));
@@ -201,6 +229,35 @@ public class ComplexItemMeta {
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
+    }
+
+    public Map<ComplexEnchantment, Integer> getComplexEnchants(){
+        return this.complexEnchantments;
+    }
+
+    public Map<Enchantment, Integer> getEnchants(){
+        return this.complexItemStack.getItem().getItemMeta().getEnchants();
+    }
+
+    public void addEnchantment(Enchantment enchantment, Integer level){
+        ItemMeta meta = this.complexItemStack.getItem().getItemMeta();
+        meta.addEnchant(enchantment, level, true);
+        this.complexItemStack.getItem().setItemMeta(meta);
+    }
+
+    public void addEnchantment(ComplexEnchantment enchantment, Integer level){
+        this.complexEnchantments.put(enchantment, level);
+        updateItem();
+    }
+
+    public void removeEnchantment(Enchantment enchantment){
+        ItemMeta meta = this.complexItemStack.getItem().getItemMeta();
+        meta.removeEnchant(enchantment);
+        this.complexItemStack.getItem().setItemMeta(meta);
+    }
+
+    public void removeEnchantment(ComplexEnchantment enchantment){
+        this.complexEnchantments.remove(enchantment);
     }
 
     public List<Variable> getVariableList() {

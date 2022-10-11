@@ -324,18 +324,18 @@ public class ItemRegistry {
     }
 
     @Nullable
-    public static ComplexItem getBasicItemFromItemStack(ItemStack item) {
+    public static ComplexItem byItem(ItemStack item) {
         try {
             PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer();
             String id = container.get(ComplexItem.GLOBAL_ID, PersistentDataType.STRING);
-            return getBasicItemFromId(id);
+            return byId(id);
         } catch (NullPointerException e) {
             return null;
         }
     }
 
     @Nullable
-    public static ComplexItem getBasicItemFromId(String id) {
+    public static ComplexItem byId(String id) {
         for (ComplexItem item : registeredItems) {
             if (id == null) return null;
             if (id.equals(item.getId())) {

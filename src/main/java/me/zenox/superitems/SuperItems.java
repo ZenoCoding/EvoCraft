@@ -9,6 +9,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import me.zenox.superitems.command.MainCommand;
 import me.zenox.superitems.data.ConfigLoader;
 import me.zenox.superitems.data.LanguageLoader;
+import me.zenox.superitems.enchant.EnchantRegistry;
 import me.zenox.superitems.events.InventoryListener;
 import me.zenox.superitems.events.OtherEvent;
 import me.zenox.superitems.events.PlayerUseItemEvent;
@@ -59,6 +60,7 @@ public final class SuperItems extends JavaPlugin {
         ItemRegistry.registerRecipes();
         ItemRegistry.registerItems();
         RecipeRegistry.registerRecipes();
+        EnchantRegistry.registerEnchants();
 
         new MainCommand(plugin);
 

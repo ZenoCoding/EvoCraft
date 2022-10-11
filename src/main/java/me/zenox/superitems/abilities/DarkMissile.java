@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -36,10 +37,9 @@ public class DarkMissile extends ItemAbility {
     }
 
     @Override
-    protected void runExecutable(Event event) {
+    protected void runExecutable(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Random r = new Random();
-        Player p = e.getPlayer();
         World w = p.getWorld();
 
         LocalPlayer localPlayer;

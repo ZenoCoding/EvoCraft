@@ -200,6 +200,7 @@ item-lore-volken_axe:
 ##########################################################################
 ##                              ABILITIES                               ##
 ##########################################################################
+
 ability-name-magic_missile: Magic Missile
 
 ability-lore-magic_missile_dev:
@@ -286,3 +287,9 @@ ability-name-justice: Justice
 
 ability-lore-justice:
   - "Strikes &flighting &7and gives &cRegeneration I&7 on hit."
+
+##########################################################################
+##                            ENCHANTMENTS                              ##
+##########################################################################
+
+enchant-name-syphon: Syphon

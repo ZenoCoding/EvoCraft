@@ -24,7 +24,9 @@ public class TranslatableText implements Serializable {
     }
 
     public enum TranslatableType {
-        ITEM_NAME("item-name"), ITEM_LORE("item-lore"), ABILITY_NAME("ability-name"), ABILITY_LORE("ability-lore"), COMMAND("cmd"), MISC_MSG("msg");
+        ITEM_NAME("item-name"), ITEM_LORE("item-lore"),
+        ABILITY_NAME("ability-name"), ABILITY_LORE("ability-lore"),
+        COMMAND("cmd"), MISC_MSG("msg"), ENCHANT_NAME("enchant-name");
 
         private final String key;
 

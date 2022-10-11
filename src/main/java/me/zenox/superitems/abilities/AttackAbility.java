@@ -1,7 +1,9 @@
 package me.zenox.superitems.abilities;
 
+import me.zenox.superitems.Slot;
 import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.item.ItemRegistry;
+import me.zenox.superitems.util.TriConsumer;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -24,28 +26,35 @@ public class AttackAbility extends Ability {
         super(id, manaCost, cooldown, EntityDamageByEntityEvent.class, slot);
     }
 
-    public AttackAbility(String id, int manaCost, double cooldown, Consumer<Event> exectuable) {
+    public AttackAbility(String id, int manaCost, double cooldown, TriConsumer<Event, Player, ItemStack> exectuable) {
         super(id, manaCost, cooldown, EntityDamageByEntityEvent.class, Slot.MAIN_HAND, exectuable);
     }
 
-    // Static ability executables
-    public static void justiceAbility(Event event) {
-        EntityDamageByEntityEvent e = ((EntityDamageByEntityEvent) event);
-        if (e.getDamager() instanceof Player) {
-            Player p = (Player) e.getDamager();
-            ItemStack item = p.getInventory().getItemInMainHand();
-            ComplexItem complexItem = ItemRegistry.getBasicItemFromItemStack(item);
-            if (!(complexItem == null) && complexItem.getId() == "sword_of_justice" && e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 0));
-                p.playSound(p.getLocation(), Sound.ITEM_AXE_SCRAPE, 1, 1.4f);
-                if (new Random().nextInt(3) == 0) e.getEntity().getWorld().strikeLightning(e.getEntity().getLocation());
-            }
-        }
+    @Override
+    protected boolean checkEvent(Event e) {
+        return ((EntityDamageByEntityEvent) e).getDamager() instanceof Player;
     }
 
     @Override
-    public boolean checkEvent(Event e) {
-        return super.checkEvent(e);
+    Player getPlayerOfEvent(Event e) {
+        return ((Player) ((EntityDamageByEntityEvent) e).getDamager());
     }
+
+    @Override
+    ItemStack getItem(Player p) {
+        return this.getSlot().item(p);
+    }
+
+    // Static ability executables
+    public static void justiceAbility(Event event, Player p, ItemStack item) {
+        EntityDamageByEntityEvent e = ((EntityDamageByEntityEvent) event);
+        ComplexItem complexItem = ItemRegistry.byItem(item);
+        if (!(complexItem == null) && complexItem.getId().equalsIgnoreCase("sword_of_justice") && e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 0));
+            p.playSound(p.getLocation(), Sound.ITEM_AXE_SCRAPE, 1, 1.4f);
+            if (new Random().nextInt(3) == 0) e.getEntity().getWorld().strikeLightning(e.getEntity().getLocation());
+        }
+    }
+
 
 }

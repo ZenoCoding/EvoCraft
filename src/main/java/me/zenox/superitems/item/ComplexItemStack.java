@@ -71,7 +71,7 @@ public class ComplexItemStack implements Cloneable {
 
     @Nullable
     public static ComplexItemStack of(ItemStack item) {
-        ComplexItem complexItem = ItemRegistry.getBasicItemFromItemStack(item);
+        ComplexItem complexItem = ItemRegistry.byItem(item);
         if (complexItem == null) {
             // Util.logToConsole("Returned null because item " + item.getItemMeta().getDisplayName() + " had no complex registry.");
             return null;
@@ -126,50 +126,6 @@ public class ComplexItemStack implements Cloneable {
         item = this.skullURL.isBlank() ? item : Util.makeSkull(item, this.skullURL);
 
         return item;
-    }
-
-    public ComplexItemStack update(boolean force) {
-        ItemMeta meta = item.getItemMeta();
-
-        // Set CustomModelData
-        meta.setCustomModelData(complexItem.getCustomModelData());
-
-        // Take attributes/enchants from it's previous state
-//        for (Map.Entry<Enchantment, Integer> enchant :
-//                meta.getEnchants().entrySet()) {
-//            meta.removeEnchant(enchant.getKey());
-//        }
-//
-//        for (Map.Entry<Enchantment, Integer> enchant :
-//                this.item.getItemMeta().getEnchants().entrySet()) {
-//            meta.addEnchant(enchant.getKey(), enchant.getValue(), true);
-//        }
-
-        for (Map.Entry<Stat, Double> entry : complexItem.getStats().entrySet()) {
-            item = complexItem.getType().isWearable() ? AureliumAPI.addArmorModifier(item, entry.getKey(), entry.getValue(), false) : AureliumAPI.addItemModifier(item, entry.getKey(), entry.getValue(), false);
-            meta = item.getItemMeta();
-        }
-
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-
-        container.set(ComplexItem.GLOBAL_ID, PersistentDataType.STRING, this.getId());
-        container.set(ComplexItem.GLOW_ID, PersistentDataType.INTEGER, complexItem.doesGlow() ? 1 : 0);
-
-        if (this.uuid != null) container.set(ComplexItem.UUID_ID, new SerializedPersistentType<UUID>(), uuid);
-
-        // Set ItemMeta so that ComplexItemMeta can use it
-        item.setItemMeta(meta);
-
-        complexMeta = new ComplexItemMeta(this);
-
-        complexMeta.setVariable(ComplexItemMeta.RARITY_VAR, complexItem.getRarity());
-        complexMeta.setVariable(ComplexItemMeta.TYPE_VAR, complexItem.getType());
-
-        complexMeta.updateItem();
-
-        item = this.skullURL.isBlank() ? item : Util.makeSkull(item, this.skullURL);
-
-        return this;
     }
 
     public ItemStack getItem() {

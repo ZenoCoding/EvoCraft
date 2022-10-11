@@ -1,5 +1,6 @@
 package me.zenox.superitems.tabcompleter;
 
+import me.zenox.superitems.enchant.ComplexEnchantment;
 import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.item.ItemRegistry;
 import org.bukkit.command.Command;
@@ -20,6 +21,8 @@ public class MainTabCompleter implements TabCompleter {
             arguments.add("loottable");
             arguments.add("droploottable");
             arguments.add("dropitematplayer");
+            arguments.add("enchant");
+            arguments.add("reload");
         }
 
         if (items.isEmpty()) {
@@ -28,7 +31,7 @@ public class MainTabCompleter implements TabCompleter {
             }
         }
 
-        List<String> results = new ArrayList<String>();
+        List<String> results = new ArrayList();
         if (args.length == 1) {
             for (String a : arguments) {
                 if (a.toLowerCase().startsWith(args[0].toLowerCase())) {
@@ -42,6 +45,16 @@ public class MainTabCompleter implements TabCompleter {
                     results.add(b);
                 }
             }
+            return results;
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("enchant")) {
+            for (ComplexEnchantment b : ComplexEnchantment.getRegisteredEnchants()) {
+                if (b.getId().toLowerCase().startsWith(args[2].toLowerCase())) {
+                    results.add(b.getId());
+                }
+            }
+            return results;
+        } else if (args.length == 4 && args[0].equalsIgnoreCase("enchant")) {
+            results.add("<level>");
             return results;
         } else if (args.length == 4 && args[0].equalsIgnoreCase("give")) {
             results.add("<amount>");

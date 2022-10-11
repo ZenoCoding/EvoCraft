@@ -48,7 +48,7 @@ public class ComplexItem {
         this.name = new TranslatableText(TranslatableText.TranslatableType.ITEM_NAME + "-" + id);
         this.lore = new TranslatableList(TranslatableText.TranslatableType.ITEM_LORE + "-" + id);
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
-        this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
+        this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 5));
         this.unique = unique;
         this.rarity = rarity;
         this.type = type;

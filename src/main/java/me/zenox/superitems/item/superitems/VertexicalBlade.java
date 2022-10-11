@@ -63,7 +63,7 @@ public class VertexicalBlade extends ComplexItem implements Listener {
             Player p = (Player) e.getDamager();
             World w = p.getWorld();
             ItemStack item = p.getInventory().getItemInMainHand();
-            ComplexItem complexItem = ItemRegistry.getBasicItemFromItemStack(item);
+            ComplexItem complexItem = ItemRegistry.byItem(item);
             if (!(complexItem == null) && complexItem.getId() == this.getId() && e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
                 p.playSound(p.getLocation(), Sound.ENTITY_BLAZE_HURT, 1, 0f);
 

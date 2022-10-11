@@ -9,9 +9,11 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import me.zenox.superitems.Slot;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.persistence.NBTEditor;
 import me.zenox.superitems.util.Geo;
+import me.zenox.superitems.util.TriConsumer;
 import me.zenox.superitems.util.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -31,7 +33,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 import static me.zenox.superitems.item.ItemRegistry.TOTEM_POLE;
 import static me.zenox.superitems.util.Util.getNearbyBlocks;
@@ -51,18 +52,37 @@ public class ItemAbility extends Ability {
         this.action = action;
     }
 
-    public ItemAbility(String id, AbilityAction action, int manaCost, double cooldown, Consumer<Event> exectuable) {
+    public ItemAbility(String id, AbilityAction action, int manaCost, double cooldown, TriConsumer<Event, Player, ItemStack> exectuable) {
         super(id, manaCost, cooldown, PlayerInteractEvent.class, Slot.EITHER_HAND, exectuable);
         this.action = action;
+    }
+
+    @Override
+    Player getPlayerOfEvent(Event e) {
+        return ((PlayerInteractEvent) e).getPlayer();
+    }
+
+    @Override
+    ItemStack getItem(Player p) {
+        return this.getSlot().item(p);
+    }
+
+    public AbilityAction getAction() {
+        return action;
+    }
+
+    @Override
+    public boolean checkEvent(Event event) {
+        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+        return action.isAction(e.getAction(), e.getPlayer().isSneaking());
     }
 
     /**
      * Represents some static executables
      */
-    public static void soulRiftAbility(Event event) {
+    public static void soulRiftAbility(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Action action = e.getAction();
-        Player p = e.getPlayer();
         World w = p.getWorld();
         Location loc;
         boolean allowed = true;
@@ -142,7 +162,7 @@ public class ItemAbility extends Ability {
                 for (LivingEntity entity : entities) {
                     if (r.nextInt(count / 25 + 1) == 0 && !entity.equals(p)) {
                         entity.setVelocity((entity.getLocation().toVector().subtract(crystal.getLocation().add(r.nextDouble() - 0.5, r.nextDouble() - 0.5 + 2, r.nextDouble() - 0.5).toVector()).multiply(-0.5).normalize()));
-                        entity.damage((entity.getHealth() * (2 / 3)) / 10 + 1);
+                        entity.damage((entity.getHealth() * (2f / 3f)) / 10f + 1f);
                     }
                 }
 
@@ -160,10 +180,9 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 0, 0);
     }
 
-    public static void magicMissileAbility(Event event, Boolean combustion, Integer explosionPower) {
+    public static void magicMissileAbility(Event event, Player p, ItemStack item, Boolean combustion, Integer explosionPower) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Random r = new Random();
-        Player p = e.getPlayer();
         World w = p.getWorld();
 
         LocalPlayer localPlayer;
@@ -185,7 +204,7 @@ public class ItemAbility extends Ability {
 
         // 20% chance to remove an item from their hand
         if (r.nextInt(5) == 0 && combustion) {
-            e.getItem().setAmount(e.getItem().getAmount() - 1);
+            item.setAmount(e.getItem().getAmount() - 1);
             Util.sendMessage(p, ChatColor.GOLD + "Woah! Your " + ChatColor.ITALIC + "Magic Toy Stick " + ChatColor.GOLD + "combusted in your hand!", false);
             p.damage(5, p);
             p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 0.5F);
@@ -277,16 +296,14 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 0, 2);
     }
 
-    public static void centralizeAbility(Event event, Boolean corrupted, Integer duration) {
+    public static void centralizeAbility(Event event, Player p, ItemStack item, Boolean corrupted, Integer duration) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Player p = e.getPlayer();
         World w = p.getWorld();
         Location loc = p.getLocation();
         if (e.getClickedBlock() != null) loc = e.getClickedBlock().getLocation().add(0.5, 1, 0.5);
 
         final Random r = new Random();
 
-        ItemStack item = e.getItem();
         ItemMeta meta = item.getItemMeta();
 
         ArmorStand totem = ((ArmorStand) w.spawnEntity(loc, EntityType.ARMOR_STAND));
@@ -441,9 +458,8 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 3, 1);
     }
 
-    public static void obsidianShardAbility(Event event) {
+    public static void obsidianShardAbility(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Player p = e.getPlayer();
         World w = p.getWorld();
 
         for (float i = 0; i < 3; i++) {
@@ -542,29 +558,12 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 0, 1);
     }
 
-    public static void tarhelmAbility(Event event) {
+    public static void tarhelmAbility(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Player p = e.getPlayer();
         p.playSound(p.getLocation(), Sound.ENTITY_RAVAGER_ATTACK, 1, 0);
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 3));
         p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 300, 0));
         p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 400, 0));
-    }
-
-    public AbilityAction getAction() {
-        return action;
-    }
-
-    @Override
-    public boolean checkEvent(Event event) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        if (!super.checkEvent(e)) return false;
-        return action.isAction(e.getAction(), e.getPlayer().isSneaking());
-    }
-
-    @Override
-    protected void runExecutable(Event e) {
-        super.runExecutable(e);
     }
 
     public enum AbilityAction {

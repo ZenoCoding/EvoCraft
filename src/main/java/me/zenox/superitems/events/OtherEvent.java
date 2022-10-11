@@ -62,7 +62,7 @@ public class OtherEvent implements Listener {
     public void blockPlaceEvent(BlockPlaceEvent e) {
         ItemStack item = e.getItemInHand();
         if (item == null) return;
-        ComplexItem complexItem = ItemRegistry.getBasicItemFromItemStack(item);
+        ComplexItem complexItem = ItemRegistry.byItem(item);
         if (complexItem != null) {
             e.setCancelled(true);
         }

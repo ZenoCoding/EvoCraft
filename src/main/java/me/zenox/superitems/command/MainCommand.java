@@ -2,6 +2,7 @@ package me.zenox.superitems.command;
 
 import com.google.common.primitives.Ints;
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.enchant.ComplexEnchantment;
 import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.item.ItemRegistry;
@@ -52,7 +53,7 @@ public class MainCommand implements CommandExecutor {
                     return true;
                 }
 
-                ComplexItem itemtype = ItemRegistry.getBasicItemFromId(args[2]);
+                ComplexItem itemtype = ItemRegistry.byId(args[2]);
 
                 if (itemtype == null) {
                     Util.sendMessage(p, "This item could not be found!");
@@ -112,7 +113,7 @@ public class MainCommand implements CommandExecutor {
                     return true;
                 }
 
-                ComplexItem itemtypetodrop = ItemRegistry.getBasicItemFromId(args[2]);
+                ComplexItem itemtypetodrop = ItemRegistry.byId(args[2]);
 
                 if (itemtypetodrop == null) {
                     Util.sendMessage(sender, "This item could not be found!");
@@ -150,6 +151,39 @@ public class MainCommand implements CommandExecutor {
                     }
                 }
                 return false;
+            case "enchant":
+                if (args.length < 2 || sender.getServer().getPlayer(args[1]) == null) {
+                    Util.sendMessage(sender, "Please specify a valid user to give an item.");
+                    return true;
+                }
+
+                if (args.length < 3) {
+                    Util.sendMessage(sender, "Please specify a item to give.");
+                    return true;
+                }
+
+                Player enchanted = sender.getServer().getPlayer(args[1]);
+
+                ComplexEnchantment enchant = ComplexEnchantment.byId(args[2]);
+
+                if (enchant == null) {
+                    Util.sendMessage(sender, "Enchantment " + ChatColor.WHITE + args[2] + " doesn't exist.");
+                } else {
+                    Object level;
+                    if (args.length >= 4) {
+                        level = Ints.tryParse(args[3]);
+                        if (level == null) {
+                            Util.sendMessage(sender, args[3] + " is not a valid integer! Please specify an integer for argument <level>.");
+                            return true;
+                        }
+                    } else {
+                        level = 1;
+                    }
+
+                    ComplexItemStack.of(enchanted.getInventory().getItemInMainHand()).getComplexMeta().addEnchantment(enchant, (Integer) level);
+                    Util.sendMessage(sender, "You enchanted " + enchanted.getDisplayName() + " with " + ChatColor.WHITE + enchant.getName() + " " + level);
+                }
+                return true;
             case "reload":
                 plugin.reload();
                 Util.sendMessage(sender, ChatColor.WHITE + "SuperItems " + ChatColor.GOLD + "v" + plugin.getDescription().getVersion() + ChatColor.WHITE + " has been reloaded.");
