@@ -63,8 +63,8 @@ public class ItemAbility extends Ability {
     }
 
     @Override
-    ItemStack getItem(Player p) {
-        return this.getSlot().item(p);
+    List<ItemStack> getItem(Player p, Event e) {
+        return List.of(((PlayerInteractEvent) e).getItem());
     }
 
     public AbilityAction getAction() {

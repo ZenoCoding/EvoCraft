@@ -9,6 +9,7 @@ import me.zenox.superitems.item.basicitems.GardenerSapling;
 import me.zenox.superitems.item.basicitems.RavagerSkin;
 import me.zenox.superitems.item.basicitems.TormentedSoul;
 import me.zenox.superitems.item.superitems.ObsidilithScythe;
+import me.zenox.superitems.item.superitems.VertexicalBlade;
 import me.zenox.superitems.item.superitems.VoidScepter;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Bukkit;
@@ -271,6 +272,8 @@ public class ItemRegistry {
             .material(Material.PLAYER_HEAD)
             .rarity(ComplexItem.Rarity.RARE)
             .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWYwMjMwNTExYjg0NGNmM2FmZjBjZWRiNDRjMTMyNDI3OTlkMzMxNTIyMzVmMTdjZWU1NzQ2NTE4NzhlZDVkMCJ9fX0=")));
+
+    public static final ComplexItem VERTEXICAL_BLADE = registerItem(new VertexicalBlade());
 
     public static final ComplexItem DEV_STICK = registerItem(new ComplexItem(new ItemSettings()
             .id("dev_stick")

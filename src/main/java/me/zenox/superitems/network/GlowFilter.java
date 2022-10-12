@@ -21,7 +21,6 @@ public class GlowFilter extends ClientItemFilter {
     void filterItem(ItemStack itemStack) {
         ItemMeta meta = itemStack.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        Util.logToConsole("Item " + meta.getDisplayName() + " has glow of: " + container.get(ComplexItem.GLOW_ID, PersistentDataType.INTEGER));
         if (container.has(ComplexItem.GLOW_ID, PersistentDataType.INTEGER) && container.get(ComplexItem.GLOW_ID, PersistentDataType.INTEGER) == 1)
             meta.addEnchant(itemStack.getType() == Material.BOW ? Enchantment.PROTECTION_ENVIRONMENTAL : Enchantment.ARROW_INFINITE, 1, true);
         itemStack.setItemMeta(meta);

@@ -10,36 +10,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
 
 public enum Slot {
-    MAIN_HAND((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getItemInMainHand()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getItemInMainHand()),
-    OFF_HAND((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getItemInOffHand()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getItemInOffHand()),
-    EITHER_HAND((PlayerInventory inv, Ability ability) -> MAIN_HAND.predicate.test(inv, ability) || OFF_HAND.predicate.test(inv, ability), (PlayerInventory inv) -> inv.getItemInMainHand()),
-    HEAD((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getHelmet()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getHelmet()),
-    CHEST((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getChestplate()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getChestplate()),
-    LEGS((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getLeggings()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getLeggings()),
-    BOOTS((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getBoots()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getBoots()),
-    ARMOR((PlayerInventory inv, Ability ability) -> {
-        for (ItemStack item : inv.getArmorContents())
-            if (ComplexItemStack.of(item).getAbilities().contains(ability)) return true;
-        return false;
-    }, (PlayerInventory inv) -> inv.getHelmet()),
-    INVENTORY((PlayerInventory inv, Ability ability) -> {
-        for (ItemStack item : inv.getContents())
-            if (ComplexItemStack.of(item).getAbilities().contains(ability)) return true;
-        return false;
-    }, (PlayerInventory inv) -> inv.getItemInMainHand()),
+    MAIN_HAND((PlayerInventory inv) -> List.of(inv.getItemInMainHand())),
+    OFF_HAND((PlayerInventory inv) -> List.of(inv.getItemInOffHand())),
+    EITHER_HAND((PlayerInventory inv) -> List.of(inv.getItemInMainHand(), inv.getItemInOffHand())),
+    HEAD((PlayerInventory inv) -> List.of(inv.getHelmet())),
+    CHEST((PlayerInventory inv) -> List.of(inv.getChestplate())),
+    LEGS((PlayerInventory inv) -> List.of(inv.getLeggings())),
+    BOOTS((PlayerInventory inv) -> List.of(inv.getBoots())),
+    ARMOR((PlayerInventory inv) -> Arrays.asList(inv.getArmorContents())),
+    INVENTORY((PlayerInventory inv) -> Arrays.asList(inv.getContents())),
     ;
 
-    private final BiPredicate<PlayerInventory, Ability> predicate;
-
     //groups that apply to multiple items will return the first item applicable
-    private final Function<PlayerInventory, ItemStack> getItem;
+    private final Function<PlayerInventory, List<ItemStack>> getItem;
 
-    Slot(BiPredicate<PlayerInventory, Ability> predicate, Function<PlayerInventory, ItemStack> getItem) {
-        this.predicate = predicate;
+    Slot(Function<PlayerInventory, List<ItemStack>> getItem) {
         this.getItem = getItem;
     }
 
@@ -49,8 +37,9 @@ public enum Slot {
      * @param p The player
      * @return The list of unique abilities that the player possesses
      */
+    @Deprecated
     public static List<Ability> uniqueEquipped(Player p) {
-        List<ItemStack> items = Arrays.stream(new ItemStack[]{MAIN_HAND.item(p), OFF_HAND.item(p), HEAD.item(p), CHEST.item(p), LEGS.item(p), BOOTS.item(p)})
+        List<ItemStack> items = Arrays.stream(new ItemStack[]{MAIN_HAND.item(p).get(0), OFF_HAND.item(p).get(0), HEAD.item(p).get(0), CHEST.item(p).get(0), LEGS.item(p).get(0), BOOTS.item(p).get(0)})
                 .filter(Objects::nonNull).toList();
         List<Ability> abilities = new ArrayList<>();
         items.stream()
@@ -60,19 +49,11 @@ public enum Slot {
         return abilities.stream().distinct().toList();
     }
 
-    public Boolean evaluate(PlayerInventory inv, Ability ability) {
-        try {
-            return this.predicate.test(inv, ability);
-        } catch (NullPointerException e) {
-            return false;
-        }
-    }
-
-    public ItemStack item(PlayerInventory inv) {
+    public List<ItemStack> item(PlayerInventory inv) {
         return this.getItem.apply(inv);
     }
 
-    public ItemStack item(Player p) {
+    public List<ItemStack> item(Player p) {
         return this.getItem.apply(p.getInventory());
     }
 }

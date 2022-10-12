@@ -5,6 +5,7 @@ import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.abilities.AttackAbility;
 import me.zenox.superitems.abilities.ItemAbility;
+import me.zenox.superitems.enchant.ComplexEnchantment;
 import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.util.Util;
 import org.bukkit.entity.Player;
@@ -29,6 +30,10 @@ public class PlayerUseItemEvent implements Listener {
     public void useEvent(Event event) {
         for (Ability ability : Ability.registeredAbilities){
             ability.useAbility(event);
+        }
+
+        for (ComplexEnchantment enchantment : ComplexEnchantment.getRegisteredEnchants()){
+            enchantment.useEnchant(event);
         }
 
 //        if (event instanceof EntityDamageByEntityEvent e) {

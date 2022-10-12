@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
@@ -41,7 +42,7 @@ public class AttackAbility extends Ability {
     }
 
     @Override
-    ItemStack getItem(Player p) {
+    List<ItemStack> getItem(Player p, Event e) {
         return this.getSlot().item(p);
     }
 

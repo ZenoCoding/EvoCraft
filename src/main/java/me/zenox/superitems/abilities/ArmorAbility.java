@@ -7,6 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -37,7 +38,7 @@ public class ArmorAbility extends Ability {
     }
 
     @Override
-    ItemStack getItem(Player p) {
+    List<ItemStack> getItem(Player p, Event e) {
         return null;
     }
 

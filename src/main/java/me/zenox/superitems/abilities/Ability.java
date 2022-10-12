@@ -113,9 +113,17 @@ public abstract class Ability implements Serializable {
         if (!this.eventType.isInstance(e)) return;
         if (!checkEvent(e)) return;
         Player p = getPlayerOfEvent(e);
-        ItemStack item = getItem(p);
-        if(ComplexItemStack.of(item) == null) return;
-        if(!ComplexItemStack.of(item).getAbilities().contains(this)) return;
+        List<ItemStack> items = getItem(p, e);
+        ItemStack item = null;
+
+        // Perhaps change this in the future to support passing multiple items to the consumer
+        for(ItemStack i : items) {
+            if (ComplexItemStack.of(i) == null) continue;
+            if (!ComplexItemStack.of(i).getAbilities().contains(this)) continue;
+            item = i;
+        }
+
+        if(item == null) return;
 
         PersistentDataContainer container = p.getPersistentDataContainer();
         NamespacedKey cooldownKey = new NamespacedKey(SuperItems.getPlugin(), getId() + "_cooldown");
@@ -161,7 +169,7 @@ public abstract class Ability implements Serializable {
 
     abstract Player getPlayerOfEvent(Event e);
 
-    abstract ItemStack getItem(Player p);
+    abstract List<ItemStack> getItem(Player p, Event e);
 
     public double getCooldown() {
         return this.cooldown;
