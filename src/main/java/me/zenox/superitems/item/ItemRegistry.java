@@ -298,8 +298,14 @@ public class ItemRegistry {
             .material(Material.LEAD)
             .rarity(ComplexItem.Rarity.SPECIAL)
             .type(ComplexItem.Type.MISC)
-//play valorant when
+
     ));
+
+    public static final ComplexItem VOLKEN_STICK = registerItem(new ComplexItem(new ItemSettings()
+            .id("volken_stick")
+            .material(Material.STICK)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.MISC)));
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 

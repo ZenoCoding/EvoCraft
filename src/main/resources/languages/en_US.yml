@@ -202,6 +202,11 @@ item-lore-volken_axe:
 item-lore-chromotonin:
   - "it consists of DNA and proteins and also helped a dev fail bio class :)"
 
+item-lore-volken_stick:
+  - "A relic of the past. Emits a strange heat..."
+  - ""
+  - "Something to do with piglins &?&"
+
 ##########################################################################
 ##                              ABILITIES                               ##
 ##########################################################################
