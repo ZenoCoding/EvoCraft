@@ -10,6 +10,7 @@ import de.studiocode.invui.item.builder.ItemBuilder;
 import de.studiocode.invui.virtualinventory.VirtualInventoryManager;
 import me.zenox.superitems.enchant.ComplexEnchantment;
 import me.zenox.superitems.gui.item.BookshelfItem;
+import me.zenox.superitems.gui.item.BooleanItem;
 import me.zenox.superitems.gui.item.CloseItem;
 import me.zenox.superitems.gui.item.EnchantItem;
 import me.zenox.superitems.item.ComplexItemStack;
@@ -71,7 +72,7 @@ public class EnchantingGUI extends SimpleGUI {
      *
      * @param level enchantment level
      * @param xp    the amount of experience to take (levels)
-     * @return whether or not the enchantment process worked
+     * @return whether the enchantment process worked
      */
     public boolean enchantItem(int level, int xp) {
         Util.sendMessage(p, "Attempting to enchant... ");
@@ -88,9 +89,10 @@ public class EnchantingGUI extends SimpleGUI {
             Util.sendMessage(p, "Failed due to player xp being too little. Player XP was: " + p.getTotalExperience() + " | Required XP was: " + xp);
             return false;
         }
-        //if (!cItem.getComplexMeta().hasVariable(ENCHANT_FUEL_VAR)) return false; // Fuel invalid
 
-        int fuelStrength = 10;/*(int) ((int) (cItem.getComplexMeta().getVariable(ENCHANT_FUEL_VAR).getValue()) * Math.sqrt(cItem.getItem().getAmount()));*/
+        if (!fuelValid(this)) return false;
+
+        int fuelStrength = (int) ((int) (cItem.getComplexMeta().getVariable(ENCHANT_FUEL_VAR).getValue()) * Math.sqrt(cItem.getItem().getAmount()));
 
         double variety = r.nextDouble(1d, (Math.sqrt(this.bookshelfPower) * level / 3d) + 1.01d);
         // between 0 and 1
@@ -172,23 +174,44 @@ public class EnchantingGUI extends SimpleGUI {
         this.bookshelfPower = bookshelfPower;
     }
 
+    public static boolean fuelValid(EnchantingGUI gui){
+        try {
+            return ComplexItemStack.of(gui.getFuelItem()).getComplexMeta().hasVariable(ENCHANT_FUEL_VAR);
+        } catch (NullPointerException e){
+            return false;
+        }
+    }
+
+    public static boolean enchantValid(EnchantingGUI gui, int level){
+        int skillRequirement = 0;
+        switch(level){
+            case 2 -> skillRequirement = 20;
+            case 3 -> skillRequirement = 35;
+        }
+        return fuelValid(gui) && AureliumAPI.getSkillLevel(gui.p, Skills.ENCHANTING) >= skillRequirement;
+    }
+
     public static GUI getGui(Player p, Block block) {
         return new EnchantGUIBuilder(GUITypes.ENCHANT, p, block)
                 .setStructure(
-                        "# # # # # R R 1 #",
-                        "# # # # # R # # #",
-                        "# L R R E R R 2 #",
-                        "# # # # # R # # #",
-                        "# # # # # R R 3 #",
+                        "# # # # # $ $ 1 #",
+                        "# # # # # $ # # #",
+                        "# F @ @ E $ % 2 #",
+                        "# # # # # ^ # # #",
+                        "# # # # # ^ ^ 3 #",
                         "# # # # C B # # #"
                 )
                 // Lapis Slot
                 .addIngredient('E', new SlotElement.VISlotElement(VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_ITEM_KEY + p.getName()), 1), 0, new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE)))
-                .addIngredient('L', new SlotElement.VISlotElement(VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1), 0, new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)))
+                .addIngredient('F', new SlotElement.VISlotElement(VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1), 0, new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)))
                 .addIngredient('R', new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName(""))
-                .addIngredient('1', new EnchantItem(1))
-                .addIngredient('2', new EnchantItem(2))
-                .addIngredient('3', new EnchantItem(3))
+                .addIngredient('1', new EnchantItem(1, 0))
+                .addIngredient('2', new EnchantItem(2, 20))
+                .addIngredient('3', new EnchantItem(3, 35))
+                .addIngredient('@', new BooleanItem(EnchantingGUI::fuelValid))
+                .addIngredient('$', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 1)))
+                .addIngredient('%', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 2)))
+                .addIngredient('^', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 3)))
                 .addIngredient('B', new BookshelfItem())
                 .addIngredient('C', new CloseItem())
                 .build();

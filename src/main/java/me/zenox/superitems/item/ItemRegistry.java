@@ -3,6 +3,7 @@ package me.zenox.superitems.item;
 import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.superitems.abilities.*;
 import me.zenox.superitems.abilities.Transcendence;
+import me.zenox.superitems.gui.EnchantingGUI;
 import me.zenox.superitems.item.armoritems.*;
 import me.zenox.superitems.item.basicitems.CorruptPearl;
 import me.zenox.superitems.item.basicitems.GardenerSapling;
@@ -292,6 +293,14 @@ public class ItemRegistry {
             .material(Material.GOLDEN_AXE)
             .rarity(ComplexItem.Rarity.RARE)
             .type(ComplexItem.Type.AXE)));
+
+    public static final ComplexItem LAPIS_ORBITEX = registerItem(new ComplexItem(new ItemSettings()
+            .id("lapis_orbitex")
+            .material(Material.BLUE_DYE)
+            .rarity(ComplexItem.Rarity.COMMON)
+            .type(ComplexItem.Type.ENCHANTING_FUEL)
+            .glow()
+            .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 5)));
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 

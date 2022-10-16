@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -119,6 +120,10 @@ public class ComplexItemStack {
 
         complexMeta.setVariable(ComplexItemMeta.RARITY_VAR, complexItem.getRarity());
         complexMeta.setVariable(ComplexItemMeta.TYPE_VAR, complexItem.getType());
+
+        for(Map.Entry<VariableType, Serializable> entry : complexItem.getVariableMap().entrySet()){
+            complexMeta.setVariable(entry.getKey(), entry.getValue());
+        }
 
         complexMeta.updateItem();
 

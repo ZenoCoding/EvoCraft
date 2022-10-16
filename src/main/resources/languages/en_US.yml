@@ -82,6 +82,8 @@ item-name-flaming_boots: Flaming Boots
 
 item-name-volken_axe: Volken Axe
 
+item-name-lapis_orbitex: Lapis Orbitex
+
 ##########################################################################
 ##                              ITEM LORE                               ##
 ##########################################################################
@@ -196,6 +198,9 @@ item-lore-volken_axe:
   - "A relic of the past. Fragile. &oDo Not Touch."
   - ""
   - "Did you really think this was &ofragile?"
+
+item-lore-lapis_orbitex:
+  - "Possesses &dmagical &7abilities, unlike that blue rock stuff."
 
 ##########################################################################
 ##                              ABILITIES                               ##

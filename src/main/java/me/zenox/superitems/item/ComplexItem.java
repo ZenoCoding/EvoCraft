@@ -18,7 +18,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,27 +43,12 @@ public class ComplexItem {
     private final ItemMeta meta;
     private final Map<Stat, Double> stats;
     private final List<Ability> abilities;
+    private final HashMap<VariableType, Serializable> variableMap = new HashMap();
 
     private String skullURL = "";
 
-    public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
-        this.id = id;
-        this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + id);
-        this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
-        this.key = new NamespacedKey(SuperItems.getPlugin(), id);
-        this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 5));
-        this.unique = unique;
-        this.rarity = rarity;
-        this.type = type;
-        this.material = material;
-        this.meta = new ItemStack(this.material).getItemMeta();
-        this.stats = stats;
-        this.skullURL = "";
-        this.abilities = abilities;
-        this.glow = false;
-    }
 
-    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
+    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap) {
         this.id = id;
         this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + id);
         this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
@@ -76,7 +63,19 @@ public class ComplexItem {
         this.stats = stats;
         this.skullURL = "";
         this.abilities = abilities;
+        this.variableMap.putAll(variableMap);
+    }
 
+    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
+        this(id, unique, glow, rarity, type, material, stats, abilities, new HashMap<>());
+    }
+
+    public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
+        this(id, unique, false, rarity, type, material, stats, abilities);
+    }
+
+    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique, List<Ability> abilities) {
+        this(id, unique, rarity, type, material, stats, abilities);
     }
 
     public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique) {
@@ -106,6 +105,7 @@ public class ComplexItem {
         this.stats = settings.getStats();
         this.skullURL = "";
         this.abilities = settings.getAbilities() == null ? new ArrayList<>() : new ArrayList<>(settings.getAbilities());
+        this.variableMap.putAll(settings.getVariableMap());
     }
 
     public List<Recipe> getRecipes() {
@@ -236,6 +236,10 @@ public class ComplexItem {
         return this.abilities;
     }
 
+    public HashMap<VariableType, Serializable> getVariableMap() {
+        return variableMap;
+    }
+
     public enum Rarity {
 
         COMMON(ChatColor.WHITE, ChatColor.BOLD + "COMMON"), UNCOMMON(ChatColor.GREEN, ChatColor.BOLD + "UNCOMMON"),
@@ -266,7 +270,9 @@ public class ComplexItem {
 
     public enum Type {
 
-        SWORD("SWORD", false), AXE("AXE", false), WAND("WAND", false), STAFF("STAFF", false), SUPERITEM("SUPERITEM", false), DEPLOYABLE("DEPLOYABLE", false), MISC("", false),
+        SWORD("SWORD", false), AXE("AXE", false), WAND("WAND", false),
+        STAFF("STAFF", false), SUPERITEM("SUPERITEM", false),
+        DEPLOYABLE("DEPLOYABLE", false), MISC("", false), ENCHANTING_FUEL("ENCHANTING FUEL", false),
         HELMET("HELMET", true), CHESTPLATE("CHESTPLATE", true), LEGGINGS("LEGGINGS", true), BOOTS("BOOTS", true);
 
         private final String name;
