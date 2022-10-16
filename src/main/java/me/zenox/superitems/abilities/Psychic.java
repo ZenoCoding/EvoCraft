@@ -122,7 +122,7 @@ public class Psychic extends ItemAbility implements Listener {
                 p.setHealth(0);
                 p.damage(10, p);
                 List<MetadataValue> values = p.getMetadata("superitems:death_psychic");
-                if (!values.isEmpty() && values.get(0).asBoolean() == false) cancel();
+                if (!values.isEmpty() && !values.get(0).asBoolean()) cancel();
                 count++;
             }
         }.runTaskTimer(SuperItems.getPlugin(), 0, 20);
@@ -136,7 +136,7 @@ public class Psychic extends ItemAbility implements Listener {
 
         Player entity = e.getEntity().getPlayer();
         List<MetadataValue> values = entity.getMetadata("superitems:death_psychic");
-        if (!values.isEmpty() && values.get(0).asBoolean() == true) {
+        if (!values.isEmpty() && values.get(0).asBoolean()) {
             Util.logToConsole("Changing death message.");
             e.setDeathMessage(entity.getDisplayName() + "'s brain exploded.");
         }

@@ -64,7 +64,7 @@ public class ItemAbility extends Ability {
 
     @Override
     List<ItemStack> getItem(Player p, Event e) {
-        return List.of(((PlayerInteractEvent) e).getItem());
+        return Arrays.stream(new ItemStack[]{((PlayerInteractEvent) e).getItem()}).filter(Objects::nonNull).toList();
     }
 
     public AbilityAction getAction() {

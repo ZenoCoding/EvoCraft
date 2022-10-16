@@ -16,8 +16,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 
 public class EmberAttune extends ItemAbility {
-    public static final VariableType ATTUNEMENT_VARIABLE_TYPE =
-            new VariableType<Attunement>("ember_attunement",
+    public static final VariableType<Attunement> ATTUNEMENT_VARIABLE_TYPE =
+            new VariableType<>("ember_attunement",
                     new LoreEntry("ember_attunement", List.of(ChatColor.AQUA + "Attunement: ")),
                     VariableType.Priority.BELOW_ABILITIES, (loreEntry, variable) ->
                     loreEntry.setLore(List.of(ChatColor.AQUA + "Attunement: " + ((Attunement) variable.getValue()).getName())));

@@ -12,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public class AttackEnchantment extends ComplexEnchantment{
-    public AttackEnchantment(String id, int maxLevel, List<ComplexItem.Type> types, Slot slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable) {
-        super(id, maxLevel, types, slot, stats, executable, EntityDamageByEntityEvent.class);
+    public AttackEnchantment(String id, int maxLevel, int rarity, List<ComplexItem.Type> types, Slot slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable) {
+        super(id, maxLevel, rarity, types, slot, stats, executable, EntityDamageByEntityEvent.class);
     }
 
     @Override

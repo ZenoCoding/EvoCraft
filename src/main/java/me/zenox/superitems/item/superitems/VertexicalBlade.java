@@ -59,8 +59,7 @@ public class VertexicalBlade extends ComplexItem implements Listener {
 
     @EventHandler
     public void onDamageEntityEvent(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player) {
-            Player p = (Player) e.getDamager();
+        if (e.getDamager() instanceof Player p) {
             World w = p.getWorld();
             ItemStack item = p.getInventory().getItemInMainHand();
             ComplexItem complexItem = ItemRegistry.byItem(item);
@@ -68,7 +67,7 @@ public class VertexicalBlade extends ComplexItem implements Listener {
                 p.playSound(p.getLocation(), Sound.ENTITY_BLAZE_HURT, 1, 0f);
 
                 // get # of stacks
-                Integer stacks = 1;
+                int stacks = 1;
                 List<MetadataValue> stackValues = p.getMetadata("vertex_stack");
                 List<MetadataValue> idValues = p.getMetadata("vertex_hit_id");
                 if (!stackValues.isEmpty() && !idValues.isEmpty() && idValues.get(0).asInt() == e.getEntity().getEntityId()) {
@@ -98,7 +97,7 @@ public class VertexicalBlade extends ComplexItem implements Listener {
                         public void run() {
 
 
-                            Integer stacks = 1;
+                            int stacks = 1;
                             List<MetadataValue> countValues = p.getMetadata("vertex_stack");
                             if (!countValues.isEmpty()) {
                                 stacks = countValues.get(0).asInt();
@@ -122,7 +121,7 @@ public class VertexicalBlade extends ComplexItem implements Listener {
 
                                 for (Vector v : edgedDodecahedron) {
                                     Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(5, 165, 255), 0.6F);
-                                    w.spawnParticle(Particle.REDSTONE, v.rotateAroundAxis(p.getLocation().toVector(), Math.toRadians(count / 4 % 360)).toLocation(w).add(0, 1.5, 0), 1, dustOptions);
+                                    w.spawnParticle(Particle.REDSTONE, v.rotateAroundAxis(p.getLocation().toVector(), Math.toRadians(((float) count) / 4f % 360)).toLocation(w).add(0, 1.5, 0), 1, dustOptions);
                                 }
                             }
 

@@ -6,6 +6,8 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import de.studiocode.invui.gui.structure.Structure;
+import de.studiocode.invui.item.builder.ItemBuilder;
 import me.zenox.superitems.command.MainCommand;
 import me.zenox.superitems.data.ConfigLoader;
 import me.zenox.superitems.data.LanguageLoader;
@@ -16,6 +18,8 @@ import me.zenox.superitems.events.PlayerUseItemEvent;
 import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.network.GlowFilter;
 import me.zenox.superitems.recipe.RecipeRegistry;
+import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SuperItems extends JavaPlugin {
@@ -54,6 +58,8 @@ public final class SuperItems extends JavaPlugin {
         configLoader = new ConfigLoader(plugin);
         languageLoader = new LanguageLoader(plugin);
 
+        registerGlobalGUIItems();
+
         // Item Packet/Network filters
         new GlowFilter(this, protocolManager);
 
@@ -72,6 +78,11 @@ public final class SuperItems extends JavaPlugin {
         new PlayerUseItemEvent(plugin);
         new OtherEvent(plugin);
         new InventoryListener(plugin);
+    }
+
+    public static void registerGlobalGUIItems(){
+        // Menu Glass Item
+        Structure.addGlobalIngredient('#', new ItemBuilder(Material.LIGHT_GRAY_STAINED_GLASS_PANE).setDisplayName(""));
     }
 
     public LanguageLoader getLang() {

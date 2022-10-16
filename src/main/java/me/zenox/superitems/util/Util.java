@@ -58,9 +58,8 @@ public class Util {
 
     @NotNull
     public static ItemStack makeSkull(ItemStack item, String base64EncodedString) {
-        final ItemStack skull = item;
         if (item.getType() != Material.PLAYER_HEAD) return item;
-        SkullMeta meta = (SkullMeta) skull.getItemMeta();
+        SkullMeta meta = (SkullMeta) item.getItemMeta();
         assert meta != null;
 
         Random r = new Random(base64EncodedString.hashCode());
@@ -78,8 +77,22 @@ public class Util {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        skull.setItemMeta(meta);
-        return skull;
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    /**
+     * Creates an uuid that is reproducible via the string - similar to hashcode, but in UUID form.
+     * @param str The String to pass in
+     * @return the uuid
+     */
+    public static UUID constantUUID(String str){
+
+        Random r = new Random(str.hashCode());
+
+        byte[] array = new byte[16];
+        r.nextBytes(array);
+        return UUID.nameUUIDFromBytes(array);
     }
 
     public static List<Block> getNearbyBlocks(Location loc, int radius, int yradius) {

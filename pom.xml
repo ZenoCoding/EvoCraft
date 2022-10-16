@@ -79,6 +79,10 @@
             <name>Lumine Releases</name>
             <url>http://mvn.lumine.io/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>xenondevs</id>
+            <url>https://repo.xenondevs.xyz/#/releases</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -103,7 +107,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.4</version>
+            <version>3.12.0</version>
         </dependency>
         <dependency>
             <groupId>com.moandjiezana.toml</groupId>
@@ -119,8 +123,13 @@
         <dependency>
             <groupId>com.ticxo.modelengine</groupId>
             <artifactId>api</artifactId>
-            <version>B3.0.0</version>
+            <version>R3.0.1</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.studiocode.invui</groupId>
+            <artifactId>InvUI</artifactId>
+            <version>0.8.1</version>
         </dependency>
     </dependencies>
 </project>

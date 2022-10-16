@@ -315,7 +315,8 @@ public class ItemRegistry {
                     //Util.logToConsole("Found duplicate recipe, re-adding.");
                     Bukkit.removeRecipe(((Keyed) recipe).getKey());
                     Bukkit.addRecipe(recipe);
-                } else { /**Util.logToConsole("Found duplicate recipe that wasn't keyed, skipping.");**/}
+                } else {
+                }
 
             }
         }

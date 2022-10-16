@@ -52,7 +52,7 @@ public class VoidularRecall extends ItemAbility {
 
             try {
                 p.teleport(locationOfBlock);
-            } catch (Exception error) {
+            } catch (Exception ignored) {
 
             }
 
@@ -66,7 +66,7 @@ public class VoidularRecall extends ItemAbility {
                 locationOfBlock = e.getClickedBlock().getLocation();
             }
 
-            String locationString = locationOfBlock.getWorld().getName() + "|" + locationOfBlock.getX() + "|" + +locationOfBlock.getY() + "|" + locationOfBlock.getZ();
+            String locationString = locationOfBlock.getWorld().getName() + "|" + locationOfBlock.getX() + "|" + locationOfBlock.getY() + "|" + locationOfBlock.getZ();
             container.set(locationKey, PersistentDataType.STRING, locationString);
 
             // Cosmetic Effects

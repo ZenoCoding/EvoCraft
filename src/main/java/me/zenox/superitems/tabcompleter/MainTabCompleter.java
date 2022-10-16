@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainTabCompleter implements TabCompleter {
-    List<String> arguments = new ArrayList();
-    List<String> items = new ArrayList<>();
+    final List<String> arguments = new ArrayList<>();
+    final List<String> items = new ArrayList<>();
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
@@ -31,7 +31,7 @@ public class MainTabCompleter implements TabCompleter {
             }
         }
 
-        List<String> results = new ArrayList();
+        List<String> results = new ArrayList<>();
         if (args.length == 1) {
             for (String a : arguments) {
                 if (a.toLowerCase().startsWith(args[0].toLowerCase())) {

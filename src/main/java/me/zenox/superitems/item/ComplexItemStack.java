@@ -27,7 +27,7 @@ import java.util.UUID;
  * <p>
  * Planned for future implementation
  */
-public class ComplexItemStack implements Cloneable {
+public class ComplexItemStack {
 
     private final ComplexItem complexItem;
     private final UUID uuid;
@@ -76,8 +76,7 @@ public class ComplexItemStack implements Cloneable {
             // Util.logToConsole("Returned null because item " + item.getItemMeta().getDisplayName() + " had no complex registry.");
             return null;
         }
-        ComplexItemStack complexItemStack = new ComplexItemStack(complexItem, item);
-        return complexItemStack;
+        return new ComplexItemStack(complexItem, item);
     }
 
     private ItemStack buildItem(int amount) {
@@ -111,7 +110,7 @@ public class ComplexItemStack implements Cloneable {
         container.set(ComplexItem.GLOBAL_ID, PersistentDataType.STRING, this.getId());
 
         if (this.uuid != null)
-            container.set(new NamespacedKey(SuperItems.getPlugin(), "uuid"), new SerializedPersistentType<UUID>(), uuid);
+            container.set(new NamespacedKey(SuperItems.getPlugin(), "uuid"), new SerializedPersistentType<>(), uuid);
 
         // Set ItemMeta so that ComplexItemMeta can use it
         item.setItemMeta(meta);

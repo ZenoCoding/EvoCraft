@@ -60,8 +60,8 @@ public class ItemSettings {
 
     public static ItemSettings of(ItemStack item) {
         return new ItemSettings(item.getType().name(), false, false, ComplexItem.Rarity.COMMON,
-                ComplexItem.Type.MISC, item.getType(), item.getItemMeta(), new HashMap(),
-                (item.getItemMeta() instanceof SkullMeta) ? ((SkullMeta) item.getItemMeta()).getOwnerProfile().getTextures().getSkin().toString() : "", new ArrayList());
+                ComplexItem.Type.MISC, item.getType(), item.getItemMeta(), new HashMap<>(),
+                (item.getItemMeta() instanceof SkullMeta) ? ((SkullMeta) item.getItemMeta()).getOwnerProfile().getTextures().getSkin().toString() : "", new ArrayList<>());
     }
 
     public String getId() {

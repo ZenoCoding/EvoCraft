@@ -92,7 +92,7 @@ public class Corruption extends ItemAbility {
 
                 final List<Block> blocks = getNearbyBlocks(loc, 7, 2);
                 Random r = new Random();
-                Block block = blocks.get(r.nextInt(blocks.size() - 0) + 0);
+                Block block = blocks.get(r.nextInt(blocks.size()));
 
                 if (blackhole) {
                     if (!(block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD))) {
@@ -134,7 +134,7 @@ public class Corruption extends ItemAbility {
                     count++;
 
 
-                    if (count / 20 >= duration) {
+                    if (((float) count) / 20f >= duration) {
                         displayPentagon(p, loc, rad);
                         cancel();
                         return;

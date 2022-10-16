@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ComplexItem {
 
     public static final NamespacedKey GLOBAL_ID = new NamespacedKey(SuperItems.getPlugin(), "superitem");
@@ -45,8 +46,8 @@ public class ComplexItem {
 
     public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
         this.id = id;
-        this.name = new TranslatableText(TranslatableText.TranslatableType.ITEM_NAME + "-" + id);
-        this.lore = new TranslatableList(TranslatableText.TranslatableType.ITEM_LORE + "-" + id);
+        this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + id);
+        this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
         this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 5));
         this.unique = unique;
@@ -62,8 +63,8 @@ public class ComplexItem {
 
     public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
         this.id = id;
-        this.name = new TranslatableText(TranslatableText.TranslatableType.ITEM_NAME + "-" + id);
-        this.lore = new TranslatableList(TranslatableText.TranslatableType.ITEM_LORE + "-" + id);
+        this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + id);
+        this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
         this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
         this.unique = unique;
@@ -91,9 +92,9 @@ public class ComplexItem {
     }
 
     public ComplexItem(ItemSettings settings) {
-        this.name = new TranslatableText(TranslatableText.TranslatableType.ITEM_NAME + "-" + settings.getId());
+        this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + settings.getId());
         this.id = settings.getId();
-        this.lore = new TranslatableList(TranslatableText.TranslatableType.ITEM_LORE + "-" + id);
+        this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
         this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
         this.unique = settings.isUnique();
@@ -137,7 +138,7 @@ public class ComplexItem {
 
         try {
             if (lore.get(lore.size() - 1).strip() != "") lore.add("");
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException ignored) {
         }
 
         lore.add(this.getRarity().color() + this.getRarity().getName() + " " + this.getType().getName());

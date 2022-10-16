@@ -29,7 +29,7 @@ public class LootTable {
     }
 
     public List<ItemStack> rollItems(double multiplier) {
-        List<ItemStack> items = new ArrayList();
+        List<ItemStack> items = new ArrayList<>();
         Random r = new Random();
         for (LootTableEntry entry : table) {
             if (r.nextDouble() <= entry.getChance() * multiplier) items.add(entry.getItemRandomAmount());

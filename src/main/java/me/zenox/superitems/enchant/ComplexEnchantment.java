@@ -20,6 +20,8 @@ public abstract class ComplexEnchantment {
     private final String id;
     private final TranslatableText name;
     private final int maxLevel;
+    // WEIGHT, not rarity (smaller is rarer)
+    private final int rarity;
     private final List<ComplexItem.Type> types;
     private final List<Slot> slots;
     private final List<StatModifier> stats;
@@ -29,10 +31,22 @@ public abstract class ComplexEnchantment {
 
     private static final List<ComplexEnchantment> registeredEnchants = new ArrayList<>();
 
-    public ComplexEnchantment(String id, int maxLevel, List<ComplexItem.Type> types, List<Slot> slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Class<? extends Event> eventType){
+    /**
+     * New instance of ComplexEnchantment
+     * @param id
+     * @param maxLevel
+     * @param rarity
+     * @param types
+     * @param slot
+     * @param stats
+     * @param executable
+     * @param eventType
+     */
+    public ComplexEnchantment(String id, int maxLevel, int rarity, List<ComplexItem.Type> types, List<Slot> slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Class<? extends Event> eventType){
         this.id = id;
-        this.name = new TranslatableText(TranslatableText.TranslatableType.ENCHANT_NAME + "-" + id);
+        this.name = new TranslatableText(TranslatableText.Type.ENCHANT_NAME + "-" + id);
         this.maxLevel = maxLevel;
+        this.rarity = rarity;
         this.types = types;
         this.slots = slot;
         this.stats = stats;
@@ -50,8 +64,8 @@ public abstract class ComplexEnchantment {
         registeredEnchants.add(this);
     }
 
-    public ComplexEnchantment(String id, int maxLevel, List<ComplexItem.Type> types, Slot slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Class<? extends Event> eventType){
-        this(id, maxLevel, types, List.of(slot), stats, executable, eventType);
+    public ComplexEnchantment(String id, int maxLevel, int rarity, List<ComplexItem.Type> types, Slot slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Class<? extends Event> eventType){
+        this(id, maxLevel, rarity, types, List.of(slot), stats, executable, eventType);
     }
 
     @Nullable
@@ -101,6 +115,10 @@ public abstract class ComplexEnchantment {
 
     public int getMaxLevel() {
         return maxLevel;
+    }
+
+    public int getRarity() {
+        return rarity;
     }
 
     public List<ComplexItem.Type> getTypes() {

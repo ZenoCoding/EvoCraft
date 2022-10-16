@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class InventoryListener implements Listener {
     private final SuperItems plugin;
@@ -60,7 +61,7 @@ public class InventoryListener implements Listener {
     }
 
     private void updateInventory(List<ItemStack> contents, Entity p) {
-        contents.removeIf(itemStack -> itemStack == null);
+        contents.removeIf(Objects::isNull);
 
         // Update ComplexItems
         for (ItemStack item : contents) {

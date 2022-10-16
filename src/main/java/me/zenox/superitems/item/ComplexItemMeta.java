@@ -6,7 +6,6 @@ import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.abilities.ItemAbility;
 import me.zenox.superitems.enchant.ComplexEnchantment;
-import me.zenox.superitems.enchant.EnchantRegistry;
 import me.zenox.superitems.persistence.ArrayListType;
 import me.zenox.superitems.persistence.SerializedPersistentType;
 import me.zenox.superitems.util.Romans;
@@ -36,10 +35,10 @@ import java.util.stream.Stream;
 public class ComplexItemMeta {
     public static final NamespacedKey ABILITY_ID = new NamespacedKey(SuperItems.getPlugin(), "ability");
     public static final String VAR_PREFIX = "var_";
-    public static final VariableType RARITY_VAR = new VariableType<ComplexItem.Rarity>("rarity", new LoreEntry("rarity", List.of("Rarity Lore")), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Rarity) variable.getValue()).color() + ((ComplexItem.Rarity) variable.getValue()).getName())));
-    public static final VariableType TYPE_VAR = new VariableType<ComplexItem.Type>("type", new LoreEntry("type", List.of("Type Lore"), ((loreBuilder, loreEntry) -> {
+    public static final VariableType<ComplexItem.Rarity> RARITY_VAR = new VariableType<ComplexItem.Rarity>("rarity", new LoreEntry("rarity", List.of("Rarity Lore")), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Rarity) variable.getValue()).color() + ((ComplexItem.Rarity) variable.getValue()).getName())));
+    public static final VariableType<ComplexItem.Type> TYPE_VAR = new VariableType<ComplexItem.Type>("type", new LoreEntry("type", List.of("Type Lore"), ((loreBuilder, loreEntry) -> {
         loreBuilder.getLoreEntryById(
-                RARITY_VAR.getName()).get(0).setLore(List.of(loreBuilder.getLoreEntryById(RARITY_VAR.getName()).get(0).getLore().get(0) + " " + loreEntry.getLore().get(0)));
+                RARITY_VAR.name()).get(0).setLore(List.of(loreBuilder.getLoreEntryById(RARITY_VAR.name()).get(0).getLore().get(0) + " " + loreEntry.getLore().get(0)));
         loreEntry.setLore(List.of());
     })), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Type) variable.getValue()).getName())));
     private static final NamespacedKey ENCHANT_KEY = new NamespacedKey(SuperItems.getPlugin(), "complexEnchants");
@@ -98,9 +97,7 @@ public class ComplexItemMeta {
             StringBuilder enchantName = new StringBuilder();
             if (e.getValue() == e.getKey().getMaxLevel()) color = ChatColor.AQUA;
             if (e.getValue() > e.getKey().getMaxLevel()) color = ChatColor.LIGHT_PURPLE;
-            Arrays.stream(e.getKey().getKey().getKey().split("_")).forEach((String str) -> {
-                enchantName.append(str.substring(0, 1).toUpperCase() + str.substring(1)).append(" ");
-            });
+            Arrays.stream(e.getKey().getKey().getKey().split("_")).forEach((String str) -> enchantName.append(str.substring(0, 1).toUpperCase() + str.substring(1)).append(" "));
             lore.entry(new LoreEntry("enchant_" + e.getKey().getKey().getKey(), List.of(color + enchantName.toString() + Romans.encode(e.getValue()))));
         }
 
@@ -127,7 +124,7 @@ public class ComplexItemMeta {
 
         // Write Abilities
         writeAbilityLore(lore);
-        dataContainer.set(ABILITY_ID, new ArrayListType<String>(), new ArrayList(abilities.stream().map(ability -> ability.getId()).toList()));
+        dataContainer.set(ABILITY_ID, new ArrayListType(), new ArrayList<>(abilities.stream().map(Ability::getId).toList()));
 
         writeVariables(VariableType.Priority.BELOW_ABILITIES, dataContainer, lore, true);
 
@@ -145,7 +142,6 @@ public class ComplexItemMeta {
      * A method to read and get a clone of the ComplexItemMeta of a normal ItemStack
      *
      * @param force whether to force- whether this is a new/unfinished item or a preexisting item
-     * @return The ComplexItemMeta of the ItemStack
      */
     public void read(Boolean force) {
         ItemStack item = complexItemStack.getItem();
@@ -171,9 +167,9 @@ public class ComplexItemMeta {
                 .forEach(namespacedKey -> setVariable(VariableType.getVariableByPrefix(namespacedKey.getKey().substring(VAR_PREFIX.length())), dataContainer.get(namespacedKey, new SerializedPersistentType<>())));
 
         // if the meta doesn't contain rarity or type
-        if (this.variableList.stream().filter((variable -> variable.getType().getName() == RARITY_VAR.getName())).toList().isEmpty())
+        if (this.variableList.stream().filter((variable -> variable.getType().name() == RARITY_VAR.name())).toList().isEmpty())
             this.variableList.add(new Variable(this, RARITY_VAR, ComplexItem.Rarity.UNKNOWN));
-        if (this.variableList.stream().filter((variable -> variable.getType().getName() == TYPE_VAR.getName())).toList().isEmpty())
+        if (this.variableList.stream().filter((variable -> variable.getType().name() == TYPE_VAR.name())).toList().isEmpty())
             this.variableList.add(new Variable(this, TYPE_VAR, ComplexItem.Type.MISC));
 
         item.setItemMeta(meta);
@@ -181,7 +177,7 @@ public class ComplexItemMeta {
     }
 
     private void writeVariables(VariableType.Priority priority, PersistentDataContainer container, LoreBuilder builder, Boolean newline) {
-        Stream<Variable> filteredList = variableList.stream().filter(variable -> variable.getType().getPriority() == priority);
+        Stream<Variable> filteredList = variableList.stream().filter(variable -> variable.getType().priority() == priority);
         filteredList.forEachOrdered(variable -> {
             try {
                 variable.write(container, builder);
@@ -189,7 +185,7 @@ public class ComplexItemMeta {
                 e.printStackTrace();
             }
         });
-        if (!variableList.stream().filter(variable -> variable.getType().getPriority() == priority).toList().isEmpty() && newline)
+        if (!variableList.stream().filter(variable -> variable.getType().priority() == priority).toList().isEmpty() && newline)
             builder.entry(new LoreEntry("newline", List.of("")));
 
     }
@@ -231,6 +227,11 @@ public class ComplexItemMeta {
         }
     }
 
+    public boolean hasVariable(VariableType type){
+        return Objects.nonNull(getVariable(type));
+    }
+
+
     public Map<ComplexEnchantment, Integer> getComplexEnchants(){
         return this.complexEnchantments;
     }
@@ -243,6 +244,7 @@ public class ComplexItemMeta {
         ItemMeta meta = this.complexItemStack.getItem().getItemMeta();
         meta.addEnchant(enchantment, level, true);
         this.complexItemStack.getItem().setItemMeta(meta);
+        updateItem();
     }
 
     public void addEnchantment(ComplexEnchantment enchantment, Integer level){
@@ -254,6 +256,12 @@ public class ComplexItemMeta {
         ItemMeta meta = this.complexItemStack.getItem().getItemMeta();
         meta.removeEnchant(enchantment);
         this.complexItemStack.getItem().setItemMeta(meta);
+        updateItem();
+    }
+
+    public void setComplexEnchantments(HashMap<ComplexEnchantment, Integer> complexEnchantments){
+        this.complexEnchantments = complexEnchantments;
+        updateItem();
     }
 
     public void removeEnchantment(ComplexEnchantment enchantment){

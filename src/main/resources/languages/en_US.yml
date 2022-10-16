@@ -293,3 +293,28 @@ ability-lore-justice:
 ##########################################################################
 
 enchant-name-syphon: Syphon
+
+##########################################################################
+##                                GUIS                                  ##
+##########################################################################
+
+gui-enchant-action-title-1: "&3Enchant &7→ &eLevel 1"
+gui-enchant-action-lore-1:
+  - "&3Enchanting &7will consume &630 &eXP levels,"
+  - "&7and consume all &d&nenchanting fuel."
+  - ""
+  - "&e&nRequires no enchanting level!"
+
+gui-enchant-action-title-2: "&3Enchant &7→ &eLevel 2"
+gui-enchant-action-lore-2:
+  - "&3Enchanting &7will consume &640 &eXP levels,"
+  - "&7and consume all &d&nenchanting fuel."
+  - ""
+  - "&c&nRequires enchanting level 20!"
+
+gui-enchant-action-title-3: "&3Enchant &7→ &eLevel 3"
+gui-enchant-action-lore-3:
+  - "&3Enchanting &7will consume &650 &eXP levels,"
+  - "&7and consume all &d&nenchanting fuel."
+  - ""
+  - "&c&nRequires enchanting level 35!"

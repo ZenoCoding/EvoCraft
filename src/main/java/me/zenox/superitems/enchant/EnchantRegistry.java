@@ -18,7 +18,7 @@ import java.util.List;
 
 public class EnchantRegistry {
 
-    public static ComplexEnchantment SYPHON = new AttackEnchantment("syphon", 5, List.of(ComplexItem.Type.SWORD, ComplexItem.Type.AXE), Slot.EITHER_HAND,  new ArrayList<>(), EnchantRegistry::syphonExecutable);
+    public static ComplexEnchantment SYPHON = new AttackEnchantment("syphon", 5, 50 ,List.of(ComplexItem.Type.SWORD, ComplexItem.Type.AXE), Slot.EITHER_HAND,  new ArrayList<>(), EnchantRegistry::syphonExecutable);
 
     // static function methods
     private static void syphonExecutable(Event e, Integer level, ItemStack item, Player p){

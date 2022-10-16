@@ -91,7 +91,7 @@ public class Crucify extends ItemAbility implements Listener {
         Entity entity = e.getEntity();
 
         List<MetadataValue> values = entity.getMetadata("crucify_active");
-        if (!values.isEmpty() && values.get(0).asBoolean() == true) {
+        if (!values.isEmpty() && values.get(0).asBoolean()) {
             e.setCancelled(true);
         }
     }
@@ -101,7 +101,7 @@ public class Crucify extends ItemAbility implements Listener {
         Player p = e.getEntity().getPlayer();
 
         List<MetadataValue> values = p.getMetadata("crucify_active");
-        if (!values.isEmpty() && values.get(0).asBoolean() == true) {
+        if (!values.isEmpty() && values.get(0).asBoolean()) {
             p.setMetadata("crucify_active", new FixedMetadataValue(SuperItems.getPlugin(), false));
             Inventory inv = p.getInventory();
             for (ItemStack item : inv.getContents()) {

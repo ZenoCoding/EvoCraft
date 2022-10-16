@@ -10,9 +10,8 @@ public class LoreBuilder {
 
     }
 
-    public LoreBuilder entry(LoreEntry entry) {
+    public void entry(LoreEntry entry) {
         this.loreEntries.add(entry);
-        return this;
     }
 
     public List<LoreEntry> getLoreEntries() {

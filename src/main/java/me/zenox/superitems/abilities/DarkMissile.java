@@ -131,7 +131,7 @@ public class DarkMissile extends ItemAbility {
                     }
                     try {
                         trident.remove();
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
 
                     }
                     w.createExplosion(loc, explosionPower, false, true, p);

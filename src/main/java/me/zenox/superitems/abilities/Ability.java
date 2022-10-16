@@ -12,7 +12,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -24,8 +23,8 @@ import java.util.List;
 
 
 public abstract class Ability implements Serializable {
-    public static List<Ability> registeredAbilities = new ArrayList<>();
-    public static List<Class<? extends Event>> registeredEvents = new ArrayList<>();
+    public static final List<Ability> registeredAbilities = new ArrayList<>();
+    public static final List<Class<? extends Event>> registeredEvents = new ArrayList<>();
 
     private final TranslatableText name;
     private final String id;
@@ -60,8 +59,8 @@ public abstract class Ability implements Serializable {
      */
     private Ability(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot, Boolean internal) {
         this.id = id;
-        this.name = new TranslatableText(TranslatableText.TranslatableType.ABILITY_NAME + "-" + id);
-        this.lore = new TranslatableList(TranslatableText.TranslatableType.ABILITY_LORE + "-" + id);
+        this.name = new TranslatableText(TranslatableText.Type.ABILITY_NAME + "-" + id);
+        this.lore = new TranslatableList(TranslatableText.Type.ABILITY_LORE + "-" + id);
         this.cooldown = cooldown;
         this.manaCost = manaCost;
         this.eventType = eventType;
