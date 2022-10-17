@@ -371,7 +371,7 @@ public class ItemRegistry {
 
     public static final ComplexItem SUPER_SPACE_HELMET = registerItem(new ComplexItem(new ItemSettings()))
             .id("super_space_helmet")
-            .material(Material.RED_STAINED_GLASS_PANE)
+            .material(Material.RED_STAINED_GLASS)
             .stat(Stats.STRENGTH, 1000)
             .stat(Stats.HEALTH, 1000)
             .stat(Stats.TOUGHNESS, 1000)
@@ -387,7 +387,7 @@ public class ItemRegistry {
             .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
             .attribute(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
             .rarity(ComplexItem.Rarity.MYTHIC)
-            .type(ComplexItem.Type.HELMET));
+            .type(ComplexItem.Type.HELMET);
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
 
