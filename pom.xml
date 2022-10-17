@@ -77,7 +77,7 @@
         <repository>
             <id>nexus</id>
             <name>Lumine Releases</name>
-            <url>http://mvn.lumine.io/repository/maven-public/</url>
+            <url>https://mvn.lumine.io/repository/maven-public/</url>
         </repository>
     </repositories>
 

@@ -207,6 +207,26 @@ item-lore-volken_stick:
   - ""
   - "Something to do with piglins &?&"
 
+item-lore-volkanaxe:
+  - "A relic of the past. Doesn't look fragile..."
+
+item-lore-titanium_helmet:
+  - "Heavy Metal Helmet "
+  - ""
+  - "tycho pls make this better"
+item-lore-titanium_chestplate:
+  - "Heavy Metal Chestplate"
+  - ""
+  - "Stronger than Diamond"
+item-lore-titanium_leggings:
+  - "Heavy Metal Leggings"
+  - ""
+  - "You can feel the weight pulling you down..."
+item-lore-titanium_boots:
+  - "Heavy Metal Boots"
+  - ""
+  - "&Heavy Drip&"
+
 ##########################################################################
 ##                              ABILITIES                               ##
 ##########################################################################
