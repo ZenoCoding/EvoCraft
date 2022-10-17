@@ -45,24 +45,24 @@ public class EnchantingGUI extends SimpleGUI {
     private static final Sound PRE_ENCHANT_SOUND = Sound.ENTITY_EVOKER_PREPARE_ATTACK;
 
     private final Player p;
-    private final Block etable;
+    private final Block eTable;
     private int bookshelfPower = 0;
 
-    public EnchantingGUI(int width, int height, Player p, Block etable) {
+    public EnchantingGUI(int width, int height, Player p, Block eTable) {
         super(width, height);
         this.p = p;
-        this.etable = etable;
+        this.eTable = eTable;
     }
 
-    public EnchantingGUI(@NotNull Structure structure, Player p, Block etable) {
+    public EnchantingGUI(@NotNull Structure structure, Player p, Block eTable) {
         super(structure.getWidth(), structure.getHeight());
         applyStructure(structure);
         this.p = p;
-        this.etable = etable;
+        this.eTable = eTable;
     }
 
     /**
-     * Applies enchants to an item in the enchant GUI, given the enchant level, bookshelf power, player enchanting level, and fuel.
+     * Applies enchants to an item in the enchant GUI, given the enchantment level, bookshelf power, player enchanting level, and fuel.
      * <ol>
      *     <li>- Enchantment Level - Increases variety and maximum strength of enchants</li>
      *     <li>- Bookshelf Power - Increases variety of enchants</li>
@@ -81,7 +81,7 @@ public class EnchantingGUI extends SimpleGUI {
         Random r = new Random();
 
         if (item == null || cItem == null) {
-            Util.sendMessage(p, "Failed due to complexitems being null");
+            Util.sendMessage(p, "Failed due to complexItems being null");
             return false;
         }
 
@@ -96,7 +96,7 @@ public class EnchantingGUI extends SimpleGUI {
 
         double variety = r.nextDouble(1d, (Math.sqrt(this.bookshelfPower) * level / 3d) + 1.01d);
         // between 0 and 1
-        double strength = Math.min(1d, ((level / 2 + Math.sqrt(fuelStrength)) * (2 * Math.sqrt(AureliumAPI.getSkillLevel(p, Skills.ENCHANTING)))) / 200);
+        double strength = Math.min(1d, ((level / 2f + Math.sqrt(fuelStrength)) * (2f * Math.sqrt(AureliumAPI.getSkillLevel(p, Skills.ENCHANTING)))) / 200);
 
         Util.sendMessage(p, "Enchant | Strength: " + strength + " | Variety: " + variety);
 
@@ -134,10 +134,10 @@ public class EnchantingGUI extends SimpleGUI {
 
         // Set fuel to be empty
         VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1).setItemStack(null, 0, new ItemStack(Material.AIR));
-        // update virtualcontainer with ench version
+        // update virtual container with enchanted version
         VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_ITEM_KEY + p.getName()), 1).setItemStack(null, 0, item.getItem());
 
-        this.etable.getWorld().playSound(this.etable.getLocation(), ENCHANT_SOUND, 1f+level, 1f-level*0.15f);
+        this.eTable.getWorld().playSound(this.eTable.getLocation(), ENCHANT_SOUND, 1f + level, 1f - level * 0.15f);
 
         p.sendExperienceChange(p.getExp(), p.getLevel() - xp);
         p.setLevel(p.getLevel() - xp);
@@ -166,29 +166,29 @@ public class EnchantingGUI extends SimpleGUI {
         return VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1).getItemStack(0);
     }
 
-    public Block getEtable() {
-        return etable;
+    public Block getETable() {
+        return eTable;
     }
 
     public void setBookshelfPower(int bookshelfPower) {
         this.bookshelfPower = bookshelfPower;
     }
 
-    public static boolean fuelValid(EnchantingGUI gui){
+    public static boolean fuelValid(EnchantingGUI gui) {
         try {
             return ComplexItemStack.of(gui.getFuelItem()).getComplexMeta().hasVariable(ENCHANT_FUEL_VAR);
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return false;
         }
     }
 
-    public static boolean enchantValid(EnchantingGUI gui, int level){
+    public static boolean enchantValid(EnchantingGUI gui, int level) {
         int skillRequirement = 0;
-        switch(level){
+        switch (level) {
             case 2 -> skillRequirement = 20;
             case 3 -> skillRequirement = 35;
         }
-        return fuelValid(gui) && AureliumAPI.getSkillLevel(gui.p, Skills.ENCHANTING) >= skillRequirement;
+        return fuelValid(gui) && AureliumAPI.getSkillLevel(gui.p, Skills.ENCHANTING) >= skillRequirement && gui.p.getLevel() >= 20 + level * 10;
     }
 
     public static GUI getGui(Player p, Block block) {
@@ -201,7 +201,6 @@ public class EnchantingGUI extends SimpleGUI {
                         "# # # # # ^ ^ 3 #",
                         "# # # # C B # # #"
                 )
-                // Lapis Slot
                 .addIngredient('E', new SlotElement.VISlotElement(VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_ITEM_KEY + p.getName()), 1), 0, new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE)))
                 .addIngredient('F', new SlotElement.VISlotElement(VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1), 0, new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)))
                 .addIngredient('R', new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName(""))

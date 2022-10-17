@@ -1,10 +1,8 @@
 package me.zenox.superitems.gui.item;
 
-import de.studiocode.invui.gui.impl.SimpleGUI;
 import de.studiocode.invui.item.ItemProvider;
 import de.studiocode.invui.item.builder.ItemBuilder;
 import de.studiocode.invui.item.impl.controlitem.ControlItem;
-import de.studiocode.invui.window.Window;
 import me.zenox.superitems.gui.EnchantingGUI;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Material;
@@ -27,7 +25,7 @@ public class BookshelfItem extends ControlItem<EnchantingGUI> {
     public ItemProvider getItemProvider(EnchantingGUI gui) {
         this.gui = gui;
         int bookshelfPower = 0;
-        for (Block block : Util.getNearbyBlocks(gui.getEtable().getLocation(), 5, 5))
+        for (Block block : Util.getNearbyBlocks(gui.getETable().getLocation(), 5, 5))
             if(block.getType() == Material.BOOKSHELF) bookshelfPower ++;
         bookshelfPower = Math.min(bookshelfPower, 15);
         gui.setBookshelfPower(bookshelfPower);

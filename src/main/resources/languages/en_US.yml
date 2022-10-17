@@ -297,7 +297,12 @@ ability-lore-justice:
 ##                            ENCHANTMENTS                              ##
 ##########################################################################
 
-enchant-name-syphon: Syphon
+enchant-name-siphon: Siphon
+enchant-name-sharpness: Sharpness
+enchant-name-fire_aspect: Fire Aspect
+enchant-name-darksoul: Darksoul
+enchant-name-knockback: Knockback
+enchant-name-culling: Culling
 
 ##########################################################################
 ##                                GUIS                                  ##

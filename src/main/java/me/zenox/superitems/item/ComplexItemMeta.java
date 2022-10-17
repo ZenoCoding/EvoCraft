@@ -75,7 +75,6 @@ public class ComplexItemMeta {
 
         writeVariables(VariableType.Priority.ABOVE_STATS, dataContainer, lore, true);
 
-        // Util.logToConsole("Stat Lore: " + statlore);
         if (!statlore.isEmpty()) {
             lore.entry(new LoreEntry("stat_lore", statlore));
             lore.entry(new LoreEntry("newline", List.of("")));

@@ -40,7 +40,7 @@ public class ItemSettings {
         this.stats = new HashMap<>();
         this.skullURL = "";
         this.abilities = new ArrayList<>();
-        this.variableMap = new HashMap();
+        this.variableMap = new HashMap<>();
     }
 
     public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap) {

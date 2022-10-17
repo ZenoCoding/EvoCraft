@@ -2,14 +2,13 @@ package me.zenox.superitems.util;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import net.citizensnpcs.api.npc.NPC;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -105,5 +104,9 @@ public class Util {
             }
         }
         return nearbyBlocks;
+    }
+
+    public static boolean isInvulnerable(Entity entity){
+        return (entity instanceof NPC || (entity instanceof Player player && player.getGameMode() == GameMode.CREATIVE));
     }
 }
