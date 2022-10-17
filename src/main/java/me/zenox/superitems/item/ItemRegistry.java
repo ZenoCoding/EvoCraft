@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import sun.font.EAttribute;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -292,15 +293,101 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.RARE)
             .type(ComplexItem.Type.AXE)));
 
+    public static final ComplexItem VOLCANAXE = registerItem(new ComplexItem(new ItemSettings()
+            .id("volkanaxe")
+            .material(Material.GOLDEN_AXE)
+            .addEnchant(Enchantment.DIG_SPEED, 6 , true)
+
+            .rarity(ComplexItem.Rarity.EPIC)
+            .type(ComplexItem.Type.AXE)));
+
 
     public static final ComplexItem CHROMOTONIN = registerItem(new ComplexItem(new ItemSettings()
             .id ("chromotonin")
             .material(Material.LEAD)
             .rarity(ComplexItem.Rarity.SPECIAL)
             .type(ComplexItem.Type.MISC)
-//play valorant when
+
     ));
 
+    public static final ComplexItem VOLKEN_STICK = registerItem(new ComplexItem(new ItemSettings()
+            .id("volken_stick")
+            .material(Material.STICK)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.MISC)));
+
+    public static final ComplexItem TITANIUM_HELMET = registerItem(new ComplexItem(new ItemSettings()
+            .id("titanium_helmet")
+            .material(Material.IRON_HELMET)
+            .stat(Stats.STRENGTH, 10)
+            .stat(Stats.TOUGHNESS,20)
+            .stat(Stats.HEALTH,6)
+            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
+            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -0.025, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
+            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
+            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", -0.05, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.HELMET)));
+
+    public static final ComplexItem TITANIUM_CHESTPLATE = registerItem(new ComplexItem(new ItemSettings()
+            .id("titanium_helmet")
+            .material(Material.IRON_HELMET)
+            .stat(Stats.STRENGTH, 15)
+            .stat(Stats.TOUGHNESS,40)
+            .stat(Stats.HEALTH,6)
+            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST))
+            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -0.025, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.CHEST))
+            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST))
+            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", -0.1, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.CHEST))
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.CHESTPLATE)));
+
+    public static final ComplexItem TITANIUM_LEGGINGS = registerItem(new ComplexItem(new ItemSettings()
+            .id("titanium_leggings")
+            .material(Material.IRON_LEGGINGS)
+            .stat(Stats.STRENGTH, 10)
+            .stat(Stats.TOUGHNESS,25)
+            .stat(Stats.HEALTH,4)
+            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS))
+            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -0.025, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.LEGS))
+            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS))
+            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", -0.075, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.LEGS))
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.LEGGINGS)));
+
+    public static final ComplexItem TITANIUM_BOOTS = registerItem(new ComplexItem(new ItemSettings()
+            .id("titanium_boots")
+            .material(Material.IRON_BOOTS)
+            .stat(Stats.STRENGTH, 5)
+            .stat(Stats.TOUGHNESS,8)
+            .stat(Stats.HEALTH,6)
+            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET))
+            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -0.025, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.FEET))
+            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET))
+            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", -0.05, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.FEET))
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.BOOTS));
+
+
+    public static final ComplexItem SUPER_SPACE_HELMET = registerItem(new ComplexItem(new ItemSettings()))
+            .id("super_space_helmet")
+            .material(Material.RED_STAINED_GLASS_PANE)
+            .stat(Stats.STRENGTH, 1000)
+            .stat(Stats.HEALTH, 1000)
+            .stat(Stats.TOUGHNESS, 1000)
+            .stat(Stats.REGENERATION, 1000)
+            .stat(Stats.WISDOM, 1000)
+            .stat(Stats.LUCK, 1000)
+            .addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 100, true)
+            .addEnchant(Enchantment.OXYGEN, 100, true)
+            .addEnchant(Enchantment.DEPTH_STRIDER, 100, true)
+            .addEnchant(Enchantment.WATER_WORKER, 100, true)
+            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 300, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
+            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 500, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
+            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
+            .attribute(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
+            .rarity(ComplexItem.Rarity.MYTHIC)
+            .type(ComplexItem.Type.HELMET));
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
 

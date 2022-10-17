@@ -175,7 +175,7 @@ item-lore-obsidilith_scythe:
   - "Mining away... I don't know.. what to miiine..."
 
 item-lore-enchanted_obsidian:
-  - "Breaking the laws of physics, it's gravitational attraction warps space-time."
+  - "Harder than diamond."
 
 item-lore-compact_obsidian:
   - "Breaking the laws of physics, it's gravitational attraction warps space-time."
@@ -201,6 +201,37 @@ item-lore-volken_axe:
 
 item-lore-chromotonin:
   - "it consists of DNA and proteins and also helped a dev fail bio class :)"
+
+item-lore-volken_stick:
+  - "A relic of the past. Emits a strange heat..."
+  - ""
+  - "Something to do with piglins &?&"
+
+item-lore-volkanaxe:
+  - "A relic of the past. Doesn't look fragile..."
+
+item-lore-titanium_helmet:
+  - "Heavy Metal Helmet "
+  - ""
+  - "tycho pls make this better"
+item-lore-titanium_chestplate:
+  - "Heavy Metal Chestplate"
+  - ""
+  - "Stronger than Diamond"
+item-lore-titanium_leggings:
+  - "Heavy Metal Leggings"
+  - ""
+  - "You can feel the weight pulling you down..."
+item-lore-titanium_boots:
+  - "Heavy Metal Boots"
+  - ""
+  - "&Heavy Drip&"
+item-lore-super_space_helmet:
+  - "&husghasodhusghasodhusghasod&"
+  - "&husghasodhusghasodhusghasod&"
+  - "&husghasodhusghasodhusghasod&"
+  - "&husghasodhusghasodhusghasod&"
+  - "trisolarians?!"
 
 ##########################################################################
 ##                              ABILITIES                               ##
