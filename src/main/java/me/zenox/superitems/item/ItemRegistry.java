@@ -391,7 +391,7 @@ public class ItemRegistry {
             .type(ComplexItem.Type.HELMET);
 
     public static final ComplexItem SUPER_SPACE_SUIT = registerItem(new ComplexItem(new ItemSettings()))
-            .id("super_space_helmet")
+            .id("super_space_suit")
             .material(Material.RED_STAINED_GLASS)
             .stat(Stats.STRENGTH, 10000000000)
             .stat(Stats.HEALTH, 1000000000000)
