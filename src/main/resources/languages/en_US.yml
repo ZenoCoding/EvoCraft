@@ -232,6 +232,12 @@ item-lore-super_space_helmet:
   - "&khusghasodhusghasodhusghasod&c"
   - "&khusghasodhusghasodhusghasod&c"
   - "trisolarians?!"
+item-lore-super_space_suit:
+  - "&khusghasodhusghasodhusghasod&c"
+  - "&khusghasodhusghasodhusghasod&c"
+  - "&khusghasodhusghasodhusghasod&c"
+  - "&khusghasodhusghasodhusghasod&c"
+  - "trisolarians?!"
 
 ##########################################################################
 ##                              ABILITIES                               ##
