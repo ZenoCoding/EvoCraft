@@ -2,7 +2,6 @@ package me.zenox.superitems.util;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import net.citizensnpcs.api.npc.NPC;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -107,6 +106,6 @@ public class Util {
     }
 
     public static boolean isInvulnerable(Entity entity){
-        return (entity instanceof NPC || (entity instanceof Player player && player.getGameMode() == GameMode.CREATIVE));
+        return (entity.hasMetadata("NPC") || (entity instanceof Player player && player.getGameMode() == GameMode.CREATIVE));
     }
 }

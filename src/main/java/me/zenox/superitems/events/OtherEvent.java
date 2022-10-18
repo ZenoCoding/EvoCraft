@@ -1,14 +1,11 @@
 package me.zenox.superitems.events;
 
-import de.studiocode.inventoryaccess.component.BaseComponentWrapper;
 import de.studiocode.invui.window.impl.single.SimpleWindow;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.gui.EnchantingGUI;
 import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.util.Util;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Explosive;
@@ -19,7 +16,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
@@ -33,11 +29,6 @@ public class OtherEvent implements Listener {
     public OtherEvent(SuperItems plugin) {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
-    }
-
-    @EventHandler
-    public void interactEntityEvent(PlayerInteractEntityEvent event){
-        Util.sendMessage(event.getPlayer(), "Entity Invulnerable: " + Util.isInvulnerable(event.getRightClicked()));
     }
 
     @EventHandler
@@ -67,7 +58,7 @@ public class OtherEvent implements Listener {
         List<MetadataValue> kbValues = entity.getMetadata("knockback");
         if (!kbValues.isEmpty()) {
             for (Entity nearbyEntity : entity.getLocation().getWorld().getNearbyEntities(entity.getLocation(), 3, 3, 3)) {
-                if (!Util.isInvulnerable(entity)) nearbyEntity.setVelocity(nearbyEntity.getVelocity().add(nearbyEntity.getLocation().toVector().subtract(entity.getLocation().add(0, -0.3, 0).toVector()).normalize().multiply(kbValues.get(0).asInt())));
+                if (!Util.isInvulnerable(nearbyEntity)) nearbyEntity.setVelocity(nearbyEntity.getVelocity().add(nearbyEntity.getLocation().toVector().subtract(entity.getLocation().add(0, -0.3, 0).toVector()).normalize().multiply(kbValues.get(0).asInt())));
             }
         }
 

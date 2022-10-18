@@ -4,6 +4,7 @@ import me.zenox.superitems.Slot;
 import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.util.TriConsumer;
+import me.zenox.superitems.util.Util;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -15,7 +16,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 import java.util.Random;
-import java.util.function.Consumer;
 
 public class AttackAbility extends Ability {
 
@@ -33,7 +33,7 @@ public class AttackAbility extends Ability {
 
     @Override
     protected boolean checkEvent(Event e) {
-        return ((EntityDamageByEntityEvent) e).getDamager() instanceof Player;
+        return e instanceof EntityDamageByEntityEvent event && event.getDamager() instanceof Player && !Util.isInvulnerable(event.getEntity());
     }
 
     @Override
