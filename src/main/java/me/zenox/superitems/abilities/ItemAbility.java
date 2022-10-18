@@ -401,13 +401,13 @@ public class ItemAbility extends Ability {
         new BukkitRunnable() {
             final int wings = 6;
             final Location loc = totem.getLocation();
-            final double startradius = 4;
+            final double startRadius = 4;
             double a = 0;
             int count = 0;
             double x = 0;
             double y = 0;
             double z = 0;
-            double radius = startradius;
+            double radius = startRadius;
 
             @Override
             public void run() {
@@ -424,7 +424,7 @@ public class ItemAbility extends Ability {
                     a += Math.PI / 150;
                     radius -= 0.025;
 
-                    if (radius <= 0.8) radius = startradius;
+                    if (radius <= 0.8) radius = startRadius;
 
                 }
 

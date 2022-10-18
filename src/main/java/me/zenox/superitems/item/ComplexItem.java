@@ -1,6 +1,5 @@
 package me.zenox.superitems.item;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
 import com.archyx.aureliumskills.stats.Stat;
 import com.google.common.primitives.Ints;
 import me.zenox.superitems.SuperItems;
@@ -8,15 +7,12 @@ import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.abilities.ItemAbility;
 import me.zenox.superitems.data.TranslatableList;
 import me.zenox.superitems.data.TranslatableText;
-import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -53,7 +49,8 @@ public class ComplexItem {
         this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + id);
         this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
-        this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
+        String str = String.valueOf(Math.abs(id.hashCode()));
+        this.customModelData = Ints.tryParse(str.substring(0, Math.min(7, str.length())));
         this.unique = unique;
         this.glow = glow;
         this.rarity = rarity;
@@ -90,12 +87,17 @@ public class ComplexItem {
         this(id, false, rarity, type, material, stats, List.of());
     }
 
+    public ComplexItem(String id, Rarity rarity, Type type, Material material) {
+        this(id, false, rarity, type, material, Map.of(), List.of());
+    }
+
     public ComplexItem(ItemSettings settings) {
         this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + settings.getId());
         this.id = settings.getId();
         this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
-        this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
+        String str = String.valueOf(Math.abs(id.hashCode()));
+        this.customModelData = Ints.tryParse(str.substring(0, Math.min(7, str.length())));
         this.unique = settings.isUnique();
         this.glow = settings.doesGlow();
         this.rarity = settings.getRarity();
@@ -115,47 +117,6 @@ public class ComplexItem {
     @Deprecated
     public ItemStack getItemStack(Integer amount) {
         return new ComplexItemStack(this, 2).getItem();
-    }
-
-    @Deprecated
-    public ItemStack getItemStackWithData(Integer amount) {
-        ItemStack item = new ItemStack(this.material);
-        item.setItemMeta(this.meta);
-        item.setAmount(amount);
-        ItemMeta meta = item.getItemMeta();
-        // Add persistent data
-        PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
-        dataContainer.set(GLOBAL_ID, PersistentDataType.STRING, this.getId());
-
-        List<String> lore = new ArrayList<>();
-
-        if (!this.stats.isEmpty()) lore.add(" ");
-
-        if (item.getItemMeta().getLore() != null) lore.addAll(item.getItemMeta().getLore());
-
-
-        writeAbilityLore(lore);
-
-        try {
-            if (lore.get(lore.size() - 1).strip() != "") lore.add("");
-        } catch (IndexOutOfBoundsException ignored) {
-        }
-
-        lore.add(this.getRarity().color() + this.getRarity().getName() + " " + this.getType().getName());
-        meta.setLore(lore);
-        meta.setDisplayName(this.getRarity().color() + this.getName().toString());
-        item.setItemMeta(meta);
-
-        for (Map.Entry<Stat, Double> entry : this.getStats().entrySet()) {
-            item = this.getType().isWearable() ? AureliumAPI.addArmorModifier(item, entry.getKey(), entry.getValue(), true) : AureliumAPI.addItemModifier(item, entry.getKey(), entry.getValue(), true);
-
-        }
-
-        ItemStack skullItem = Util.makeSkull(item, this.skullURL);
-
-        item = this.skullURL.isBlank() ? item : skullItem;
-
-        return item;
     }
 
     protected void writeAbilityLore(List<String> lore) {
@@ -242,20 +203,23 @@ public class ComplexItem {
 
     public enum Rarity {
 
-        COMMON(ChatColor.WHITE, ChatColor.BOLD + "COMMON"), UNCOMMON(ChatColor.GREEN, ChatColor.BOLD + "UNCOMMON"),
-        RARE(ChatColor.BLUE, ChatColor.BOLD + "RARE"), EPIC(ChatColor.DARK_PURPLE, ChatColor.BOLD + "EPIC"),
-        LEGENDARY(ChatColor.GOLD, ChatColor.BOLD + "LEGENDARY"),
-        MYTHIC(ChatColor.LIGHT_PURPLE, ChatColor.MAGIC + "" + ChatColor.BOLD + "D " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "MYTHIC" + ChatColor.MAGIC + " D" + ChatColor.LIGHT_PURPLE),
-        SPECIAL(ChatColor.RED, ChatColor.MAGIC + "" + ChatColor.BOLD + "D " + ChatColor.RED + ChatColor.BOLD + "SPECIAL" + ChatColor.MAGIC + " D" + ChatColor.RED),
-        VERY_SPECIAL(ChatColor.RED, ChatColor.MAGIC + "" + ChatColor.BOLD + "| D " + ChatColor.RED + ChatColor.BOLD + "VERY SPECIAL" + ChatColor.MAGIC + " D |" + ChatColor.RED),
-        UNKNOWN(ChatColor.RED, ChatColor.MAGIC + "" + ChatColor.BOLD + "D " + ChatColor.RED + ChatColor.BOLD + "UNKNOWN" + ChatColor.MAGIC + " D" + ChatColor.RED);
+        COMMON(ChatColor.WHITE, "&f&lCOMMON&f"),
+        UNCOMMON(ChatColor.GREEN, "&a&lUNCOMMON&a"),
+        RARE(ChatColor.BLUE, "&9&lRARE&9"),
+        EPIC(ChatColor.DARK_PURPLE, "&5&lEPIC&5"),
+        LEGENDARY(ChatColor.GOLD, "&6&lLEGENDARY&6"),
+        MYTHIC(ChatColor.LIGHT_PURPLE, "&d&k&lD &k&lMYTHIC&k D&d"),
+        OMEGA(ChatColor.GOLD, "&6&k&lD &6&lOMEGA&k D&6"),
+        VERY_SPECIAL(ChatColor.RED, "&c&k&l| D &c&lVERY SPECIAL &kD |&c"),
+        UNOBTAINABLE(ChatColor.DARK_AQUA, "&3&k&lD &3&lUNOBTAINABLE&k D&3"),
+        UNKNOWN(ChatColor.RED, "&c&k& D &c&lUNKNOWN &kD &c");
 
         private final ChatColor color;
         private final String name;
 
         Rarity(ChatColor color, String name) {
             this.color = color;
-            this.name = name;
+            this.name = ChatColor.translateAlternateColorCodes('&', name);
         }
 
         public ChatColor color() {

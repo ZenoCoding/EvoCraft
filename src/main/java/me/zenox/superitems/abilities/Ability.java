@@ -117,7 +117,6 @@ public abstract class Ability implements Serializable {
 
         // Perhaps change this in the future to support passing multiple items to the consumer
         for(ItemStack i : items) {
-            if (ComplexItemStack.of(i) == null) continue;
             if (!ComplexItemStack.of(i).getAbilities().contains(this)) continue;
             item = i;
         }

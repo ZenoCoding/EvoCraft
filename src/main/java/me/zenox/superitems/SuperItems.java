@@ -16,9 +16,9 @@ import me.zenox.superitems.events.InventoryListener;
 import me.zenox.superitems.events.OtherEvent;
 import me.zenox.superitems.events.PlayerUseItemEvent;
 import me.zenox.superitems.item.ItemRegistry;
+import me.zenox.superitems.item.VanillaItem;
 import me.zenox.superitems.network.GlowFilter;
 import me.zenox.superitems.recipe.RecipeRegistry;
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -65,6 +65,7 @@ public final class SuperItems extends JavaPlugin {
 
         ItemRegistry.registerRecipes();
         ItemRegistry.registerItems();
+        VanillaItem.registerItems();
         RecipeRegistry.registerRecipes();
         EnchantRegistry.registerEnchants();
 

@@ -12,6 +12,7 @@ import me.zenox.superitems.util.Romans;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -72,6 +73,9 @@ public class ComplexItemMeta {
 
         PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
         LoreBuilder lore = new LoreBuilder();
+
+        // Make Normal Enchants INVISIBLE
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         writeVariables(VariableType.Priority.ABOVE_STATS, dataContainer, lore, true);
 

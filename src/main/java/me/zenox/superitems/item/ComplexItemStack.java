@@ -12,11 +12,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -70,13 +70,8 @@ public class ComplexItemStack {
         // Util.logToConsole("Item Name: " + meta.getDisplayName());
     }
 
-    @Nullable
     public static ComplexItemStack of(ItemStack item) {
-        ComplexItem complexItem = ItemRegistry.byItem(item);
-        if (complexItem == null) {
-            // Util.logToConsole("Returned null because item " + item.getItemMeta().getDisplayName() + " had no complex registry.");
-            return null;
-        }
+        ComplexItem complexItem = Objects.requireNonNullElse(ItemRegistry.byItem(item), VanillaItem.of(item.getType()));
         return new ComplexItemStack(complexItem, item);
     }
 
@@ -87,9 +82,6 @@ public class ComplexItemStack {
         item.setItemMeta(complexItem.getMeta());
 
         ItemMeta meta = item.getItemMeta();
-
-        // Make Enchants INVISIBLE
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         // Set CustomModelData
         meta.setCustomModelData(complexItem.getCustomModelData());
