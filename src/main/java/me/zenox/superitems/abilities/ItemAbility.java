@@ -622,7 +622,7 @@ public class ItemAbility extends Ability {
                     for(Entity entity : arr.getNearbyEntities(5, 5, 5)){
                         if(entity instanceof LivingEntity && !Util.isInvulnerable(entity)){
                             LivingEntity lentity = ((LivingEntity) entity);
-                            lentity.damage(50, p);
+                            lentity.damage(75, p);
                             lentity.setVelocity(lentity.getVelocity().add(lentity.getLocation().toVector().subtract(arr.getLocation().clone().toVector())));
                         }
                     }

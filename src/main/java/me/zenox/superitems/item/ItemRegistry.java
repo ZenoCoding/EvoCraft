@@ -322,7 +322,7 @@ public class ItemRegistry {
             .material(Material.STONE_SWORD)
             .rarity(ComplexItem.Rarity.RARE)
             .type(ComplexItem.Type.SWORD)
-            .attribute(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "superitems:attack_damage", 30, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
+            .attribute(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "superitems:attack_damage", 20, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
             .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -3.2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
             .stat(Stats.STRENGTH, 50d)
             .ability(AbilityRegistry.TERRA_STRIKE)));

@@ -8,6 +8,7 @@ import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.util.QuadConsumer;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -27,6 +28,8 @@ public abstract class ComplexEnchantment {
     private final List<Slot> slots;
     private final List<StatModifier> stats;
     private final QuadConsumer<Event, Integer, ItemStack, Player> executable;
+    private final Enchantment vanillaEnchant;
+    private final List<ComplexEnchantment> exclusive;
 
     private final Class<? extends Event> eventType;
 
@@ -34,6 +37,7 @@ public abstract class ComplexEnchantment {
 
     /**
      * New instance of ComplexEnchantment
+     *
      * @param id
      * @param maxLevel
      * @param rarity
@@ -41,9 +45,11 @@ public abstract class ComplexEnchantment {
      * @param slot
      * @param stats
      * @param executable
+     * @param vanillaEnchant
+     * @param exclusive
      * @param eventType
      */
-    public ComplexEnchantment(String id, int maxLevel, int rarity, List<ComplexItem.Type> types, List<Slot> slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Class<? extends Event> eventType){
+    public ComplexEnchantment(String id, int maxLevel, int rarity, List<ComplexItem.Type> types, List<Slot> slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Enchantment vanillaEnchant, List<ComplexEnchantment> exclusive, Class<? extends Event> eventType){
         this.id = id;
         this.name = new TranslatableText(TranslatableText.Type.ENCHANT_NAME + "-" + id);
         this.maxLevel = maxLevel;
@@ -52,6 +58,8 @@ public abstract class ComplexEnchantment {
         this.slots = slot;
         this.stats = stats;
         this.executable = executable;
+        this.vanillaEnchant = vanillaEnchant;
+        this.exclusive = exclusive;
         this.eventType = eventType;
 
         for (ComplexEnchantment enchantment :
@@ -65,8 +73,12 @@ public abstract class ComplexEnchantment {
         registeredEnchants.add(this);
     }
 
-    public ComplexEnchantment(String id, int maxLevel, int rarity, List<ComplexItem.Type> types, Slot slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Class<? extends Event> eventType){
-        this(id, maxLevel, rarity, types, List.of(slot), stats, executable, eventType);
+    public ComplexEnchantment(EnchantmentSettings settings){
+        this(settings.getId(), settings.getMaxLevel(), settings.getRarity(), settings.getTypes(), settings.getSlots(), settings.getStats(), settings.getExecutable(), settings.getVanillaEnchant(), settings.getExclusive(), settings.getEventType());
+    }
+
+    public ComplexEnchantment(String id, int maxLevel, int rarity, List<ComplexItem.Type> types, Slot slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Enchantment vanillaEnchant, List<ComplexEnchantment> exclusive, Class<? extends Event> eventType){
+        this(id, maxLevel, rarity, types, List.of(slot), stats, executable, vanillaEnchant, exclusive, eventType);
     }
 
     @Nullable

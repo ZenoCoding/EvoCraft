@@ -234,8 +234,10 @@ public class ComplexItem {
 
     public enum Type {
 
-        SWORD("SWORD", false), AXE("AXE", false), WAND("WAND", false),
-        STAFF("STAFF", false), SUPERITEM("SUPERITEM", false),
+        SWORD("SWORD", false), AXE("AXE", false), BOW("BOW", false), CROSSBOW("CROSSBOW", false),
+        TRIDENT("TRIDENT", false),
+        PICKAXE("PICKAXE", false), FISHING_ROD("FISHING ROD", false),
+        WAND("WAND", false), STAFF("STAFF", false), SUPERITEM("SUPERITEM", false),
         DEPLOYABLE("DEPLOYABLE", false), MISC("", false), ENCHANTING_FUEL("ENCHANTING FUEL", false),
         HELMET("HELMET", true), CHESTPLATE("CHESTPLATE", true), LEGGINGS("LEGGINGS", true), BOOTS("BOOTS", true);
 

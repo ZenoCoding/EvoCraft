@@ -76,6 +76,8 @@ public class ComplexItemMeta {
 
         // Make Normal Enchants INVISIBLE
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta.setUnbreakable(true);
 
         writeVariables(VariableType.Priority.ABOVE_STATS, dataContainer, lore, true);
 
