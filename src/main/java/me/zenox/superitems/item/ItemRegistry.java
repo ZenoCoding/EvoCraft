@@ -228,7 +228,7 @@ public class ItemRegistry {
     public static final ComplexItem OBSIDIAN_SCYTHE = registerItem(new ObsidilithScythe());
 
     public static final ComplexItem VOID_HELMET = registerItem(new VoidMask());
-    public static final ComplexItem VOID_CHESTPLATE = registerItem(new VoidCloak());
+    public static final ComplexItem VOID_CHESTPLATE = registerItem(new VoidChestplate());
     public static final ComplexItem VOID_LEGGINGS = registerItem(new VoidLeggings());
     public static final ComplexItem VOID_BOOTS = registerItem(new VoidBoots());
 
@@ -301,6 +301,31 @@ public class ItemRegistry {
             .type(ComplexItem.Type.ENCHANTING_FUEL)
             .glow()
             .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 5)));
+
+    public static final ComplexItem SHADOW_BLADE = registerItem(new ComplexItem(new ItemSettings()
+            .id("shadow_blade")
+            .material(Material.IRON_SWORD)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.SWORD)
+            .ability(AbilityRegistry.DARK_FURY)));
+
+    public static final ComplexItem DARK_ORB = registerItem(new ComplexItem(new ItemSettings()
+            .id("dark_orb")
+            .material(Material.ENDER_PEARL)));
+
+    public static final ComplexItem HEAT_BLAZED_CORE = registerItem(new ComplexItem(new ItemSettings()
+            .id("heat_blazed_core")
+            .material(Material.FIRE_CHARGE)));
+
+    public static final ComplexItem GREATSWORD_VOLKUMOS = registerItem(new ComplexItem(new ItemSettings()
+            .id("greatsword_volkumos")
+            .material(Material.STONE_SWORD)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.SWORD)
+            .attribute(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "superitems:attack_damage", 30, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
+            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -3.2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
+            .stat(Stats.STRENGTH, 50d)
+            .ability(AbilityRegistry.TERRA_STRIKE)));
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 

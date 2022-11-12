@@ -105,8 +105,8 @@ public class EnchantingGUI extends SimpleGUI {
         while (variety >= 1) {
             for (ComplexEnchantment enchantment : ComplexEnchantment.getRegisteredEnchants()
                     .stream()
-                    /*.filter(complexEnchantment ->
-                            complexEnchantment.getTypes().contains(item.getComplexItem().getType()))*/.toList()) {
+                    .filter(complexEnchantment ->
+                            complexEnchantment.getTypes().contains(item.getComplexItem().getType())).toList()) {
                 if (r.nextInt(0, Math.max(1, ComplexEnchantment.getRegisteredEnchants().size() * (enchantment.getRarity() / 100))) == 0) {
                     result.put(enchantment, Math.max(1, r.nextInt((int) (enchantment.getMaxLevel() / (strength + 1)))));
                     variety--;

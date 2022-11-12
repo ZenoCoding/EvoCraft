@@ -33,6 +33,8 @@ public class VanillaItem extends ComplexItem {
         unobtainableList.forEach(material -> rarityMap.put(material, Rarity.UNOBTAINABLE));
 
         Arrays.stream(Material.values()).forEach(material -> typeMap.put(material, Type.MISC));
+
+        vanillaItemList.removeIf(vanillaItem -> vanillaItem.getMaterial() == Material.AIR);
     }
 
     public VanillaItem(Material material) {

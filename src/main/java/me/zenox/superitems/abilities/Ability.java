@@ -9,6 +9,7 @@ import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.util.TriConsumer;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -117,8 +118,10 @@ public abstract class Ability implements Serializable {
 
         // Perhaps change this in the future to support passing multiple items to the consumer
         for(ItemStack i : items) {
+            if (i == null || i.getType() == Material.AIR || i.getItemMeta() == null) continue;
             if (!ComplexItemStack.of(i).getAbilities().contains(this)) continue;
             item = i;
+            break;
         }
 
         if(item == null) return;

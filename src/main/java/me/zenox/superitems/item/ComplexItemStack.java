@@ -6,8 +6,8 @@ import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.persistence.SerializedPersistentType;
 import me.zenox.superitems.util.Util;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -71,6 +71,7 @@ public class ComplexItemStack {
     }
 
     public static ComplexItemStack of(ItemStack item) {
+        if(item.getType() == Material.AIR) throw new IllegalArgumentException("You cannot create a ComplexItemStack of an ItemStack with material AIR");
         ComplexItem complexItem = Objects.requireNonNullElse(ItemRegistry.byItem(item), VanillaItem.of(item.getType()));
         return new ComplexItemStack(complexItem, item);
     }
@@ -85,7 +86,7 @@ public class ComplexItemStack {
 
         // Set CustomModelData
         meta.setCustomModelData(complexItem.getCustomModelData());
-        Util.logToConsole("CustomModelData of " + this.complexItem.getDisplayName() + " is: " + this.complexItem.getCustomModelData());
+        // Util.logToConsole("CustomModelData of " + this.complexItem.getDisplayName() + " is: " + this.complexItem.getCustomModelData());
 
         item.setAmount(amount);
 

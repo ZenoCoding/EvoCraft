@@ -7,6 +7,7 @@ import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.util.QuadConsumer;
 import me.zenox.superitems.util.Util;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -92,6 +93,7 @@ public abstract class ComplexEnchantment {
             items.addAll(slot.item(p));
         }
         for (ItemStack item : items){
+            if (item == null || item.getType() == Material.AIR || item.getItemMeta() == null) continue;
             ComplexItemStack cItem = ComplexItemStack.of(item);
             if(cItem != null && cItem.getComplexMeta().getComplexEnchants().containsKey(this))
             executable.accept(e, cItem.getComplexMeta().getComplexEnchants().get(this), item, p);

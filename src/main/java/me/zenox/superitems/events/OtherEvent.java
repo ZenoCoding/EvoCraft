@@ -15,9 +15,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
 import java.util.List;
@@ -82,6 +84,14 @@ public class OtherEvent implements Listener {
         if (complexItem != null) {
             e.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void entityDamageByEntityEvent(EntityDamageByEntityEvent e){
+
+        // Store a table of the last time all entities hit the player (in meta-data, so it isn't persistent)
+        // For Dark Fury Ability
+        e.getEntity().setMetadata("last_damaged", new FixedMetadataValue(SuperItems.getPlugin(), System.currentTimeMillis()));
     }
 
 

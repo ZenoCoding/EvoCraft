@@ -171,9 +171,9 @@ public class ComplexItemMeta {
 
         // if the meta doesn't contain rarity or type
         if (this.variableList.stream().filter((variable -> variable.getType().name() == RARITY_VAR.name())).toList().isEmpty())
-            this.variableList.add(new Variable(this, RARITY_VAR, ComplexItem.Rarity.UNKNOWN));
+            this.variableList.add(new Variable(this, RARITY_VAR, complexItemStack.getComplexItem().getRarity()));
         if (this.variableList.stream().filter((variable -> variable.getType().name() == TYPE_VAR.name())).toList().isEmpty())
-            this.variableList.add(new Variable(this, TYPE_VAR, ComplexItem.Type.MISC));
+            this.variableList.add(new Variable(this, TYPE_VAR, complexItemStack.getComplexItem().getType()));
 
         item.setItemMeta(meta);
         updateItem();

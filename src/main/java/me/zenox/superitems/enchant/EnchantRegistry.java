@@ -1,13 +1,11 @@
 package me.zenox.superitems.enchant;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
 import me.zenox.superitems.Slot;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -23,6 +21,8 @@ import java.util.Random;
 
 public class EnchantRegistry {
 
+    // Custom Enchantments
+
     public static ComplexEnchantment SHARPNESS = new AttackEnchantment("sharpness", 5, 30, List.of(ComplexItem.Type.SWORD, ComplexItem.Type.AXE), Slot.MAIN_HAND, new ArrayList<>(), EnchantRegistry::sharpnessExecutable);
 
     public static ComplexEnchantment FIRE_ASPECT = new AttackEnchantment("fire_aspect", 2, 20, List.of(ComplexItem.Type.SWORD, ComplexItem.Type.AXE), Slot.MAIN_HAND, new ArrayList<>(), EnchantRegistry::fireAspectExecutable);
@@ -34,6 +34,11 @@ public class EnchantRegistry {
     public static ComplexEnchantment KNOCKBACK = new AttackEnchantment("knockback", 2, 20, List.of(ComplexItem.Type.SWORD), Slot.MAIN_HAND, new ArrayList<>(), EnchantRegistry::knockbackExecutable);
 
     public static ComplexEnchantment CULLING = new AttackEnchantment("culling", 2, 20, List.of(ComplexItem.Type.SWORD), Slot.MAIN_HAND, new ArrayList<>(), EnchantRegistry::cullingExecutable);
+
+    public static ComplexEnchantment PROTECTION = new DamagedByEntityEnchantment("protection", 4, 20, List.of(ComplexItem.Type.HELMET, ComplexItem.Type.CHESTPLATE, ComplexItem.Type.LEGGINGS, ComplexItem.Type.BOOTS), Slot.ARMOR, new ArrayList<>(), EnchantRegistry::protectionExecutable);
+
+    // Vanilla Enchantments
+    public static ComplexEnchantment AQUA_AFFINITY = new DamagedByEntityEnchantment("aqua_affinity", 4, 20, List.of(ComplexItem.Type.HELMET, ComplexItem.Type.CHESTPLATE, ComplexItem.Type.LEGGINGS, ComplexItem.Type.BOOTS), Slot.ARMOR, new ArrayList<>(), EnchantRegistry::protectionExecutable);
 
 
     // static function methods
@@ -98,16 +103,22 @@ public class EnchantRegistry {
     private static void knockbackExecutable(Event e, Integer level, ItemStack item, Player p) {
         EntityDamageByEntityEvent event = ((EntityDamageByEntityEvent) e);
         Entity entity = event.getEntity();
-        entity.setVelocity(event.getDamager().getLocation().getDirection().normalize().multiply(level));
+        entity.setVelocity(entity.getVelocity().add(event.getDamager().getLocation().getDirection().normalize().multiply(level/2)));
     }
 
     private static void cullingExecutable(Event e, Integer level, ItemStack item, Player p) {
         EntityDamageByEntityEvent event = ((EntityDamageByEntityEvent) e);
         Entity entity = event.getEntity();
-        entity.setVelocity(event.getDamager().getLocation().getDirection().normalize().multiply(-1f*level));
+        entity.setVelocity(entity.getVelocity().add(event.getDamager().getLocation().getDirection().normalize().multiply(-1/2f*level)));
+    }
+
+    private static void protectionExecutable(Event e, Integer level, ItemStack item, Player p) {
+        EntityDamageByEntityEvent event = ((EntityDamageByEntityEvent) e);
+        event.setDamage(event.getDamage()*(1-level/20));
     }
 
     public static void registerEnchants() {
         Util.logToConsole(ChatColor.WHITE + "Registering " + ChatColor.GOLD + ComplexEnchantment.getRegisteredEnchants().size() + ChatColor.WHITE + " enchantments.");
     }
+
 }

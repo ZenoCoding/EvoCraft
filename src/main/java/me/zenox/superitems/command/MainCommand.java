@@ -11,10 +11,12 @@ import me.zenox.superitems.loot.LootTableRegistry;
 import me.zenox.superitems.tabcompleter.MainTabCompleter;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
@@ -171,8 +173,17 @@ public class MainCommand implements CommandExecutor {
                 Util.sendMessage(sender, ChatColor.WHITE + "SuperItems " + ChatColor.GOLD + "v" + plugin.getDescription().getVersion() + ChatColor.WHITE + " has been reloaded.");
                 return true;
             }
+            case "model" -> {
+                ItemStack item = ((Player) sender).getEquipment().getItemInMainHand();
+                if(item == null || item.getType() == Material.AIR) {
+                    Util.sendMessage(sender, ChatColor.WHITE + "This item has no CustomModelData (that is created by superitems)");
+                    return true;
+                }
+                Util.sendMessage(sender, ChatColor.WHITE + "The CustomModelData of " + item.getItemMeta().getDisplayName() + ChatColor.WHITE + "  is " + ComplexItemStack.of(item).getComplexItem().getCustomModelData());
+                return true;
+            }
             default -> Util.sendMessage(sender, "SuperItems Help Page.");
         }
-        return false;
+        return true;
     }
 }

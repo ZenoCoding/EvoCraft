@@ -9,8 +9,8 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -50,11 +50,20 @@ public class AttackAbility extends Ability {
     public static void justiceAbility(Event event, Player p, ItemStack item) {
         EntityDamageByEntityEvent e = ((EntityDamageByEntityEvent) event);
         ComplexItem complexItem = ItemRegistry.byItem(item);
-        if (!(complexItem == null) && complexItem.getId().equalsIgnoreCase("sword_of_justice") && e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 0));
-            p.playSound(p.getLocation(), Sound.ITEM_AXE_SCRAPE, 1, 1.4f);
-            if (new Random().nextInt(3) == 0) e.getEntity().getWorld().strikeLightning(e.getEntity().getLocation());
+        //if (!(complexItem == null) && complexItem.getId().equalsIgnoreCase("sword_of_justice") && e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 0));
+        p.playSound(p.getLocation(), Sound.ITEM_AXE_SCRAPE, 1, 1.4f);
+        if (new Random().nextInt(3) == 0) e.getEntity().getWorld().strikeLightning(e.getEntity().getLocation());
+        //}
+    }
+
+    public static void darkFuryAbility(Event event, Player p, ItemStack item) {
+        EntityDamageByEntityEvent e = ((EntityDamageByEntityEvent) event);
+        List<MetadataValue> values = p.getMetadata("last_damaged");
+        if (values.isEmpty() || (System.currentTimeMillis() - values.get(0).asLong() > 30 * 1000)) {
+            e.setDamage(e.getDamage()*2);
         }
+
     }
 
 

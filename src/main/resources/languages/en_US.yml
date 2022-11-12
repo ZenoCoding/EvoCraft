@@ -53,15 +53,19 @@ item-name-corrupted_totem_pole: Corrupted Totem Pole
 
 item-name-warped_cube: Warped Cube
 
+item-name-rough_void_stone: Rough Void Stone
 item-name-void_stone: Void Stone
 item-name-void_scepter: Void Scepter
 
-item-name-obsidian_scythe: Obsidian Scythe
+item-name-obsidilith_scythe: Obsidilith Scythe
 
 item-name-void_helmet: Void Helmet
 item-name-void_chestplate: Void Chestplate
 item-name-void_leggings: Void Leggings
 item-name-void_boots: Void Boots
+
+item-name-vertex_blade: Vertexical Blade
+item-name-vertexical_core: Vertexical Core
 
 item-name-corrupt_pearl: Corrupt Pearl
 
@@ -83,6 +87,14 @@ item-name-flaming_boots: Flaming Boots
 item-name-volken_axe: Volken Axe
 
 item-name-lapis_orbitex: Lapis Orbitex
+
+item-name-shadow_blade: Shadow Blade
+
+item-name-dark_orb: Dark Orb
+
+item-name-heat_blazed_core: Heat Blazed Core
+
+item-name-greatsword_volkumos: The Greatsword of Volkumos
 
 ##########################################################################
 ##                              ITEM LORE                               ##
@@ -168,6 +180,12 @@ item-lore-totem_pole:
 item-lore-corrupt_totem_pole:
   - "&cWith great power, eventually comes &dcorruption."
 
+item-lore-rough_void_stone:
+  - "Like a diamond in the rough..."
+
+item-lore-void_stone:
+  - "The embodiment of nothing."
+
 item-lore-void_scepter:
   - "Forged from the souls of corrupted endermen."
 
@@ -201,6 +219,18 @@ item-lore-volken_axe:
 
 item-lore-lapis_orbitex:
   - "Possesses &dmagical &7abilities, unlike that blue rock stuff."
+
+item-lore-shadow_blade:
+  - "&8Dark and mysterious."
+
+item-lore-dark_orb:
+  - "It's not really dark energy, just a visual trick!"
+
+item-lore-heat_blazed_core:
+  - "Radiating energy, if only it could be harnessed somehow..."
+
+item-lore-greatsword_volkumos:
+  - "Forged from the stone that &6Excalibur &7was pulled from."
 
 ##########################################################################
 ##                              ABILITIES                               ##
@@ -282,6 +312,12 @@ ability-lore-void_recall:
   - "Binds a nearby block to your &bsoul."
   - "Teleports you back to the &bsoulbound &7block."
 
+ability-name-dimensional_travel: Dimensional Travel
+
+ability-lore-dimensional_travel:
+  - "Crates a &drift &7into the next dimension."
+  - "Cycles through the &cThe Nether, &aThe Overworld, &8The End."
+
 ability-name-obsidian_shard: Obsidian Shards
 
 ability-lore-obsidian_shard:
@@ -292,6 +328,19 @@ ability-name-justice: Justice
 
 ability-lore-justice:
   - "Strikes &flighting &7and gives &cRegeneration I&7 on hit."
+
+ability-name-dark_fury: Dark Fury
+
+ability-lore-dark_fury:
+  - "When &8unnoticed&7, deal &a2x &cdamage &7to opponents."
+  -
+
+ability-name-terra_strike: Terra-Strike
+
+ability-lore-terra_strike:
+  - "Bring down your greatsword with the might of a thousand men."
+  - ""
+  - "Creates a &cshockwave &7and deals massive &cdamage &7to those in a nearby radius."
 
 ##########################################################################
 ##                            ENCHANTMENTS                              ##

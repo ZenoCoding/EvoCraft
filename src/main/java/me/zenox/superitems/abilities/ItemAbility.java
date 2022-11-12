@@ -1,5 +1,7 @@
 package me.zenox.superitems.abilities;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
@@ -9,8 +11,11 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import me.zenox.superitems.Slot;
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.item.ComplexItemStack;
+import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.persistence.NBTEditor;
 import me.zenox.superitems.util.Geo;
 import me.zenox.superitems.util.TriConsumer;
@@ -564,6 +569,70 @@ public class ItemAbility extends Ability {
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 3));
         p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 300, 0));
         p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 400, 0));
+    }
+
+    public static void terraStrikeAbility(Event event, Player p, ItemStack item) {
+        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+        Location loc = p.getLocation();
+        Random r = new Random();
+        Arrow arr = p.getWorld().spawnArrow(p.getEyeLocation(), loc.getDirection(), 2f, 0);
+        arr.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+        arr.setPierceLevel(100);
+
+        Giant giant = (Giant) p.getWorld().spawnEntity(loc, EntityType.GIANT);
+        giant.setInvisible(true);
+        giant.setInvulnerable(true);
+        giant.setCustomName("Dinnerbone");
+        giant.getEquipment().setItemInMainHand(new ComplexItemStack(ItemRegistry.GREATSWORD_VOLKUMOS).getItem());
+
+        PacketContainer destroyArrow = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
+        destroyArrow.getModifier()
+                .write(0, new IntArrayList(new int[]{arr.getEntityId()}));
+
+        SuperItems.getPlugin().getProtocolManager().broadcastServerPacket(destroyArrow);
+
+        new BukkitRunnable(){
+            boolean contacted = false;
+            @Override
+            public void run() {
+                giant.setCustomName("Dinnerbone");
+
+                Location giantLocation = arr.getLocation();
+                giantLocation.setY(arr.getLocation().getY()-1);
+                giant.teleport(giantLocation);
+
+                if(arr.isInBlock() && !contacted){
+                    contacted = true;
+                    arr.setTicksLived(1);
+
+                    p.getWorld().createExplosion(arr.getLocation(), 4, false, false, p);
+                    List<Block> blocks = getNearbyBlocks(arr.getLocation(), 4, 2);
+
+                    for (Block block : blocks) {
+                        if (block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD))
+                            continue;
+                        if (r.nextDouble() > 0.7) continue;
+                        FallingBlock fallingBlock = p.getWorld().spawnFallingBlock(block.getLocation(), block.getBlockData());
+                        fallingBlock.setVelocity(fallingBlock.getLocation().toVector().subtract(arr.getLocation().clone().toVector()).multiply(2).normalize());
+                        fallingBlock.setDropItem(false);
+                        fallingBlock.setHurtEntities(true);
+                        fallingBlock.setMetadata("temporary", new FixedMetadataValue(SuperItems.getPlugin(), true));
+                    }
+
+                    for(Entity entity : arr.getNearbyEntities(5, 5, 5)){
+                        if(entity instanceof LivingEntity && !Util.isInvulnerable(entity)){
+                            LivingEntity lentity = ((LivingEntity) entity);
+                            lentity.damage(50, p);
+                            lentity.setVelocity(lentity.getVelocity().add(lentity.getLocation().toVector().subtract(arr.getLocation().clone().toVector())));
+                        }
+                    }
+                }
+                if((contacted && arr.getTicksLived() > 80) || arr.getTicksLived() > 200){
+                    arr.remove();
+                    giant.remove();
+                }
+            }
+        }.runTaskTimer(SuperItems.getPlugin(), 0, 1);
     }
 
     public enum AbilityAction {

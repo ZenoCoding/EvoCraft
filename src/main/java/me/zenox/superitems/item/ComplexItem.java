@@ -203,16 +203,16 @@ public class ComplexItem {
 
     public enum Rarity {
 
-        COMMON(ChatColor.WHITE, "&f&lCOMMON&f"),
-        UNCOMMON(ChatColor.GREEN, "&a&lUNCOMMON&a"),
-        RARE(ChatColor.BLUE, "&9&lRARE&9"),
-        EPIC(ChatColor.DARK_PURPLE, "&5&lEPIC&5"),
-        LEGENDARY(ChatColor.GOLD, "&6&lLEGENDARY&6"),
-        MYTHIC(ChatColor.LIGHT_PURPLE, "&d&k&lD &k&lMYTHIC&k D&d"),
-        OMEGA(ChatColor.GOLD, "&6&k&lD &6&lOMEGA&k D&6"),
-        VERY_SPECIAL(ChatColor.RED, "&c&k&l| D &c&lVERY SPECIAL &kD |&c"),
-        UNOBTAINABLE(ChatColor.DARK_AQUA, "&3&k&lD &3&lUNOBTAINABLE&k D&3"),
-        UNKNOWN(ChatColor.RED, "&c&k& D &c&lUNKNOWN &kD &c");
+        COMMON(ChatColor.WHITE, "&f&lCOMMON&f&l"),
+        UNCOMMON(ChatColor.GREEN, "&a&lUNCOMMON&a&l"),
+        RARE(ChatColor.BLUE, "&9&lRARE&9&l"),
+        EPIC(ChatColor.AQUA, "&b&lEPIC&b&l"),
+        LEGENDARY(ChatColor.GOLD, "&6&lLEGENDARY&6&l"),
+        MYTHIC(ChatColor.LIGHT_PURPLE, "&d&k&lD &k&lMYTHIC&k D&d&l"),
+        OMEGA(ChatColor.GOLD, "&6&k&lD &6&lOMEGA&k D&6&l"),
+        VERY_SPECIAL(ChatColor.RED, "&c&k&l| D &c&lVERY SPECIAL &kD |&c&l"),
+        UNOBTAINABLE(ChatColor.DARK_AQUA, "&3&k&lD &3&lUNOBTAINABLE&k D&3&l"),
+        UNKNOWN(ChatColor.RED, "&c&k& D &c&lUNKNOWN &kD&c&l");
 
         private final ChatColor color;
         private final String name;
