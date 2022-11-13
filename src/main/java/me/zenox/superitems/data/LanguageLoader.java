@@ -36,7 +36,7 @@ public class LanguageLoader {
                 // if the thing is a list (contains lore)
                 if (translation.contains("lore")) {
                     StringBuilder concat = new StringBuilder();
-                    for (String s : translations.getStringList(translation)) concat.append(s + LIST_CONCAT_SEPERATOR);
+                    for (String s : translations.getStringList(translation)) concat.append(s).append(LIST_CONCAT_SEPERATOR);
                     translationMap.put(translation, concat.toString());
                 } else {
                     translationMap.put(translation, translations.getString(translation));
@@ -48,7 +48,7 @@ public class LanguageLoader {
                 // if the thing is a list (contains lore)
                 if (translation.contains("lore")) {
                     StringBuilder concat = new StringBuilder();
-                    for (String s : translations.getStringList(translation)) concat.append(s + LIST_CONCAT_SEPERATOR);
+                    for (String s : translations.getStringList(translation)) concat.append(s).append(LIST_CONCAT_SEPERATOR);
                     translationMap.put(translation, concat.toString());
                 } else {
                     translationMap.put(translation, translations.getString(translation));

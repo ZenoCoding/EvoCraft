@@ -10,7 +10,7 @@ import static me.zenox.superitems.item.ItemRegistry.*;
 
 public class LootTableRegistry {
 
-    public static final List<LootTable> lootTableList = new ArrayList();
+    public static final List<LootTable> lootTableList = new ArrayList<>();
 
     public static LootTable BLAZIEL_DROPS = registerLootTable(new LootTable("blaziel", "Blaziel Loot", List.of(
             new LootTableEntry(PYTHEMION_GEM.getItemStack(1), 1, 1, 0.005),

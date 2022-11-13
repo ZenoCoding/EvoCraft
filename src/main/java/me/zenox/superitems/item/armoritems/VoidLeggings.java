@@ -3,7 +3,8 @@ package me.zenox.superitems.item.armoritems;
 import com.archyx.aureliumskills.stats.Stats;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import me.zenox.superitems.item.ArmorItem;
+import me.zenox.superitems.abilities.AbilityRegistry;
+import me.zenox.superitems.item.ComplexItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -17,9 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class VoidLeggings extends ArmorItem {
+public class VoidLeggings extends ComplexItem {
     public VoidLeggings() {
-        super("void_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 5d, Stats.WISDOM, 75d, Stats.REGENERATION, 5d));
+        super("void_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 5d, Stats.WISDOM, 75d, Stats.REGENERATION, 5d), List.of(AbilityRegistry.TEST_FULLSET));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Whispering secrets of magic.");

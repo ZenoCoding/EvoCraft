@@ -10,6 +10,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
+import me.zenox.superitems.Slot;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Bukkit;
@@ -22,6 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -46,10 +48,9 @@ public class Psychic extends ItemAbility implements Listener {
     }
 
     @Override
-    public void runExecutable(Event event) {
+    public void runExecutable(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         e.setCancelled(true);
-        Player p = e.getPlayer();
         PersistentDataContainer dataContainer = p.getPersistentDataContainer();
 
         LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
@@ -121,7 +122,7 @@ public class Psychic extends ItemAbility implements Listener {
                 p.setHealth(0);
                 p.damage(10, p);
                 List<MetadataValue> values = p.getMetadata("superitems:death_psychic");
-                if (!values.isEmpty() && values.get(0).asBoolean() == false) cancel();
+                if (!values.isEmpty() && !values.get(0).asBoolean()) cancel();
                 count++;
             }
         }.runTaskTimer(SuperItems.getPlugin(), 0, 20);
@@ -135,7 +136,7 @@ public class Psychic extends ItemAbility implements Listener {
 
         Player entity = e.getEntity().getPlayer();
         List<MetadataValue> values = entity.getMetadata("superitems:death_psychic");
-        if (!values.isEmpty() && values.get(0).asBoolean() == true) {
+        if (!values.isEmpty() && values.get(0).asBoolean()) {
             Util.logToConsole("Changing death message.");
             e.setDeathMessage(entity.getDisplayName() + "'s brain exploded.");
         }

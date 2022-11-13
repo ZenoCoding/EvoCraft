@@ -23,12 +23,15 @@ public class TranslatableText implements Serializable {
         return ChatColor.translateAlternateColorCodes('&', translation);
     }
 
-    public enum TranslatableType {
-        ITEM_NAME("item-name"), ITEM_LORE("item-lore"), ABILITY_NAME("ability-name"), ABILITY_LORE("ability-lore"), COMMAND("cmd"), MISC_MSG("msg");
+    public enum Type {
+        ITEM_NAME("item-name"), ITEM_LORE("item-lore"),
+        ABILITY_NAME("ability-name"), ABILITY_LORE("ability-lore"),
+        COMMAND("cmd"), MISC_MSG("msg"), ENCHANT_NAME("enchant-name"),
+        GUI("gui");
 
         private final String key;
 
-        TranslatableType(String key) {
+        Type(String key) {
             this.key = key;
         }
 

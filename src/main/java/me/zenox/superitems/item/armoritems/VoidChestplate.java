@@ -3,7 +3,8 @@ package me.zenox.superitems.item.armoritems;
 import com.archyx.aureliumskills.stats.Stats;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import me.zenox.superitems.item.ArmorItem;
+import me.zenox.superitems.abilities.AbilityRegistry;
+import me.zenox.superitems.item.ComplexItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -18,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class VoidCloak extends ArmorItem {
-    public VoidCloak() {
-        super("void_cloak", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 20d, Stats.WISDOM, 100d, Stats.REGENERATION, 10d));
+public class VoidChestplate extends ComplexItem {
+    public VoidChestplate() {
+        super("void_chestplate", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 3d, Stats.HEALTH, 20d, Stats.WISDOM, 100d, Stats.REGENERATION, 10d), List.of(AbilityRegistry.TEST_FULLSET));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "An ultimate source of wisdom, bringing great power to the wearer");

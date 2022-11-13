@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class VariableType<T extends Serializable> {
+public record VariableType<T extends Serializable>(String name, LoreEntry loreEntry,
+                                                   me.zenox.superitems.item.VariableType.Priority priority,
+                                                   BiConsumer<LoreEntry, Variable> loreModifier) {
     private static final List<VariableType> variableList = new ArrayList<>();
 
-    private final String name;
-    private final LoreEntry loreEntry;
-    private final Priority priority;
-    private final BiConsumer<LoreEntry, Variable> loreModifier;
-
-    public VariableType(String name, LoreEntry loreEntry, Priority priority, BiConsumer<LoreEntry, Variable> loreModifier) throws IllegalArgumentException {
+    /**
+     * @throws IllegalArgumentException
+     */
+    public VariableType(String name, LoreEntry loreEntry, Priority priority, BiConsumer<LoreEntry, Variable> loreModifier) {
         if (variableList.stream().anyMatch(variable -> variable.name == name))
             throw new IllegalArgumentException("ComplexItemMeta VariableType Key " + name + " is a duplicate");
         this.name = name;
@@ -31,7 +31,7 @@ public class VariableType<T extends Serializable> {
     public static VariableType getVariableByPrefix(String name) {
         try {
             return variableList.stream().filter(variableType -> {
-                return variableType.getName().equalsIgnoreCase(name);
+                return variableType.name().equalsIgnoreCase(name);
             }).toList().get(0);
         } catch (IndexOutOfBoundsException e) {
             Util.logToConsole(ChatColor.RED + "[ERROR] Variable with name " + name + " doesn't seem to be registered!");
@@ -41,22 +41,6 @@ public class VariableType<T extends Serializable> {
 
     public Variable<T> createVariable(T value, ComplexItemMeta meta) {
         return new Variable<T>(meta, this, value);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Priority getPriority() {
-        return priority;
-    }
-
-    public LoreEntry getLoreEntry() {
-        return this.loreEntry;
-    }
-
-    public BiConsumer<LoreEntry, Variable> getLoreModifier() {
-        return loreModifier;
     }
 
     @Override

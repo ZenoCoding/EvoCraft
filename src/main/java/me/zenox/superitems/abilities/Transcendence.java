@@ -26,12 +26,8 @@ public class Transcendence extends ItemAbility {
     // TODO: Change this to a CIM Variable
 
     @Override
-    public void runExecutable(Event event) {
+    public void runExecutable(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Player p = e.getPlayer();
-        World w = p.getWorld();
-        Location loc = p.getLocation();
-        ItemStack item = e.getItem();
         ItemMeta meta = item.getItemMeta();
 
         //Remove Pages

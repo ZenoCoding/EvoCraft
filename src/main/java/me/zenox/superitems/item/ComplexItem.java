@@ -1,6 +1,5 @@
 package me.zenox.superitems.item;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
 import com.archyx.aureliumskills.stats.Stat;
 import com.google.common.primitives.Ints;
 import me.zenox.superitems.SuperItems;
@@ -8,20 +7,20 @@ import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.abilities.ItemAbility;
 import me.zenox.superitems.data.TranslatableList;
 import me.zenox.superitems.data.TranslatableText;
-import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ComplexItem {
 
     public static final NamespacedKey GLOBAL_ID = new NamespacedKey(SuperItems.getPlugin(), "superitem");
@@ -40,32 +39,18 @@ public class ComplexItem {
     private final ItemMeta meta;
     private final Map<Stat, Double> stats;
     private final List<Ability> abilities;
+    private final HashMap<VariableType, Serializable> variableMap = new HashMap();
 
     private String skullURL = "";
 
-    public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
-        this.id = id;
-        this.name = new TranslatableText(TranslatableText.TranslatableType.ITEM_NAME + "-" + id);
-        this.lore = new TranslatableList(TranslatableText.TranslatableType.ITEM_LORE + "-" + id);
-        this.key = new NamespacedKey(SuperItems.getPlugin(), id);
-        this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
-        this.unique = unique;
-        this.rarity = rarity;
-        this.type = type;
-        this.material = material;
-        this.meta = new ItemStack(this.material).getItemMeta();
-        this.stats = stats;
-        this.skullURL = "";
-        this.abilities = abilities;
-        this.glow = false;
-    }
 
-    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
+    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap) {
         this.id = id;
-        this.name = new TranslatableText(TranslatableText.TranslatableType.ITEM_NAME + "-" + id);
-        this.lore = new TranslatableList(TranslatableText.TranslatableType.ITEM_LORE + "-" + id);
+        this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + id);
+        this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
-        this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
+        String str = String.valueOf(Math.abs(id.hashCode()));
+        this.customModelData = Ints.tryParse(str.substring(0, Math.min(7, str.length())));
         this.unique = unique;
         this.glow = glow;
         this.rarity = rarity;
@@ -75,7 +60,19 @@ public class ComplexItem {
         this.stats = stats;
         this.skullURL = "";
         this.abilities = abilities;
+        this.variableMap.putAll(variableMap);
+    }
 
+    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
+        this(id, unique, glow, rarity, type, material, stats, abilities, new HashMap<>());
+    }
+
+    public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
+        this(id, unique, false, rarity, type, material, stats, abilities);
+    }
+
+    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique, List<Ability> abilities) {
+        this(id, unique, rarity, type, material, stats, abilities);
     }
 
     public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique) {
@@ -90,12 +87,17 @@ public class ComplexItem {
         this(id, false, rarity, type, material, stats, List.of());
     }
 
+    public ComplexItem(String id, Rarity rarity, Type type, Material material) {
+        this(id, false, rarity, type, material, Map.of(), List.of());
+    }
+
     public ComplexItem(ItemSettings settings) {
-        this.name = new TranslatableText(TranslatableText.TranslatableType.ITEM_NAME + "-" + settings.getId());
+        this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + settings.getId());
         this.id = settings.getId();
-        this.lore = new TranslatableList(TranslatableText.TranslatableType.ITEM_LORE + "-" + id);
+        this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
-        this.customModelData = Ints.tryParse(String.valueOf(Math.abs(id.hashCode())).substring(0, 7));
+        String str = String.valueOf(Math.abs(id.hashCode()));
+        this.customModelData = Ints.tryParse(str.substring(0, Math.min(7, str.length())));
         this.unique = settings.isUnique();
         this.glow = settings.doesGlow();
         this.rarity = settings.getRarity();
@@ -105,6 +107,7 @@ public class ComplexItem {
         this.stats = settings.getStats();
         this.skullURL = "";
         this.abilities = settings.getAbilities() == null ? new ArrayList<>() : new ArrayList<>(settings.getAbilities());
+        this.variableMap.putAll(settings.getVariableMap());
     }
 
     public List<Recipe> getRecipes() {
@@ -114,47 +117,6 @@ public class ComplexItem {
     @Deprecated
     public ItemStack getItemStack(Integer amount) {
         return new ComplexItemStack(this, 2).getItem();
-    }
-
-    @Deprecated
-    public ItemStack getItemStackWithData(Integer amount) {
-        ItemStack item = new ItemStack(this.material);
-        item.setItemMeta(this.meta);
-        item.setAmount(amount);
-        ItemMeta meta = item.getItemMeta();
-        // Add persistent data
-        PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
-        dataContainer.set(GLOBAL_ID, PersistentDataType.STRING, this.getId());
-
-        List<String> lore = new ArrayList<>();
-
-        if (!this.stats.isEmpty()) lore.add(" ");
-
-        if (item.getItemMeta().getLore() != null) lore.addAll(item.getItemMeta().getLore());
-
-
-        writeAbilityLore(lore);
-
-        try {
-            if (lore.get(lore.size() - 1).strip() != "") lore.add("");
-        } catch (IndexOutOfBoundsException e) {
-        }
-
-        lore.add(this.getRarity().color() + this.getRarity().getName() + " " + this.getType().getName());
-        meta.setLore(lore);
-        meta.setDisplayName(this.getRarity().color() + this.getName().toString());
-        item.setItemMeta(meta);
-
-        for (Map.Entry<Stat, Double> entry : this.getStats().entrySet()) {
-            item = this.getType().isWearable() ? AureliumAPI.addArmorModifier(item, entry.getKey(), entry.getValue(), true) : AureliumAPI.addItemModifier(item, entry.getKey(), entry.getValue(), true);
-
-        }
-
-        ItemStack skullItem = Util.makeSkull(item, this.skullURL);
-
-        item = this.skullURL.isBlank() ? item : skullItem;
-
-        return item;
     }
 
     protected void writeAbilityLore(List<String> lore) {
@@ -235,22 +197,29 @@ public class ComplexItem {
         return this.abilities;
     }
 
+    public HashMap<VariableType, Serializable> getVariableMap() {
+        return variableMap;
+    }
+
     public enum Rarity {
 
-        COMMON(ChatColor.WHITE, ChatColor.BOLD + "COMMON"), UNCOMMON(ChatColor.GREEN, ChatColor.BOLD + "UNCOMMON"),
-        RARE(ChatColor.BLUE, ChatColor.BOLD + "RARE"), EPIC(ChatColor.DARK_PURPLE, ChatColor.BOLD + "EPIC"),
-        LEGENDARY(ChatColor.GOLD, ChatColor.BOLD + "LEGENDARY"),
-        MYTHIC(ChatColor.LIGHT_PURPLE, ChatColor.MAGIC + "" + ChatColor.BOLD + "D " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "MYTHIC" + ChatColor.MAGIC + " D" + ChatColor.LIGHT_PURPLE),
-        SPECIAL(ChatColor.RED, ChatColor.MAGIC + "" + ChatColor.BOLD + "D " + ChatColor.RED + ChatColor.BOLD + "SPECIAL" + ChatColor.MAGIC + " D" + ChatColor.RED),
-        VERY_SPECIAL(ChatColor.RED, ChatColor.MAGIC + "" + ChatColor.BOLD + "| D " + ChatColor.RED + ChatColor.BOLD + "VERY SPECIAL" + ChatColor.MAGIC + " D |" + ChatColor.RED),
-        UNKNOWN(ChatColor.RED, ChatColor.MAGIC + "" + ChatColor.BOLD + "D " + ChatColor.RED + ChatColor.BOLD + "UNKNOWN" + ChatColor.MAGIC + " D" + ChatColor.RED);
+        COMMON(ChatColor.WHITE, "&f&lCOMMON&f&l"),
+        UNCOMMON(ChatColor.GREEN, "&a&lUNCOMMON&a&l"),
+        RARE(ChatColor.BLUE, "&9&lRARE&9&l"),
+        EPIC(ChatColor.AQUA, "&b&lEPIC&b&l"),
+        LEGENDARY(ChatColor.GOLD, "&6&lLEGENDARY&6&l"),
+        MYTHIC(ChatColor.LIGHT_PURPLE, "&d&k&lD &k&lMYTHIC&k D&d&l"),
+        OMEGA(ChatColor.GOLD, "&6&k&lD &6&lOMEGA&k D&6&l"),
+        VERY_SPECIAL(ChatColor.RED, "&c&k&l| D &c&lVERY SPECIAL &kD |&c&l"),
+        UNOBTAINABLE(ChatColor.DARK_AQUA, "&3&k&lD &3&lUNOBTAINABLE&k D&3&l"),
+        UNKNOWN(ChatColor.RED, "&c&k& D &c&lUNKNOWN &kD&c&l");
 
         private final ChatColor color;
         private final String name;
 
         Rarity(ChatColor color, String name) {
             this.color = color;
-            this.name = name;
+            this.name = ChatColor.translateAlternateColorCodes('&', name);
         }
 
         public ChatColor color() {
@@ -265,7 +234,11 @@ public class ComplexItem {
 
     public enum Type {
 
-        SWORD("SWORD", false), AXE("AXE", false), WAND("WAND", false), STAFF("STAFF", false), SUPERITEM("SUPERITEM", false), DEPLOYABLE("DEPLOYABLE", false), MISC("", false),
+        SWORD("SWORD", false), AXE("AXE", false), BOW("BOW", false), CROSSBOW("CROSSBOW", false),
+        TRIDENT("TRIDENT", false),
+        PICKAXE("PICKAXE", false), FISHING_ROD("FISHING ROD", false),
+        WAND("WAND", false), STAFF("STAFF", false), SUPERITEM("SUPERITEM", false),
+        DEPLOYABLE("DEPLOYABLE", false), MISC("", false), ENCHANTING_FUEL("ENCHANTING FUEL", false),
         HELMET("HELMET", true), CHESTPLATE("CHESTPLATE", true), LEGGINGS("LEGGINGS", true), BOOTS("BOOTS", true);
 
         private final String name;
