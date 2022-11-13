@@ -294,6 +294,48 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.RARE)
             .type(ComplexItem.Type.AXE)));
 
+    public static final ComplexItem VOLCANAXE = registerItem(new ComplexItem(new ItemSettings()
+            .id("volkanaxe")
+            .material(Material.GOLDEN_AXE)
+            .enchant(Enchantment.DIG_SPEED, 6)
+            .rarity(ComplexItem.Rarity.EPIC)
+            .type(ComplexItem.Type.AXE)));
+
+
+    public static final ComplexItem CHROMOTONIN = registerItem(new ComplexItem(new ItemSettings()
+            .id ("chromotonin")
+            .material(Material.LEAD)
+            .rarity(ComplexItem.Rarity.SPECIAL)
+            .type(ComplexItem.Type.MISC)
+
+    ));
+
+    public static final ComplexItem VOLKEN_STICK = registerItem(new ComplexItem(new ItemSettings()
+            .id("volken_stick")
+            .material(Material.STICK)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.MISC)));
+
+    public static final ComplexItem SUPER_SPACE_HELMET = registerItem(new ComplexItem(new ItemSettings()
+            .id("super_space_helmet")
+            .material(Material.RED_STAINED_GLASS_PANE)
+            .stat(Stats.STRENGTH, 1000d)
+            .stat(Stats.HEALTH, 1000d)
+            .stat(Stats.TOUGHNESS, 1000d)
+            .stat(Stats.REGENERATION, 1000d)
+            .stat(Stats.WISDOM, 1000d)
+            .stat(Stats.LUCK, 1000d)
+            .enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 100)
+            .enchant(Enchantment.OXYGEN, 100)
+            .enchant(Enchantment.DEPTH_STRIDER, 100)
+            .enchant(Enchantment.WATER_WORKER, 100)
+            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 300, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
+            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 500, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
+            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
+            .attribute(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
+            .rarity(ComplexItem.Rarity.MYTHIC)
+            .type(ComplexItem.Type.HELMET)));
+
     public static final ComplexItem LAPIS_ORBITEX = registerItem(new ComplexItem(new ItemSettings()
             .id("lapis_orbitex")
             .material(Material.BLUE_DYE)
@@ -349,7 +391,6 @@ public class ItemRegistry {
                     //Util.logToConsole("Found duplicate recipe, re-adding.");
                     Bukkit.removeRecipe(((Keyed) recipe).getKey());
                     Bukkit.addRecipe(recipe);
-                } else {
                 }
 
             }

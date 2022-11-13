@@ -96,6 +96,8 @@ item-name-heat_blazed_core: Heat Blazed Core
 
 item-name-greatsword_volkumos: The Greatsword of Volkumos
 
+item-name-chromotonin: Chromotonin
+
 ##########################################################################
 ##                              ITEM LORE                               ##
 ##########################################################################
@@ -193,7 +195,7 @@ item-lore-obsidilith_scythe:
   - "Mining away... I don't know.. what to miiine..."
 
 item-lore-enchanted_obsidian:
-  - "Breaking the laws of physics, it's gravitational attraction warps space-time."
+  - "Harder than diamond."
 
 item-lore-compact_obsidian:
   - "Breaking the laws of physics, it's gravitational attraction warps space-time."
@@ -231,6 +233,24 @@ item-lore-heat_blazed_core:
 
 item-lore-greatsword_volkumos:
   - "Forged from the stone that &6Excalibur &7was pulled from."
+
+item-lore-chromotonin:
+  - "it consists of DNA and proteins and also helped a dev fail bio class :)"
+
+item-lore-volken_stick:
+  - "A relic of the past. Emits a strange heat..."
+  - ""
+  - "Something to do with piglins &?&"
+
+item-lore-volkanaxe:
+  - "A relic of the past. Doesn't look fragile..."
+
+item-lore-super_space_helmet:
+  - "&husghasodhusghasodhusghasod&"
+  - "&husghasodhusghasodhusghasod&"
+  - "&husghasodhusghasodhusghasod&"
+  - "&husghasodhusghasodhusghasod&"
+  - "trisolarians?!"
 
 ##########################################################################
 ##                              ABILITIES                               ##
