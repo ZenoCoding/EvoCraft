@@ -73,8 +73,8 @@ public abstract class ComplexEnchantment {
         registeredEnchants.add(this);
     }
 
-    public ComplexEnchantment(EnchantmentSettings settings){
-        this(settings.getId(), settings.getMaxLevel(), settings.getRarity(), settings.getTypes(), settings.getSlots(), settings.getStats(), settings.getExecutable(), settings.getVanillaEnchant(), settings.getExclusive(), settings.getEventType());
+    public ComplexEnchantment(EnchantmentSettings settings, Class<? extends Event> eventType) {
+        this(settings.getId(), settings.getMaxLevel(), settings.getRarity(), settings.getTypes(), settings.getSlots(), settings.getStats(), settings.getExecutable(), settings.getVanillaEnchant(), settings.getExclusive(), eventType);
     }
 
     public ComplexEnchantment(String id, int maxLevel, int rarity, List<ComplexItem.Type> types, Slot slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Enchantment vanillaEnchant, List<ComplexEnchantment> exclusive, Class<? extends Event> eventType){
@@ -149,5 +149,13 @@ public abstract class ComplexEnchantment {
 
     public QuadConsumer<Event, Integer, ItemStack, Player> getExecutable() {
         return executable;
+    }
+
+    public Enchantment getVanillaEnchant() {
+        return vanillaEnchant;
+    }
+
+    public List<ComplexEnchantment> getExclusive() {
+        return exclusive;
     }
 }

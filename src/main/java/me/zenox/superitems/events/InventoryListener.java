@@ -5,11 +5,9 @@ import me.zenox.superitems.item.ComplexItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
@@ -36,14 +34,14 @@ public class InventoryListener implements Listener {
         updateInventory(contents, event.getPlayer());
     }
 
-    @EventHandler
-    public void inventoryInteractEvent(InventoryClickEvent event) {
-        ArrayList<ItemStack> contents = new ArrayList<>();
-        contents.addAll(Arrays.asList(event.getWhoClicked().getInventory().getContents()));
-        contents.addAll(Arrays.asList(event.getWhoClicked().getInventory().getArmorContents()));
-        contents.add(event.getCurrentItem());
-        updateInventory(contents, event.getWhoClicked());
-    }
+//    @EventHandler
+//    public void inventoryInteractEvent(InventoryClickEvent event) {
+//        ArrayList<ItemStack> contents = new ArrayList<>();
+//        contents.addAll(Arrays.asList(event.getWhoClicked().getInventory().getContents()));
+//        contents.addAll(Arrays.asList(event.getWhoClicked().getInventory().getArmorContents()));
+//        contents.add(event.getCurrentItem());
+//        updateInventory(contents, event.getWhoClicked());
+//    }
 
     @EventHandler
     public void inventoryDragItemEvent(InventoryDragEvent event) {

@@ -7,7 +7,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 public class DamagedEnchantment extends ComplexEnchantment{
 
     public DamagedEnchantment(EnchantmentSettings settings) {
-        super(settings);
+        super(settings, EntityDamageEvent.class);
     }
 
     @Override

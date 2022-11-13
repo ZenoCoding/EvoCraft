@@ -13,15 +13,15 @@ import java.util.Objects;
 import java.util.function.Function;
 
 public enum Slot {
-    MAIN_HAND((PlayerInventory inv) -> List.of(inv.getItemInMainHand())),
-    OFF_HAND((PlayerInventory inv) -> List.of(inv.getItemInOffHand())),
-    EITHER_HAND((PlayerInventory inv) -> List.of(inv.getItemInMainHand(), inv.getItemInOffHand())),
-    HEAD((PlayerInventory inv) -> List.of(inv.getHelmet())),
-    CHEST((PlayerInventory inv) -> List.of(inv.getChestplate())),
-    LEGS((PlayerInventory inv) -> List.of(inv.getLeggings())),
-    BOOTS((PlayerInventory inv) -> List.of(inv.getBoots())),
-    ARMOR((PlayerInventory inv) -> Arrays.asList(inv.getArmorContents())),
-    INVENTORY((PlayerInventory inv) -> Arrays.asList(inv.getContents())),
+    MAIN_HAND((PlayerInventory inv) -> Arrays.stream(new ItemStack[]{inv.getItemInMainHand()}).filter(Objects::nonNull).toList()),
+    OFF_HAND((PlayerInventory inv) -> Arrays.stream(new ItemStack[]{inv.getItemInOffHand()}).filter(Objects::nonNull).toList()),
+    EITHER_HAND((PlayerInventory inv) -> Arrays.stream(new ItemStack[]{inv.getItemInMainHand(), inv.getItemInOffHand()}).filter(Objects::nonNull).toList()),
+    HEAD((PlayerInventory inv) -> Arrays.stream(new ItemStack[]{inv.getHelmet()}).filter(Objects::nonNull).toList()),
+    CHEST((PlayerInventory inv) -> Arrays.stream(new ItemStack[]{inv.getChestplate()}).filter(Objects::nonNull).toList()),
+    LEGS((PlayerInventory inv) -> Arrays.stream(new ItemStack[]{inv.getLeggings()}).filter(Objects::nonNull).toList()),
+    BOOTS((PlayerInventory inv) -> Arrays.stream(new ItemStack[]{inv.getBoots()}).filter(Objects::nonNull).toList()),
+    ARMOR((PlayerInventory inv) -> Arrays.stream(inv.getArmorContents()).filter(Objects::nonNull).toList()),
+    INVENTORY((PlayerInventory inv) -> Arrays.stream(inv.getContents()).filter(Objects::nonNull).toList()),
     ;
 
     //groups that apply to multiple items will return the first item applicable

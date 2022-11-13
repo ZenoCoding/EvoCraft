@@ -45,10 +45,12 @@ public class EnchantRegistry {
             .rarity(20)
             .types(ComplexItem.Type.SWORD)
             .slots(Slot.MAIN_HAND)
-            .executable(EnchantRegistry::cullingExecutable));
+            .executable(EnchantRegistry::cullingExecutable)
+            .exclusive(EnchantmentWrapper.KNOCKBACK));
 
     // Vanilla Enchantments
     // maybe make a mine enchant?
+
     public static ComplexEnchantment AQUA_AFFINITY = new AttackEnchantment(new EnchantmentSettings()
             .id("aqua_affinity")
             .maxLevel(1)
@@ -64,7 +66,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.SWORD, ComplexItem.Type.AXE)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.DAMAGE_ARTHROPODS)
-            .exclusive(SHARPNESS, SMITE));
+            .exclusive(EnchantmentWrapper.SHARPNESS, EnchantmentWrapper.SMITE));
 
     public static ComplexEnchantment BLAST_PROTECTION = new DamagedEnchantment(new EnchantmentSettings()
             .id("blast_protection")
@@ -73,7 +75,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.HELMET, ComplexItem.Type.CHESTPLATE, ComplexItem.Type.LEGGINGS, ComplexItem.Type.BOOTS)
             .slots(Slot.ARMOR)
             .vanillaEnchant(Enchantment.PROTECTION_EXPLOSIONS)
-            .exclusive(PROTECTION, FIRE_PROTECTION, PROJECTILE_PROTECTION));
+            .exclusive(EnchantmentWrapper.PROTECTION, EnchantmentWrapper.FIRE_PROTECTION, EnchantmentWrapper.PROJECTILE_PROTECTION));
 
     public static ComplexEnchantment CHANNELING = new AttackEnchantment(new EnchantmentSettings()
             .id("channeling")
@@ -82,7 +84,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.TRIDENT)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.CHANNELING)
-            .exclusive(RIPTIDE));
+            .exclusive(EnchantmentWrapper.RIPTIDE));
 
     public static ComplexEnchantment DEPTH_STRIDER = new AttackEnchantment(new EnchantmentSettings()
             .id("depth_strider")
@@ -91,7 +93,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.BOOTS)
             .slots(Slot.BOOTS)
             .vanillaEnchant(Enchantment.DEPTH_STRIDER)
-            .exclusive(FROST_WALKER));
+            .exclusive(EnchantmentWrapper.FROST_WALKER));
 
     public static ComplexEnchantment EFFICIENCY = new AttackEnchantment(new EnchantmentSettings()
             .id("efficiency")
@@ -124,7 +126,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.HELMET, ComplexItem.Type.CHESTPLATE, ComplexItem.Type.LEGGINGS, ComplexItem.Type.BOOTS)
             .slots(Slot.ARMOR)
             .vanillaEnchant(Enchantment.PROTECTION_FIRE)
-            .exclusive(BLAST_PROTECTION, PROJECTILE_PROTECTION, PROTECTION));
+            .exclusive(EnchantmentWrapper.BLAST_PROTECTION, EnchantmentWrapper.PROJECTILE_PROTECTION, EnchantmentWrapper.PROTECTION));
 
     public static ComplexEnchantment FLAME = new AttackEnchantment(new EnchantmentSettings()
             .id("flame")
@@ -141,7 +143,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.PICKAXE)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.LOOT_BONUS_BLOCKS)
-            .exclusive(SILK_TOUCH));
+            .exclusive(EnchantmentWrapper.SILK_TOUCH));
 
     public static ComplexEnchantment FROST_WALKER = new DamagedEnchantment(new EnchantmentSettings()
             .id("frost_walker")
@@ -150,7 +152,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.BOOTS)
             .slots(Slot.BOOTS)
             .vanillaEnchant(Enchantment.FROST_WALKER)
-            .exclusive(DEPTH_STRIDER));
+            .exclusive(EnchantmentWrapper.DEPTH_STRIDER));
 
     public static ComplexEnchantment IMPALING = new AttackEnchantment(new EnchantmentSettings()
             .id("impaling")
@@ -167,7 +169,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.BOW)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.ARROW_INFINITE)
-            .exclusive(MENDING));
+            .exclusive(EnchantmentWrapper.MENDING));
 
     public static ComplexEnchantment KNOCKBACK = new AttackEnchantment(new EnchantmentSettings()
             .id("knockback")
@@ -176,7 +178,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.SWORD)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.KNOCKBACK)
-            .exclusive(CULLING));
+            .exclusive(EnchantmentWrapper.CULLING));
 
     public static ComplexEnchantment LOOTING = new AttackEnchantment(new EnchantmentSettings()
             .id("looting")
@@ -193,7 +195,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.TRIDENT)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.LOYALTY)
-            .exclusive(RIPTIDE, CHANNELING));
+            .exclusive(EnchantmentWrapper.RIPTIDE, EnchantmentWrapper.CHANNELING));
 
     public static ComplexEnchantment LUCK_OF_THE_SEA = new DamagedEnchantment(new EnchantmentSettings()
             .id("luck_of_the_sea")
@@ -218,7 +220,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.values())
             .slots(Slot.ARMOR, Slot.EITHER_HAND)
             .vanillaEnchant(Enchantment.MENDING)
-            .exclusive(INFINITY));
+            .exclusive(EnchantmentWrapper.INFINITY));
 
     public static ComplexEnchantment MULTISHOT = new DamagedEnchantment(new EnchantmentSettings()
             .id("multishot")
@@ -227,7 +229,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.CROSSBOW)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.MULTISHOT)
-            .exclusive(PIERCING));
+            .exclusive(EnchantmentWrapper.PIERCING));
 
     public static ComplexEnchantment PIERCING = new AttackEnchantment(new EnchantmentSettings()
             .id("piercing")
@@ -236,7 +238,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.CROSSBOW)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.PIERCING)
-            .exclusive(MULTISHOT));
+            .exclusive(EnchantmentWrapper.MULTISHOT));
 
     public static ComplexEnchantment POWER = new AttackEnchantment(new EnchantmentSettings()
             .id("power")
@@ -253,7 +255,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.HELMET, ComplexItem.Type.CHESTPLATE, ComplexItem.Type.LEGGINGS, ComplexItem.Type.BOOTS)
             .slots(Slot.ARMOR)
             .vanillaEnchant(Enchantment.PROTECTION_PROJECTILE)
-            .exclusive(BLAST_PROTECTION, FIRE_PROTECTION, PROTECTION));
+            .exclusive(EnchantmentWrapper.BLAST_PROTECTION, EnchantmentWrapper.FIRE_PROTECTION, EnchantmentWrapper.PROTECTION));
 
     public static ComplexEnchantment PROTECTION = new DamagedEnchantment(new EnchantmentSettings()
             .id("protection")
@@ -262,7 +264,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.HELMET, ComplexItem.Type.CHESTPLATE, ComplexItem.Type.LEGGINGS, ComplexItem.Type.BOOTS)
             .slots(Slot.ARMOR)
             .vanillaEnchant(Enchantment.PROTECTION_ENVIRONMENTAL)
-            .exclusive(BLAST_PROTECTION, PROJECTILE_PROTECTION, FIRE_PROTECTION));
+            .exclusive(EnchantmentWrapper.BLAST_PROTECTION, EnchantmentWrapper.PROJECTILE_PROTECTION, EnchantmentWrapper.FIRE_PROTECTION));
 
     public static ComplexEnchantment PUNCH = new AttackEnchantment(new EnchantmentSettings()
             .id("punch")
@@ -295,7 +297,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.TRIDENT)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.RIPTIDE)
-            .exclusive(LOYALTY, CHANNELING));
+            .exclusive(EnchantmentWrapper.LOYALTY, EnchantmentWrapper.CHANNELING));
 
     public static ComplexEnchantment SHARPNESS = new AttackEnchantment(new EnchantmentSettings()
             .id("sharpness")
@@ -304,7 +306,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.SWORD, ComplexItem.Type.AXE, ComplexItem.Type.STAFF)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.DAMAGE_ALL)
-            .exclusive(SMITE, BANE_OF_ARTHROPODS));
+            .exclusive(EnchantmentWrapper.SMITE, EnchantmentWrapper.BANE_OF_ARTHROPODS));
 
     public static ComplexEnchantment SILK_TOUCH = new DamagedEnchantment(new EnchantmentSettings()
             .id("silk_touch")
@@ -313,7 +315,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.PICKAXE)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.SILK_TOUCH)
-            .exclusive(FORTUNE));
+            .exclusive(EnchantmentWrapper.FORTUNE));
 
     public static ComplexEnchantment SMITE = new AttackEnchantment(new EnchantmentSettings()
             .id("smite")
@@ -322,7 +324,7 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.SWORD, ComplexItem.Type.AXE, ComplexItem.Type.STAFF)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.DAMAGE_UNDEAD)
-            .exclusive(SHARPNESS, BANE_OF_ARTHROPODS));
+            .exclusive(EnchantmentWrapper.SHARPNESS, EnchantmentWrapper.BANE_OF_ARTHROPODS));
 
     public static ComplexEnchantment SOUL_SPEED = new DamagedEnchantment(new EnchantmentSettings()
             .id("soul_speed")
@@ -412,6 +414,35 @@ public class EnchantRegistry {
 
     public static void registerEnchants() {
         Util.logToConsole(ChatColor.WHITE + "Registering " + ChatColor.GOLD + ComplexEnchantment.getRegisteredEnchants().size() + ChatColor.WHITE + " enchantments.");
+    }
+
+    enum EnchantmentWrapper {
+        AQUA_AFFINITY(EnchantRegistry.AQUA_AFFINITY), BANE_OF_ARTHROPODS(EnchantRegistry.BANE_OF_ARTHROPODS),
+        BLAST_PROTECTION(EnchantRegistry.BLAST_PROTECTION), CHANNELING(EnchantRegistry.CHANNELING),
+        DEPTH_STRIDER(EnchantRegistry.DEPTH_STRIDER), EFFICIENCY(EnchantRegistry.EFFICIENCY),
+        FEATHER_FALLING(EnchantRegistry.FEATHER_FALLING), FIRE_ASPECT(EnchantRegistry.FIRE_ASPECT), FIRE_PROTECTION(EnchantRegistry.FIRE_PROTECTION),
+        FORTUNE(EnchantRegistry.FORTUNE), FROST_WALKER(EnchantRegistry.FROST_WALKER), IMPALING(EnchantRegistry.IMPALING),
+        INFINITY(EnchantRegistry.INFINITY), KNOCKBACK(EnchantRegistry.KNOCKBACK), LOOTING(EnchantRegistry.LOOTING),
+        LOYALTY(EnchantRegistry.LOYALTY), LUCK_OF_THE_SEA(EnchantRegistry.LUCK_OF_THE_SEA),
+        LURE(EnchantRegistry.LURE), MENDING(EnchantRegistry.MENDING), MULTISHOT(EnchantRegistry.MULTISHOT),
+        PIERCING(EnchantRegistry.PIERCING), POWER(EnchantRegistry.POWER),
+        PROJECTILE_PROTECTION(EnchantRegistry.PROJECTILE_PROTECTION), PROTECTION(EnchantRegistry.PROTECTION),
+        PUNCH(EnchantRegistry.PUNCH), QUICK_CHARGE(EnchantRegistry.QUICK_CHARGE), RESPIRATION(EnchantRegistry.RESPIRATION),
+        RIPTIDE(EnchantRegistry.RIPTIDE), SHARPNESS(EnchantRegistry.SHARPNESS), SILK_TOUCH(EnchantRegistry.SILK_TOUCH),
+        SMITE(EnchantRegistry.SMITE), SOUL_SPEED(EnchantRegistry.SOUL_SPEED), SWEEPING_EDGE(EnchantRegistry.SWEEPING_EDGE),
+        SWIFT_SNEAK(EnchantRegistry.SWIFT_SNEAK), THORNS(EnchantRegistry.THORNS), UNBREAKING(EnchantRegistry.UNBREAKING),
+
+        CULLING(EnchantRegistry.CULLING), DARKSOUL(EnchantRegistry.DARKSOUL), SIPHON(EnchantRegistry.SIPHON);
+
+        private ComplexEnchantment complexEnchantment;
+
+        EnchantmentWrapper(ComplexEnchantment complexEnchantment){
+            this.complexEnchantment = complexEnchantment;
+        }
+
+        public ComplexEnchantment getEnchant() {
+            return complexEnchantment;
+        }
     }
 
 }

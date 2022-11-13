@@ -13,7 +13,7 @@ public class DamagedByEntityEnchantment extends ComplexEnchantment{
     private static List<EntityDamageEvent.DamageCause> validCauses = List.of(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION, EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, EntityDamageEvent.DamageCause.PROJECTILE);
 
     public DamagedByEntityEnchantment(EnchantmentSettings settings) {
-        super(settings);
+        super(settings, EntityDamageByEntityEvent.class);
     }
 
     @Override

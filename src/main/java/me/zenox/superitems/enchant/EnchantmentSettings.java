@@ -10,6 +10,7 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,13 +31,12 @@ public class EnchantmentSettings {
     private Enchantment vanillaEnchant;
     private List<ComplexEnchantment> exclusive;
 
-    private Class<? extends Event> eventType;
 
     public EnchantmentSettings() {
         this.id = "enchantment_" + UUID.randomUUID();
         this.maxLevel = 1;
         this.rarity = 100;
-        this.types = List.of(ComplexItem.Type.values());
+        this.types = new ArrayList<>(List.of(ComplexItem.Type.values()));
         this.slots = new ArrayList<>();
         this.slots.add(Slot.MAIN_HAND);
         this.stats = new ArrayList<>();
@@ -135,17 +135,8 @@ public class EnchantmentSettings {
         return exclusive;
     }
 
-    public EnchantmentSettings exclusive(ComplexEnchantment ... exclusive) {
-        this.exclusive.addAll(List.of(exclusive));
-        return this;
-    }
-
-    public Class<? extends Event> getEventType() {
-        return eventType;
-    }
-
-    public EnchantmentSettings eventType(Class<? extends Event> eventType) {
-        this.eventType = eventType;
+    public EnchantmentSettings exclusive(EnchantRegistry.EnchantmentWrapper ... exclusive) {
+        this.exclusive.addAll(Arrays.stream(exclusive).map(enchantmentWrapper -> enchantmentWrapper.getEnchant()).toList());
         return this;
     }
 }

@@ -101,22 +101,27 @@ public class EnchantingGUI extends SimpleGUI {
         Util.sendMessage(p, "Enchant | Strength: " + strength + " | Variety: " + variety);
 
         HashMap<ComplexEnchantment, Integer> result = new HashMap<>();
+        Map<ComplexEnchantment, Integer> current = item.getComplexMeta().getComplexEnchants();
+
+        // Obtain list of enchantments that cannot be applied
+        List<ComplexEnchantment> excluded = new ArrayList<>();
+        for(ComplexEnchantment enchantment : current.keySet()) excluded.addAll(enchantment.getExclusive());
 
         while (variety >= 1) {
             for (ComplexEnchantment enchantment : ComplexEnchantment.getRegisteredEnchants()
                     .stream()
                     .filter(complexEnchantment ->
                             complexEnchantment.getTypes().contains(item.getComplexItem().getType())).toList()) {
-                if (r.nextInt(0, Math.max(1, ComplexEnchantment.getRegisteredEnchants().size() * (enchantment.getRarity() / 100))) == 0) {
+                if (r.nextInt(0, Math.max(1, ComplexEnchantment.getRegisteredEnchants().size() * (enchantment.getRarity() / 100))) == 0 && !excluded.contains(enchantment)) {
                     result.put(enchantment, Math.max(1, r.nextInt((int) (enchantment.getMaxLevel() / (strength + 1)))));
+                    excluded.addAll(enchantment.getExclusive());
                     variety--;
                 }
             }
         }
-
-        Map<ComplexEnchantment, Integer> current = item.getComplexMeta().getComplexEnchants();
         HashMap<ComplexEnchantment, Integer> resultCombined = new HashMap<>();
 
+        // merge result with current
         for (Map.Entry<ComplexEnchantment, Integer> entry : result.entrySet()) {
             if (current.containsKey(entry.getKey())) {
                 Util.sendMessage(p, current.get(entry.getKey()) + " | " + entry.getValue());

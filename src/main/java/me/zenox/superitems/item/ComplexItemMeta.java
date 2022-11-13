@@ -96,16 +96,6 @@ public class ComplexItemMeta {
 
         writeVariables(VariableType.Priority.ABOVE_ENCHANTS, dataContainer, lore, true);
 
-        // Write Enchants
-        for (Map.Entry<Enchantment, Integer> e : meta.getEnchants().entrySet()) {
-            ChatColor color = ChatColor.GRAY;
-            StringBuilder enchantName = new StringBuilder();
-            if (e.getValue() == e.getKey().getMaxLevel()) color = ChatColor.AQUA;
-            if (e.getValue() > e.getKey().getMaxLevel()) color = ChatColor.LIGHT_PURPLE;
-            Arrays.stream(e.getKey().getKey().getKey().split("_")).forEach((String str) -> enchantName.append(str.substring(0, 1).toUpperCase() + str.substring(1)).append(" "));
-            lore.entry(new LoreEntry("enchant_" + e.getKey().getKey().getKey(), List.of(color + enchantName.toString() + Romans.encode(e.getValue()))));
-        }
-
         HashMap<String, Integer> complexEnchMap = new HashMap<>();
         for (Map.Entry<ComplexEnchantment, Integer> entry :
                 this.complexEnchantments.entrySet()) {
@@ -115,12 +105,21 @@ public class ComplexItemMeta {
         // Write ComplexEnchants
         dataContainer.set(ENCHANT_KEY, new SerializedPersistentType<HashMap>(), complexEnchMap);
 
+        // Clear vanilla enchantments
+        for (Enchantment enchant:
+             Enchantment.values()) {
+            meta.removeEnchant(enchant);
+        }
+
         for (Map.Entry<ComplexEnchantment, Integer> e : this.complexEnchantments.entrySet()) {
             ChatColor color = ChatColor.GRAY;
             String enchantName = e.getKey().getName().toString();
             if (e.getValue() == e.getKey().getMaxLevel()) color = ChatColor.AQUA;
             if (e.getValue() > e.getKey().getMaxLevel()) color = ChatColor.LIGHT_PURPLE;
             lore.entry(new LoreEntry("enchant_" + e.getKey().getId(), List.of(color + enchantName + " " + Romans.encode(e.getValue()))));
+
+            // Apply vanilla enchant if it has
+            if(e.getKey().getVanillaEnchant() != null) meta.addEnchant(e.getKey().getVanillaEnchant(), e.getValue(), true);
         }
 
         if (!meta.getEnchants().isEmpty() || !this.complexEnchantments.isEmpty()) lore.entry(new LoreEntry("newline", List.of("")));
