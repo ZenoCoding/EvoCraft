@@ -1,8 +1,10 @@
 package me.zenox.superitems.item;
 
 import com.archyx.aureliumskills.stats.Stats;
+import me.zenox.superitems.Slot;
 import me.zenox.superitems.abilities.*;
 import me.zenox.superitems.abilities.Transcendence;
+import me.zenox.superitems.attribute.AttributeRegistry;
 import me.zenox.superitems.gui.EnchantingGUI;
 import me.zenox.superitems.item.armoritems.*;
 import me.zenox.superitems.item.basicitems.CorruptPearl;
@@ -305,7 +307,7 @@ public class ItemRegistry {
     public static final ComplexItem CHROMOTONIN = registerItem(new ComplexItem(new ItemSettings()
             .id ("chromotonin")
             .material(Material.LEAD)
-            .rarity(ComplexItem.Rarity.SPECIAL)
+            .rarity(ComplexItem.Rarity.OMEGA)
             .type(ComplexItem.Type.MISC)
 
     ));
@@ -364,7 +366,7 @@ public class ItemRegistry {
             .material(Material.STONE_SWORD)
             .rarity(ComplexItem.Rarity.RARE)
             .type(ComplexItem.Type.SWORD)
-            .attribute(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "superitems:attack_damage", 20, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
+            .modifier(new me.zenox.superitems.attribute.AttributeModifier("superitems:attack_speed", AttributeRegistry.ATTACK_DAMAGE, 20d, AttributeModifier.Operation.ADD_NUMBER, Slot.MAIN_HAND))
             .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -3.2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
             .stat(Stats.STRENGTH, 50d)
             .ability(AbilityRegistry.TERRA_STRIKE)));

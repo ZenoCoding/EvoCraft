@@ -28,6 +28,7 @@ public class ItemSettings {
     private String skullURL;
     private List<Ability> abilities;
     private HashMap<VariableType, Serializable> variableMap;
+    private List<me.zenox.superitems.attribute.AttributeModifier> attributeModifiers;
 
     public ItemSettings() {
         this.id = "undefined_" + UUID.randomUUID();
@@ -41,9 +42,10 @@ public class ItemSettings {
         this.skullURL = "";
         this.abilities = new ArrayList<>();
         this.variableMap = new HashMap<>();
+        this.attributeModifiers = new ArrayList<>();
     }
 
-    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap) {
+    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap, List<me.zenox.superitems.attribute.AttributeModifier> attributeModifiers) {
         this.id = id;
         this.unique = unique;
         this.glow = glow;
@@ -55,14 +57,16 @@ public class ItemSettings {
         this.skullURL = skullURL;
         this.abilities = abilities;
         this.variableMap = variableMap;
+        this.attributeModifiers = attributeModifiers;
     }
 
     public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities){
-        this(id, unique, glow, rarity, type, material, meta, stats, skullURL, abilities, new HashMap<>());
+        this(id, unique, glow, rarity, type, material, meta, stats, skullURL, abilities, new HashMap<>(), new ArrayList<>());
     }
 
+
     public static ItemSettings of(ComplexItem item) {
-        return new ItemSettings(item.getId(), item.isUnique(), item.doesGlow(), item.getRarity(), item.getType(), item.getMaterial(), item.getMeta(), item.getStats(), item.getSkullURL(), new ArrayList<>());
+        return new ItemSettings(item.getId(), item.isUnique(), item.doesGlow(), item.getRarity(), item.getType(), item.getMaterial(), item.getMeta(), item.getStats(), item.getSkullURL(), item.getAbilities(), item.getVariableMap(), item.getAttributeModifiers());
     }
 
     public static ItemSettings of(ItemStack item) {
@@ -113,6 +117,10 @@ public class ItemSettings {
 
     public HashMap<VariableType, Serializable> getVariableMap() {
         return variableMap;
+    }
+
+    public List<me.zenox.superitems.attribute.AttributeModifier> getAttributeModifiers() {
+        return attributeModifiers;
     }
 
     public ItemSettings id(String id) {
@@ -208,6 +216,16 @@ public class ItemSettings {
 
     public ItemSettings variable(VariableType type, Serializable value){
         this.variableMap.put(type, value);
+        return this;
+    }
+
+    public ItemSettings modifier(me.zenox.superitems.attribute.AttributeModifier ... modifiers){
+        this.attributeModifiers.addAll(List.of(modifiers));
+        return this;
+    }
+
+    public ItemSettings setAttributeModifiers(List<me.zenox.superitems.attribute.AttributeModifier> attributeModifiers) {
+        this.attributeModifiers = attributeModifiers;
         return this;
     }
 }

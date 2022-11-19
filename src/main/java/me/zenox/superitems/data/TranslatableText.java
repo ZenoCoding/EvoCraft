@@ -27,7 +27,7 @@ public class TranslatableText implements Serializable {
         ITEM_NAME("item-name"), ITEM_LORE("item-lore"),
         ABILITY_NAME("ability-name"), ABILITY_LORE("ability-lore"),
         COMMAND("cmd"), MISC_MSG("msg"), ENCHANT_NAME("enchant-name"),
-        GUI("gui");
+        ATTRIBUTE("attribute"), GUI("gui");
 
         private final String key;
 

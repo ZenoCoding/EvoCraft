@@ -1,5 +1,10 @@
 package me.zenox.superitems.util;
 
+import com.archyx.aureliumskills.AureliumSkills;
+import com.archyx.aureliumskills.modifier.ModifierType;
+import com.archyx.aureliumskills.modifier.Modifiers;
+import com.archyx.aureliumskills.modifier.StatModifier;
+import com.archyx.aureliumskills.stats.Stat;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.md_5.bungee.api.ChatMessageType;
@@ -106,11 +111,21 @@ public class Util {
     }
 
     /**
-     * Utility method to check if an entity is invulernerable to damage- should be used to do things like check if an entity should have custom knockback/damage applied to it.
+     * Utility method to check if an entity is invulnerable to damage- should be used to do things like check if an entity should have custom knockback/damage applied to it.
      * @param entity the entity to check
      * @return whether or not the entity is invulnerable
      */
     public static boolean isInvulnerable(Entity entity){
         return (entity.hasMetadata("NPC") || (entity instanceof Player player && player.getGameMode() == GameMode.CREATIVE));
+    }
+
+    public static List<StatModifier> getAureliumModifiers(ItemStack item, ModifierType type){
+        Modifiers modifiers = new Modifiers(AureliumSkills.getPlugin(AureliumSkills.class));
+        return modifiers.getModifiers(type, item);
+    }
+
+    public static ItemStack removeAureliumModifier(ItemStack item, ModifierType type, Stat stat){
+        Modifiers modifiers = new Modifiers(AureliumSkills.getPlugin(AureliumSkills.class));
+        return modifiers.removeModifier(type, item, stat);
     }
 }

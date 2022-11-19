@@ -3,7 +3,7 @@ package me.zenox.superitems.item.armoritems;
 import com.archyx.aureliumskills.stats.Stats;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import me.zenox.superitems.item.ArmorItem;
+import me.zenox.superitems.item.ComplexItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import static me.zenox.superitems.item.ItemRegistry.*;
 
-public class DesecratorChestplate extends ArmorItem {
+public class DesecratorChestplate extends ComplexItem {
     public DesecratorChestplate() {
         super("desecrator_chestplate", Rarity.EPIC, Type.CHESTPLATE, Material.LEATHER_CHESTPLATE, Map.of(Stats.STRENGTH, 5d, Stats.HEALTH, 5d));
 

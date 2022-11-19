@@ -11,15 +11,14 @@ public class LoreEntry implements Cloneable {
     private List<String> lore;
     private final BiConsumer<LoreBuilder, LoreEntry> modifier;
 
-    LoreEntry(String id, @NotNull List<String> lore, BiConsumer<LoreBuilder, LoreEntry> modifier) {
+    public LoreEntry(String id, @NotNull List<String> lore, BiConsumer<LoreBuilder, LoreEntry> modifier) {
         this.id = id;
         this.lore = new ArrayList<>(lore);
         this.modifier = modifier;
     }
 
     public LoreEntry(String id, List<String> lore) {
-        this(id, lore, ((loreBuilder, loreEntry) -> {
-        }));
+        this(id, lore, ((loreBuilder, loreEntry) -> {}));
     }
 
     public String getId() {

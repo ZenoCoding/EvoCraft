@@ -1,0 +1,61 @@
+package me.zenox.superitems.attribute.types;
+
+import com.archyx.aureliumskills.api.AureliumAPI;
+import com.archyx.aureliumskills.modifier.ModifierType;
+import com.archyx.aureliumskills.stats.Stat;
+import me.zenox.superitems.Slot;
+import me.zenox.superitems.attribute.Attribute;
+import me.zenox.superitems.attribute.AttributeModifier;
+import me.zenox.superitems.util.Util;
+import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Field;
+import java.util.List;
+
+public class AureliumAttribute extends Attribute {
+
+    private final Stat stat;
+
+    public AureliumAttribute(String id, ChatColor color, Stat stat) {
+        super(id, color, null, AttributeSource.AURELIUM);
+        try {
+            Field f = getClass().getSuperclass().getDeclaredField("lore");
+            f.setAccessible(true);
+            f.set(this, generateLore());
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        this.stat = stat;
+    }
+
+    private @NotNull String generateLore(){
+        return this.getName() + ": " + this.getColor() + Attribute.VALUE_PLACEHOLDER;
+    }
+
+    @Override
+    public ItemStack apply(ItemStack item, @NotNull AttributeModifier modifier) {
+        final Double[] value = {modifier.getValue()};
+        if (modifier.getOperation().equals(org.bukkit.attribute.AttributeModifier.Operation.ADD_SCALAR)){
+            value[0] = 0d;
+            Util.getAureliumModifiers(item,
+                    List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.BOOTS, Slot.ARMOR)
+                    .contains(modifier.getSlot()) ? ModifierType.ARMOR : ModifierType.ITEM)
+                    .forEach(statModifier -> value[0] += statModifier.getValue());
+            value[0] *= modifier.getValue();
+        }
+
+        return AureliumAPI.addItemModifier(item, stat, value[0], false);
+    }
+
+    @Override
+    public ItemStack remove(ItemStack item, @NotNull AttributeModifier modifier) {
+        return Util.removeAureliumModifier(item, List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.BOOTS, Slot.ARMOR)
+                .contains(modifier.getSlot()) ? ModifierType.ARMOR : ModifierType.ITEM, stat);
+    }
+
+    public Stat getStat() {
+        return stat;
+    }
+}

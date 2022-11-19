@@ -5,12 +5,15 @@ import com.archyx.aureliumskills.modifier.StatModifier;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.abilities.ItemAbility;
+import me.zenox.superitems.attribute.AttributeModifier;
 import me.zenox.superitems.enchant.ComplexEnchantment;
 import me.zenox.superitems.persistence.ArrayListType;
 import me.zenox.superitems.persistence.SerializedPersistentType;
 import me.zenox.superitems.util.Romans;
+import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -36,16 +39,18 @@ import java.util.stream.Stream;
 public class ComplexItemMeta {
     public static final NamespacedKey ABILITY_ID = new NamespacedKey(SuperItems.getPlugin(), "ability");
     public static final String VAR_PREFIX = "var_";
-    public static final VariableType<ComplexItem.Rarity> RARITY_VAR = new VariableType<ComplexItem.Rarity>("rarity", new LoreEntry("rarity", List.of("Rarity Lore")), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Rarity) variable.getValue()).color() + ((ComplexItem.Rarity) variable.getValue()).getName())));
-    public static final VariableType<ComplexItem.Type> TYPE_VAR = new VariableType<ComplexItem.Type>("type", new LoreEntry("type", List.of("Type Lore"), ((loreBuilder, loreEntry) -> {
+    public static final VariableType<ComplexItem.Rarity> RARITY_VAR = new VariableType<>("rarity", new LoreEntry("rarity", List.of("Rarity Lore")), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Rarity) variable.getValue()).color() + ((ComplexItem.Rarity) variable.getValue()).getName())));
+    public static final VariableType<ComplexItem.Type> TYPE_VAR = new VariableType<>("type", new LoreEntry("type", List.of("Type Lore"), ((loreBuilder, loreEntry) -> {
         loreBuilder.getLoreEntryById(
                 RARITY_VAR.name()).get(0).setLore(List.of(loreBuilder.getLoreEntryById(RARITY_VAR.name()).get(0).getLore().get(0) + " " + loreEntry.getLore().get(0)));
         loreEntry.setLore(List.of());
     })), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Type) variable.getValue()).getName())));
     private static final NamespacedKey ENCHANT_KEY = new NamespacedKey(SuperItems.getPlugin(), "complexEnchants");
+    private static final NamespacedKey ATTRIBUTE_KEY = new NamespacedKey(SuperItems.getPlugin(), "attributes");
     private List<Ability> abilities;
     private final List<Variable> variableList = new ArrayList<>();
     private HashMap<ComplexEnchantment, Integer> complexEnchantments = new HashMap<>();
+    private final List<AttributeModifier> modifierList = new ArrayList<>();
     private final ComplexItemStack complexItemStack;
 
     public ComplexItemMeta(ComplexItemStack complexItemStack, List<Ability> abilities) {
@@ -66,23 +71,33 @@ public class ComplexItemMeta {
         ItemMeta meta = item.getItemMeta();
 
         // Write Stats
-        List<String> statlore = new ArrayList<>();
-        List<StatModifier> modifiers = SuperItems.getPlugin().modifiers.getModifiers(ModifierType.ARMOR, item);
-        modifiers.addAll(SuperItems.getPlugin().modifiers.getModifiers(ModifierType.ITEM, item));
-        modifiers.stream().forEach(statModifier -> statlore.add(ChatColor.GRAY + statModifier.getStat().getDisplayName(Locale.ENGLISH) + ": " + statModifier.getStat().getColor(Locale.ENGLISH) + ((int) statModifier.getValue())));
+        List<String> attributeLore = new ArrayList<>();
+        modifierList.forEach(modifier -> attributeLore.add(ChatColor.GRAY + modifier.getName() + ": " + modifier.getAttribute().getColor() + ((int) modifier.getValue())));
 
         PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
         LoreBuilder lore = new LoreBuilder();
 
-        // Make Normal Enchants INVISIBLE
+        // Make Minecraft's default lore invisible
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.setUnbreakable(true);
+
+        // Write Attributes
+        dataContainer.set(ATTRIBUTE_KEY, new ArrayListType(), modifierList);
+
+        // Set itemMeta so modifier can use it (important)
+        item.setItemMeta(meta);
+
+        modifierList.forEach(attributeModifier -> attributeModifier.apply(item));
+
+        // get it again
+        meta = item.getItemMeta();
 
         writeVariables(VariableType.Priority.ABOVE_STATS, dataContainer, lore, true);
 
-        if (!statlore.isEmpty()) {
-            lore.entry(new LoreEntry("stat_lore", statlore));
+        if (!attributeLore.isEmpty()) {
+            lore.entry(new LoreEntry("modifier_lore", attributeLore));
             lore.entry(new LoreEntry("newline", List.of("")));
         }
 
@@ -209,6 +224,30 @@ public class ComplexItemMeta {
         }
     }
 
+    /**
+     * Read previous modifiers, used for registering modifiers that don't exist in NBT data
+     * @param stack the ComplexItemStack to read
+     * @return the list of attribute modifiers
+     */
+    public static @NotNull List<AttributeModifier> readModifiers(@NotNull ComplexItemStack stack){
+        ComplexItemMeta meta = stack.getComplexMeta();
+        List<AttributeModifier> modifiers = new ArrayList<>();
+
+        // Read Minecraft Attribute Modifiers
+        for(Map.Entry<Attribute, org.bukkit.attribute.AttributeModifier> modifier : stack.getItem().getItemMeta().getAttributeModifiers().entries()) {
+            modifiers.add(AttributeModifier.of(modifier.getKey(), modifier.getValue()));
+        }
+
+        // Read AureliumSkills Modifiers
+        for(StatModifier modifier :
+                Util.getAureliumModifiers(stack.getItem(),
+                        ((ComplexItem.Type) meta.getVariable(ComplexItemMeta.TYPE_VAR).getValue()).isWearable() ? ModifierType.ARMOR : ModifierType.ITEM)){
+            modifiers.add(AttributeModifier.of(modifier));
+        }
+
+        return modifiers;
+    }
+
     public void addVariable(Variable var) {
         this.variableList.add(var);
         this.updateItem();
@@ -240,26 +279,8 @@ public class ComplexItemMeta {
         return this.complexEnchantments;
     }
 
-    public Map<Enchantment, Integer> getEnchants(){
-        return this.complexItemStack.getItem().getItemMeta().getEnchants();
-    }
-
-    public void addEnchantment(Enchantment enchantment, Integer level){
-        ItemMeta meta = this.complexItemStack.getItem().getItemMeta();
-        meta.addEnchant(enchantment, level, true);
-        this.complexItemStack.getItem().setItemMeta(meta);
-        updateItem();
-    }
-
     public void addEnchantment(ComplexEnchantment enchantment, Integer level){
         this.complexEnchantments.put(enchantment, level);
-        updateItem();
-    }
-
-    public void removeEnchantment(Enchantment enchantment){
-        ItemMeta meta = this.complexItemStack.getItem().getItemMeta();
-        meta.removeEnchant(enchantment);
-        this.complexItemStack.getItem().setItemMeta(meta);
         updateItem();
     }
 
@@ -279,4 +300,6 @@ public class ComplexItemMeta {
     public List<Ability> getAbilities() {
         return abilities;
     }
+
+
 }

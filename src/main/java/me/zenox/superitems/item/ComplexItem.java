@@ -5,6 +5,7 @@ import com.google.common.primitives.Ints;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.abilities.ItemAbility;
+import me.zenox.superitems.attribute.AttributeModifier;
 import me.zenox.superitems.data.TranslatableList;
 import me.zenox.superitems.data.TranslatableText;
 import org.bukkit.ChatColor;
@@ -32,7 +33,7 @@ public class ComplexItem {
     private final TranslatableText name;
     private final TranslatableList lore;
     private final int customModelData;
-    private boolean glow = false;
+    private boolean glow;
     private final Rarity rarity;
     private final Type type;
     private final Material material;
@@ -40,15 +41,17 @@ public class ComplexItem {
     private final Map<Stat, Double> stats;
     private final List<Ability> abilities;
     private final HashMap<VariableType, Serializable> variableMap = new HashMap();
+    private final List<AttributeModifier> attributeModifiers;
 
     private String skullURL = "";
 
 
-    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap) {
+    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap, List<AttributeModifier> attributeModifiers) {
         this.id = id;
         this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + id);
         this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
+        this.attributeModifiers = attributeModifiers;
         String str = String.valueOf(Math.abs(id.hashCode()));
         this.customModelData = Ints.tryParse(str.substring(0, Math.min(7, str.length())));
         this.unique = unique;
@@ -63,12 +66,16 @@ public class ComplexItem {
         this.variableMap.putAll(variableMap);
     }
 
-    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
-        this(id, unique, glow, rarity, type, material, stats, abilities, new HashMap<>());
+    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, List<AttributeModifier> attributeModifiers) {
+        this(id, unique, glow, rarity, type, material, stats, abilities, new HashMap<>(), attributeModifiers);
+    }
+
+    public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, List<AttributeModifier> attributeModifiers) {
+        this(id, unique, false, rarity, type, material, stats, abilities, attributeModifiers);
     }
 
     public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
-        this(id, unique, false, rarity, type, material, stats, abilities);
+        this(id, unique, false, rarity, type, material, stats, abilities, new ArrayList<>());
     }
 
     public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique, List<Ability> abilities) {
@@ -108,6 +115,7 @@ public class ComplexItem {
         this.skullURL = "";
         this.abilities = settings.getAbilities() == null ? new ArrayList<>() : new ArrayList<>(settings.getAbilities());
         this.variableMap.putAll(settings.getVariableMap());
+        this.attributeModifiers = settings.getAttributeModifiers();
     }
 
     public List<Recipe> getRecipes() {
@@ -199,6 +207,10 @@ public class ComplexItem {
 
     public HashMap<VariableType, Serializable> getVariableMap() {
         return variableMap;
+    }
+
+    public List<AttributeModifier> getAttributeModifiers() {
+        return attributeModifiers;
     }
 
     public enum Rarity {
