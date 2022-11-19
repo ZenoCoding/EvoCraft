@@ -1,20 +1,19 @@
 package me.zenox.superitems.abilities;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
+import me.zenox.superitems.Slot;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.data.TranslatableList;
 import me.zenox.superitems.data.TranslatableText;
 import me.zenox.superitems.item.ComplexItemStack;
+import me.zenox.superitems.util.TriConsumer;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityEvent;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
@@ -22,14 +21,11 @@ import org.jetbrains.annotations.Nullable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 
 public abstract class Ability implements Serializable {
-    public static List<Ability> registeredAbilities = new ArrayList<>();
+    public static final List<Ability> registeredAbilities = new ArrayList<>();
+    public static final List<Class<? extends Event>> registeredEvents = new ArrayList<>();
 
     private final TranslatableText name;
     private final String id;
@@ -40,14 +36,14 @@ public abstract class Ability implements Serializable {
     private final Slot slot;
     private TranslatableList lore;
 
-    private transient Consumer<Event> executable;
+    private transient TriConsumer<Event, Player, ItemStack> executable;
 
-    public Ability(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot) {
+    protected Ability(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot) {
         this(id, manaCost, cooldown, eventType, slot, true);
         this.executable = this::runExecutable;
     }
 
-    public Ability(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot, Consumer<Event> executable) {
+    protected Ability(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot, TriConsumer<Event, Player, ItemStack> executable) {
         this(id, manaCost, cooldown, eventType, slot, true);
         this.executable = executable;
     }
@@ -55,17 +51,17 @@ public abstract class Ability implements Serializable {
     /**
      * Internal constructor because exectuable go brr
      *
-     * @param id
-     * @param manaCost
-     * @param cooldown
-     * @param eventType
-     * @param slot
+     * @param id The unique identifier of the ability
+     * @param manaCost The mana cost-per usage of the ability
+     * @param cooldown The cooldown of the ability, how long before it can be used again
+     * @param eventType The EventType that triggers the ability
+     * @param slot The slot that the item that contains the ability has to be in, i.e. main hand, head, etc
      * @param internal  parameter that never gets used just to differentiate it from the public variant
      */
     private Ability(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot, Boolean internal) {
         this.id = id;
-        this.name = new TranslatableText(TranslatableText.TranslatableType.ABILITY_NAME + "-" + id);
-        this.lore = new TranslatableList(TranslatableText.TranslatableType.ABILITY_LORE + "-" + id);
+        this.name = new TranslatableText(TranslatableText.Type.ABILITY_NAME + "-" + id);
+        this.lore = new TranslatableList(TranslatableText.Type.ABILITY_LORE + "-" + id);
         this.cooldown = cooldown;
         this.manaCost = manaCost;
         this.eventType = eventType;
@@ -80,6 +76,7 @@ public abstract class Ability implements Serializable {
         }
 
         Ability.registeredAbilities.add(this);
+        if(!Ability.registeredEvents.contains(eventType)) Ability.registeredEvents.add(eventType);
     }
 
     /**
@@ -91,7 +88,7 @@ public abstract class Ability implements Serializable {
      */
     @Nullable
     public static Ability getAbility(String id) {
-        for (Ability ability : registeredAbilities) if (ability.getId() == id) return ability;
+        for (Ability ability : registeredAbilities) if (ability.getId().equals(id)) return ability;
         return null;
     }
 
@@ -112,13 +109,22 @@ public abstract class Ability implements Serializable {
         this.lore = list;
     }
 
-    protected boolean checkEvent(Event e) {
-        return this.eventType.isInstance(e);
-    }
-
     public void useAbility(Event e) {
+        if (!this.eventType.isInstance(e)) return;
         if (!checkEvent(e)) return;
         Player p = getPlayerOfEvent(e);
+        List<ItemStack> items = getItem(p, e);
+        ItemStack item = null;
+
+        // Perhaps change this in the future to support passing multiple items to the consumer
+        for(ItemStack i : items) {
+            if (i == null || i.getType() == Material.AIR || i.getItemMeta() == null) continue;
+            if (!ComplexItemStack.of(i).getAbilities().contains(this)) continue;
+            item = i;
+            break;
+        }
+
+        if(item == null) return;
 
         PersistentDataContainer container = p.getPersistentDataContainer();
         NamespacedKey cooldownKey = new NamespacedKey(SuperItems.getPlugin(), getId() + "_cooldown");
@@ -151,28 +157,20 @@ public abstract class Ability implements Serializable {
         String manaMessage = this.manaCost > 0 ? ChatColor.AQUA + "-" + manaCost + " Mana " + "(" + ChatColor.GOLD + name + ChatColor.AQUA + ")" : ChatColor.GOLD + "Used " + name;
         Util.sendActionBar(p, manaMessage);
 
-        this.executable.accept(e);
+        this.executable.accept(e, p, item);
 
         container.set(cooldownKey, PersistentDataType.DOUBLE, System.currentTimeMillis() + (getCooldown() * 1000));
     }
 
-    protected void runExecutable(Event e) {
-        if (e instanceof PlayerEvent)
-            Util.sendMessage(((PlayerEvent) e).getPlayer(), "Used the " + this.id + " ability");
-        else if (e instanceof EntityEvent)
-            Util.sendMessage(((EntityEvent) e).getEntity(), "Used the " + this.id + " ability");
-        else
-            Util.logToConsole("Attempted to use ability " + this.id + "but was unable to find the corresponding entity.");
+    protected void runExecutable(Event e, Player p, ItemStack itemStack) {
+        Util.sendMessage(p, "Used the " + this.id + " ability");
     }
 
-    private Player getPlayerOfEvent(Event e) {
-        if (e instanceof PlayerEvent) return ((PlayerEvent) e).getPlayer();
-        else if (e instanceof EntityDamageByEntityEvent) return ((Player) ((EntityDamageByEntityEvent) e).getDamager());
-            // create implemenations for every event registered
-        else
-            Util.logToConsole("Ability#getPlayerOfEvent: Attempted to use ability " + this.id + "but was unable to find the corresponding entity.");
-        return null;
-    }
+    abstract boolean checkEvent(Event e);
+
+    abstract Player getPlayerOfEvent(Event e);
+
+    abstract List<ItemStack> getItem(Player p, Event e);
 
     public double getCooldown() {
         return this.cooldown;
@@ -188,69 +186,6 @@ public abstract class Ability implements Serializable {
 
     public Slot getSlot() {
         return this.slot;
-    }
-
-    public enum Slot {
-        MAIN_HAND((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getItemInMainHand()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getItemInMainHand()),
-        OFF_HAND((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getItemInOffHand()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getItemInOffHand()),
-        EITHER_HAND((PlayerInventory inv, Ability ability) -> MAIN_HAND.predicate.test(inv, ability) || OFF_HAND.predicate.test(inv, ability), (PlayerInventory inv) -> inv.getItemInMainHand()),
-        HEAD((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getHelmet()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getHelmet()),
-        CHEST((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getChestplate()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getChestplate()),
-        LEGS((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getLeggings()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getLeggings()),
-        BOOTS((PlayerInventory inv, Ability ability) -> ComplexItemStack.of(inv.getBoots()).getAbilities().contains(ability), (PlayerInventory inv) -> inv.getBoots()),
-        ARMOR((PlayerInventory inv, Ability ability) -> {
-            for (ItemStack item : inv.getArmorContents())
-                if (ComplexItemStack.of(item).getAbilities().contains(ability)) return true;
-            return false;
-        }, (PlayerInventory inv) -> inv.getHelmet()),
-        INVENTORY((PlayerInventory inv, Ability ability) -> {
-            for (ItemStack item : inv.getContents())
-                if (ComplexItemStack.of(item).getAbilities().contains(ability)) return true;
-            return false;
-        }, (PlayerInventory inv) -> inv.getItemInMainHand()),
-        ;
-
-        private final BiPredicate<PlayerInventory, Ability> predicate;
-
-        //groups that apply to multiple items will return the first item applicable
-        private final Function<PlayerInventory, ItemStack> getItem;
-
-        Slot(BiPredicate<PlayerInventory, Ability> predicate, Function<PlayerInventory, ItemStack> getItem) {
-            this.predicate = predicate;
-            this.getItem = getItem;
-        }
-
-        /**
-         * Gets all the unique abilities of a player's equipped gear.
-         *
-         * @param p The player
-         * @return A list of unique abilities.
-         */
-        public static List<Ability> uniqueEquipped(Player p) {
-            List<ItemStack> items = List.of(MAIN_HAND.item(p), OFF_HAND.item(p), HEAD.item(p), CHEST.item(p), LEGS.item(p), BOOTS.item(p));
-            List<Ability> abilities = new ArrayList<>();
-            items.stream()
-                    .map(ComplexItemStack::of)
-                    .filter(Objects::nonNull)
-                    .forEach((complexItemStack) -> abilities.addAll(complexItemStack.getAbilities()));
-            return abilities.stream().distinct().toList();
-        }
-
-        public Boolean evaluate(PlayerInventory inv, Ability ability) {
-            try {
-                return this.predicate.test(inv, ability);
-            } catch (NullPointerException e) {
-                return false;
-            }
-        }
-
-        public ItemStack item(PlayerInventory inv) {
-            return this.getItem.apply(inv);
-        }
-
-        public ItemStack item(Player p) {
-            return this.getItem.apply(p.getInventory());
-        }
     }
 
 

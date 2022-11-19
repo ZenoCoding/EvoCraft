@@ -3,7 +3,8 @@ package me.zenox.superitems.item.armoritems;
 import com.archyx.aureliumskills.stats.Stats;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import me.zenox.superitems.item.ArmorItem;
+import me.zenox.superitems.abilities.AbilityRegistry;
+import me.zenox.superitems.item.ComplexItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -18,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class VoidMask extends ArmorItem {
+public class VoidMask extends ComplexItem {
     public VoidMask() {
-        super("void_helmet", Rarity.EPIC, Type.HELMET, Material.PLAYER_HEAD, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 15d, Stats.WISDOM, 50d, Stats.REGENERATION, 5d));
+        super("void_helmet", Rarity.EPIC, Type.HELMET, Material.PLAYER_HEAD, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 15d, Stats.WISDOM, 50d, Stats.REGENERATION, 5d), List.of(AbilityRegistry.TEST_FULLSET));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Psychic powers.");

@@ -8,6 +8,7 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class EmberShootSmall extends ItemAbility {
@@ -20,9 +21,8 @@ public class EmberShootSmall extends ItemAbility {
     }
 
     @Override
-    public void runExecutable(Event event) {
+    public void runExecutable(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Player p = e.getPlayer();
 
         Location eyeLoc = p.getEyeLocation();
 

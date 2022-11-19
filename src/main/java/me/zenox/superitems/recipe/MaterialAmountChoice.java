@@ -71,7 +71,7 @@ public class MaterialAmountChoice implements RecipeChoice {
     public MaterialAmountChoice clone() {
         try {
             MaterialAmountChoice clone = (MaterialAmountChoice) super.clone();
-            clone.choices = new HashMap(choices);
+            clone.choices = new HashMap<>(choices);
             return clone;
         } catch (CloneNotSupportedException ex) {
             throw new AssertionError(ex);

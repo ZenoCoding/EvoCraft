@@ -32,15 +32,14 @@ public class Variable<T extends Serializable> {
         return value;
     }
 
-    public Variable<T> setValue(T value) {
+    public void setValue(T value) {
         this.value = value;
-        return this;
     }
 
     public void write(PersistentDataContainer container, LoreBuilder loreBuilder) throws CloneNotSupportedException {
-        LoreEntry entry = (LoreEntry) type.getLoreEntry().clone();
-        type.getLoreModifier().accept(entry, this);
-        container.set(new NamespacedKey(SuperItems.getPlugin(), ComplexItemMeta.VAR_PREFIX + type.getName()), new SerializedPersistentType<T>(), value);
+        LoreEntry entry = (LoreEntry) type.loreEntry().clone();
+        type.loreModifier().accept(entry, this);
+        container.set(new NamespacedKey(SuperItems.getPlugin(), ComplexItemMeta.VAR_PREFIX + type.name()), new SerializedPersistentType<>(), value);
         loreBuilder.entry(entry);
     }
 
