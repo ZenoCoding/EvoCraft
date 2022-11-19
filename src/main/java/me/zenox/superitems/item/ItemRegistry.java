@@ -320,7 +320,7 @@ public class ItemRegistry {
             .id("titanium_helmet")
             .material(Material.IRON_HELMET)
             .stat(Stats.STRENGTH, 10)
-            .stat(Stats.TOUGHNESS,20)
+            .stat(Stats.TOUGHNESS,40)
             .stat(Stats.HEALTH,6)
             .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
             .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -0.025, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
@@ -333,7 +333,7 @@ public class ItemRegistry {
             .id("titanium_helmet")
             .material(Material.IRON_HELMET)
             .stat(Stats.STRENGTH, 15)
-            .stat(Stats.TOUGHNESS,40)
+            .stat(Stats.TOUGHNESS,50)
             .stat(Stats.HEALTH,6)
             .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST))
             .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -0.025, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.CHEST))
@@ -346,7 +346,7 @@ public class ItemRegistry {
             .id("titanium_leggings")
             .material(Material.IRON_LEGGINGS)
             .stat(Stats.STRENGTH, 10)
-            .stat(Stats.TOUGHNESS,25)
+            .stat(Stats.TOUGHNESS,45)
             .stat(Stats.HEALTH,4)
             .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS))
             .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -0.025, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.LEGS))
@@ -358,9 +358,9 @@ public class ItemRegistry {
     public static final ComplexItem TITANIUM_BOOTS = registerItem(new ComplexItem(new ItemSettings()
             .id("titanium_boots")
             .material(Material.IRON_BOOTS)
-            .stat(Stats.STRENGTH, 5)
-            .stat(Stats.TOUGHNESS,8)
-            .stat(Stats.HEALTH,6)
+            .stat(Stats.STRENGTH, 10)
+            .stat(Stats.TOUGHNESS,40)
+            .stat(Stats.HEALTH,10)
             .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET))
             .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -0.025, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.FEET))
             .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET))
@@ -410,6 +410,13 @@ public class ItemRegistry {
             .attribute(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.CHEST))
             .rarity(ComplexItem.Rarity.MYTHIC)
             .type(ComplexItem.Type.CHESTPLATE);
+    public static final ComplexItem CREATIVE_MIND = registerItem(new ComplexItem((new ItemSettings())))
+            .id("creative_mind")
+            .material(Material.PAINTING)
+            .stats(Stats.WISDOM, 1)
+            .addEnchant(Enchantment.OXYGEN, 1)
+            .rarity(ComplexItem.Rarity.VERY_SPECIAL)
+            .type(ComplexItem.Type.MISC);
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
 
