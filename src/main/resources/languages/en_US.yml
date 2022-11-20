@@ -98,6 +98,8 @@ item-name-greatsword_volkumos: The Greatsword of Volkumos
 
 item-name-chromotonin: Chromotonin
 
+item-name-burning_smoke: Burning Smoke
+
 ##########################################################################
 ##                              ITEM LORE                               ##
 ##########################################################################
@@ -251,6 +253,9 @@ item-lore-super_space_helmet:
   - "&husghasodhusghasodhusghasod&"
   - "&husghasodhusghasodhusghasod&"
   - "trisolarians?!"
+
+item-lore-burning_smoke:
+  - "Blaze smoke in a bottle. Highly reactive."
 
 ##########################################################################
 ##                              ABILITIES                               ##
