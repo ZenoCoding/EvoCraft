@@ -417,6 +417,28 @@ public class ItemRegistry {
             .addEnchant(Enchantment.OXYGEN, 1)
             .rarity(ComplexItem.Rarity.VERY_SPECIAL)
             .type(ComplexItem.Type.MISC);
+    public static final ComplexItem HYPE = registerItem(new ComplexItem((new ItemSettings())))
+            .id("hype")
+            .material(Material.IRON_SWORD)
+            .stats(Stats.WISDOM, 1999999999)
+            .stats(Stats.STRENGTH, 1999999999)
+            .stats(Stats.HEALTH, 1999999999)
+            .addEnchant(Enchantment.DAMAGE_ALL, 999, true)
+            ///.ability(AbilityRegistry.WITHPLOSION) cringe
+            .rarity(ComplexItem.Rarity.EPIC)
+            .type(ComplexItem.Type.SWORD);
+
+    public static final ComplexItem DARKCALLER = registerItem(new ComplexItem((new ItemSettings())))
+            .id("darkcaller")
+            .material(Material.BEACON)
+            .stats(Stats.WISDOM, 50)
+            .addEnchant(Enchantment.OXYGEN, 1)
+            .ability(AbilityRegistry.DARKCALL)
+            .rarity(ComplexItem.Rarity.EPIC)
+            .type(ComplexItem.Type.STAFF);
+            .
+
+
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
 

@@ -10,4 +10,8 @@ public class AbilityRegistry {
     public static Ability TARHELM = new ItemAbility("tarhelm", ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK, 150, 30, ItemAbility::tarhelmAbility);
 
     public static Ability JUSTICE = new AttackAbility("justice", 0, 0, AttackAbility::justiceAbility);
+
+    public static Ability DARKCALL = new ItemAbility("darkcall", 15, 0, ItemAbility::darkcallerAbility);
+
+    ///public static Ability WITHPLOSION = new ItemAbility("withplosin",ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 55, 0, ItemAbility::);
 }
