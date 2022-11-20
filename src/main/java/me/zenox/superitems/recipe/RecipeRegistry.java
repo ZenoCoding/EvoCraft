@@ -254,6 +254,16 @@ public class RecipeRegistry {
                 .addChoice('C', new RecipeChoice.ExactChoice(ItemRegistry.CORRUPT_PEARL.getItemStack(1)))
                 .addChoice('A', new RecipeChoice.ExactChoice(ItemRegistry.ABSOLUTE_ENDER_PEARL.getItemStack(1)))
                 .build());
+
+        final Recipe TITANIUM_BOOTS = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.VOID_BOOTS).getItem())
+                .id("void_boots")
+                .shape("KDK", "ACA", "AAA")
+
+
+                .addChoice('A', new RecipeChoice.ExactChoice(ItemRegistry.TITANIUM_CUBE.getItemStack(1)))
+                //if its more than 1 we have to increase stats
+                .build());
     }
 
     private static Recipe registerRecipe(Recipe recipe) {
