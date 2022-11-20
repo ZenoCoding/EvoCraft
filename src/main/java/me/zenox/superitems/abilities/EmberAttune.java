@@ -16,8 +16,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 
 public class EmberAttune extends ItemAbility {
-    public static final VariableType ATTUNEMENT_VARIABLE_TYPE =
-            new VariableType<Attunement>("ember_attunement",
+    public static final VariableType<Attunement> ATTUNEMENT_VARIABLE_TYPE =
+            new VariableType<>("ember_attunement",
                     new LoreEntry("ember_attunement", List.of(ChatColor.AQUA + "Attunement: ")),
                     VariableType.Priority.BELOW_ABILITIES, (loreEntry, variable) ->
                     loreEntry.setLore(List.of(ChatColor.AQUA + "Attunement: " + ((Attunement) variable.getValue()).getName())));
@@ -27,10 +27,8 @@ public class EmberAttune extends ItemAbility {
     }
 
     @Override
-    public void runExecutable(Event event) {
+    public void runExecutable(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Player p = e.getPlayer();
-        ItemStack item = e.getItem();
         ItemMeta meta = item.getItemMeta();
         ComplexItemMeta complexMeta = ComplexItemStack.of(item).getComplexMeta();
 

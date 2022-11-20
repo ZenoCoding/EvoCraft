@@ -30,9 +30,8 @@ public class LoreEntry implements Cloneable {
         return lore;
     }
 
-    public LoreEntry setLore(@NotNull List<String> lore) {
+    public void setLore(@NotNull List<String> lore) {
         this.lore = lore;
-        return this;
     }
 
     @Override

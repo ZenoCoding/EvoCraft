@@ -3,7 +3,8 @@ package me.zenox.superitems.item.armoritems;
 import com.archyx.aureliumskills.stats.Stats;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import me.zenox.superitems.item.ArmorItem;
+import me.zenox.superitems.abilities.AbilityRegistry;
+import me.zenox.superitems.item.ComplexItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -20,9 +21,9 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class VoidBoots extends ArmorItem {
+public class VoidBoots extends ComplexItem {
     public VoidBoots() {
-        super("void_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 2d, Stats.HEALTH, 5d, Stats.WISDOM, 50d, Stats.REGENERATION, 5d));
+        super("void_boots", Rarity.EPIC, Type.BOOTS, Material.LEATHER_BOOTS, Map.of(Stats.STRENGTH, 2d, Stats.HEALTH, 5d, Stats.WISDOM, 50d, Stats.REGENERATION, 5d), List.of(AbilityRegistry.TEST_FULLSET));
 
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Who the heck is this \"Void Lord\" guy?");

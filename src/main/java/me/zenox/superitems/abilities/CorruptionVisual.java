@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
@@ -27,11 +28,8 @@ public class CorruptionVisual extends ItemAbility {
     }
 
     @Override
-    protected void runExecutable(Event event) {
+    protected void runExecutable(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Random r = new Random();
-        Player p = e.getPlayer();
-        World w = p.getWorld();
         double rad = this.radius;
 
         // Particle Helix

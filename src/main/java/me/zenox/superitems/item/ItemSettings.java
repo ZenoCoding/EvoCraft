@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.io.Serializable;
 import java.util.*;
 
 public class ItemSettings {
@@ -25,8 +26,8 @@ public class ItemSettings {
     private ItemMeta meta;
     private Map<Stat, Double> stats;
     private String skullURL;
-
     private List<Ability> abilities;
+    private HashMap<VariableType, Serializable> variableMap;
 
     public ItemSettings() {
         this.id = "undefined_" + UUID.randomUUID();
@@ -39,9 +40,10 @@ public class ItemSettings {
         this.stats = new HashMap<>();
         this.skullURL = "";
         this.abilities = new ArrayList<>();
+        this.variableMap = new HashMap<>();
     }
 
-    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities) {
+    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap) {
         this.id = id;
         this.unique = unique;
         this.glow = glow;
@@ -52,6 +54,11 @@ public class ItemSettings {
         this.stats = stats;
         this.skullURL = skullURL;
         this.abilities = abilities;
+        this.variableMap = variableMap;
+    }
+
+    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities){
+        this(id, unique, glow, rarity, type, material, meta, stats, skullURL, abilities, new HashMap<>());
     }
 
     public static ItemSettings of(ComplexItem item) {
@@ -60,8 +67,8 @@ public class ItemSettings {
 
     public static ItemSettings of(ItemStack item) {
         return new ItemSettings(item.getType().name(), false, false, ComplexItem.Rarity.COMMON,
-                ComplexItem.Type.MISC, item.getType(), item.getItemMeta(), new HashMap(),
-                (item.getItemMeta() instanceof SkullMeta) ? ((SkullMeta) item.getItemMeta()).getOwnerProfile().getTextures().getSkin().toString() : "", new ArrayList());
+                ComplexItem.Type.MISC, item.getType(), item.getItemMeta(), new HashMap<>(),
+                (item.getItemMeta() instanceof SkullMeta) ? ((SkullMeta) item.getItemMeta()).getOwnerProfile().getTextures().getSkin().toString() : "", new ArrayList<>());
     }
 
     public String getId() {
@@ -102,6 +109,10 @@ public class ItemSettings {
 
     public List<Ability> getAbilities() {
         return abilities;
+    }
+
+    public HashMap<VariableType, Serializable> getVariableMap() {
+        return variableMap;
     }
 
     public ItemSettings id(String id) {
@@ -187,6 +198,16 @@ public class ItemSettings {
 
     public ItemSettings glow() {
         this.glow = true;
+        return this;
+    }
+
+    public ItemSettings setVariableMap(HashMap<VariableType, Serializable> variableMap) {
+        this.variableMap = variableMap;
+        return this;
+    }
+
+    public ItemSettings variable(VariableType type, Serializable value){
+        this.variableMap.put(type, value);
         return this;
     }
 }

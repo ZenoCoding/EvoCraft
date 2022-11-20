@@ -32,8 +32,7 @@ public class TormentedSoul extends ComplexItem implements Listener {
 
     @EventHandler
     public void villagerDeathEvent(EntityDeathEvent e) {
-        if (e.getEntity() instanceof Villager) {
-            Villager v = (Villager) e.getEntity();
+        if (e.getEntity() instanceof Villager v) {
             if (v.getVillagerLevel() == 5) {
                 v.getWorld().dropItemNaturally(v.getLocation(), this.getItemStack(1));
             }

@@ -34,11 +34,6 @@ public class CorruptPearl extends ComplexItem implements Listener {
         Bukkit.getPluginManager().registerEvents(this, SuperItems.getPlugin());
     }
 
-    @Override
-    public List<Recipe> getRecipes() {
-        return super.getRecipes();
-    }
-
     @EventHandler
     public void dropEvent(EntityDeathEvent event) {
         if (!(event.getEntity().getType() == EntityType.ENDERMAN)) {
@@ -60,7 +55,7 @@ public class CorruptPearl extends ComplexItem implements Listener {
         }
 
         List<MetadataValue> values = entity.getMetadata("corrupted");
-        if (!values.isEmpty() && values.get(0).asBoolean() == true) {
+        if (!values.isEmpty() && values.get(0).asBoolean()) {
             event.getDrops().removeIf((ItemStack item) -> item.getType().equals(Material.END_PORTAL_FRAME));
             w.dropItemNaturally(loc, CORRUPT_PEARL.getItemStack(1));
         }

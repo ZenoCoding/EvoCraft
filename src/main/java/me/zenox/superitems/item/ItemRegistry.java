@@ -3,12 +3,14 @@ package me.zenox.superitems.item;
 import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.superitems.abilities.*;
 import me.zenox.superitems.abilities.Transcendence;
+import me.zenox.superitems.gui.EnchantingGUI;
 import me.zenox.superitems.item.armoritems.*;
 import me.zenox.superitems.item.basicitems.CorruptPearl;
 import me.zenox.superitems.item.basicitems.GardenerSapling;
 import me.zenox.superitems.item.basicitems.RavagerSkin;
 import me.zenox.superitems.item.basicitems.TormentedSoul;
 import me.zenox.superitems.item.superitems.ObsidilithScythe;
+import me.zenox.superitems.item.superitems.VertexicalBlade;
 import me.zenox.superitems.item.superitems.VoidScepter;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Bukkit;
@@ -227,13 +229,11 @@ public class ItemRegistry {
     public static final ComplexItem OBSIDIAN_SCYTHE = registerItem(new ObsidilithScythe());
 
     public static final ComplexItem VOID_HELMET = registerItem(new VoidMask());
-    public static final ComplexItem VOID_CHESTPLATE = registerItem(new VoidCloak());
+    public static final ComplexItem VOID_CHESTPLATE = registerItem(new VoidChestplate());
     public static final ComplexItem VOID_LEGGINGS = registerItem(new VoidLeggings());
     public static final ComplexItem VOID_BOOTS = registerItem(new VoidBoots());
 
     public static final ComplexItem CORRUPT_PEARL = registerItem(new CorruptPearl());
-
-
 
     // Obsidian
     public static final ComplexItem ENCHANTED_OBSIDIAN = registerItem(new ComplexItem(new ItemSettings()
@@ -275,6 +275,8 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.RARE)
             .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWYwMjMwNTExYjg0NGNmM2FmZjBjZWRiNDRjMTMyNDI3OTlkMzMxNTIyMzVmMTdjZWU1NzQ2NTE4NzhlZDVkMCJ9fX0=")));
 
+    public static final ComplexItem VERTEXICAL_BLADE = registerItem(new VertexicalBlade());
+
     public static final ComplexItem DEV_STICK = registerItem(new ComplexItem(new ItemSettings()
             .id("dev_stick")
             .material(Material.STICK)
@@ -296,8 +298,7 @@ public class ItemRegistry {
     public static final ComplexItem VOLCANAXE = registerItem(new ComplexItem(new ItemSettings()
             .id("volkanaxe")
             .material(Material.GOLDEN_AXE)
-            .addEnchant(Enchantment.DIG_SPEED, 6 , true)
-
+            .enchant(Enchantment.DIG_SPEED, 6)
             .rarity(ComplexItem.Rarity.EPIC)
             .type(ComplexItem.Type.AXE)));
 
@@ -316,73 +317,19 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .type(ComplexItem.Type.MISC)));
 
-    public static final ComplexItem TITANIUM_HELMET = registerItem(new ComplexItem(new ItemSettings()
-            .id("titanium_helmet")
-            .material(Material.IRON_HELMET)
-            .stat(Stats.STRENGTH, 10)
-            .stat(Stats.TOUGHNESS,40)
-            .stat(Stats.HEALTH,6)
-            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
-            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -0.025, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
-            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
-            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", -0.05, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
-            .rarity(ComplexItem.Rarity.UNCOMMON)
-            .type(ComplexItem.Type.HELMET)));
-
-    public static final ComplexItem TITANIUM_CHESTPLATE = registerItem(new ComplexItem(new ItemSettings()
-            .id("titanium_helmet")
-            .material(Material.IRON_HELMET)
-            .stat(Stats.STRENGTH, 15)
-            .stat(Stats.TOUGHNESS,50)
-            .stat(Stats.HEALTH,6)
-            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST))
-            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -0.025, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.CHEST))
-            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST))
-            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", -0.1, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.CHEST))
-            .rarity(ComplexItem.Rarity.UNCOMMON)
-            .type(ComplexItem.Type.CHESTPLATE)));
-
-    public static final ComplexItem TITANIUM_LEGGINGS = registerItem(new ComplexItem(new ItemSettings()
-            .id("titanium_leggings")
-            .material(Material.IRON_LEGGINGS)
-            .stat(Stats.STRENGTH, 10)
-            .stat(Stats.TOUGHNESS,45)
-            .stat(Stats.HEALTH,4)
-            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS))
-            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -0.025, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.LEGS))
-            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS))
-            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", -0.075, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.LEGS))
-            .rarity(ComplexItem.Rarity.UNCOMMON)
-            .type(ComplexItem.Type.LEGGINGS)));
-
-    public static final ComplexItem TITANIUM_BOOTS = registerItem(new ComplexItem(new ItemSettings()
-            .id("titanium_boots")
-            .material(Material.IRON_BOOTS)
-            .stat(Stats.STRENGTH, 10)
-            .stat(Stats.TOUGHNESS,40)
-            .stat(Stats.HEALTH,10)
-            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 15, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET))
-            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -0.025, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.FEET))
-            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET))
-            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", -0.05, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.FEET))
-            .rarity(ComplexItem.Rarity.UNCOMMON)
-            .type(ComplexItem.Type.BOOTS));
-
-
-    public static final ComplexItem SUPER_SPACE_HELMET = registerItem(new ComplexItem(new ItemSettings()))
+    public static final ComplexItem SUPER_SPACE_HELMET = registerItem(new ComplexItem(new ItemSettings()
             .id("super_space_helmet")
-            .material(Material.RED_STAINED_GLASS)
-            .stat(Stats.STRENGTH, 100000000)
-            .stat(Stats.HEALTH, 100000000)
-            .stat(Stats.TOUGHNESS, 100000000)
-            .stat(Stats.REGENERATION, 100000000)
-            .stat(Stats.WISDOM, 100000000)
-            .stat(Stats.LUCK, 10000000)
-            .addEnchat(Enchantment.KNOCKBACK, 32770, true)
-            .addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 100, true)
-            .addEnchant(Enchantment.OXYGEN, 100, true)
-            .addEnchant(Enchantment.DEPTH_STRIDER, 100, true)
-            .addEnchant(Enchantment.WATER_WORKER, 100, true)
+            .material(Material.RED_STAINED_GLASS_PANE)
+            .stat(Stats.STRENGTH, 1000d)
+            .stat(Stats.HEALTH, 1000d)
+            .stat(Stats.TOUGHNESS, 1000d)
+            .stat(Stats.REGENERATION, 1000d)
+            .stat(Stats.WISDOM, 1000d)
+            .stat(Stats.LUCK, 1000d)
+            .enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 100)
+            .enchant(Enchantment.OXYGEN, 100)
+            .enchant(Enchantment.DEPTH_STRIDER, 100)
+            .enchant(Enchantment.WATER_WORKER, 100)
             .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 300, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
             .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 500, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
             .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
@@ -416,6 +363,42 @@ public class ItemRegistry {
             .stats(Stats.WISDOM, 1)
             .addEnchant(Enchantment.OXYGEN, 1)
             .rarity(ComplexItem.Rarity.VERY_SPECIAL)
+            .type(ComplexItem.Type.MISC)
+            .type(ComplexItem.Type.HELMET)));
+
+    public static final ComplexItem LAPIS_ORBITEX = registerItem(new ComplexItem(new ItemSettings()
+            .id("lapis_orbitex")
+            .material(Material.BLUE_DYE)
+            .rarity(ComplexItem.Rarity.COMMON)
+            .type(ComplexItem.Type.ENCHANTING_FUEL)
+            .glow()
+            .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 5)));
+
+    public static final ComplexItem SHADOW_BLADE = registerItem(new ComplexItem(new ItemSettings()
+            .id("shadow_blade")
+            .material(Material.IRON_SWORD)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.SWORD)
+            .ability(AbilityRegistry.DARK_FURY)));
+
+    public static final ComplexItem DARK_ORB = registerItem(new ComplexItem(new ItemSettings()
+            .id("dark_orb")
+            .material(Material.ENDER_PEARL)));
+
+    public static final ComplexItem HEAT_BLAZED_CORE = registerItem(new ComplexItem(new ItemSettings()
+            .id("heat_blazed_core")
+            .material(Material.FIRE_CHARGE)));
+
+    public static final ComplexItem GREATSWORD_VOLKUMOS = registerItem(new ComplexItem(new ItemSettings()
+            .id("greatsword_volkumos")
+            .material(Material.STONE_SWORD)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.SWORD)
+            .attribute(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "superitems:attack_damage", 20, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
+            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -3.2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
+            .stat(Stats.STRENGTH, 50d)
+            .ability(AbilityRegistry.TERRA_STRIKE)));
+
             .type(ComplexItem.Type.MISC);
     public static final ComplexItem HYPE = registerItem(new ComplexItem((new ItemSettings())))
             .id("hype")
@@ -461,7 +444,7 @@ public class ItemRegistry {
                     //Util.logToConsole("Found duplicate recipe, re-adding.");
                     Bukkit.removeRecipe(((Keyed) recipe).getKey());
                     Bukkit.addRecipe(recipe);
-                } else { /**Util.logToConsole("Found duplicate recipe that wasn't keyed, skipping.");**/}
+                }
 
             }
         }
@@ -473,18 +456,18 @@ public class ItemRegistry {
     }
 
     @Nullable
-    public static ComplexItem getBasicItemFromItemStack(ItemStack item) {
+    public static ComplexItem byItem(ItemStack item) {
         try {
             PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer();
             String id = container.get(ComplexItem.GLOBAL_ID, PersistentDataType.STRING);
-            return getBasicItemFromId(id);
+            return byId(id);
         } catch (NullPointerException e) {
             return null;
         }
     }
 
     @Nullable
-    public static ComplexItem getBasicItemFromId(String id) {
+    public static ComplexItem byId(String id) {
         for (ComplexItem item : registeredItems) {
             if (id == null) return null;
             if (id.equals(item.getId())) {

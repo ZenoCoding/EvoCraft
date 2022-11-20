@@ -4,12 +4,10 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -58,9 +56,8 @@ public class Util {
 
     @NotNull
     public static ItemStack makeSkull(ItemStack item, String base64EncodedString) {
-        final ItemStack skull = item;
         if (item.getType() != Material.PLAYER_HEAD) return item;
-        SkullMeta meta = (SkullMeta) skull.getItemMeta();
+        SkullMeta meta = (SkullMeta) item.getItemMeta();
         assert meta != null;
 
         Random r = new Random(base64EncodedString.hashCode());
@@ -78,8 +75,22 @@ public class Util {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        skull.setItemMeta(meta);
-        return skull;
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    /**
+     * Creates an uuid that is reproducible via the string - similar to hashcode, but in UUID form.
+     * @param str The String to pass in
+     * @return the uuid
+     */
+    public static UUID constantUUID(String str){
+
+        Random r = new Random(str.hashCode());
+
+        byte[] array = new byte[16];
+        r.nextBytes(array);
+        return UUID.nameUUIDFromBytes(array);
     }
 
     public static List<Block> getNearbyBlocks(Location loc, int radius, int yradius) {
@@ -92,5 +103,14 @@ public class Util {
             }
         }
         return nearbyBlocks;
+    }
+
+    /**
+     * Utility method to check if an entity is invulernerable to damage- should be used to do things like check if an entity should have custom knockback/damage applied to it.
+     * @param entity the entity to check
+     * @return whether or not the entity is invulnerable
+     */
+    public static boolean isInvulnerable(Entity entity){
+        return (entity.hasMetadata("NPC") || (entity instanceof Player player && player.getGameMode() == GameMode.CREATIVE));
     }
 }

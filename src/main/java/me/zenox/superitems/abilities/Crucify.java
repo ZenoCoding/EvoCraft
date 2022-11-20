@@ -41,9 +41,8 @@ public class Crucify extends ItemAbility implements Listener {
     }
 
     @Override
-    public void runExecutable(Event event) {
+    public void runExecutable(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Player p = e.getPlayer();
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 3));
         p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_DEATH, 2f, 0.7f);
@@ -92,7 +91,7 @@ public class Crucify extends ItemAbility implements Listener {
         Entity entity = e.getEntity();
 
         List<MetadataValue> values = entity.getMetadata("crucify_active");
-        if (!values.isEmpty() && values.get(0).asBoolean() == true) {
+        if (!values.isEmpty() && values.get(0).asBoolean()) {
             e.setCancelled(true);
         }
     }
@@ -102,11 +101,11 @@ public class Crucify extends ItemAbility implements Listener {
         Player p = e.getEntity().getPlayer();
 
         List<MetadataValue> values = p.getMetadata("crucify_active");
-        if (!values.isEmpty() && values.get(0).asBoolean() == true) {
+        if (!values.isEmpty() && values.get(0).asBoolean()) {
             p.setMetadata("crucify_active", new FixedMetadataValue(SuperItems.getPlugin(), false));
             Inventory inv = p.getInventory();
             for (ItemStack item : inv.getContents()) {
-                ComplexItem complexItemMaterial = ItemRegistry.getBasicItemFromItemStack(item);
+                ComplexItem complexItemMaterial = ItemRegistry.byItem(item);
                 if (complexItemMaterial != null && complexItemMaterial.getId() == CRUCIFIED_AMULET.getId()) {
                     item.setAmount(item.getAmount() - 1);
 

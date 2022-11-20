@@ -20,8 +20,8 @@ import java.util.regex.Pattern;
  * Sets/Gets NBT tags from ItemStacks
  * Supports 1.8-1.19
  * <p>
- * Github: https://github.com/BananaPuncher714/NBTEditor
- * Spigot: https://www.spigotmc.org/threads/269621/
+ * Github: <a href="https://github.com/BananaPuncher714/NBTEditor">.<a href="..</a>
+ ">* Spigot: https://www.spigotmc.o</a>rg/threads/269621/
  *
  * @author BananaPuncher714
  * @version 7.18.3
@@ -46,7 +46,7 @@ public final class NBTEditor {
         VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
         LOCAL_VERSION = MinecraftVersion.get(VERSION);
 
-        classCache = new HashMap<String, Class<?>>();
+        classCache = new HashMap<>();
         try {
             if (LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersion.v1_16)) {
                 classCache.put("NBTBase", Class.forName("net.minecraft.server." + VERSION + "." + "NBTBase"));
@@ -102,7 +102,7 @@ public final class NBTEditor {
             e.printStackTrace();
         }
 
-        NBTClasses = new HashMap<Class<?>, Class<?>>();
+        NBTClasses = new HashMap<>();
         try {
             if (LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersion.v1_16)) {
                 NBTClasses.put(Byte.class, Class.forName("net.minecraft.server." + VERSION + "." + "NBTTagByte"));
@@ -131,7 +131,7 @@ public final class NBTEditor {
             e.printStackTrace();
         }
 
-        methodCache = new HashMap<String, Method>();
+        methodCache = new HashMap<>();
         try {
             if (LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersion.v1_17)) {
                 methodCache.put("get", getNMSClass("NBTTagCompound").getMethod("get", String.class));
@@ -275,7 +275,7 @@ public final class NBTEditor {
             // The method doesn't exist, so it's before 1.15.2
         }
 
-        constructorCache = new HashMap<Class<?>, Constructor<?>>();
+        constructorCache = new HashMap<>();
         try {
             constructorCache.put(getNBTTag(Byte.class), getNBTTag(Byte.class).getDeclaredConstructor(byte.class));
             constructorCache.put(getNBTTag(Boolean.class), getNBTTag(Boolean.class).getDeclaredConstructor(byte.class));
@@ -305,7 +305,7 @@ public final class NBTEditor {
             e.printStackTrace();
         }
 
-        NBTTagFieldCache = new HashMap<Class<?>, Field>();
+        NBTTagFieldCache = new HashMap<>();
         try {
             if (LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersion.v1_16)) {
                 for (Class<?> clazz : NBTClasses.values()) {
@@ -390,8 +390,8 @@ public final class NBTEditor {
         }
     }
 
-    private static String getMatch(String string, String regex) {
-        Pattern pattern = Pattern.compile(regex);
+    private static String getMatch(String string) {
+        Pattern pattern = Pattern.compile("\\{\"url\":\"(.*?)\"\\}");
         Matcher matcher = pattern.matcher(string);
         if (matcher.find()) {
             return matcher.group(1);
@@ -497,7 +497,7 @@ public final class NBTEditor {
             for (Object prop : properties) {
                 if ("textures".equals(getMethod("getName").invoke(prop))) {
                     String texture = new String(Base64.getDecoder().decode((String) getMethod("getValue").invoke(prop)));
-                    return getMatch(texture, "\\{\"url\":\"(.*?)\"\\}");
+                    return getMatch(texture);
                 }
             }
             return null;
@@ -1150,11 +1150,10 @@ public final class NBTEditor {
      * @param object Must be an ItemStack, Entity, Block, or NBTCompound
      * @param value  The value to set, can be an NBTCompound
      * @param keys   The keys in descending order
-     * @return The new item stack if the object provided is an item, else original object
      */
-    public static <T> T set(T object, Object value, Object... keys) {
+    public static <T> void set(T object, Object value, Object... keys) {
         if (object instanceof ItemStack) {
-            return (T) setItemTag((ItemStack) object, value, keys);
+            setItemTag((ItemStack) object, value, keys);
         } else if (object instanceof Entity) {
             setEntityTag((Entity) object, value, keys);
         } else if (object instanceof Block) {
@@ -1168,7 +1167,6 @@ public final class NBTEditor {
         } else {
             throw new IllegalArgumentException("Object provided must be of type ItemStack, Entity, Block, or NBTCompound!");
         }
-        return object;
     }
 
     /**
@@ -1209,7 +1207,7 @@ public final class NBTEditor {
                 wrappedValue = getNMSClass("NBTTagList").newInstance();
             } else {
                 if (value instanceof Boolean) {
-                    value = (byte) ((Boolean) value == true ? 1 : 0);
+                    value = (byte) ((Boolean) value ? 1 : 0);
                 }
                 Constructor<?> cons = getConstructor(getNBTTag(value.getClass()));
                 if (cons != null) {
@@ -1350,7 +1348,7 @@ public final class NBTEditor {
 
     @SuppressWarnings("unchecked")
     private static Object getTags(Object tag) {
-        Map<Object, Object> tags = new HashMap<Object, Object>();
+        Map<Object, Object> tags = new HashMap<>();
         try {
             if (getNMSClass("NBTTagCompound").isInstance(tag)) {
                 Map<String, Object> tagCompound = (Map<String, Object>) NBTCompoundMap.get(tag);

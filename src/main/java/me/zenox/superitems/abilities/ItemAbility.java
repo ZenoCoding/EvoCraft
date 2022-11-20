@@ -1,5 +1,7 @@
 package me.zenox.superitems.abilities;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
@@ -9,9 +11,14 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import me.zenox.superitems.Slot;
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.item.ComplexItemStack;
+import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.persistence.NBTEditor;
 import me.zenox.superitems.util.Geo;
+import me.zenox.superitems.util.TriConsumer;
 import me.zenox.superitems.util.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -31,7 +38,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 import static me.zenox.superitems.item.ItemRegistry.TOTEM_POLE;
 import static me.zenox.superitems.util.Util.getNearbyBlocks;
@@ -51,18 +57,37 @@ public class ItemAbility extends Ability {
         this.action = action;
     }
 
-    public ItemAbility(String id, AbilityAction action, int manaCost, double cooldown, Consumer<Event> exectuable) {
+    public ItemAbility(String id, AbilityAction action, int manaCost, double cooldown, TriConsumer<Event, Player, ItemStack> exectuable) {
         super(id, manaCost, cooldown, PlayerInteractEvent.class, Slot.EITHER_HAND, exectuable);
         this.action = action;
+    }
+
+    @Override
+    Player getPlayerOfEvent(Event e) {
+        return ((PlayerInteractEvent) e).getPlayer();
+    }
+
+    @Override
+    List<ItemStack> getItem(Player p, Event e) {
+        return Arrays.stream(new ItemStack[]{((PlayerInteractEvent) e).getItem()}).filter(Objects::nonNull).toList();
+    }
+
+    public AbilityAction getAction() {
+        return action;
+    }
+
+    @Override
+    public boolean checkEvent(Event event) {
+        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+        return action.isAction(e.getAction(), e.getPlayer().isSneaking());
     }
 
     /**
      * Represents some static executables
      */
-    public static void soulRiftAbility(Event event) {
+    public static void soulRiftAbility(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Action action = e.getAction();
-        Player p = e.getPlayer();
         World w = p.getWorld();
         Location loc;
         boolean allowed = true;
@@ -142,7 +167,7 @@ public class ItemAbility extends Ability {
                 for (LivingEntity entity : entities) {
                     if (r.nextInt(count / 25 + 1) == 0 && !entity.equals(p)) {
                         entity.setVelocity((entity.getLocation().toVector().subtract(crystal.getLocation().add(r.nextDouble() - 0.5, r.nextDouble() - 0.5 + 2, r.nextDouble() - 0.5).toVector()).multiply(-0.5).normalize()));
-                        entity.damage((entity.getHealth() * (2 / 3)) / 10 + 1);
+                        entity.damage((entity.getHealth() * (2f / 3f)) / 10f + 1f);
                     }
                 }
 
@@ -160,10 +185,9 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 0, 0);
     }
 
-    public static void magicMissileAbility(Event event, Boolean combustion, Integer explosionPower) {
+    public static void magicMissileAbility(Event event, Player p, ItemStack item, Boolean combustion, Integer explosionPower) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Random r = new Random();
-        Player p = e.getPlayer();
         World w = p.getWorld();
 
         LocalPlayer localPlayer;
@@ -185,7 +209,7 @@ public class ItemAbility extends Ability {
 
         // 20% chance to remove an item from their hand
         if (r.nextInt(5) == 0 && combustion) {
-            e.getItem().setAmount(e.getItem().getAmount() - 1);
+            item.setAmount(e.getItem().getAmount() - 1);
             Util.sendMessage(p, ChatColor.GOLD + "Woah! Your " + ChatColor.ITALIC + "Magic Toy Stick " + ChatColor.GOLD + "combusted in your hand!", false);
             p.damage(5, p);
             p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 0.5F);
@@ -277,16 +301,14 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 0, 2);
     }
 
-    public static void centralizeAbility(Event event, Boolean corrupted, Integer duration) {
+    public static void centralizeAbility(Event event, Player p, ItemStack item, Boolean corrupted, Integer duration) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Player p = e.getPlayer();
         World w = p.getWorld();
         Location loc = p.getLocation();
         if (e.getClickedBlock() != null) loc = e.getClickedBlock().getLocation().add(0.5, 1, 0.5);
 
         final Random r = new Random();
 
-        ItemStack item = e.getItem();
         ItemMeta meta = item.getItemMeta();
 
         ArmorStand totem = ((ArmorStand) w.spawnEntity(loc, EntityType.ARMOR_STAND));
@@ -384,13 +406,13 @@ public class ItemAbility extends Ability {
         new BukkitRunnable() {
             final int wings = 6;
             final Location loc = totem.getLocation();
-            final double startradius = 4;
+            final double startRadius = 4;
             double a = 0;
             int count = 0;
             double x = 0;
             double y = 0;
             double z = 0;
-            double radius = startradius;
+            double radius = startRadius;
 
             @Override
             public void run() {
@@ -407,7 +429,7 @@ public class ItemAbility extends Ability {
                     a += Math.PI / 150;
                     radius -= 0.025;
 
-                    if (radius <= 0.8) radius = startradius;
+                    if (radius <= 0.8) radius = startRadius;
 
                 }
 
@@ -441,9 +463,8 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 3, 1);
     }
 
-    public static void obsidianShardAbility(Event event) {
+    public static void obsidianShardAbility(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Player p = e.getPlayer();
         World w = p.getWorld();
 
         for (float i = 0; i < 3; i++) {
@@ -542,9 +563,8 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 0, 1);
     }
 
-    public static void tarhelmAbility(Event event) {
+    public static void tarhelmAbility(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Player p = e.getPlayer();
         p.playSound(p.getLocation(), Sound.ENTITY_RAVAGER_ATTACK, 1, 0);
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 3));
         p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 300, 0));
@@ -602,14 +622,68 @@ public class ItemAbility extends Ability {
 
     @Override
     public boolean checkEvent(Event event) {
+    public static void terraStrikeAbility(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        if (!super.checkEvent(e)) return false;
-        return action.isAction(e.getAction(), e.getPlayer().isSneaking());
-    }
+        Location loc = p.getLocation();
+        Random r = new Random();
+        Arrow arr = p.getWorld().spawnArrow(p.getEyeLocation(), loc.getDirection(), 2f, 0);
+        arr.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+        arr.setPierceLevel(100);
 
-    @Override
-    protected void runExecutable(Event e) {
-        super.runExecutable(e);
+        Giant giant = (Giant) p.getWorld().spawnEntity(loc, EntityType.GIANT);
+        giant.setInvisible(true);
+        giant.setInvulnerable(true);
+        giant.setCustomName("Dinnerbone");
+        giant.getEquipment().setItemInMainHand(new ComplexItemStack(ItemRegistry.GREATSWORD_VOLKUMOS).getItem());
+
+        PacketContainer destroyArrow = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
+        destroyArrow.getModifier()
+                .write(0, new IntArrayList(new int[]{arr.getEntityId()}));
+
+        SuperItems.getPlugin().getProtocolManager().broadcastServerPacket(destroyArrow);
+
+        new BukkitRunnable(){
+            boolean contacted = false;
+            @Override
+            public void run() {
+                giant.setCustomName("Dinnerbone");
+
+                Location giantLocation = arr.getLocation();
+                giantLocation.setY(arr.getLocation().getY()-1);
+                giant.teleport(giantLocation);
+
+                if(arr.isInBlock() && !contacted){
+                    contacted = true;
+                    arr.setTicksLived(1);
+
+                    p.getWorld().createExplosion(arr.getLocation(), 4, false, false, p);
+                    List<Block> blocks = getNearbyBlocks(arr.getLocation(), 4, 2);
+
+                    for (Block block : blocks) {
+                        if (block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD))
+                            continue;
+                        if (r.nextDouble() > 0.7) continue;
+                        FallingBlock fallingBlock = p.getWorld().spawnFallingBlock(block.getLocation(), block.getBlockData());
+                        fallingBlock.setVelocity(fallingBlock.getLocation().toVector().subtract(arr.getLocation().clone().toVector()).multiply(2).normalize());
+                        fallingBlock.setDropItem(false);
+                        fallingBlock.setHurtEntities(true);
+                        fallingBlock.setMetadata("temporary", new FixedMetadataValue(SuperItems.getPlugin(), true));
+                    }
+
+                    for(Entity entity : arr.getNearbyEntities(5, 5, 5)){
+                        if(entity instanceof LivingEntity && !Util.isInvulnerable(entity)){
+                            LivingEntity lentity = ((LivingEntity) entity);
+                            lentity.damage(75, p);
+                            lentity.setVelocity(lentity.getVelocity().add(lentity.getLocation().toVector().subtract(arr.getLocation().clone().toVector())));
+                        }
+                    }
+                }
+                if((contacted && arr.getTicksLived() > 80) || arr.getTicksLived() > 200){
+                    arr.remove();
+                    giant.remove();
+                }
+            }
+        }.runTaskTimer(SuperItems.getPlugin(), 0, 1);
     }
 
     public enum AbilityAction {
