@@ -81,7 +81,7 @@
         </repository>
         <repository>
             <id>xenondevs</id>
-            <url>https://repo.xenondevs.xyz/#/releases</url>
+            <url>https://repo.xenondevs.xyz/releases</url>
         </repository>
         <repository>
             <id>citizens-repo</id>
@@ -133,7 +133,7 @@
         <dependency>
             <groupId>de.studiocode.invui</groupId>
             <artifactId>InvUI</artifactId>
-            <version>0.8.1</version>
+            <version>0.8.2</version>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
