@@ -240,16 +240,22 @@ item-lore-chromotonin:
 item-lore-volken_stick:
   - "A relic of the past. Emits a strange heat..."
   - ""
-  - "Something to do with piglins &?&"
+  - "Something to do with piglins &k?&c"
 
 item-lore-volkanaxe:
   - "A relic of the past. Doesn't look fragile..."
 
 item-lore-super_space_helmet:
-  - "&husghasodhusghasodhusghasod&"
-  - "&husghasodhusghasodhusghasod&"
-  - "&husghasodhusghasodhusghasod&"
-  - "&husghasodhusghasodhusghasod&"
+  - "&khusghasodhusghasodhusghasod&c"
+  - "&khusghasodhusghasodhusghasod&c"
+  - "&khusghasodhusghasodhusghasod&c"
+  - "&khusghasodhusghasodhusghasod&c"
+  - "trisolarians?!"
+item-lore-super_space_suit:
+  - "&khusghasodhusghasodhusghasod&c"
+  - "&khusghasodhusghasodhusghasod&c"
+  - "&khusghasodhusghasodhusghasod&c"
+  - "&khusghasodhusghasodhusghasod&c"
   - "trisolarians?!"
 
 ##########################################################################

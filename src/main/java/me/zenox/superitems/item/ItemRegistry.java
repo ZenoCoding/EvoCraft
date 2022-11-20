@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import sun.font.EAttribute;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -334,6 +335,35 @@ public class ItemRegistry {
             .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
             .attribute(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
             .rarity(ComplexItem.Rarity.MYTHIC)
+            .type(ComplexItem.Type.HELMET);
+
+    public static final ComplexItem SUPER_SPACE_SUIT = registerItem(new ComplexItem(new ItemSettings()))
+            .id("super_space_suit")
+            .material(Material.RED_STAINED_GLASS)
+            .stat(Stats.STRENGTH, 10000000)
+            .stat(Stats.HEALTH, 1000000000)
+            .stat(Stats.TOUGHNESS, 100000000)
+            .stat(Stats.REGENERATION, 1000000)
+            .stat(Stats.WISDOM, 100000000)
+            .stat(Stats.LUCK, 10000000)
+            .addEnchat(Enchantment.KNOCKBACK, 32770, true)
+            .addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 100, true)
+            .addEnchant(Enchantment.OXYGEN, 100, true)
+            .addEnchant(Enchantment.DEPTH_STRIDER, 100, true)
+            .addEnchant(Enchantment.WATER_WORKER, 100, true)
+            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 300, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST))
+            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 500, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST))
+            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.CHEST))
+            .attribute(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.CHEST))
+            .rarity(ComplexItem.Rarity.MYTHIC)
+            .type(ComplexItem.Type.CHESTPLATE);
+    public static final ComplexItem CREATIVE_MIND = registerItem(new ComplexItem((new ItemSettings())))
+            .id("creative_mind")
+            .material(Material.PAINTING)
+            .stats(Stats.WISDOM, 1)
+            .addEnchant(Enchantment.OXYGEN, 1)
+            .rarity(ComplexItem.Rarity.VERY_SPECIAL)
+            .type(ComplexItem.Type.MISC)
             .type(ComplexItem.Type.HELMET)));
 
     public static final ComplexItem LAPIS_ORBITEX = registerItem(new ComplexItem(new ItemSettings()
@@ -368,6 +398,29 @@ public class ItemRegistry {
             .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -3.2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
             .stat(Stats.STRENGTH, 50d)
             .ability(AbilityRegistry.TERRA_STRIKE)));
+
+            .type(ComplexItem.Type.MISC);
+    public static final ComplexItem HYPE = registerItem(new ComplexItem((new ItemSettings())))
+            .id("hype")
+            .material(Material.IRON_SWORD)
+            .stats(Stats.WISDOM, 1999999999)
+            .stats(Stats.STRENGTH, 1999999999)
+            .stats(Stats.HEALTH, 1999999999)
+            .addEnchant(Enchantment.DAMAGE_ALL, 999, true)
+            ///.ability(AbilityRegistry.WITHPLOSION) cringe
+            .rarity(ComplexItem.Rarity.EPIC)
+            .type(ComplexItem.Type.SWORD);
+
+    public static final ComplexItem DARKCALLER = registerItem(new ComplexItem((new ItemSettings())))
+            .id("darkcaller")
+            .material(Material.BEACON)
+            .stats(Stats.WISDOM, 50)
+            .addEnchant(Enchantment.OXYGEN, 1)
+            .ability(AbilityRegistry.DARKCALL)
+            .rarity(ComplexItem.Rarity.EPIC)
+            .type(ComplexItem.Type.STAFF);
+            .
+
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 

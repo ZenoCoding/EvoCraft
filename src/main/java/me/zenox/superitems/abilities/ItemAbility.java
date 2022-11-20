@@ -490,7 +490,7 @@ public class ItemAbility extends Ability {
         arrow.getLocation().setDirection(v);
         arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
         arrow.setInvulnerable(true);
-        arrow.setKnockbackStrength(0);
+        arrow.setKnockbackStrength(1);
         arrow.setCritical(false);
         arrow.setDamage(0d);
 
@@ -571,6 +571,57 @@ public class ItemAbility extends Ability {
         p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 400, 0));
     }
 
+
+    public static void darkcallerAbility(Event event) {
+        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+        Player p = e.getPlayer();
+        World w = p.getWorld();
+
+        LocalPlayer localPlayer;
+        com.sk89q.worldedit.util.Location guardLoc;
+        RegionContainer container;
+        RegionQuery query;
+
+        ArmorStand totem = ((ArmorStand) w.spawnEntity(p.getLocation(), EntityType.ARMOR_STAND));
+
+        totem.setInvulnerable(false);
+        totem.setGravity(false);
+        totem.setVisible(false);
+        totem.setPersistent(false);
+
+        // NMS-Setting NBT data
+        NBTEditor.set(totem, 2039583, "DisabledSlots");
+
+        ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
+        ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
+        ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
+
+        List<Particle> particleList = new ArrayList<>();
+
+
+        LeatherArmorMeta chestMeta = ((LeatherArmorMeta) chestplate.getItemMeta());
+        chestMeta.setColor(Color.WHITE);
+        LeatherArmorMeta leggingsMeta = ((LeatherArmorMeta) leggings.getItemMeta());
+        leggingsMeta.setColor(Color.BLACK);
+        LeatherArmorMeta bootsMeta = ((LeatherArmorMeta) boots.getItemMeta());
+        bootsMeta.setColor(Color.BLACK);
+
+        chestplate.setItemMeta(chestMeta);
+        leggings.setItemMeta(leggingsMeta);
+        boots.setItemMeta(bootsMeta);
+
+        totem.getEquipment().setHelmet(Util.makeSkull(new ItemStack(Material.PLAYER_HEAD), "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2RlMzNjOTVmZWMxYjhkOTg4MjUwZjVmNWIzYTI0ODU3NDI0MzlmYWVhYTc1ZWQ1MDZlYTAxZDc1ZTE3ZjIxIn19fQ==="));
+        totem.getEquipment().setChestplate(chestplate);
+        totem.getEquipment().setLeggings(leggings);
+        totem.getEquipment().setBoots(boots);
+
+    }
+    public AbilityAction getAction() {
+        return action;
+    }
+
+    @Override
+    public boolean checkEvent(Event event) {
     public static void terraStrikeAbility(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Location loc = p.getLocation();
