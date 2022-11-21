@@ -572,9 +572,8 @@ public class ItemAbility extends Ability {
     }
 
 
-    public static void darkcallerAbility(Event event) {
+    public static void darkcallerAbility(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Player p = e.getPlayer();
         World w = p.getWorld();
 
         LocalPlayer localPlayer;
@@ -616,12 +615,7 @@ public class ItemAbility extends Ability {
         totem.getEquipment().setBoots(boots);
 
     }
-    public AbilityAction getAction() {
-        return action;
-    }
 
-    @Override
-    public boolean checkEvent(Event event) {
     public static void terraStrikeAbility(Event event, Player p, ItemStack item) {
         PlayerInteractEvent e = ((PlayerInteractEvent) event);
         Location loc = p.getLocation();

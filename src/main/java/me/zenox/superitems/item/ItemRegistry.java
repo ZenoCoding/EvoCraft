@@ -336,26 +336,6 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.MYTHIC)
             .type(ComplexItem.Type.HELMET)));
 
-    public static final ComplexItem SUPER_SPACE_SUIT = registerItem(new ComplexItem(new ItemSettings()
-            .id("super_space_suit")
-            .material(Material.RED_STAINED_GLASS)
-            .stat(Stats.STRENGTH, 10000000)
-            .stat(Stats.HEALTH, 1000000000)
-            .stat(Stats.TOUGHNESS, 100000000)
-            .stat(Stats.REGENERATION, 1000000)
-            .stat(Stats.WISDOM, 100000000)
-            .stat(Stats.LUCK, 10000000)
-            .addEnchat(Enchantment.KNOCKBACK, 32770, true)
-            .addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 100, true)
-            .addEnchant(Enchantment.OXYGEN, 100, true)
-            .addEnchant(Enchantment.DEPTH_STRIDER, 100, true)
-            .addEnchant(Enchantment.WATER_WORKER, 100, true)
-            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 300, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST))
-            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 500, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST))
-            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.CHEST))
-            .attribute(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.CHEST))
-            .rarity(ComplexItem.Rarity.MYTHIC)
-            .type(ComplexItem.Type.CHESTPLATE)));
     public static final ComplexItem CREATIVE_MIND = registerItem(new ComplexItem((new ItemSettings()
             .id("creative_mind")
             .material(Material.PAINTING)
@@ -421,7 +401,6 @@ public class ItemRegistry {
             .material(Material.GLASS_BOTTLE)));
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
-
 
     private static ComplexItem registerItem(ComplexItem item) {
         registeredItems.add(item);
