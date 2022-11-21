@@ -407,6 +407,9 @@ attribute-mc-follow_range: Follow Range
 attribute-mc-knockback_resistance: Knockback Resistance
 attribute-mc-movement_speed: Speed
 attribute-mc-flight_speed: Creative Flight Speed
+attribute-mc-attack_damage: Damage
+attribute-mc-attack_knockback: Knockback
+attribute-mc-attack_speed: Attack Speed
 attribute-mc-armor: Armor
 attribute-mc-armor_toughness: Armor Toughness
 attribute-mc-luck: Luck
