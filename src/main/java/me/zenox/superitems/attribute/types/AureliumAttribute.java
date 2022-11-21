@@ -2,6 +2,7 @@ package me.zenox.superitems.attribute.types;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
 import com.archyx.aureliumskills.modifier.ModifierType;
+import com.archyx.aureliumskills.modifier.StatModifier;
 import com.archyx.aureliumskills.stats.Stat;
 import me.zenox.superitems.Slot;
 import me.zenox.superitems.attribute.Attribute;
@@ -36,17 +37,22 @@ public class AureliumAttribute extends Attribute {
 
     @Override
     public ItemStack apply(ItemStack item, @NotNull AttributeModifier modifier) {
-        final Double[] value = {modifier.getValue()};
+        double value = modifier.getValue();
+        double curValue = Util.getAureliumModifiers(item,
+                        List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.BOOTS, Slot.ARMOR)
+                                .contains(modifier.getSlot()) ? ModifierType.ARMOR : ModifierType.ITEM)
+                .stream()
+                .filter(statModifier -> stat.equals(statModifier.getStat()))
+                .mapToDouble(StatModifier::getValue)
+                .sum();
+
         if (modifier.getOperation().equals(org.bukkit.attribute.AttributeModifier.Operation.ADD_SCALAR)){
-            value[0] = 0d;
-            Util.getAureliumModifiers(item,
-                    List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.BOOTS, Slot.ARMOR)
-                    .contains(modifier.getSlot()) ? ModifierType.ARMOR : ModifierType.ITEM)
-                    .forEach(statModifier -> value[0] += statModifier.getValue());
-            value[0] *= modifier.getValue();
+            curValue *= value;
+        } else if (modifier.getOperation().equals(org.bukkit.attribute.AttributeModifier.Operation.ADD_NUMBER)) {
+            curValue += value;
         }
 
-        return AureliumAPI.addItemModifier(item, stat, value[0], false);
+        return AureliumAPI.addItemModifier(item, stat, curValue, false);
     }
 
     @Override

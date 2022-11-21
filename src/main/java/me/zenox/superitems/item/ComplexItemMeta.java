@@ -6,6 +6,7 @@ import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.abilities.ItemAbility;
 import me.zenox.superitems.attribute.AttributeModifier;
+import me.zenox.superitems.attribute.types.AureliumAttribute;
 import me.zenox.superitems.enchant.ComplexEnchantment;
 import me.zenox.superitems.persistence.ArrayListType;
 import me.zenox.superitems.persistence.SerializedPersistentType;
@@ -39,6 +40,7 @@ import java.util.stream.Stream;
 public class ComplexItemMeta {
     public static final NamespacedKey ABILITY_ID = new NamespacedKey(SuperItems.getPlugin(), "ability");
     public static final String VAR_PREFIX = "var_";
+    public static final String ATTRIBUTE_BASE_KEY = "base";
     public static final VariableType<ComplexItem.Rarity> RARITY_VAR = new VariableType<>("rarity", new LoreEntry("rarity", List.of("Rarity Lore")), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Rarity) variable.getValue()).color() + ((ComplexItem.Rarity) variable.getValue()).getName())));
     public static final VariableType<ComplexItem.Type> TYPE_VAR = new VariableType<>("type", new LoreEntry("type", List.of("Type Lore"), ((loreBuilder, loreEntry) -> {
         loreBuilder.getLoreEntryById(
@@ -50,7 +52,7 @@ public class ComplexItemMeta {
     private List<Ability> abilities;
     private final List<Variable> variableList = new ArrayList<>();
     private HashMap<ComplexEnchantment, Integer> complexEnchantments = new HashMap<>();
-    private final List<AttributeModifier> modifierList = new ArrayList<>();
+    private List<AttributeModifier> modifierList = new ArrayList<>();
     private final ComplexItemStack complexItemStack;
 
     public ComplexItemMeta(ComplexItemStack complexItemStack, List<Ability> abilities) {
@@ -102,7 +104,6 @@ public class ComplexItemMeta {
         }
 
         writeVariables(VariableType.Priority.ABOVE_LORE, dataContainer, lore, true);
-
 
         List<String> trueLore = complexItemStack.getComplexItem().getDefaultLore();
 
@@ -174,6 +175,30 @@ public class ComplexItemMeta {
                 else return Ability.getAbility(((Ability) o).getId());
             }).toList();
         }
+
+        // Attributes
+        boolean hasComplexAttributes = dataContainer.has(ATTRIBUTE_KEY, new ArrayListType<>());
+        modifierList = new ArrayList<>();
+
+        // apply minecraft's attributes
+        meta.getAttributeModifiers().forEach((attribute, modifier) -> modifierList.add(AttributeModifier.of(attribute, modifier)));
+        
+        // apply aurelium stats
+        if(hasComplexAttributes){
+            modifierList.addAll(dataContainer.get(ATTRIBUTE_KEY,  new ArrayListType<AttributeModifier>())
+                    .stream()
+                    .filter(attributeModifier -> attributeModifier.getAttribute() instanceof AureliumAttribute).toList());
+        }
+
+        // Update any attributes with the same name to match parent ComplexItem
+        modifierList.stream()
+                .forEach(attributeModifier -> {
+                    try{
+                        double d = ((AttributeModifier) complexItemStack.getComplexItem().getAttributeModifiers().stream().filter(attributeModifier::equals).toArray()[0]).getValue();
+                        attributeModifier.setValue(d);
+                    } catch(IndexOutOfBoundsException ignored) {
+                    }
+                });
 
         HashMap<String, Integer> complexEnchMap = dataContainer.has(ENCHANT_KEY, new SerializedPersistentType<>()) ? dataContainer.get(ENCHANT_KEY, new SerializedPersistentType<>()) : new HashMap<>();
 

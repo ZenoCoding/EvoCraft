@@ -58,6 +58,29 @@ public class AttributeModifier implements Serializable {
         }
     }
 
+    /**
+     * ::equals to check if a modifier is roughly equal to another, regardless of value
+     * @param o Another object
+     * @return whether the two objects are equal
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AttributeModifier that)) return false;
+
+        if (!name.equals(that.name)) return false;
+        return attribute.equals(that.attribute);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + attribute.hashCode();
+        result = 31 * result + operation.hashCode();
+        result = 31 * result + slot.hashCode();
+        return result;
+    }
+
     public void apply(ItemStack item){
         attribute.apply(item, this);
     }
