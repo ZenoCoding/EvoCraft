@@ -4,7 +4,6 @@ import com.archyx.aureliumskills.api.AureliumAPI;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.item.ComplexItemMeta;
 import me.zenox.superitems.item.ComplexItemStack;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
@@ -18,7 +17,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 public class EmberShoot extends ItemAbility {
 
     public EmberShoot() {
-        super("dark_ember_shoot", AbilityAction.RIGHT_CLICK_ALL, 25, 0);
+        super("dark_ember_shoot", AbilityAction.RIGHT_CLICK_ALL, 25, 10);
     }
 
     @Override
