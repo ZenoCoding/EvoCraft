@@ -2,6 +2,7 @@ package me.zenox.superitems.item;
 
 import com.archyx.aureliumskills.modifier.ModifierType;
 import com.archyx.aureliumskills.modifier.StatModifier;
+import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.abilities.ItemAbility;
@@ -74,7 +75,7 @@ public class ComplexItemMeta {
 
         // Write Stats
         List<String> attributeLore = new ArrayList<>();
-        modifierList.forEach(modifier -> attributeLore.add(ChatColor.GRAY + modifier.getName() + ": " + modifier.getAttribute().getColor() + ((int) modifier.getValue())));
+        modifierList.forEach(modifier -> attributeLore.add(ChatColor.GRAY + modifier.getAttribute().getName().toString() + ": " + modifier.getAttribute().getColor() + ((int) modifier.getValue())));
 
         PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
         LoreBuilder lore = new LoreBuilder();
@@ -88,10 +89,18 @@ public class ComplexItemMeta {
         // Write Attributes
         dataContainer.set(ATTRIBUTE_KEY, new ArrayListType(), modifierList);
 
+        // Clear Item's current attributes
+        Arrays.stream(Attribute.values()).forEach(meta::removeAttributeModifier);
+        item.setItemMeta(meta);
+
+        Arrays.stream(Stats.values()).forEach(stats -> item.setItemMeta(Util.removeAureliumModifier(item, ((ComplexItem.Type) getVariable(TYPE_VAR).getValue()).isWearable() ? ModifierType.ARMOR : ModifierType.ITEM, stats).getItemMeta()));
+
+        meta = item.getItemMeta();
+
         // Set itemMeta so modifier can use it (important)
         item.setItemMeta(meta);
 
-        modifierList.forEach(attributeModifier -> attributeModifier.apply(item));
+        modifierList.forEach(attributeModifier -> item.setItemMeta(attributeModifier.apply(item).getItemMeta()));
 
         // get it again
         meta = item.getItemMeta();
@@ -181,7 +190,7 @@ public class ComplexItemMeta {
         modifierList = new ArrayList<>();
 
         // apply minecraft's attributes
-        meta.getAttributeModifiers().forEach((attribute, modifier) -> modifierList.add(AttributeModifier.of(attribute, modifier)));
+        if (Objects.nonNull(meta.getAttributeModifiers())) meta.getAttributeModifiers().forEach((attribute, modifier) -> modifierList.add(AttributeModifier.of(attribute, modifier)));
         
         // apply aurelium stats
         if(hasComplexAttributes){
@@ -326,5 +335,7 @@ public class ComplexItemMeta {
         return abilities;
     }
 
-
+    public List<AttributeModifier> getModifierList() {
+        return modifierList;
+    }
 }

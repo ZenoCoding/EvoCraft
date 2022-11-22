@@ -1,11 +1,13 @@
 package me.zenox.superitems.item;
 
 import com.archyx.aureliumskills.stats.Stat;
-import com.google.common.collect.Multimap;
+import me.zenox.superitems.Slot;
 import me.zenox.superitems.abilities.Ability;
+import me.zenox.superitems.attribute.Attribute;
+import me.zenox.superitems.attribute.AttributeModifier;
+import me.zenox.superitems.attribute.types.AureliumAttribute;
+import me.zenox.superitems.attribute.types.MinecraftAttribute;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -154,18 +156,26 @@ public class ItemSettings {
         return this;
     }
 
+    @Deprecated
     public ItemSettings enchant(Enchantment enchantment, Integer level) {
         this.meta.addEnchant(enchantment, level, true);
         return this;
     }
 
-    public ItemSettings attribute(Attribute attribute, AttributeModifier modifier) {
-        this.meta.addAttributeModifier(attribute, modifier);
-        return this;
-    }
-
-    public ItemSettings attribute(Multimap<Attribute, AttributeModifier> modifiers) {
-        this.meta.setAttributeModifiers(modifiers);
+    public ItemSettings attribute(org.bukkit.attribute.Attribute attribute, org.bukkit.attribute.AttributeModifier modifier) {
+        Attribute attr;
+        try {
+            attr = ((Attribute) Attribute.attributeRegistry.stream()
+                    .filter(attribute1 -> attribute1 instanceof MinecraftAttribute && ((MinecraftAttribute) attribute1).getMcAttribute().equals(attribute))
+                    .toArray()[0]);
+        } catch (IndexOutOfBoundsException e){
+            throw new IllegalArgumentException("Attribute matching mcattribute " + attribute.getKey().getKey() + " could not be found in the attribute registry!");
+        }
+        this.attributeModifiers.add(
+                new AttributeModifier("base." + attr.getName(),
+                        attr, modifier.getAmount(),
+                        modifier.getOperation(),
+                        type.isWearable() ? Slot.ARMOR : Slot.MAIN_HAND));
         return this;
     }
 
@@ -175,7 +185,19 @@ public class ItemSettings {
     }
 
     public ItemSettings stat(Stat stat, Double num) {
-        this.stats.put(stat, num);
+        Attribute attr;
+        try {
+            attr = ((Attribute) Attribute.attributeRegistry.stream()
+                    .filter(attribute1 -> attribute1 instanceof AureliumAttribute && ((AureliumAttribute) attribute1).getStat().equals(stat))
+                    .toArray()[0]);
+        } catch (IndexOutOfBoundsException e){
+            throw new IllegalArgumentException("Attribute matching stat " + stat.getDisplayName(Locale.ENGLISH) + " could not be found in the attribute registry!");
+        }
+        this.attributeModifiers.add(
+                new AttributeModifier("base." + attr.getName(),
+                        attr, num,
+                        org.bukkit.attribute.AttributeModifier.Operation.ADD_NUMBER,
+                        type.isWearable() ? Slot.ARMOR : Slot.MAIN_HAND));
         return this;
     }
 
@@ -216,6 +238,40 @@ public class ItemSettings {
 
     public ItemSettings variable(VariableType type, Serializable value){
         this.variableMap.put(type, value);
+        return this;
+    }
+
+    public ItemSettings modifier(Attribute attribute, double value){
+        this.attributeModifiers.add(
+                new AttributeModifier("base." + attribute.getName(),
+                        attribute, value,
+                        org.bukkit.attribute.AttributeModifier.Operation.ADD_NUMBER,
+                        type.isWearable() ? Slot.ARMOR : Slot.MAIN_HAND));
+        return this;
+    }
+
+    public ItemSettings modifier(Attribute attribute, double value, org.bukkit.attribute.AttributeModifier.Operation operation){
+        this.attributeModifiers.add(
+                new AttributeModifier("base." + attribute.getName(),
+                        attribute, value,
+                        operation,
+                        type.isWearable() ? Slot.ARMOR : Slot.MAIN_HAND));
+        return this;
+    }
+
+    public ItemSettings modifier(Attribute attribute, double value, Slot slot){
+        this.attributeModifiers.add(
+                new AttributeModifier("base." + attribute.getName(),
+                        attribute, value,
+                        org.bukkit.attribute.AttributeModifier.Operation.ADD_NUMBER,
+                        slot));
+        return this;
+    }
+
+    public ItemSettings modifier(Attribute attribute, double value, org.bukkit.attribute.AttributeModifier.Operation operation, Slot slot){
+        this.attributeModifiers.add(
+                new AttributeModifier("base." + attribute.getName(),
+                        attribute, value, operation, slot));
         return this;
     }
 

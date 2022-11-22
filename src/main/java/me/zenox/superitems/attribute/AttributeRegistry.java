@@ -3,6 +3,7 @@ package me.zenox.superitems.attribute;
 import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.superitems.attribute.types.AureliumAttribute;
 import me.zenox.superitems.attribute.types.MinecraftAttribute;
+import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 
 public class AttributeRegistry {
@@ -25,4 +26,7 @@ public class AttributeRegistry {
     public static final Attribute WISDOM = new AureliumAttribute("as-wisdom", ChatColor.BLUE, Stats.WISDOM);
     public static final Attribute TOUGHNESS = new AureliumAttribute("as-toughness", ChatColor.DARK_PURPLE, Stats.TOUGHNESS);
 
+    public static void registerAttributes(){
+        Util.logToConsole(ChatColor.WHITE + "Registered " + ChatColor.GOLD + Attribute.attributeRegistry.size() + ChatColor.WHITE + " attributes");
+    }
 }

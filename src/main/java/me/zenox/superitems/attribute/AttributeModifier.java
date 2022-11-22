@@ -81,8 +81,8 @@ public class AttributeModifier implements Serializable {
         return result;
     }
 
-    public void apply(ItemStack item){
-        attribute.apply(item, this);
+    public ItemStack apply(ItemStack item){
+        return attribute.apply(item, this);
     }
 
     public String getName() {

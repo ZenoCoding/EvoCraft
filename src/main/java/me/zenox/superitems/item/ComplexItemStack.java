@@ -112,6 +112,8 @@ public class ComplexItemStack {
 
         complexMeta = new ComplexItemMeta(this);
 
+        complexMeta.getModifierList().addAll(complexItem.getAttributeModifiers());
+
         complexMeta.setVariable(ComplexItemMeta.RARITY_VAR, complexItem.getRarity());
         complexMeta.setVariable(ComplexItemMeta.TYPE_VAR, complexItem.getType());
 

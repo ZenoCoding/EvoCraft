@@ -8,6 +8,7 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.studiocode.invui.gui.structure.Structure;
 import de.studiocode.invui.item.builder.ItemBuilder;
+import me.zenox.superitems.attribute.AttributeRegistry;
 import me.zenox.superitems.command.MainCommand;
 import me.zenox.superitems.data.ConfigLoader;
 import me.zenox.superitems.data.LanguageLoader;
@@ -63,6 +64,7 @@ public final class SuperItems extends JavaPlugin {
         // Item Packet/Network filters
         new GlowFilter(this, protocolManager);
 
+        AttributeRegistry.registerAttributes();
         ItemRegistry.registerRecipes();
         ItemRegistry.registerItems();
         VanillaItem.registerItems();
