@@ -86,7 +86,6 @@ public class ComplexItemStack {
 
         // Set CustomModelData
         meta.setCustomModelData(complexItem.getCustomModelData());
-        // Util.logToConsole("CustomModelData of " + this.complexItem.getDisplayName() + " is: " + this.complexItem.getCustomModelData());
 
         item.setAmount(amount);
 
@@ -102,6 +101,7 @@ public class ComplexItemStack {
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         container.set(ComplexItem.GLOBAL_ID, PersistentDataType.STRING, this.getId());
+        container.set(ComplexItem.UUID_ID, new SerializedPersistentType<>(), UUID.randomUUID());
 
         if (this.uuid != null)
             container.set(new NamespacedKey(SuperItems.getPlugin(), "uuid"), new SerializedPersistentType<>(), uuid);
