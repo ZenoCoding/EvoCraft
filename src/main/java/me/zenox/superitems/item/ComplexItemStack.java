@@ -101,7 +101,7 @@ public class ComplexItemStack {
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         container.set(ComplexItem.GLOBAL_ID, PersistentDataType.STRING, this.getId());
-        container.set(ComplexItem.UUID_ID, new SerializedPersistentType<>(), UUID.randomUUID());
+        if(complexItem.isUnique()) container.set(ComplexItem.UUID_ID, new SerializedPersistentType<>(), UUID.randomUUID());
 
         if (this.uuid != null)
             container.set(new NamespacedKey(SuperItems.getPlugin(), "uuid"), new SerializedPersistentType<>(), uuid);
