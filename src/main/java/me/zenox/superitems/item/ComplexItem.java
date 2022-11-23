@@ -43,10 +43,10 @@ public class ComplexItem {
     private final ItemMeta meta;
     private final Map<Stat, Double> stats;
     private final List<Ability> abilities;
-    private final HashMap<VariableType, Serializable> variableMap = new HashMap();
+    private final HashMap<VariableType, Serializable> variableMap = new HashMap<>();
     private final List<AttributeModifier> attributeModifiers;
 
-    private String skullURL = "";
+    private String skullURL;
 
 
     public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap, List<AttributeModifier> attributeModifiers) {

@@ -98,6 +98,11 @@ item-name-greatsword_volkumos: The Greatsword of Volkumos
 
 item-name-chromotonin: Chromotonin
 
+item-name-burning_helmet: Burning Helmet
+item-name-burning_chestplate: Burning Chestplate
+item-name-burning_leggings: Burning Leggings
+item-name-burning_boots: Burning Boots
+
 ##########################################################################
 ##                              ITEM LORE                               ##
 ##########################################################################
@@ -252,6 +257,15 @@ item-lore-super_space_helmet:
   - "&husghasodhusghasodhusghasod&"
   - "trisolarians?!"
 
+item-lore-burning_helmet:
+  - "Burning through hell."
+item-lore-burning_chestplate:
+  - "Burning through hell."
+item-lore-burning_leggings:
+  - "Burning through hell."
+item-lore-burning_boots:
+  - "Burning through hell."
+
 ##########################################################################
 ##                              ABILITIES                               ##
 ##########################################################################
@@ -362,6 +376,16 @@ ability-lore-terra_strike:
   - ""
   - "Creates a &cshockwave &7and deals massive &cdamage &7to those in a nearby radius."
 
+ability-name-roaring_flame: Roaring Flame
+
+ability-lore-roaring_flame:
+  - "&cIgnites &7 your opponent for &a4s."
+  - "Stacks with &cFire Aspect."
+
+ability-name-lava_glider: Lava Glider
+
+ability-lore-lava_glider:
+  - "While moving on or over &clava, multiply your speed by &a1.5x."
 ##########################################################################
 ##                             ENCHANTMENTS                             ##
 ##########################################################################

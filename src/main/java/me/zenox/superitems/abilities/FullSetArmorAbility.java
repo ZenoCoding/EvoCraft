@@ -11,12 +11,12 @@ import org.bukkit.inventory.ItemStack;
  * General Armor Ability with no class
  */
 public abstract class FullSetArmorAbility extends Ability {
-    public FullSetArmorAbility(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot) {
-        super(id, manaCost, cooldown, eventType, slot);
+    public FullSetArmorAbility(String id, int manaCost, double cooldown, Class<? extends Event> eventType) {
+        super(id, manaCost, cooldown, eventType, Slot.ARMOR);
     }
 
-    public FullSetArmorAbility(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot, TriConsumer<Event, Player, ItemStack> executable) {
-        super(id, manaCost, cooldown, eventType, slot, executable);
+    public FullSetArmorAbility(String id, int manaCost, double cooldown, Class<? extends Event> eventType, TriConsumer<Event, Player, ItemStack> executable) {
+        super(id, manaCost, cooldown, eventType, Slot.ARMOR, executable);
     }
 
     @Override

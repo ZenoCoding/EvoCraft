@@ -175,7 +175,7 @@ public class ItemSettings {
                 new AttributeModifier("base." + attr.getName(),
                         attr, modifier.getAmount(),
                         modifier.getOperation(),
-                        type.isWearable() ? Slot.ARMOR : Slot.MAIN_HAND));
+                        Slot.fromType(type)));
         return this;
     }
 
@@ -197,7 +197,7 @@ public class ItemSettings {
                 new AttributeModifier("base." + attr.getName(),
                         attr, num,
                         org.bukkit.attribute.AttributeModifier.Operation.ADD_NUMBER,
-                        type.isWearable() ? Slot.ARMOR : Slot.MAIN_HAND));
+                        Slot.fromType(type)));
         return this;
     }
 
@@ -246,7 +246,7 @@ public class ItemSettings {
                 new AttributeModifier("base." + attribute.getName(),
                         attribute, value,
                         org.bukkit.attribute.AttributeModifier.Operation.ADD_NUMBER,
-                        type.isWearable() ? Slot.ARMOR : Slot.MAIN_HAND));
+                        Slot.fromType(type)));
         return this;
     }
 
@@ -255,7 +255,7 @@ public class ItemSettings {
                 new AttributeModifier("base." + attribute.getName(),
                         attribute, value,
                         operation,
-                        type.isWearable() ? Slot.ARMOR : Slot.MAIN_HAND));
+                        Slot.fromType(type)));
         return this;
     }
 

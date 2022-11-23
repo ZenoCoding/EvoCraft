@@ -17,4 +17,6 @@ public class AbilityRegistry {
     public static final Ability DARK_FURY = new AttackAbility("dark_fury", 10, 0, AttackAbility::darkFuryAbility);
     public static final Ability TEST_FULLSET = new FullSetAttackAbility("test_fullset", 10, 0, FullSetAttackAbility::testFullSetAbility);
     public static final Ability TERRA_STRIKE = new ItemAbility("terra_strike", ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK, 10, 5, ItemAbility::terraStrikeAbility);
+    public static final Ability ROARING_FLAME = new FullSetAttackAbility("roaring_flame", 0, 0, FullSetAttackAbility::roaringFlameAbility);
+    public static final Ability LAVA_GLIDER = new MoveAbility("lava_glider", 0, 0, MoveAbility::lavaGliderAbility);
 }

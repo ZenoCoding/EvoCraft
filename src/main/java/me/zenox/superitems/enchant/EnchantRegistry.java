@@ -91,7 +91,7 @@ public class EnchantRegistry {
             .maxLevel(3)
             .rarity(20)
             .types(ComplexItem.Type.BOOTS)
-            .slots(Slot.BOOTS)
+            .slots(Slot.FEET)
             .vanillaEnchant(Enchantment.DEPTH_STRIDER)
             .exclusive(EnchantmentWrapper.FROST_WALKER));
 
@@ -108,7 +108,7 @@ public class EnchantRegistry {
             .maxLevel(4)
             .rarity(10)
             .types(ComplexItem.Type.BOOTS)
-            .slots(Slot.BOOTS)
+            .slots(Slot.FEET)
             .vanillaEnchant(Enchantment.PROTECTION_FALL));
 
     public static ComplexEnchantment FIRE_ASPECT = new AttackEnchantment(new EnchantmentSettings()
@@ -150,7 +150,7 @@ public class EnchantRegistry {
             .maxLevel(2)
             .rarity(10)
             .types(ComplexItem.Type.BOOTS)
-            .slots(Slot.BOOTS)
+            .slots(Slot.FEET)
             .vanillaEnchant(Enchantment.FROST_WALKER)
             .exclusive(EnchantmentWrapper.DEPTH_STRIDER));
 
@@ -331,7 +331,7 @@ public class EnchantRegistry {
             .maxLevel(3)
             .rarity(0)
             .types(ComplexItem.Type.BOOTS)
-            .slots(Slot.BOOTS)
+            .slots(Slot.FEET)
             .vanillaEnchant(Enchantment.SOUL_SPEED));
 
     public static ComplexEnchantment SWEEPING_EDGE = new AttackEnchantment(new EnchantmentSettings()

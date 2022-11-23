@@ -39,7 +39,7 @@ public class AureliumAttribute extends Attribute {
     public ItemStack apply(ItemStack item, @NotNull AttributeModifier modifier) {
         double value = modifier.getValue();
         double curValue = Util.getAureliumModifiers(item,
-                        List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.BOOTS, Slot.ARMOR)
+                        List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.FEET, Slot.ARMOR)
                                 .contains(modifier.getSlot()) ? ModifierType.ARMOR : ModifierType.ITEM)
                 .stream()
                 .filter(statModifier -> stat.equals(statModifier.getStat()))
@@ -57,7 +57,7 @@ public class AureliumAttribute extends Attribute {
 
     @Override
     public ItemStack remove(ItemStack item, @NotNull AttributeModifier modifier) {
-        return Util.removeAureliumModifier(item, List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.BOOTS, Slot.ARMOR)
+        return Util.removeAureliumModifier(item, List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.FEET, Slot.ARMOR)
                 .contains(modifier.getSlot()) ? ModifierType.ARMOR : ModifierType.ITEM, stat);
     }
 

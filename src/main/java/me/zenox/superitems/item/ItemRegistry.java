@@ -1,9 +1,7 @@
 package me.zenox.superitems.item;
 
 import com.archyx.aureliumskills.stats.Stats;
-import me.zenox.superitems.Slot;
 import me.zenox.superitems.abilities.*;
-import me.zenox.superitems.abilities.Transcendence;
 import me.zenox.superitems.attribute.AttributeRegistry;
 import me.zenox.superitems.gui.EnchantingGUI;
 import me.zenox.superitems.item.armoritems.*;
@@ -19,10 +17,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -32,7 +28,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 public class ItemRegistry {
 
@@ -102,7 +97,7 @@ public class ItemRegistry {
     public static final ComplexItem DARK_EMBER_STAFF = new ComplexItem(new ItemSettings()
             .id("dark_ember_staff")
             .material(Material.BLAZE_ROD)
-            .rarity(ComplexItem.Rarity.RARE)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
             .type(ComplexItem.Type.STAFF)
             .ability(new EmberAttune())
             .ability(new EmberShoot())
@@ -111,7 +106,7 @@ public class ItemRegistry {
     public static final ComplexItem TORMENTED_BLADE = new ComplexItem(new ItemSettings()
             .id("tormented_blade")
             .material(Material.IRON_AXE)
-            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .rarity(ComplexItem.Rarity.COMMON)
             .type(ComplexItem.Type.AXE)
             .ability(AbilityRegistry.TARHELM));
 
@@ -121,9 +116,8 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.RARE)
             .type(ComplexItem.Type.SWORD)
             .enchant(Enchantment.DAMAGE_ALL, 10)
-            .unbreakable()
-            .attribute(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "superitems:attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
-            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 10, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlot.HAND))
+            .modifier(AttributeRegistry.ATTACK_DAMAGE, 10)
+            .modifier(AttributeRegistry.ATTACK_SPEED, 1000)
             .ability(AbilityRegistry.JUSTICE));
 
     public static final ComplexItem CRUCIFIED_AMULET = new ComplexItem(new ItemSettings()
@@ -328,10 +322,9 @@ public class ItemRegistry {
             .enchant(Enchantment.OXYGEN, 100)
             .enchant(Enchantment.DEPTH_STRIDER, 100)
             .enchant(Enchantment.WATER_WORKER, 100)
-            .attribute(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "superitems:armor", 300, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
-            .attribute(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), "superitems:armor_toughness", 500, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD))
-            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
-            .attribute(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:movement_speed", 5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlot.HEAD))
+            .modifier(AttributeRegistry.ARMOR, 100d)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 100d)
+            .modifier(AttributeRegistry.ATTACK_DAMAGE, 100d)
             .rarity(ComplexItem.Rarity.MYTHIC)
             .type(ComplexItem.Type.HELMET));
 
@@ -363,10 +356,54 @@ public class ItemRegistry {
             .material(Material.STONE_SWORD)
             .rarity(ComplexItem.Rarity.RARE)
             .type(ComplexItem.Type.SWORD)
-            .modifier(new me.zenox.superitems.attribute.AttributeModifier("superitems:attack_speed", AttributeRegistry.ATTACK_DAMAGE, 20d, AttributeModifier.Operation.ADD_NUMBER, Slot.MAIN_HAND))
-            .attribute(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "superitems:attack_speed", -3.2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND))
+            .modifier(AttributeRegistry.ATTACK_DAMAGE, 20)
+            .modifier(AttributeRegistry.ATTACK_DAMAGE, -3.2)
             .stat(Stats.STRENGTH, 50d)
             .ability(AbilityRegistry.TERRA_STRIKE));
+
+    public static final ComplexItem BURNING_HELMET = new ComplexItem(new ItemSettings()
+            .id("burning_helmet")
+            .material(Material.LEATHER_HELMET)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.HELMET)
+            .modifier(AttributeRegistry.HEALTH, 5)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 4)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
+            .abilities(AbilityRegistry.ROARING_FLAME));
+
+    public static final ComplexItem BURNING_CHESTPLATE = new ComplexItem(new ItemSettings()
+            .id("burning_chestplate")
+            .material(Material.LEATHER_CHESTPLATE)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.CHESTPLATE)
+            .modifier(AttributeRegistry.HEALTH, 12)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 10)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
+            .abilities(AbilityRegistry.ROARING_FLAME));
+
+    public static final ComplexItem BURNING_LEGGINGS = new ComplexItem(new ItemSettings()
+            .id("burning_leggings")
+            .material(Material.LEATHER_LEGGINGS)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.LEGGINGS)
+            .modifier(AttributeRegistry.HEALTH, 10)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 8)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
+            .abilities(AbilityRegistry.ROARING_FLAME));
+
+    public static final ComplexItem BURNING_BOOTS = new ComplexItem(new ItemSettings()
+            .id("burning_boots")
+            .material(Material.LEATHER_BOOTS)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.BOOTS)
+            .modifier(AttributeRegistry.HEALTH, 5)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 3)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
+            .abilities(AbilityRegistry.ROARING_FLAME, AbilityRegistry.LAVA_GLIDER));
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
