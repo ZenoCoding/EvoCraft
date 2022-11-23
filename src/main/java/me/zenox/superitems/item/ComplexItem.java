@@ -8,6 +8,7 @@ import me.zenox.superitems.abilities.ItemAbility;
 import me.zenox.superitems.attribute.AttributeModifier;
 import me.zenox.superitems.data.TranslatableList;
 import me.zenox.superitems.data.TranslatableText;
+import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -23,6 +24,8 @@ import java.util.Map;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ComplexItem {
+
+    public static final List<ComplexItem> itemRegistry = new ArrayList<>();
 
     public static final NamespacedKey GLOBAL_ID = new NamespacedKey(SuperItems.getPlugin(), "superitem");
     public static final NamespacedKey GLOW_ID = new NamespacedKey(SuperItems.getPlugin(), "glow");
@@ -64,6 +67,8 @@ public class ComplexItem {
         this.skullURL = "";
         this.abilities = abilities;
         this.variableMap.putAll(variableMap);
+
+        register();
     }
 
     public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, List<AttributeModifier> attributeModifiers) {
@@ -116,7 +121,22 @@ public class ComplexItem {
         this.abilities = settings.getAbilities() == null ? new ArrayList<>() : new ArrayList<>(settings.getAbilities());
         this.variableMap.putAll(settings.getVariableMap());
         this.attributeModifiers = settings.getAttributeModifiers();
+
+        register();
     }
+
+    private void register(){
+        for (ComplexItem item:
+                itemRegistry) {
+            if (item.getId().equalsIgnoreCase(id)) {
+                Util.logToConsole("Duplicate ComplexItem ID: " + id + " | Exact Match: " + item.equals(this));
+                throw new IllegalArgumentException("ComplexItem ID cannot be duplicate");
+            }
+        }
+
+        itemRegistry.add(this);
+    }
+
 
     public List<Recipe> getRecipes() {
         return new ArrayList<>();
