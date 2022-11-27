@@ -103,6 +103,8 @@ item-name-burning_chestplate: Burning Chestplate
 item-name-burning_leggings: Burning Leggings
 item-name-burning_boots: Burning Boots
 
+item-name-burning_smoke: Burning Smoke
+
 ##########################################################################
 ##                              ITEM LORE                               ##
 ##########################################################################
@@ -245,16 +247,16 @@ item-lore-chromotonin:
 item-lore-volken_stick:
   - "A relic of the past. Emits a strange heat..."
   - ""
-  - "Something to do with piglins &?&"
+  - "Something to do with piglins ?&c"
 
 item-lore-volkanaxe:
   - "A relic of the past. Doesn't look fragile..."
 
 item-lore-super_space_helmet:
-  - "&husghasodhusghasodhusghasod&"
-  - "&husghasodhusghasodhusghasod&"
-  - "&husghasodhusghasodhusghasod&"
-  - "&husghasodhusghasodhusghasod&"
+  - "&khusghasodhusghasodhusghasod&c"
+  - "&khusghasodhusghasodhusghasod&c"
+  - "&khusghasodhusghasodhusghasod&c"
+  - "&khusghasodhusghasodhusghasod&c"
   - "trisolarians?!"
 
 item-lore-burning_helmet:

@@ -19,4 +19,5 @@ public class AbilityRegistry {
     public static final Ability TERRA_STRIKE = new ItemAbility("terra_strike", ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK, 10, 5, ItemAbility::terraStrikeAbility);
     public static final Ability ROARING_FLAME = new FullSetAttackAbility("roaring_flame", 0, 0, FullSetAttackAbility::roaringFlameAbility);
     public static final Ability LAVA_GLIDER = new MoveAbility("lava_glider", 0, 0, MoveAbility::lavaGliderAbility);
+    public static final Ability DARKCALL = new ItemAbility("darkcall", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 0, 60, ItemAbility::darkcallerAbility);
 }

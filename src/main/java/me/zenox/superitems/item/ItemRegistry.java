@@ -336,6 +336,15 @@ public class ItemRegistry {
             .glow()
             .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 5));
 
+    public static final ComplexItem CREATIVE_MIND = new ComplexItem((new ItemSettings()
+            .id("creative_mind")
+            .material(Material.PAINTING)
+            .stat(Stats.WISDOM, 1d)
+            .enchant(Enchantment.OXYGEN, 1)
+            .rarity(ComplexItem.Rarity.VERY_SPECIAL)
+            .type(ComplexItem.Type.MISC)
+            .type(ComplexItem.Type.HELMET)));
+
     public static final ComplexItem SHADOW_BLADE = new ComplexItem(new ItemSettings()
             .id("shadow_blade")
             .material(Material.IRON_SWORD)
@@ -404,6 +413,19 @@ public class ItemRegistry {
             .modifier(AttributeRegistry.ARMOR, 3)
             .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
             .abilities(AbilityRegistry.ROARING_FLAME, AbilityRegistry.LAVA_GLIDER));
+
+    public static final ComplexItem DARKCALLER = new ComplexItem(new ItemSettings()
+            .id("darkcaller")
+            .material(Material.BEACON)
+            .stat(Stats.WISDOM, 50d)
+            .enchant(Enchantment.OXYGEN, 1)
+            .ability(AbilityRegistry.DARKCALL)
+            .rarity(ComplexItem.Rarity.EPIC)
+            .type(ComplexItem.Type.STAFF));
+
+    public static final ComplexItem BURNING_SMOKE = new ComplexItem(new ItemSettings()
+            .id("burning_smoke")
+            .material(Material.GLASS_BOTTLE));
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 

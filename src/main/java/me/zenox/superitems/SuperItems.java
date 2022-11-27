@@ -13,6 +13,7 @@ import me.zenox.superitems.command.MainCommand;
 import me.zenox.superitems.data.ConfigLoader;
 import me.zenox.superitems.data.LanguageLoader;
 import me.zenox.superitems.enchant.EnchantRegistry;
+import me.zenox.superitems.events.DimensionLocker;
 import me.zenox.superitems.events.InventoryListener;
 import me.zenox.superitems.events.OtherEvent;
 import me.zenox.superitems.events.PlayerUseItemEvent;
@@ -81,6 +82,7 @@ public final class SuperItems extends JavaPlugin {
         new PlayerUseItemEvent(plugin);
         new OtherEvent(plugin);
         new InventoryListener(plugin);
+        new DimensionLocker(plugin);
     }
 
     public static void registerGlobalGUIItems(){
