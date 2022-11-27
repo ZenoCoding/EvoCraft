@@ -147,7 +147,9 @@ public class ComplexItemMeta {
             if(e.getKey().getVanillaEnchant() != null) meta.addEnchant(e.getKey().getVanillaEnchant(), e.getValue(), true);
         }
 
-        if (!meta.getEnchants().isEmpty() || !this.complexEnchantments.isEmpty()) lore.entry(new LoreEntry("newline", List.of("")));
+        Util.logToConsole("Write | ComplexEnch: " + complexEnchantments);
+
+        if (!this.complexEnchantments.isEmpty()) lore.entry(new LoreEntry("newline", List.of("")));
 
         writeVariables(VariableType.Priority.ABOVE_ABILITIES, dataContainer, lore, true);
 
@@ -191,7 +193,8 @@ public class ComplexItemMeta {
 
         // apply minecraft's attributes
         if (Objects.nonNull(meta.getAttributeModifiers())) meta.getAttributeModifiers().forEach((attribute, modifier) -> modifierList.add(AttributeModifier.of(attribute, modifier)));
-        
+
+        Util.logToConsole("Read | hasComplexAttributes: " + hasComplexAttributes);
         // apply aurelium stats
         if(hasComplexAttributes){
             modifierList.addAll(dataContainer.get(ATTRIBUTE_KEY,  new ArrayListType<AttributeModifier>())
@@ -209,11 +212,15 @@ public class ComplexItemMeta {
                     }
                 });
 
+        // Read Enchantments
         HashMap<String, Integer> complexEnchMap = dataContainer.has(ENCHANT_KEY, new SerializedPersistentType<>()) ? dataContainer.get(ENCHANT_KEY, new SerializedPersistentType<>()) : new HashMap<>();
+        Util.logToConsole("Read | ComplexEnchMap: " + complexEnchMap);
+        Util.logToConsole("Read | Item has ComplexEnchMap: " + dataContainer.has(ENCHANT_KEY, new SerializedPersistentType<>()));
 
         for (Map.Entry<String, Integer> entry: complexEnchMap.entrySet()){
             this.complexEnchantments.put(ComplexEnchantment.byId(entry.getKey()), entry.getValue());
         }
+        Util.logToConsole("Read | ComplexEnch: " + complexEnchantments);
 
         dataContainer.getKeys().stream()
                 .filter(namespacedKey -> namespacedKey.getKey().startsWith(VAR_PREFIX))

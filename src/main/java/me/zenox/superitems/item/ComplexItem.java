@@ -71,24 +71,8 @@ public class ComplexItem {
         register();
     }
 
-    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, List<AttributeModifier> attributeModifiers) {
-        this(id, unique, glow, rarity, type, material, stats, abilities, new HashMap<>(), attributeModifiers);
-    }
-
-    public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, List<AttributeModifier> attributeModifiers) {
-        this(id, unique, false, rarity, type, material, stats, abilities, attributeModifiers);
-    }
-
     public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
-        this(id, unique, false, rarity, type, material, stats, abilities, new ArrayList<>());
-    }
-
-    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique, List<Ability> abilities) {
-        this(id, unique, rarity, type, material, stats, abilities);
-    }
-
-    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique) {
-        this(id, unique, rarity, type, material, stats, List.of());
+        this(id, unique, false, rarity, type, material, stats, abilities, new HashMap<>(), new ArrayList<>());
     }
 
     public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
