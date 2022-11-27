@@ -36,6 +36,7 @@ import java.util.stream.Stream;
  * <p>
  * Converts between PersistentDataStorage and Class, at an abstract level,
  * manipulating normal ItemMeta in an attempt to get rid of functional programming inconsistencies
+ *
  */
 
 public class ComplexItemMeta {
@@ -227,10 +228,8 @@ public class ComplexItemMeta {
                 .forEach(namespacedKey -> setVariable(VariableType.getVariableByPrefix(namespacedKey.getKey().substring(VAR_PREFIX.length())), dataContainer.get(namespacedKey, new SerializedPersistentType<>())));
 
         // if the meta doesn't contain rarity or type
-        if (this.variableList.stream().filter((variable -> variable.getType().name() == RARITY_VAR.name())).toList().isEmpty())
-            this.variableList.add(new Variable(this, RARITY_VAR, complexItemStack.getComplexItem().getRarity()));
-        if (this.variableList.stream().filter((variable -> variable.getType().name() == TYPE_VAR.name())).toList().isEmpty())
-            this.variableList.add(new Variable(this, TYPE_VAR, complexItemStack.getComplexItem().getType()));
+        if (getVariable(RARITY_VAR) == null) setVariable(RARITY_VAR, complexItemStack.getComplexItem().getRarity());
+        if (getVariable(TYPE_VAR) == null) setVariable(TYPE_VAR, complexItemStack.getComplexItem().getType());
 
         item.setItemMeta(meta);
         updateItem();
