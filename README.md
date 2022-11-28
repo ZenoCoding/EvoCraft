@@ -1,11 +1,6 @@
-# SuperItems
- Hypixel inspired items.
+## SuperItems
+SuperItems is a plugin that transforms your server into a rpg experience.
+SuperItems is a way to add custom items, enchants, abilities, and more.
 
-
-
-
-##Todo list:
- - Fire Fist
- - Wither Skull
- - Grappling Hook
- - F-30 5th Geneartion Fighter Jet
+Depending on SuperItems:
+Coming Soon
