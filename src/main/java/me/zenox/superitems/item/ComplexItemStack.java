@@ -36,7 +36,7 @@ public class ComplexItemStack {
     private ItemStack item;
     private ComplexItemMeta complexMeta;
 
-    private String skullURL = "";
+    private String skullURL;
 
     public ComplexItemStack(ComplexItem complexItem, int amount) {
         this(complexItem, new ItemStack(complexItem.getMaterial()));
@@ -92,6 +92,7 @@ public class ComplexItemStack {
         // Set ItemMeta so that SkillModifier can use it
         item.setItemMeta(meta);
 
+        // Set stats and clone
         for (Map.Entry<Stat, Double> entry : complexItem.getStats().entrySet()) {
             item = complexItem.getType().isWearable() ? AureliumAPI.addArmorModifier(item, entry.getKey(), entry.getValue(), false) : AureliumAPI.addItemModifier(item, entry.getKey(), entry.getValue(), false);
         }
@@ -110,6 +111,8 @@ public class ComplexItemStack {
         item.setItemMeta(meta);
 
         complexMeta = new ComplexItemMeta(this);
+
+        complexMeta.getModifierList().addAll(complexItem.getAttributeModifiers());
 
         complexMeta.setVariable(ComplexItemMeta.RARITY_VAR, complexItem.getRarity());
         complexMeta.setVariable(ComplexItemMeta.TYPE_VAR, complexItem.getType());

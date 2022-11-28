@@ -1,6 +1,6 @@
 package me.zenox.superitems.persistence;
 
-import org.apache.commons.lang.SerializationUtils;
+import me.zenox.superitems.util.SerializationUtils;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;

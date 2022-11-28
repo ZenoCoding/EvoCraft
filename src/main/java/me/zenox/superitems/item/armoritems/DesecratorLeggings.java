@@ -3,7 +3,7 @@ package me.zenox.superitems.item.armoritems;
 import com.archyx.aureliumskills.stats.Stats;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import me.zenox.superitems.item.ArmorItem;
+import me.zenox.superitems.item.ComplexItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -23,7 +23,7 @@ import java.util.UUID;
 import static me.zenox.superitems.item.ItemRegistry.DESECRATOR_SCALE;
 import static me.zenox.superitems.item.ItemRegistry.KEVLAR;
 
-public class DesecratorLeggings extends ArmorItem {
+public class DesecratorLeggings extends ComplexItem {
     public DesecratorLeggings() {
         super("desecrator_leggings", Rarity.EPIC, Type.LEGGINGS, Material.LEATHER_LEGGINGS, Map.of(Stats.STRENGTH, 5d, Stats.HEALTH, 5d));
 

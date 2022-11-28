@@ -1,7 +1,6 @@
 package me.zenox.superitems.data;
 
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 
 import java.io.Serializable;
@@ -18,7 +17,7 @@ public class TranslatableText implements Serializable {
         String translation = SuperItems.getPlugin().getLang().get(key);
         if (translation == null) {
             translation = key;
-            Util.logToConsole(ChatColor.RED + "[ERROR] " + ChatColor.WHITE + "Unregistered translatable string: " + key);
+            // Util.logToConsole(ChatColor.RED + "[ERROR] " + ChatColor.WHITE + "Unregistered translatable string: " + key);
         }
         return ChatColor.translateAlternateColorCodes('&', translation);
     }
@@ -27,7 +26,7 @@ public class TranslatableText implements Serializable {
         ITEM_NAME("item-name"), ITEM_LORE("item-lore"),
         ABILITY_NAME("ability-name"), ABILITY_LORE("ability-lore"),
         COMMAND("cmd"), MISC_MSG("msg"), ENCHANT_NAME("enchant-name"),
-        GUI("gui");
+        ATTRIBUTE("attribute"), GUI("gui");
 
         private final String key;
 

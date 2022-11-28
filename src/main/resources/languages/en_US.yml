@@ -98,6 +98,11 @@ item-name-greatsword_volkumos: The Greatsword of Volkumos
 
 item-name-chromotonin: Chromotonin
 
+item-name-burning_helmet: Burning Helmet
+item-name-burning_chestplate: Burning Chestplate
+item-name-burning_leggings: Burning Leggings
+item-name-burning_boots: Burning Boots
+
 item-name-burning_smoke: Burning Smoke
 
 ##########################################################################
@@ -242,7 +247,7 @@ item-lore-chromotonin:
 item-lore-volken_stick:
   - "A relic of the past. Emits a strange heat..."
   - ""
-  - "Something to do with piglins &k?&c"
+  - "Something to do with piglins ?&c"
 
 item-lore-volkanaxe:
   - "A relic of the past. Doesn't look fragile..."
@@ -253,15 +258,15 @@ item-lore-super_space_helmet:
   - "&khusghasodhusghasodhusghasod&c"
   - "&khusghasodhusghasodhusghasod&c"
   - "trisolarians?!"
-item-lore-super_space_suit:
-  - "&khusghasodhusghasodhusghasod&c"
-  - "&khusghasodhusghasodhusghasod&c"
-  - "&khusghasodhusghasodhusghasod&c"
-  - "&khusghasodhusghasodhusghasod&c"
-  - "trisolarians?!"
 
-item-lore-burning_smoke:
-  - "Blaze smoke in a bottle. Highly reactive."
+item-lore-burning_helmet:
+  - "Burning through hell."
+item-lore-burning_chestplate:
+  - "Burning through hell."
+item-lore-burning_leggings:
+  - "Burning through hell."
+item-lore-burning_boots:
+  - "Burning through hell."
 
 ##########################################################################
 ##                              ABILITIES                               ##
@@ -373,8 +378,18 @@ ability-lore-terra_strike:
   - ""
   - "Creates a &cshockwave &7and deals massive &cdamage &7to those in a nearby radius."
 
+ability-name-roaring_flame: Roaring Flame
+
+ability-lore-roaring_flame:
+  - "&cIgnites &7 your opponent for &a4s."
+  - "Stacks with &cFire Aspect."
+
+ability-name-lava_glider: Lava Glider
+
+ability-lore-lava_glider:
+  - "While moving on or over &clava, multiply your speed by &a1.5x."
 ##########################################################################
-##                            ENCHANTMENTS                              ##
+##                             ENCHANTMENTS                             ##
 ##########################################################################
 
 enchant-name-siphon: Siphon
@@ -408,3 +423,26 @@ gui-enchant-action-lore-3:
   - "&7and consume all &d&nenchanting fuel."
   - ""
   - "&c&nRequires enchanting level 35!"
+
+##########################################################################
+##                              ATTRIBUTES                              ##
+##########################################################################
+
+attribute-mc-mac_health: True Health
+attribute-mc-follow_range: Follow Range
+attribute-mc-knockback_resistance: Knockback Resistance
+attribute-mc-movement_speed: Speed
+attribute-mc-flight_speed: Creative Flight Speed
+attribute-mc-attack_damage: Damage
+attribute-mc-attack_knockback: Knockback
+attribute-mc-attack_speed: Attack Speed
+attribute-mc-armor: Armor
+attribute-mc-armor_toughness: Armor Toughness
+attribute-mc-luck: Luck
+
+attribute-as-strength: Strength
+attribute-as-health: Health
+attribute-as-regeneration: Regeneration
+attribute-as-luck: Luck
+attribute-as-wisdom: Wisdom
+attribute-as-toughness: Toughness

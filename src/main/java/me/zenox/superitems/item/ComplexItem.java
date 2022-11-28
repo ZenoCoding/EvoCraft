@@ -5,8 +5,10 @@ import com.google.common.primitives.Ints;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
 import me.zenox.superitems.abilities.ItemAbility;
+import me.zenox.superitems.attribute.AttributeModifier;
 import me.zenox.superitems.data.TranslatableList;
 import me.zenox.superitems.data.TranslatableText;
+import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -23,6 +25,8 @@ import java.util.Map;
 @SuppressWarnings("UnstableApiUsage")
 public class ComplexItem {
 
+    public static final List<ComplexItem> itemRegistry = new ArrayList<>();
+
     public static final NamespacedKey GLOBAL_ID = new NamespacedKey(SuperItems.getPlugin(), "superitem");
     public static final NamespacedKey GLOW_ID = new NamespacedKey(SuperItems.getPlugin(), "glow");
     public static final NamespacedKey UUID_ID = new NamespacedKey(SuperItems.getPlugin(), "uuid");
@@ -32,23 +36,25 @@ public class ComplexItem {
     private final TranslatableText name;
     private final TranslatableList lore;
     private final int customModelData;
-    private boolean glow = false;
+    private boolean glow;
     private final Rarity rarity;
     private final Type type;
     private final Material material;
     private final ItemMeta meta;
     private final Map<Stat, Double> stats;
     private final List<Ability> abilities;
-    private final HashMap<VariableType, Serializable> variableMap = new HashMap();
+    private final HashMap<VariableType, Serializable> variableMap = new HashMap<>();
+    private final List<AttributeModifier> attributeModifiers;
 
-    private String skullURL = "";
+    private String skullURL;
 
 
-    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap) {
+    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap, List<AttributeModifier> attributeModifiers) {
         this.id = id;
         this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + id);
         this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
         this.key = new NamespacedKey(SuperItems.getPlugin(), id);
+        this.attributeModifiers = attributeModifiers;
         String str = String.valueOf(Math.abs(id.hashCode()));
         this.customModelData = Ints.tryParse(str.substring(0, Math.min(7, str.length())));
         this.unique = unique;
@@ -61,22 +67,12 @@ public class ComplexItem {
         this.skullURL = "";
         this.abilities = abilities;
         this.variableMap.putAll(variableMap);
-    }
 
-    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
-        this(id, unique, glow, rarity, type, material, stats, abilities, new HashMap<>());
+        register();
     }
 
     public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
-        this(id, unique, false, rarity, type, material, stats, abilities);
-    }
-
-    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique, List<Ability> abilities) {
-        this(id, unique, rarity, type, material, stats, abilities);
-    }
-
-    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, Boolean unique) {
-        this(id, unique, rarity, type, material, stats, List.of());
+        this(id, unique, false, rarity, type, material, stats, abilities, new HashMap<>(), new ArrayList<>());
     }
 
     public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
@@ -108,7 +104,23 @@ public class ComplexItem {
         this.skullURL = "";
         this.abilities = settings.getAbilities() == null ? new ArrayList<>() : new ArrayList<>(settings.getAbilities());
         this.variableMap.putAll(settings.getVariableMap());
+        this.attributeModifiers = settings.getAttributeModifiers();
+
+        register();
     }
+
+    private void register(){
+        for (ComplexItem item:
+                itemRegistry) {
+            if (item.getId().equalsIgnoreCase(id)) {
+                Util.logToConsole("Duplicate ComplexItem ID: " + id + " | Exact Match: " + item.equals(this));
+                throw new IllegalArgumentException("ComplexItem ID cannot be duplicate");
+            }
+        }
+
+        itemRegistry.add(this);
+    }
+
 
     public List<Recipe> getRecipes() {
         return new ArrayList<>();
@@ -199,6 +211,10 @@ public class ComplexItem {
 
     public HashMap<VariableType, Serializable> getVariableMap() {
         return variableMap;
+    }
+
+    public List<AttributeModifier> getAttributeModifiers() {
+        return attributeModifiers;
     }
 
     public enum Rarity {

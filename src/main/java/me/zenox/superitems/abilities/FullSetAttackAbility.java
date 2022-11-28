@@ -1,6 +1,5 @@
 package me.zenox.superitems.abilities;
 
-import me.zenox.superitems.Slot;
 import me.zenox.superitems.util.TriConsumer;
 import me.zenox.superitems.util.Util;
 import org.bukkit.entity.Player;
@@ -13,15 +12,11 @@ import java.util.List;
 public class FullSetAttackAbility extends FullSetArmorAbility {
 
     public FullSetAttackAbility(String id, int manaCost, double cooldown) {
-        super(id, manaCost, cooldown, EntityDamageByEntityEvent.class, Slot.ARMOR);
-    }
-
-    public FullSetAttackAbility(String id, int manaCost, double cooldown, Slot slot) {
-        super(id, manaCost, cooldown, EntityDamageByEntityEvent.class, slot);
+        super(id, manaCost, cooldown, EntityDamageByEntityEvent.class);
     }
 
     public FullSetAttackAbility(String id, int manaCost, double cooldown, TriConsumer<Event, Player, ItemStack> exectuable) {
-        super(id, manaCost, cooldown, EntityDamageByEntityEvent.class, Slot.ARMOR, exectuable);
+        super(id, manaCost, cooldown, EntityDamageByEntityEvent.class, exectuable);
     }
 
     @Override
@@ -45,4 +40,8 @@ public class FullSetAttackAbility extends FullSetArmorAbility {
     }
 
 
+    public static void roaringFlameAbility(Event e, Player p, ItemStack item) {
+        EntityDamageByEntityEvent event = ((EntityDamageByEntityEvent) e);
+        event.getEntity().setFireTicks(event.getEntity().getFireTicks() + 100);
+    }
 }

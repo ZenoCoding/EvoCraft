@@ -2,7 +2,6 @@ package me.zenox.superitems.tabcompleter;
 
 import me.zenox.superitems.enchant.ComplexEnchantment;
 import me.zenox.superitems.item.ComplexItem;
-import me.zenox.superitems.item.ItemRegistry;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -26,7 +25,7 @@ public class MainTabCompleter implements TabCompleter {
         }
 
         if (items.isEmpty()) {
-            for (ComplexItem item : ItemRegistry.getRegisteredItems()) {
+            for (ComplexItem item : ComplexItem.itemRegistry) {
                 items.add(item.getId());
             }
         }

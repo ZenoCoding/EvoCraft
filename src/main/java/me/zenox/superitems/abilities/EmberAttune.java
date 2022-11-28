@@ -53,7 +53,7 @@ public class EmberAttune extends ItemAbility {
         complexMeta.updateItem();
     }
 
-    enum Attunement {
+    public enum Attunement {
         DARKSOUL(ChatColor.DARK_GRAY + "Darksoul"), BLAZEBORN(ChatColor.GOLD + "Blazeborn");
 
         private final String name;

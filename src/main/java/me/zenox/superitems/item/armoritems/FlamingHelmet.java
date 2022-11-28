@@ -3,7 +3,7 @@ package me.zenox.superitems.item.armoritems;
 import com.archyx.aureliumskills.stats.Stats;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import me.zenox.superitems.item.ArmorItem;
+import me.zenox.superitems.item.ComplexItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class FlamingHelmet extends ArmorItem {
+public class FlamingHelmet extends ComplexItem {
     public FlamingHelmet() {
         super("flaming_helmet", Rarity.EPIC, Type.HELMET, Material.LEATHER_HELMET, Map.of(Stats.STRENGTH, 10d, Stats.HEALTH, 2d));
 
