@@ -46,7 +46,7 @@ public class DimensionLocker implements Listener {
 
     @EventHandler
     public void useEyeOfEnder(PlayerInteractEvent e){
-        if(e.getClickedBlock().getType() == Material.END_PORTAL_FRAME
+        if(e.getClickedBlock() != null && e.getClickedBlock().getType() == Material.END_PORTAL_FRAME
                 && e.getItem().getType() == Material.ENDER_EYE
                 && (e.getAction() == Action.RIGHT_CLICK_BLOCK)){
             e.setCancelled(true);
