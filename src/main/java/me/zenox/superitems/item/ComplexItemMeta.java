@@ -105,6 +105,7 @@ public class ComplexItemMeta {
 
         // get it again
         meta = item.getItemMeta();
+        dataContainer = meta.getPersistentDataContainer();
 
         writeVariables(VariableType.Priority.ABOVE_STATS, dataContainer, lore, true);
 
@@ -131,12 +132,15 @@ public class ComplexItemMeta {
         // Write ComplexEnchants
         dataContainer.set(ENCHANT_KEY, new SerializedPersistentType<HashMap>(), complexEnchMap);
 
+
+
         // Clear vanilla enchantments
         for (Enchantment enchant:
              Enchantment.values()) {
             meta.removeEnchant(enchant);
         }
 
+        // Apply custom enchantments
         for (Map.Entry<ComplexEnchantment, Integer> e : this.complexEnchantments.entrySet()) {
             ChatColor color = ChatColor.GRAY;
             String enchantName = e.getKey().getName().toString();
@@ -147,8 +151,6 @@ public class ComplexItemMeta {
             // Apply vanilla enchant if it has
             if(e.getKey().getVanillaEnchant() != null) meta.addEnchant(e.getKey().getVanillaEnchant(), e.getValue(), true);
         }
-
-        Util.logToConsole("Write | ComplexEnch: " + complexEnchantments);
 
         if (!this.complexEnchantments.isEmpty()) lore.entry(new LoreEntry("newline", List.of("")));
 
@@ -165,6 +167,7 @@ public class ComplexItemMeta {
         meta.setLore(lore.build());
 
         dataContainer.set(ComplexItem.GLOW_ID, PersistentDataType.INTEGER, complexItemStack.getComplexItem().doesGlow() ? 1 : 0);
+
 
         // Finally, set the meta
         item.setItemMeta(meta);
@@ -195,7 +198,6 @@ public class ComplexItemMeta {
         // apply minecraft's attributes
         if (Objects.nonNull(meta.getAttributeModifiers())) meta.getAttributeModifiers().forEach((attribute, modifier) -> modifierList.add(AttributeModifier.of(attribute, modifier)));
 
-        Util.logToConsole("Read | hasComplexAttributes: " + hasComplexAttributes);
         // apply aurelium stats
         if(hasComplexAttributes){
             modifierList.addAll(dataContainer.get(ATTRIBUTE_KEY,  new ArrayListType<AttributeModifier>())
@@ -215,13 +217,10 @@ public class ComplexItemMeta {
 
         // Read Enchantments
         HashMap<String, Integer> complexEnchMap = dataContainer.has(ENCHANT_KEY, new SerializedPersistentType<>()) ? dataContainer.get(ENCHANT_KEY, new SerializedPersistentType<>()) : new HashMap<>();
-        Util.logToConsole("Read | ComplexEnchMap: " + complexEnchMap);
-        Util.logToConsole("Read | Item has ComplexEnchMap: " + dataContainer.has(ENCHANT_KEY, new SerializedPersistentType<>()));
 
         for (Map.Entry<String, Integer> entry: complexEnchMap.entrySet()){
             this.complexEnchantments.put(ComplexEnchantment.byId(entry.getKey()), entry.getValue());
         }
-        Util.logToConsole("Read | ComplexEnch: " + complexEnchantments);
 
         dataContainer.getKeys().stream()
                 .filter(namespacedKey -> namespacedKey.getKey().startsWith(VAR_PREFIX))
