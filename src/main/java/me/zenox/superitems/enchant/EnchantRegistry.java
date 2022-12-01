@@ -449,7 +449,7 @@ public class EnchantRegistry {
         SMITE(EnchantRegistry.SMITE), SOUL_SPEED(EnchantRegistry.SOUL_SPEED), SWEEPING_EDGE(EnchantRegistry.SWEEPING_EDGE),
         SWIFT_SNEAK(EnchantRegistry.SWIFT_SNEAK), THORNS(EnchantRegistry.THORNS), UNBREAKING(EnchantRegistry.UNBREAKING),
 
-        CULLING(EnchantRegistry.CULLING), DARKSOUL(EnchantRegistry.DARKSOUL), SIPHON(EnchantRegistry.SIPHON);
+        CULLING(EnchantRegistry.CULLING), DARKSOUL(EnchantRegistry.DARKSOUL), SIPHON(EnchantRegistry.SIPHON), SNIPE(EnchantRegistry.SNIPE);
 
         private ComplexEnchantment complexEnchantment;
 
