@@ -48,6 +48,14 @@ public class EnchantRegistry {
             .executable(EnchantRegistry::cullingExecutable)
             .exclusive(EnchantmentWrapper.KNOCKBACK));
 
+    public static ComplexEnchantment SNIPE = new AttackEnchantment(new EnchantmentSettings()
+            .id("snipe")
+            .maxLevel(3)
+            .rarity(10)
+            .type(ComplexItem.Type.BOW)
+            .slot(Slot.MAIN_HAND)
+            .executable(EnchantRegistry::snipeExecutable));
+
     // Vanilla Enchantments
     // maybe make a mine enchant?
 
@@ -410,6 +418,15 @@ public class EnchantRegistry {
         EntityDamageByEntityEvent event = ((EntityDamageByEntityEvent) e);
         Entity entity = event.getEntity();
         entity.setVelocity(entity.getVelocity().add(event.getDamager().getLocation().getDirection().normalize().multiply(-1/2f*level)));
+    }
+
+    // Snipe - Multiplies projectile damage by 0.005x->0.015x per block of distance between target and player, capped at 0.3x->0.5x
+    private static void snipeExecutable(Event e, Integer level, ItemStack item, Player p) {
+        EntityDamageByEntityEvent event = ((EntityDamageByEntityEvent) e);
+        Entity entity = event.getEntity();
+        double distance = p.getLocation().distance(entity.getLocation());
+        double buff = Math.min((0.005 * level) * distance, 0.2 + 0.1 * level) + 1;
+        event.setDamage(event.getDamage() * buff);
     }
 
     public static void registerEnchants() {

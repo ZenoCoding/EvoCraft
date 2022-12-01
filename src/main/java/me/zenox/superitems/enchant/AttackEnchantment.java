@@ -25,4 +25,5 @@ public class AttackEnchantment extends ComplexEnchantment{
     Player getPlayerOfEvent(Event e) {
         return ((Player) ((EntityDamageByEntityEvent) e).getDamager());
     }
+
 }
