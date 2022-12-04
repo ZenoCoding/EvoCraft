@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  *
  */
 
-public class ComplexItemMeta {
+public class ComplexItemMeta implements Cloneable{
     public static final NamespacedKey ABILITY_ID = new NamespacedKey(SuperItems.getPlugin(), "ability");
     public static final String VAR_PREFIX = "var_";
     public static final String ATTRIBUTE_BASE_KEY = "base";
@@ -342,5 +342,14 @@ public class ComplexItemMeta {
 
     public List<AttributeModifier> getModifierList() {
         return modifierList;
+    }
+
+    @Override
+    protected ComplexItemMeta clone(){
+        try {
+            return ((ComplexItemMeta) super.clone());
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Cloning not supported here! o_O");
+        }
     }
 }

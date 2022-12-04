@@ -28,7 +28,7 @@ import java.util.UUID;
  * <p>
  * Planned for future implementation
  */
-public class ComplexItemStack {
+public class ComplexItemStack implements Cloneable{
 
     private final ComplexItem complexItem;
     private final UUID uuid;
@@ -150,5 +150,12 @@ public class ComplexItemStack {
 
     public ComplexItemMeta getComplexMeta() {
         return complexMeta;
+    }
+
+    @Override
+    public ComplexItemStack clone() {
+        ComplexItemStack clone = new ComplexItemStack(this.complexItem, this.item.getAmount());
+        clone.complexMeta = clone.complexMeta.clone();
+        return clone;
     }
 }
