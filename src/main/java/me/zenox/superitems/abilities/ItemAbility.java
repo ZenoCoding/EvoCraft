@@ -680,6 +680,13 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 0, 1);
     }
 
+    public static void consumeAbility(Event event, Player p, ItemStack item) {
+        item.setAmount(item.getAmount()-1);
+        Util.sendActionBar(p, ChatColor.GOLD + "" + ChatColor.BOLD + "CONSUMED " + ChatColor.RESET + "" + ChatColor.BLUE + "Gilded Carrot");
+        p.setFoodLevel(20);
+        p.setSaturation(50);
+    }
+
     public enum AbilityAction {
 
         LEFT_CLICK_BLOCK("LEFT CLICK", new Action[]{Action.LEFT_CLICK_BLOCK}, false), LEFT_CLICK_AIR("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR}, false), LEFT_CLICK_ALL("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, false), SHIFT_LEFT_CLICK("SHIFT LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, true),

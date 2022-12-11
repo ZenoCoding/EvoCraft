@@ -36,7 +36,7 @@ public abstract class Ability implements Serializable {
     private final Slot slot;
     private TranslatableList lore;
 
-    private transient TriConsumer<Event, Player, ItemStack> executable;
+    private TriConsumer<Event, Player, ItemStack> executable;
 
     protected Ability(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot) {
         this(id, manaCost, cooldown, eventType, slot, true);

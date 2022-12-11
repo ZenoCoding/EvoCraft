@@ -2,8 +2,6 @@ package me.zenox.superitems.abilities;
 
 import me.zenox.superitems.Slot;
 import me.zenox.superitems.SuperItems;
-import me.zenox.superitems.item.ComplexItem;
-import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.util.Geo;
 import me.zenox.superitems.util.TriConsumer;
 import me.zenox.superitems.util.Util;
@@ -55,12 +53,9 @@ public class AttackAbility extends Ability {
     // Static ability executables
     public static void justiceAbility(Event event, Player p, ItemStack item) {
         EntityDamageByEntityEvent e = ((EntityDamageByEntityEvent) event);
-        ComplexItem complexItem = ItemRegistry.byItem(item);
-        //if (!(complexItem == null) && complexItem.getId().equalsIgnoreCase("sword_of_justice") && e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 0));
         p.playSound(p.getLocation(), Sound.ITEM_AXE_SCRAPE, 1, 1.4f);
         if (new Random().nextInt(3) == 0) e.getEntity().getWorld().strikeLightning(e.getEntity().getLocation());
-        //}
     }
 
     public static void darkFuryAbility(Event event, Player p, ItemStack item) {

@@ -298,7 +298,7 @@ public class ItemRegistry {
 
 
     public static final ComplexItem CHROMOTONIN = new ComplexItem(new ItemSettings()
-            .id ("chromotonin")
+            .id("chromotonin")
             .material(Material.LEAD)
             .rarity(ComplexItem.Rarity.OMEGA)
             .type(ComplexItem.Type.MISC));
@@ -427,6 +427,12 @@ public class ItemRegistry {
             .id("burning_smoke")
             .material(Material.GLASS_BOTTLE));
 
+    public static final ComplexItem GILDED_CARROT = new ComplexItem(new ItemSettings()
+            .id("gilded_carrot")
+            .material(Material.GOLDEN_CARROT)
+            .ability(AbilityRegistry.GILDED_CONSUME)
+            .rarity(ComplexItem.Rarity.RARE));
+
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
     @Deprecated
@@ -475,5 +481,4 @@ public class ItemRegistry {
         }
         return null;
     }
-
 }

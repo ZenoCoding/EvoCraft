@@ -105,6 +105,8 @@ item-name-burning_boots: Burning Boots
 
 item-name-burning_smoke: Burning Smoke
 
+item-name-gilded_carrot: Gilded Carrot
+
 ##########################################################################
 ##                              ITEM LORE                               ##
 ##########################################################################
@@ -268,6 +270,9 @@ item-lore-burning_leggings:
 item-lore-burning_boots:
   - "Burning through hell."
 
+item-lore-gilded_carrot:
+  - "Really tasty!"
+
 ##########################################################################
 ##                              ABILITIES                               ##
 ##########################################################################
@@ -388,6 +393,11 @@ ability-name-lava_glider: Lava Glider
 
 ability-lore-lava_glider:
   - "While moving on or over &clava, multiply your speed by &a1.5x."
+
+ability-name-gilded_consume: Consume
+
+ability-lore-gilded_consume:
+  - "Refills all of your &6hunger &7bars, and then also grants &a50 &6saturation&7!"
 
 ##########################################################################
 ##                             ENCHANTMENTS                             ##
