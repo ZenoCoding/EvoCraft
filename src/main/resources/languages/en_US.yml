@@ -448,6 +448,45 @@ enchant-name-swift_sneak: Swift Sneak
 enchant-name-thorns: Thorns
 enchant-name-unbreaking: Unbreaking
 
+# Vanilla Enchantments
+enchant-name-aqua_affinity: Aqua Affinity
+enchant-name-bane_of_arthropods: Bane of Arthropods
+enchant-name-blast_protection: Blast Protection
+enchant-name-channeling: Channeling
+enchant-name-depth_strider: Depth Strider
+enchant-name-efficiency: Efficiency
+enchant_name-feather_falling: Feather Falling
+enchant-name-fire_aspect: Fire Aspect
+enchant-name-fire_protection: Fire Protection
+enchant-name-flame: Flame
+enchant-name-fortune: Fortune
+enchant-name-frost_walker: Frost Walker
+enchant-name-impaling: Impaling
+enchant-name-infinity: Infinity
+enchant-name-knockback: Knockback
+enchant-name-looting: Looting
+enchant-name-loyalty: Loyalty
+enchant-name-luck_of_the_sea: Luck of the Sea
+enchant-name-lure: Lure
+enchant-mending: Mending
+enchant-name-multishot: Multishot
+enchant-name-piercing: Piercing
+enchant-name-power: Power
+enchant-name-projectile_protection: Projectile Protection
+enchant-name-protection: Protection
+enchant-name-punch: Punch
+enchant-name-quick_charge: Quick Charge
+enchant-name-respiration: Respiration
+enchant-name-riptide: Riptide
+enchant-name-sharpness: Sharpness
+enchant-name-silk_touch: Silk Touch
+enchant-name-smite: Smite
+enchant-name-soul_speed: Soul Speed
+enchant-name-sweeping_edge: Sweeping Edge
+enchant-name-swift_sneak: Swift Sneak
+enchant-name-thorns: Thorns
+enchant-name-unbreaking: Unbreaking
+
 ##########################################################################
 ##                                GUIS                                  ##
 ##########################################################################

@@ -649,6 +649,8 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                 Location giantLocation = arr.getLocation();
                 giantLocation.setY(arr.getLocation().getY()-1);
                 giant.teleport(giantLocation);
+                giant.setFireTicks(0);
+                giant.setVisualFire(false);
 
                 if(arr.isInBlock() && !contacted){
                     contacted = true;

@@ -4,15 +4,15 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.item.ComplexItemStack;
-import me.zenox.superitems.item.ItemRegistry;
+import me.zenox.superitems.item.VanillaItem;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Objects;
 
-public class ComplexChoice implements RecipeChoice {
+public class ComplexChoice {
 
     private Map<ComplexItem, Integer> choices;
 
@@ -26,6 +26,21 @@ public class ComplexChoice implements RecipeChoice {
         this(Map.of(complexItem, amount));
     }
 
+    public ComplexChoice(@NotNull Material material, Integer amount) {
+        this(Map.of(VanillaItem.of(material), amount));
+    }
+
+    public ComplexChoice(@NotNull ComplexItem complexItem) {
+        this(Map.of(complexItem, 1));
+    }
+
+    public ComplexChoice(@NotNull ComplexItemStack itemStack){
+        this(Map.of(itemStack.getComplexItem(), itemStack.getItem().getAmount()));
+    }
+    public ComplexChoice(@NotNull Material material) {
+        this(Map.of(VanillaItem.of(material), 1));
+    }
+
     public ComplexChoice(@NotNull Map<ComplexItem, Integer> choices) {
         Preconditions.checkArgument(choices != null, "choices");
         Preconditions.checkArgument(!choices.isEmpty(), "Must have at least one choice");
@@ -37,9 +52,13 @@ public class ComplexChoice implements RecipeChoice {
     }
 
     @NotNull
-    @Override
     public ItemStack getItemStack() {
-        return ItemRegistry.byId(((Map.Entry<String, Integer>) choices.entrySet().toArray()[0]).getKey()).getItemStack(((Map.Entry<String, Integer>) choices.entrySet().toArray()[0]).getValue());
+        return new ComplexItemStack(((Map.Entry<ComplexItem, Integer>) choices.entrySet().toArray()[0]).getKey(), ((Map.Entry<ComplexItem, Integer>) choices.entrySet().toArray()[0]).getValue()).getItem();
+    }
+
+    @NotNull
+    public int getAmount(){
+        return ((Map.Entry<ComplexItem, Integer>) choices.entrySet().toArray()[0]).getValue();
     }
 
     public Map<ComplexItem, Integer> getChoices() {
@@ -57,14 +76,13 @@ public class ComplexChoice implements RecipeChoice {
         }
     }
 
-    @Override
     public boolean test(@NotNull ItemStack t) {
+        ComplexItem cItem = ComplexItemStack.of(t).getComplexItem();
         for (Map.Entry<ComplexItem, Integer> match : choices.entrySet()) {
-            if (ComplexItemStack.of(t).getComplexItem().equals(match) && (t.getAmount() == match.getValue() || match.getValue() == -1)) {
+            if (cItem.equals(match.getKey()) && (t.getAmount() >= match.getValue() || match.getValue() == -1)) {
                 return true;
             }
         }
-
         return false;
     }
 

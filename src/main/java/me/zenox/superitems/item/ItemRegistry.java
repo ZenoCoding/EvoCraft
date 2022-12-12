@@ -447,7 +447,6 @@ public class ItemRegistry {
                 Bukkit.addRecipe(recipe);
             } catch (IllegalStateException e) {
                 if (recipe instanceof Keyed) {
-                    //Util.logToConsole("Found duplicate recipe, re-adding.");
                     Bukkit.removeRecipe(((Keyed) recipe).getKey());
                     Bukkit.addRecipe(recipe);
                 }
