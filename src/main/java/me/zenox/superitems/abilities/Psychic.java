@@ -18,7 +18,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -48,9 +47,8 @@ public class Psychic extends ItemAbility implements Listener {
     }
 
     @Override
-    public void runExecutable(Event event, Player p, ItemStack item) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        e.setCancelled(true);
+    public void runExecutable(PlayerInteractEvent event, Player p, ItemStack item) {
+        event.setCancelled(true);
         PersistentDataContainer dataContainer = p.getPersistentDataContainer();
 
         LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(p);
@@ -63,7 +61,7 @@ public class Psychic extends ItemAbility implements Listener {
             return;
         }
 
-        e.getItem().setAmount(e.getItem().getAmount() - 1);
+        event.getItem().setAmount(event.getItem().getAmount() - 1);
 
         NamespacedKey key = new NamespacedKey(SuperItems.getPlugin(), "psychic_wisdom_buff");
         int count = 0;

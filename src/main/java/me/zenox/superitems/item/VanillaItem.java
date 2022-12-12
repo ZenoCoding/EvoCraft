@@ -64,7 +64,7 @@ public class VanillaItem extends ComplexItem {
 
     public static void registerItems(){
         Arrays.stream(Material.values()).filter(material -> material.isItem()).forEach(material -> new VanillaItem(material));
-        Util.logToConsole(ChatColor.WHITE + "Registered " + ChatColor.GOLD + Material.values().length + ChatColor.WHITE + " vanilla based ComplexItems.");
+        Util.logToConsole(ChatColor.WHITE + "Registering " + ChatColor.GOLD + Material.values().length + ChatColor.WHITE + " vanilla based ComplexItems.");
     }
 
 }

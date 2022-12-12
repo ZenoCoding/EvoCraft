@@ -7,7 +7,6 @@ import org.bukkit.*;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -41,8 +40,7 @@ public class Crucify extends ItemAbility implements Listener {
     }
 
     @Override
-    public void runExecutable(Event event, Player p, ItemStack item) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+    public void runExecutable(PlayerInteractEvent event, Player p, ItemStack item) {
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 3));
         p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_DEATH, 2f, 0.7f);

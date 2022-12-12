@@ -1,7 +1,9 @@
 package me.zenox.superitems.abilities;
 
+import com.archyx.aureliumskills.api.AureliumAPI;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
+import com.google.common.primitives.Doubles;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
@@ -14,6 +16,7 @@ import com.ticxo.modelengine.api.model.ModeledEntity;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import me.zenox.superitems.Slot;
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.item.ComplexItemMeta;
 import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.persistence.NBTEditor;
@@ -23,7 +26,6 @@ import me.zenox.superitems.util.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
-import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -42,34 +44,50 @@ import java.util.*;
 import static me.zenox.superitems.item.ItemRegistry.TOTEM_POLE;
 import static me.zenox.superitems.util.Util.getNearbyBlocks;
 
-public class ItemAbility extends Ability {
+public class ItemAbility extends Ability<PlayerInteractEvent> {
     private static final int SHARD_SPEED = 3;
     private static final int SHARD_RADIUS = 3;
     private final AbilityAction action;
 
+    public ItemAbility(AbilitySettings settings) {
+        super(settings);
+        if(settings.getAbilityAction() == AbilityAction.NONE){
+            throw new IllegalArgumentException("Action cannot be NONE");
+        }
+        this.action = settings.getAbilityAction();
+    }
+
+    public ItemAbility(AbilitySettings settings, TriConsumer<PlayerInteractEvent, Player, ItemStack> executable) {
+        super(settings, executable);
+        if(settings.getAbilityAction() == AbilityAction.NONE){
+            throw new IllegalArgumentException("Action cannot be NONE");
+        }
+        this.action = settings.getAbilityAction();
+    }
+
     public ItemAbility(String id, AbilityAction action, int manaCost, double cooldown) {
-        super(id, manaCost, cooldown, PlayerInteractEvent.class, Slot.EITHER_HAND);
+        super(id, manaCost, cooldown, Slot.EITHER_HAND);
         this.action = action;
     }
 
     public ItemAbility(String id, AbilityAction action, int manaCost, double cooldown, Slot slot) {
-        super(id, manaCost, cooldown, PlayerInteractEvent.class, slot);
+        super(id, manaCost, cooldown, slot);
         this.action = action;
     }
 
-    public ItemAbility(String id, AbilityAction action, int manaCost, double cooldown, TriConsumer<Event, Player, ItemStack> exectuable) {
-        super(id, manaCost, cooldown, PlayerInteractEvent.class, Slot.EITHER_HAND, exectuable);
+    public ItemAbility(String id, AbilityAction action, int manaCost, double cooldown, TriConsumer<PlayerInteractEvent, Player, ItemStack> exectuable) {
+        super(id, manaCost, cooldown, Slot.EITHER_HAND, exectuable);
         this.action = action;
     }
 
     @Override
-    Player getPlayerOfEvent(Event e) {
-        return ((PlayerInteractEvent) e).getPlayer();
+    Player getPlayerOfEvent(PlayerInteractEvent e) {
+        return e.getPlayer();
     }
 
     @Override
-    List<ItemStack> getItem(Player p, Event e) {
-        return Arrays.stream(new ItemStack[]{((PlayerInteractEvent) e).getItem()}).filter(Objects::nonNull).toList();
+    List<ItemStack> getItem(Player p, PlayerInteractEvent e) {
+        return Arrays.stream(new ItemStack[]{e.getItem()}).filter(Objects::nonNull).toList();
     }
 
     public AbilityAction getAction() {
@@ -77,17 +95,15 @@ public class ItemAbility extends Ability {
     }
 
     @Override
-    public boolean checkEvent(Event event) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        return action.isAction(e.getAction(), e.getPlayer().isSneaking());
+    public boolean checkEvent(PlayerInteractEvent event) {
+        return action.isAction(event.getAction(), event.getPlayer().isSneaking());
     }
 
     /**
      * Represents some static executables
      */
-    public static void soulRiftAbility(Event event, Player p, ItemStack item) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        Action action = e.getAction();
+    public static void soulRiftAbility(PlayerInteractEvent event, Player p, ItemStack item) {
+        Action action = event.getAction();
         World w = p.getWorld();
         Location loc;
         boolean allowed = true;
@@ -103,9 +119,9 @@ public class ItemAbility extends Ability {
             return;
         }
 
-        e.setCancelled(true);
+        event.setCancelled(true);
 
-        if (action.equals(Action.RIGHT_CLICK_BLOCK)) loc = Objects.requireNonNull(e.getClickedBlock()).getLocation();
+        if (action.equals(Action.RIGHT_CLICK_BLOCK)) loc = Objects.requireNonNull(event.getClickedBlock()).getLocation();
         else if (action.equals(Action.RIGHT_CLICK_AIR)) loc = p.getLocation();
         else return;
 
@@ -185,8 +201,7 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 0, 0);
     }
 
-    public static void magicMissileAbility(Event event, Player p, ItemStack item, Boolean combustion, Integer explosionPower) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+    public static void magicMissileAbility(PlayerInteractEvent event, Player p, ItemStack item, Boolean combustion, Integer explosionPower) {
         Random r = new Random();
         World w = p.getWorld();
 
@@ -209,7 +224,7 @@ public class ItemAbility extends Ability {
 
         // 20% chance to remove an item from their hand
         if (r.nextInt(5) == 0 && combustion) {
-            item.setAmount(e.getItem().getAmount() - 1);
+            item.setAmount(event.getItem().getAmount() - 1);
             Util.sendMessage(p, ChatColor.GOLD + "Woah! Your " + ChatColor.ITALIC + "Magic Toy Stick " + ChatColor.GOLD + "combusted in your hand!", false);
             p.damage(5, p);
             p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 0.5F);
@@ -301,11 +316,10 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 0, 2);
     }
 
-    public static void centralizeAbility(Event event, Player p, ItemStack item, Boolean corrupted, Integer duration) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+    public static void centralizeAbility(PlayerInteractEvent event, Player p, ItemStack item, Boolean corrupted, Integer duration) {
         World w = p.getWorld();
         Location loc = p.getLocation();
-        if (e.getClickedBlock() != null) loc = e.getClickedBlock().getLocation().add(0.5, 1, 0.5);
+        if (event.getClickedBlock() != null) loc = event.getClickedBlock().getLocation().add(0.5, 1, 0.5);
 
         final Random r = new Random();
 
@@ -344,7 +358,7 @@ public class ItemAbility extends Ability {
             if (uses == 0) {
                 Location highestblockpos = w.getHighestBlockAt(loc.getBlockX(), loc.getBlockZ()).getLocation().add(0, 1, 0);
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm m spawn -s Demiser 1 " + w.getName() + "," + highestblockpos.getX() + "," + highestblockpos.getY() + "," + highestblockpos.getZ());
-                p.getInventory().setItem(e.getHand(), TOTEM_POLE.getItemStack(1));
+                p.getInventory().setItem(event.getHand(), TOTEM_POLE.getItemStack(1));
             } else {
                 List<String> lore = meta.getLore();
                 for (String loreitem : lore) {
@@ -463,16 +477,8 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 3, 1);
     }
 
-    public static void obsidianShardAbility(Event event, Player p, ItemStack item) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+    public static void obsidianShardAbility(PlayerInteractEvent event, Player p, ItemStack item) {
         World w = p.getWorld();
-
-        for (float i = 0; i < 3; i++) {
-            i += .5;
-            shootShard(p, new Vector(Math.cos((i) * (Math.PI / 4)) * SHARD_RADIUS, Math.sin((i) * (Math.PI / 3)) * SHARD_RADIUS, 0d).rotateAroundY(p.getLocation().getYaw() % 180).toLocation(p.getWorld()), (i + 1) * 0.2);
-            i -= .5;
-        }
-
         shootShard(p, new Location(p.getWorld(), 0, 1.8, 0), 0);
     }
 
@@ -494,12 +500,16 @@ public class ItemAbility extends Ability {
         arrow.setCritical(false);
         arrow.setDamage(0d);
 
+        // Hide the arrow
+        PacketContainer destroyArrow = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
+        destroyArrow.getModifier()
+                .write(0, new IntArrayList(new int[]{arrow.getEntityId()}));
+
+        SuperItems.getPlugin().getProtocolManager().broadcastServerPacket(destroyArrow);
+
         ModeledEntity shard = ModelEngineAPI.createModeledEntity(arrow);
         shard.addModel(ModelEngineAPI.createActiveModel("obsidianshard"), true);
         shard.getLookController().setBodyYaw(p.getLocation().getYaw());
-//        Util.sendMessage(p, "Yaw: " + p.getLocation().getYaw());
-//        Util.sendMessage(p, "Pitch: " + p.getLocation().getPitch());
-        //shard.getLookController().setPitch(p.getLocation().getPitch());
         shard.getModel("obsidianshard").setLockPitch(true);
         shard.getModel("obsidianshard").setLockYaw(true);
 
@@ -549,12 +559,9 @@ public class ItemAbility extends Ability {
                     arrow.remove();
                     cancel();
                 } else {
-                    for (int i = 0; i < 2; i++) {
-                        w.spawnParticle(Particle.SQUID_INK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
-                        w.spawnParticle(Particle.REVERSE_PORTAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
-                        w.spawnParticle(Particle.BLOCK_CRACK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2, Material.OBSIDIAN.createBlockData());
-                        w.spawnParticle(Particle.SMOKE_NORMAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
-                    }
+                    w.spawnParticle(Particle.REVERSE_PORTAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
+                    w.spawnParticle(Particle.BLOCK_CRACK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2, Material.OBSIDIAN.createBlockData());
+                    w.spawnParticle(Particle.SMOKE_NORMAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
                 }
 
                 count = count + 1;
@@ -563,8 +570,7 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 0, 1);
     }
 
-    public static void tarhelmAbility(Event event, Player p, ItemStack item) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+    public static void tarhelmAbility(PlayerInteractEvent event, Player p, ItemStack item) {
         p.playSound(p.getLocation(), Sound.ENTITY_RAVAGER_ATTACK, 1, 0);
         p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 3));
         p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 300, 0));
@@ -572,8 +578,7 @@ public class ItemAbility extends Ability {
     }
 
 
-    public static void darkcallerAbility(Event event, Player p, ItemStack item) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+    public static void darkcallerAbility(PlayerInteractEvent event, Player p, ItemStack item) {
         World w = p.getWorld();
 
         LocalPlayer localPlayer;
@@ -616,8 +621,7 @@ public class ItemAbility extends Ability {
 
     }
 
-    public static void terraStrikeAbility(Event event, Player p, ItemStack item) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+    public static void terraStrikeAbility(PlayerInteractEvent event, Player p, ItemStack item) {
         Location loc = p.getLocation();
         Random r = new Random();
         Arrow arr = p.getWorld().spawnArrow(p.getEyeLocation(), loc.getDirection(), 2f, 0);
@@ -680,17 +684,160 @@ public class ItemAbility extends Ability {
         }.runTaskTimer(SuperItems.getPlugin(), 0, 1);
     }
 
-    public static void consumeAbility(Event event, Player p, ItemStack item) {
+    public static void consumeAbility(PlayerInteractEvent event, Player p, ItemStack item) {
         item.setAmount(item.getAmount()-1);
         Util.sendActionBar(p, ChatColor.GOLD + "" + ChatColor.BOLD + "CONSUMED " + ChatColor.RESET + "" + ChatColor.BLUE + "Gilded Carrot");
         p.setFoodLevel(20);
         p.setSaturation(50);
     }
 
+    public static void voidWarpAbility(PlayerInteractEvent event, Player p, ItemStack item) {
+        Random r = new Random();
+
+        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 0.6f);
+
+        new BukkitRunnable() {
+            int count = 0;
+
+            @Override
+            public void run() {
+                if (count >= 20) {
+                    p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 0.8f);
+
+                    Block endblock = p.getTargetBlockExact(75, FluidCollisionMode.NEVER);
+                    Vector dir = p.getLocation().getDirection();
+                    if (endblock == null) {
+                        p.teleport(p.getLocation().add(dir.normalize().multiply(75)).add(0, 1, 0).setDirection(dir));
+                    } else {
+                        p.teleport(endblock.getLocation().add(0, 1, 0).setDirection(dir));
+                    }
+                    cancel();
+                }
+
+                if (count % 4 == 0) p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_HURT, 1, 1.4f);
+
+                for (int i = 0; i < 4; i++) {
+                    Location loc = p.getLocation().clone().add(r.nextDouble() - 0.5, r.nextDouble() + 0.1, r.nextDouble() - 0.5);
+                    World w = p.getWorld();
+                    w.spawnParticle(Particle.ELECTRIC_SPARK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
+                    w.spawnParticle(Particle.BLOCK_CRACK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2, Material.OBSIDIAN.createBlockData());
+                    w.spawnParticle(Particle.REVERSE_PORTAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
+                    w.spawnParticle(Particle.BLOCK_CRACK, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2, Material.OBSIDIAN.createBlockData());
+                    w.spawnParticle(Particle.SMOKE_NORMAL, loc, 0, r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
+                }
+                count++;
+            }
+        }.runTaskTimer(SuperItems.getPlugin(), 5, 1);
+    }
+
+    public static void voidularRecallAbility(PlayerInteractEvent event, Player p, ItemStack item) {
+        Random r = new Random();
+        Location locationOfBlock;
+
+
+        PersistentDataContainer container = p.getPersistentDataContainer();
+        NamespacedKey locationKey = new NamespacedKey(SuperItems.getPlugin(), "voidular_recall");
+        if (container.has(locationKey, PersistentDataType.STRING)) {
+            String locationString = container.get(locationKey, PersistentDataType.STRING);
+            List<String> locationStringList = List.of(locationString.split("\\|"));
+            container.remove(locationKey);
+            locationOfBlock = new Location(p.getServer().getWorld(locationStringList.get(0)), Doubles.tryParse(locationStringList.get(1)), Doubles.tryParse(locationStringList.get(2)), Doubles.tryParse(locationStringList.get(3)));
+
+            World w = p.getWorld();
+
+            w.playSound(p.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_DEATH, 2f, 0.7f);
+            w.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 2f, 0.8f);
+
+            for (int i = 0; i < 5; i++) {
+                w.spawnParticle(Particle.SCULK_SOUL, locationOfBlock.clone().add(r.nextDouble() - 0.5, 0.5, r.nextDouble() - 0.5), 0, r.nextDouble(), r.nextDouble(), r.nextDouble() - 0.5, 0.2);
+                w.spawnParticle(Particle.REVERSE_PORTAL, locationOfBlock.clone().add(r.nextDouble() - 0.5, 0.5, r.nextDouble() - 0.5), 0, r.nextDouble(), r.nextDouble(), r.nextDouble() - 0.5, 0.2);
+                w.spawnParticle(Particle.END_ROD, locationOfBlock.clone().add(r.nextDouble() - 0.5, 0.5, r.nextDouble() - 0.5), 0, r.nextDouble(), r.nextDouble(), r.nextDouble() - 0.5, 0.2);
+            }
+
+            try {
+                p.teleport(locationOfBlock);
+            } catch (Exception ignored) {
+
+            }
+
+
+            w.playSound(p.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_DEATH, 2f, 0.7f);
+            w.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 2f, 0.8f);
+        } else {
+            if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
+                locationOfBlock = p.getLocation().add(0, 1, 0);
+            } else {
+                locationOfBlock = event.getClickedBlock().getLocation();
+            }
+
+            String locationString = locationOfBlock.getWorld().getName() + "|" + locationOfBlock.getX() + "|" + locationOfBlock.getY() + "|" + locationOfBlock.getZ();
+            container.set(locationKey, PersistentDataType.STRING, locationString);
+
+            // Cosmetic Effects
+            p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_DEATH, 2f, 0.7f);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    World w = p.getWorld();
+                    w.spawnParticle(Particle.SCULK_SOUL, locationOfBlock.clone().add(r.nextDouble() - 0.5, 0.5, r.nextDouble() - 0.5), 0, r.nextDouble(), r.nextDouble() - 0.5, r.nextDouble() - 0.5, 0.2);
+
+                    if (!container.has(locationKey, PersistentDataType.STRING)) {
+                        cancel();
+                    }
+
+                }
+            }.runTaskTimer(SuperItems.getPlugin(), 0, 3);
+
+        }
+
+    }
+
+    public static void emberShootAbility(PlayerInteractEvent event, Player p, ItemStack item) {
+        ComplexItemMeta complexMeta = ComplexItemStack.of(item).getComplexMeta();
+
+        Location eyeLoc = p.getEyeLocation();
+
+        if(complexMeta.getVariable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE) == null) complexMeta.setVariable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE, EmberAttune.Attunement.BLAZEBORN);
+
+        if (complexMeta.getVariable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE).getValue().equals(EmberAttune.Attunement.BLAZEBORN)) {
+            Fireball f = (Fireball) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.FIREBALL);
+            f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, AureliumAPI.getMaxMana(event.getPlayer()) / 75)));
+            f.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
+            f.setMetadata("knockback", new FixedMetadataValue(SuperItems.getPlugin(), 1.5));
+            f.setShooter(p);
+            f.setYield(((float) AureliumAPI.getMaxMana(p)) / 100f);
+        } else if (complexMeta.getVariable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE).getValue().equals(EmberAttune.Attunement.DARKSOUL)) {
+            WitherSkull f = (WitherSkull) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.WITHER_SKULL);
+            f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, AureliumAPI.getMaxMana(event.getPlayer()) / 50)));
+            f.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
+            f.setShooter(p);
+            f.setYield(((float) AureliumAPI.getMaxMana(p)) / 60f);
+        }
+    }
+
+    public static void smallEmberShootAbility(PlayerInteractEvent event, Player p, ItemStack item) {
+
+        Location eyeLoc = p.getEyeLocation();
+
+        Fireball f = (Fireball) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.FIREBALL);
+        f.setVelocity(eyeLoc.getDirection().normalize());
+        f.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
+        f.setYield(1f);
+        f.setShooter(p);
+    }
+
     public enum AbilityAction {
 
-        LEFT_CLICK_BLOCK("LEFT CLICK", new Action[]{Action.LEFT_CLICK_BLOCK}, false), LEFT_CLICK_AIR("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR}, false), LEFT_CLICK_ALL("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, false), SHIFT_LEFT_CLICK("SHIFT LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, true),
-        RIGHT_CLICK_BLOCK("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR}, false), RIGHT_CLICK_AIR("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK}, false), RIGHT_CLICK_ALL("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR}, false), SHIFT_RIGHT_CLICK("SHIFT RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK}, true);
+        LEFT_CLICK_BLOCK("LEFT CLICK", new Action[]{Action.LEFT_CLICK_BLOCK}, false),
+        LEFT_CLICK_AIR("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR}, false),
+        LEFT_CLICK_ALL("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, false),
+        SHIFT_LEFT_CLICK("SHIFT LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, true),
+        RIGHT_CLICK_BLOCK("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR}, false),
+        RIGHT_CLICK_AIR("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK}, false),
+        RIGHT_CLICK_ALL("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR}, false),
+        SHIFT_RIGHT_CLICK("SHIFT RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK}, true),
+        NONE("", new Action[]{}, false);
 
         private final String name;
         private final Action[] actionList;

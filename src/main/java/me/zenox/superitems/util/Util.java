@@ -28,11 +28,11 @@ public class Util {
 
 
     public static void sendMessage(Player p, String message) {
-        sendMessage(p, message, true);
+        sendMessage(p, message, false);
     }
 
     public static void sendMessage(Player p, String message, boolean prefix) {
-        p.sendMessage(prefix ? ChatColor.GOLD + "[SuperItems] " + message : message);
+        p.sendMessage(prefix ? ChatColor.GOLD + "[SuperItems] " + ChatColor.WHITE + message : ChatColor.WHITE + message);
     }
 
     public static void sendMessage(CommandSender p, String message) {
@@ -40,7 +40,7 @@ public class Util {
     }
 
     public static void sendMessage(CommandSender p, String message, boolean prefix) {
-        p.sendMessage(prefix ? ChatColor.GOLD + "[SuperItems] " + message : message);
+        p.sendMessage(prefix ? ChatColor.GOLD + "[SuperItems] " + ChatColor.WHITE + message : ChatColor.WHITE + message);
     }
 
     public static void sendActionBar(Player p, String message) {
@@ -48,7 +48,7 @@ public class Util {
     }
 
     public static void logToConsole(String message) {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SuperItems] " + message);
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SuperItems] " + ChatColor.WHITE + message);
     }
 
     public static void broadcast(String message) {
@@ -56,7 +56,7 @@ public class Util {
     }
 
     public static void broadcast(String message, Boolean prefix) {
-        Bukkit.broadcastMessage(prefix ? ChatColor.GOLD + "[SuperItems] " + message : message);
+        Bukkit.broadcastMessage(prefix ? ChatColor.GOLD + "[SuperItems] " + ChatColor.WHITE + message : ChatColor.WHITE + message);
     }
 
     @NotNull

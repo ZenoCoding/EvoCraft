@@ -386,13 +386,13 @@ ability-lore-terra_strike:
 ability-name-roaring_flame: Roaring Flame
 
 ability-lore-roaring_flame:
-  - "&cIgnites &7 your opponent for &a4s."
+  - "Upon attacking, &cignite &7your opponent for &a4s."
   - "Stacks with &cFire Aspect."
 
 ability-name-lava_glider: Lava Glider
 
 ability-lore-lava_glider:
-  - "While moving on or over &clava, multiply your speed by &a1.5x."
+  - "While moving on or over &clava&7, multiply your speed by &a1.5x."
 
 ability-name-gilded_consume: Consume
 

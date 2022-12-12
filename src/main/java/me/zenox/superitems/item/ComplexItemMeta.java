@@ -5,6 +5,7 @@ import com.archyx.aureliumskills.modifier.StatModifier;
 import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
+import me.zenox.superitems.abilities.FullSetArmorAbility;
 import me.zenox.superitems.abilities.ItemAbility;
 import me.zenox.superitems.attribute.AttributeModifier;
 import me.zenox.superitems.attribute.types.AureliumAttribute;
@@ -251,7 +252,7 @@ public class ComplexItemMeta {
     private void writeAbilityLore(LoreBuilder loreBuilder) {
         for (Ability ability : this.abilities) {
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GOLD + "Ability: " + ability.getDisplayName() + ChatColor.YELLOW + ChatColor.BOLD + " " + (ability instanceof ItemAbility ? ((ItemAbility) ability).getAction().getName() : ""));
+            lore.add(ChatColor.GOLD + (ability.isPassive() ? "Passive " : "") + (ability instanceof FullSetArmorAbility ? "Full Set " : "") + "Ability: " + ability.getDisplayName() + ChatColor.YELLOW + ChatColor.BOLD + " " + (ability instanceof ItemAbility ? ((ItemAbility) ability).getAction().getName() : ""));
             lore.addAll(ability.getLore());
 
             if (ability.getManaCost() > 0)
@@ -297,6 +298,7 @@ public class ComplexItemMeta {
             variableList.add(new Variable(this, type, value));
         else
             variableList.stream().filter(variable -> variable.getType() == type).forEach(variable -> variable.setValue(value));
+        updateItem();
     }
 
     // Gets the first variable of that variable type

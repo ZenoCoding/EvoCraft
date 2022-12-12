@@ -8,7 +8,6 @@ import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -27,8 +26,7 @@ public class EmberAttune extends ItemAbility {
     }
 
     @Override
-    public void runExecutable(Event event, Player p, ItemStack item) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
+    public void runExecutable(PlayerInteractEvent event, Player p, ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         ComplexItemMeta complexMeta = ComplexItemStack.of(item).getComplexMeta();
 

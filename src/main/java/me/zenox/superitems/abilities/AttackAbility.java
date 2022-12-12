@@ -7,7 +7,6 @@ import me.zenox.superitems.util.TriConsumer;
 import me.zenox.superitems.util.Util;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -21,56 +20,54 @@ import org.bukkit.util.Vector;
 import java.util.List;
 import java.util.Random;
 
-public class AttackAbility extends Ability {
+public class AttackAbility extends Ability<EntityDamageByEntityEvent> {
 
-    public AttackAbility(String id, int manaCost, double cooldown) {
-        super(id, manaCost, cooldown, EntityDamageByEntityEvent.class, Slot.MAIN_HAND);
+
+    public AttackAbility(AbilitySettings settings) {
+        super(settings);
     }
 
-    public AttackAbility(String id, int manaCost, double cooldown, Slot slot) {
-        super(id, manaCost, cooldown, EntityDamageByEntityEvent.class, slot);
+    public AttackAbility(AbilitySettings settings, TriConsumer<EntityDamageByEntityEvent, Player, ItemStack> executable) {
+        super(settings, executable);
     }
 
-    public AttackAbility(String id, int manaCost, double cooldown, TriConsumer<Event, Player, ItemStack> exectuable) {
-        super(id, manaCost, cooldown, EntityDamageByEntityEvent.class, Slot.MAIN_HAND, exectuable);
-    }
-
-    @Override
-    protected boolean checkEvent(Event e) {
-        return e instanceof EntityDamageByEntityEvent event && event.getDamager() instanceof Player && !Util.isInvulnerable(event.getEntity());
+    public AttackAbility(String id, int manaCost, double cooldown, TriConsumer<EntityDamageByEntityEvent, Player, ItemStack> exectuable) {
+        super(id, manaCost, cooldown, Slot.MAIN_HAND, exectuable);
     }
 
     @Override
-    Player getPlayerOfEvent(Event e) {
-        return ((Player) ((EntityDamageByEntityEvent) e).getDamager());
+    protected boolean checkEvent(EntityDamageByEntityEvent event) {
+        return event.getDamager() instanceof Player && !Util.isInvulnerable(event.getEntity());
     }
 
     @Override
-    List<ItemStack> getItem(Player p, Event e) {
+    Player getPlayerOfEvent(EntityDamageByEntityEvent e) {
+        return ((Player) e.getDamager());
+    }
+
+    @Override
+    List<ItemStack> getItem(Player p, EntityDamageByEntityEvent e) {
         return this.getSlot().item(p);
     }
 
     // Static ability executables
-    public static void justiceAbility(Event event, Player p, ItemStack item) {
-        EntityDamageByEntityEvent e = ((EntityDamageByEntityEvent) event);
+    public static void justiceAbility(EntityDamageByEntityEvent event, Player p, ItemStack item) {
         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 0));
         p.playSound(p.getLocation(), Sound.ITEM_AXE_SCRAPE, 1, 1.4f);
-        if (new Random().nextInt(3) == 0) e.getEntity().getWorld().strikeLightning(e.getEntity().getLocation());
+        if (new Random().nextInt(3) == 0) event.getEntity().getWorld().strikeLightning(event.getEntity().getLocation());
     }
 
-    public static void darkFuryAbility(Event event, Player p, ItemStack item) {
-        EntityDamageByEntityEvent e = ((EntityDamageByEntityEvent) event);
+    public static void darkFuryAbility(EntityDamageByEntityEvent event, Player p, ItemStack item) {
         List<MetadataValue> values = p.getMetadata("last_damaged");
         if (values.isEmpty() || (System.currentTimeMillis() - values.get(0).asLong() > 30 * 1000)) {
-            e.setDamage(e.getDamage()*2);
+            event.setDamage(event.getDamage()*2);
         }
 
     }
 
-    public static void vertexAbility(Event event, Player p, ItemStack item) {
-        EntityDamageByEntityEvent e = ((EntityDamageByEntityEvent) event);
+    public static void vertexAbility(EntityDamageByEntityEvent event, Player p, ItemStack item) {
 
-        World w = e.getEntity().getWorld();
+        World w = event.getEntity().getWorld();
 
         p.playSound(p.getLocation(), Sound.ENTITY_BLAZE_HURT, 1, 0f);
 
@@ -78,19 +75,19 @@ public class AttackAbility extends Ability {
         int stacks = 1;
         List<MetadataValue> stackValues = p.getMetadata("vertex_stack");
         List<MetadataValue> idValues = p.getMetadata("vertex_hit_id");
-        if (!stackValues.isEmpty() && !idValues.isEmpty() && idValues.get(0).asInt() == e.getEntity().getEntityId()) {
+        if (!stackValues.isEmpty() && !idValues.isEmpty() && idValues.get(0).asInt() == event.getEntity().getEntityId()) {
             stacks = stackValues.get(0).asInt();
             p.setMetadata("vertex_stack", new FixedMetadataValue(SuperItems.getPlugin(), stacks + 1));
         } else {
             p.setMetadata("vertex_stack", new FixedMetadataValue(SuperItems.getPlugin(), 1));
         }
-        p.setMetadata("vertex_hit_id", new FixedMetadataValue(SuperItems.getPlugin(), e.getEntity().getEntityId()));
+        p.setMetadata("vertex_hit_id", new FixedMetadataValue(SuperItems.getPlugin(), event.getEntity().getEntityId()));
 
         Util.sendMessage(p, "Stacks: " + stacks);
 
 
         if (stacks >= 3) {
-            e.setDamage(e.getDamage() * (1 + 0.04 * stacks));
+            event.setDamage(event.getDamage() * (1 + 0.04 * stacks));
         }
 
 

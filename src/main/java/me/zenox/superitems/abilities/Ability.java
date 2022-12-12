@@ -19,11 +19,13 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class Ability implements Serializable {
+public abstract class Ability<T extends Event> implements Serializable {
     public static final List<Ability> registeredAbilities = new ArrayList<>();
     public static final List<Class<? extends Event>> registeredEvents = new ArrayList<>();
 
@@ -35,37 +37,49 @@ public abstract class Ability implements Serializable {
     private final Class<? extends Event> eventType;
     private final Slot slot;
     private TranslatableList lore;
+    private final boolean isPassive;
 
-    private TriConsumer<Event, Player, ItemStack> executable;
+    private TriConsumer<T, Player, ItemStack> executable;
 
-    protected Ability(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot) {
-        this(id, manaCost, cooldown, eventType, slot, true);
+    protected Ability(String id, int manaCost, double cooldown, Slot slot) {
+        this(id, manaCost, cooldown, slot, false);
         this.executable = this::runExecutable;
     }
 
-    protected Ability(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot, TriConsumer<Event, Player, ItemStack> executable) {
-        this(id, manaCost, cooldown, eventType, slot, true);
+    protected Ability(String id, int manaCost, double cooldown, Slot slot, TriConsumer<T, Player, ItemStack> executable) {
+        this(id, manaCost, cooldown, slot, false);
+        this.executable = executable;
+    }
+
+    protected Ability(AbilitySettings settings){
+        this(settings.getId(), settings.getManaCost(), settings.getCooldown(), settings.getSlot(), settings.isPassive());
+    }
+
+    protected Ability(AbilitySettings settings, TriConsumer<T, Player, ItemStack> executable){
+        this(settings.getId(), settings.getManaCost(), settings.getCooldown(), settings.getSlot(), settings.isPassive());
         this.executable = executable;
     }
 
     /**
      * Internal constructor because exectuable go brr
      *
-     * @param id The unique identifier of the ability
+     * @param id       The unique identifier of the ability
      * @param manaCost The mana cost-per usage of the ability
      * @param cooldown The cooldown of the ability, how long before it can be used again
-     * @param eventType The EventType that triggers the ability
-     * @param slot The slot that the item that contains the ability has to be in, i.e. main hand, head, etc
-     * @param internal  parameter that never gets used just to differentiate it from the public variant
+     * @param slot     The slot that the item that contains the ability has to be in, i.e. main hand, head, etc
+     * @param isPassive Whether the ability is passive
      */
-    private Ability(String id, int manaCost, double cooldown, Class<? extends Event> eventType, Slot slot, Boolean internal) {
+    private Ability(String id, int manaCost, double cooldown, Slot slot, boolean isPassive) {
         this.id = id;
         this.name = new TranslatableText(TranslatableText.Type.ABILITY_NAME + "-" + id);
         this.lore = new TranslatableList(TranslatableText.Type.ABILITY_LORE + "-" + id);
         this.cooldown = cooldown;
         this.manaCost = manaCost;
-        this.eventType = eventType;
         this.slot = slot;
+        this.isPassive = isPassive;
+
+        this.eventType = (Class<T>) getType();
+        if(this.eventType == null) throw new NullPointerException("Event type is null");
 
         for (Ability ability :
                 registeredAbilities) {
@@ -77,6 +91,18 @@ public abstract class Ability implements Serializable {
 
         Ability.registeredAbilities.add(this);
         if(!Ability.registeredEvents.contains(eventType)) Ability.registeredEvents.add(eventType);
+    }
+
+    private Type getType() {
+        Class<?> clazz = getClass();
+        while (clazz != null) {
+            Type type = clazz.getGenericSuperclass();
+            if (type instanceof ParameterizedType) {
+                return ((ParameterizedType) type).getActualTypeArguments()[0];
+            }
+            clazz = clazz.getSuperclass();
+        }
+        return null;
     }
 
     /**
@@ -109,8 +135,9 @@ public abstract class Ability implements Serializable {
         this.lore = list;
     }
 
-    public void useAbility(Event e) {
-        if (!this.eventType.isInstance(e)) return;
+    public void useAbility(Event event) {
+        if (!this.eventType.isInstance(event)) return;
+        T e = (T) event;
         if (!checkEvent(e)) return;
         Player p = getPlayerOfEvent(e);
         List<ItemStack> items = getItem(p, e);
@@ -137,16 +164,16 @@ public abstract class Ability implements Serializable {
             container.set(cooldownKey, PersistentDataType.DOUBLE, cooldown);
         }
 
-
+        // If the ability is on cooldown, return
         if (cooldown != null && Math.ceil((cooldown - System.currentTimeMillis()) / 1000) > 0) {
-            Util.sendMessage(p, ChatColor.WHITE + "This ability is on cooldown for " + ChatColor.RED + Math.ceil((cooldown - System.currentTimeMillis()) / 1000) + ChatColor.WHITE + " seconds");
+            if (!isPassive) Util.sendActionBar(p, ChatColor.WHITE + "" + ChatColor.BOLD + "ABILITY ON COOLDOWN (" + ChatColor.RED + Math.ceil((cooldown - System.currentTimeMillis()) / 100)/10 + "s" + ChatColor.WHITE + ")");
             return;
         }
 
         if (this.manaCost > 0) {
             int resultingMana = ((int) AureliumAPI.getMana(p)) - manaCost;
             if (resultingMana < 0) {
-                Util.sendActionBar(p, ChatColor.RED + "" + ChatColor.BOLD + "NOT ENOUGH MANA");
+                if (!isPassive) Util.sendActionBar(p, ChatColor.RED + "" + ChatColor.BOLD + "NOT ENOUGH MANA");
                 return;
             } else {
                 AureliumAPI.setMana(p, AureliumAPI.getMana(p) - manaCost);
@@ -162,15 +189,15 @@ public abstract class Ability implements Serializable {
         container.set(cooldownKey, PersistentDataType.DOUBLE, System.currentTimeMillis() + (getCooldown() * 1000));
     }
 
-    protected void runExecutable(Event e, Player p, ItemStack itemStack) {
+    protected void runExecutable(T e, Player p, ItemStack itemStack) {
         Util.sendMessage(p, "Used the " + this.id + " ability");
     }
 
-    abstract boolean checkEvent(Event e);
+    abstract boolean checkEvent(T e);
 
-    abstract Player getPlayerOfEvent(Event e);
+    abstract Player getPlayerOfEvent(T e);
 
-    abstract List<ItemStack> getItem(Player p, Event e);
+    abstract List<ItemStack> getItem(Player p, T e);
 
     public double getCooldown() {
         return this.cooldown;
@@ -188,5 +215,7 @@ public abstract class Ability implements Serializable {
         return this.slot;
     }
 
-
+    public boolean isPassive() {
+        return isPassive;
+    }
 }

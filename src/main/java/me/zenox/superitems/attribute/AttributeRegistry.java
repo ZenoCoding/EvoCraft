@@ -27,6 +27,6 @@ public class AttributeRegistry {
     public static final Attribute TOUGHNESS = new AureliumAttribute("as-toughness", ChatColor.DARK_PURPLE, Stats.TOUGHNESS);
 
     public static void registerAttributes(){
-        Util.logToConsole(ChatColor.WHITE + "Registered " + ChatColor.GOLD + Attribute.attributeRegistry.size() + ChatColor.WHITE + " attributes");
+        Util.logToConsole(ChatColor.WHITE + "Registering " + ChatColor.GOLD + Attribute.attributeRegistry.size() + ChatColor.WHITE + " attributes");
     }
 }

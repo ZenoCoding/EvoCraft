@@ -1,24 +1,112 @@
 package me.zenox.superitems.abilities;
 
+import me.zenox.superitems.util.Util;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class AbilityRegistry {
-    public static final Ability SOUL_RIFT = new ItemAbility("soul_rift", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 100, 50, ItemAbility::soulRiftAbility);
-    public static final Ability MAGIC_MISSILE_COMBUST_6 = new ItemAbility("magic_missile", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 0, 0, (Event event, Player p, ItemStack item) -> ItemAbility.magicMissileAbility(event, p, item,true, 6));
-    public static final Ability MAGIC_MISSILE_DEV = new ItemAbility("magic_missile_dev", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 0, 0, (Event event, Player p, ItemStack item) -> ItemAbility.magicMissileAbility(event, p, item, false, 15));
-    public static final Ability CENTRALIZE = new ItemAbility("centralize", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 150, 0, (Event event, Player p, ItemStack item) -> ItemAbility.centralizeAbility(event, p, item, false, 30));
-    public static final Ability CENTRALIZE_CORRUPT = new ItemAbility("centralize_corrupt", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 250, 0, (Event event, Player p, ItemStack item) -> ItemAbility.centralizeAbility(event, p, item, true, 45));
-    public static final Ability OBSIDIAN_SHARD = new ItemAbility("obsidian_shard", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 0, 0, ItemAbility::obsidianShardAbility);
-    public static final Ability TARHELM = new ItemAbility("tarhelm", ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK, 150, 30, ItemAbility::tarhelmAbility);
-    public static final Ability JUSTICE = new AttackAbility("justice", 0, 0, AttackAbility::justiceAbility);
-    public static final Ability VERTEX_ABILITY = new AttackAbility("vertex_ability", 5, 0, AttackAbility::vertexAbility);
-    public static final Ability DARK_FURY = new AttackAbility("dark_fury", 10, 0, AttackAbility::darkFuryAbility);
-    public static final Ability TEST_FULLSET = new FullSetAttackAbility("test_fullset", 10, 0, FullSetAttackAbility::testFullSetAbility);
-    public static final Ability TERRA_STRIKE = new ItemAbility("terra_strike", ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK, 10, 5, ItemAbility::terraStrikeAbility);
-    public static final Ability ROARING_FLAME = new FullSetAttackAbility("roaring_flame", 0, 0, FullSetAttackAbility::roaringFlameAbility);
-    public static final Ability LAVA_GLIDER = new MoveAbility("lava_glider", 0, 0, MoveAbility::lavaGliderAbility);
-    public static final Ability DARKCALL = new ItemAbility("darkcall", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 0, 60, ItemAbility::darkcallerAbility);
-    public static final Ability GILDED_CONSUME = new ItemAbility("gilded_consume", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 0, 0, ItemAbility::consumeAbility);
+    public static final ItemAbility SOUL_RIFT = new ItemAbility(new AbilitySettings()
+            .setId("soul_rift")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(100)
+            .setCooldown(50), ItemAbility::soulRiftAbility);
+    public static final ItemAbility MAGIC_MISSILE_COMBUST_6 = new ItemAbility(new AbilitySettings()
+            .setId("magic_missile")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(0)
+            .setCooldown(0),
+            (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.magicMissileAbility(event, p, item,true, 6));
+    public static final ItemAbility MAGIC_MISSILE_DEV = new ItemAbility(new AbilitySettings()
+            .setId("magic_missile_dev")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(0)
+            .setCooldown(0), (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.magicMissileAbility(event, p, item, false, 15));
+    public static final ItemAbility SMALL_EMBER_SHOOT = new ItemAbility(new AbilitySettings()
+            .setId("small_ember_shoot")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(10)
+            .setCooldown(0), ItemAbility::smallEmberShootAbility);
+    public static final ItemAbility EMBER_SHOOT = new ItemAbility(new AbilitySettings()
+            .setId("ember_shoot")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(25)
+            .setCooldown(0), ItemAbility::emberShootAbility);
+    public static final ItemAbility CENTRALIZE = new ItemAbility(new AbilitySettings()
+            .setId("centralize")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(150)
+            .setCooldown(0), (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.centralizeAbility(event, p, item, false, 30));
+
+    public static final ItemAbility CENTRALIZE_CORRUPT = new ItemAbility(new AbilitySettings()/*"centralize_corrupt", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 250, 0, (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.centralizeAbility(event, p, item, true, 45)*/
+            .setId("centralize_corrupt")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(250)
+            .setCooldown(0), (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.centralizeAbility(event, p, item, true, 45));
+    public static final ItemAbility OBSIDIAN_SHARD = new ItemAbility(new AbilitySettings()
+            .setId("obsidian_shard")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(25)
+            .setCooldown(0), ItemAbility::obsidianShardAbility);
+    public static final ItemAbility TARHELM = new ItemAbility(new AbilitySettings()
+            .setId("tarhelm")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(150)
+            .setCooldown(30), ItemAbility::tarhelmAbility);
+    public static final AttackAbility JUSTICE = new AttackAbility(new AbilitySettings()
+            .setId("justice")
+            .setManaCost(0)
+            .setCooldown(0), AttackAbility::justiceAbility);
+    public static final AttackAbility VERTEX_ABILITY = new AttackAbility(new AbilitySettings()
+            .setId("vertex_ability")
+            .setManaCost(5)
+            .setCooldown(0), AttackAbility::vertexAbility);
+    public static final AttackAbility DARK_FURY = new AttackAbility(new AbilitySettings()
+            .setId("dark_fury")
+            .setManaCost(20)
+            .setCooldown(0), AttackAbility::darkFuryAbility);
+    public static final FullSetAttackAbility TEST_FULLSET = new FullSetAttackAbility(new AbilitySettings()
+            .setId("test_fullset")
+            .setManaCost(10)
+            .setCooldown(0), FullSetAttackAbility::testFullSetAbility);
+    public static final ItemAbility TERRA_STRIKE = new ItemAbility(new AbilitySettings()
+            .setId("terra_strike")
+            .setAbilityAction(ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK)
+            .setManaCost(10)
+            .setCooldown(5), ItemAbility::terraStrikeAbility);
+    public static final FullSetAttackAbility ROARING_FLAME = new FullSetAttackAbility(new AbilitySettings()
+            .setId("roaring_flame")
+            .setPassive(true)
+            .setManaCost(0)
+            .setCooldown(0), FullSetAttackAbility::roaringFlameAbility);
+    public static final MoveAbility LAVA_GLIDER = new MoveAbility(new AbilitySettings()
+            .setId("lava_glider")
+            .setPassive(true)
+            .setManaCost(0)
+            .setCooldown(0), MoveAbility::lavaGliderAbility);
+    public static final ItemAbility DARKCALL = new ItemAbility(new AbilitySettings()
+            .setId("darkcall")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(0)
+            .setCooldown(60), ItemAbility::darkcallerAbility);
+    public static final ItemAbility GILDED_CONSUME = new ItemAbility(new AbilitySettings()
+            .setId("gilded_consume")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(0)
+            .setCooldown(0), ItemAbility::consumeAbility);
+    public static final ItemAbility VOID_WARP = new ItemAbility(new AbilitySettings()
+            .setId("void_warp")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(10)
+            .setCooldown(1), ItemAbility::voidWarpAbility);
+    public static final ItemAbility VOIDULAR_RECALL= new ItemAbility(new AbilitySettings()
+            .setId("voidular_recall")
+            .setAbilityAction(ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK)
+            .setManaCost(10)
+            .setCooldown(1), ItemAbility::voidularRecallAbility);
+
+    public static void registerAbilities(){
+        Util.logToConsole("Registering %s abilities.".formatted(ChatColor.GOLD + "" + Ability.registeredAbilities.size() + "" + ChatColor.RESET));
+    }
 }

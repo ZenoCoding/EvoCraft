@@ -1,56 +1,41 @@
 package me.zenox.superitems.abilities;
 
-import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.item.ComplexItemMeta;
+import me.zenox.superitems.item.ComplexItemStack;
+import me.zenox.superitems.item.LoreEntry;
+import me.zenox.superitems.item.VariableType;
 import me.zenox.superitems.util.Util;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
 public class Transcendence extends ItemAbility {
+
+
+    public static final VariableType<EmberAttune.Attunement> AGONY_PAGES_VARIABLE_TYPE =
+            new VariableType<>("agony_pages",
+                    new LoreEntry("agony_pages", List.of(ChatColor.AQUA + "Pages: ")),
+                    VariableType.Priority.BELOW_ABILITIES, (loreEntry, variable) ->
+                    loreEntry.setLore(List.of(ChatColor.AQUA + "Pages: " + ChatColor.LIGHT_PURPLE + variable.getValue())));
     public Transcendence() {
         super("dimensional_travel", AbilityAction.RIGHT_CLICK_ALL, 350, 0);
-
-        this.addLineToLore(ChatColor.GRAY + "Crates a " + ChatColor.LIGHT_PURPLE + "rift" + ChatColor.GRAY + " into the next dimension.");
-        this.addLineToLore(ChatColor.GRAY + "Cycles through the " + ChatColor.RED + "The Nether, " + ChatColor.GREEN + "The Overworld, " + ChatColor.DARK_GRAY + "The End.");
-        this.addLineToLore("");
-        this.addLineToLore(ChatColor.AQUA + "Pages: " + ChatColor.LIGHT_PURPLE + "100");
     }
 
     // TODO: Change this to a CIM Variable
 
     @Override
-    public void runExecutable(Event event, Player p, ItemStack item) {
-        PlayerInteractEvent e = ((PlayerInteractEvent) event);
-        ItemMeta meta = item.getItemMeta();
+    public void runExecutable(PlayerInteractEvent event, Player p, ItemStack item) {
+        ComplexItemMeta complexMeta = ComplexItemStack.of(item).getComplexMeta();
 
-        //Remove Pages
-        NamespacedKey key = new NamespacedKey(SuperItems.getPlugin(), "dimensional_pages");
-        PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
-        int pages = 99;
+        int pages = (int) complexMeta.getVariable(AGONY_PAGES_VARIABLE_TYPE).getValue() - 1;
 
-        if (dataContainer.has(key, PersistentDataType.INTEGER)) {
-            pages = dataContainer.get(key, PersistentDataType.INTEGER) - 1;
-            dataContainer.set(key, PersistentDataType.INTEGER, pages);
-        } else {
-            dataContainer.set(key, PersistentDataType.INTEGER, 99);
-        }
-
-        // Update lore
-        List<String> lore = meta.getLore();
-        for (String lorestring : lore) {
-            if (lorestring.startsWith(ChatColor.AQUA + "Pages: ")) {
-                lore.set(lore.indexOf(lorestring), ChatColor.AQUA + "Pages: " + ChatColor.LIGHT_PURPLE + pages);
-            }
-        }
-        meta.setLore(lore);
-        item.setItemMeta(meta);
+        complexMeta.setVariable(AGONY_PAGES_VARIABLE_TYPE, pages);
+        complexMeta.updateItem();
 
         if (pages == 0) {
             item.setAmount(item.getAmount() - 1);

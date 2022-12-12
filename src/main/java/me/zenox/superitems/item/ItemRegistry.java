@@ -92,7 +92,7 @@ public class ItemRegistry {
             .material(Material.BLAZE_ROD)
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .type(ComplexItem.Type.STAFF)
-            .ability(new EmberShootSmall()));
+            .ability(AbilityRegistry.SMALL_EMBER_SHOOT));
 
     public static final ComplexItem DARK_EMBER_STAFF = new ComplexItem(new ItemSettings()
             .id("dark_ember_staff")
@@ -100,7 +100,7 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .type(ComplexItem.Type.STAFF)
             .ability(new EmberAttune())
-            .ability(new EmberShoot())
+            .ability(AbilityRegistry.EMBER_SHOOT)
             .variable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE, EmberAttune.Attunement.BLAZEBORN));
 
     public static final ComplexItem TORMENTED_BLADE = new ComplexItem(new ItemSettings()
@@ -261,7 +261,8 @@ public class ItemRegistry {
             .material(Material.BOOK)
             .rarity(ComplexItem.Rarity.RARE)
             .stat(Stats.WISDOM, 100d)
-            .abilities(new Transcendence()));
+            .abilities(new Transcendence())
+            .variable(Transcendence.AGONY_PAGES_VARIABLE_TYPE, 5));
 
     public static final ComplexItem VERTEXICAL_CORE = new ComplexItem(new ItemSettings()
             .id("vertexical_core")
