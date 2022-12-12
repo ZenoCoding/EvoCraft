@@ -119,7 +119,7 @@ public class CraftEvent implements Listener {
                     inventory.getMatrix()[i].setAmount(inventory.getMatrix()[i].getAmount() % ((ShapedComplexRecipe) recipe).getChoiceatIndex(i).getItemStack().getAmount());
                 }
             } else {
-
+                e.setCancelled(true);
             }
         } else {
             if(recipe instanceof ShapedComplexRecipe) {
@@ -138,7 +138,11 @@ public class CraftEvent implements Listener {
                     ItemStack item = inventory.getMatrix()[i];
                     if(item == null) continue;
                     ComplexItem cItem = ComplexItemStack.of(item).getComplexItem();
-                    if(requiredItems.get(cItem) <= 0) continue;
+                    if(requiredItems.get(cItem) <= 0) {
+                        // Attempt to stop the items from duplicating
+                        item.setAmount(item.getAmount() + 1);
+                        continue;
+                    }
 
                     int amountToSubtract = Math.min(item.getAmount(), requiredItems.get(cItem));
                     item.setAmount(item.getAmount() - amountToSubtract);
@@ -149,4 +153,5 @@ public class CraftEvent implements Listener {
         }
 
     }
+
 }
