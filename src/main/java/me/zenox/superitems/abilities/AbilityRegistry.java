@@ -1,5 +1,6 @@
 package me.zenox.superitems.abilities;
 
+import me.zenox.superitems.Slot;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -57,19 +58,23 @@ public class AbilityRegistry {
     public static final AttackAbility JUSTICE = new AttackAbility(new AbilitySettings()
             .setId("justice")
             .setManaCost(0)
-            .setCooldown(0), AttackAbility::justiceAbility);
+            .setCooldown(0)
+            .setSlot(Slot.MAIN_HAND), AttackAbility::justiceAbility);
     public static final AttackAbility VERTEX_ABILITY = new AttackAbility(new AbilitySettings()
             .setId("vertex_ability")
             .setManaCost(5)
-            .setCooldown(0), AttackAbility::vertexAbility);
+            .setCooldown(0)
+            .setSlot(Slot.MAIN_HAND), AttackAbility::vertexAbility);
     public static final AttackAbility DARK_FURY = new AttackAbility(new AbilitySettings()
             .setId("dark_fury")
             .setManaCost(20)
-            .setCooldown(0), AttackAbility::darkFuryAbility);
+            .setCooldown(0)
+            .setSlot(Slot.MAIN_HAND), AttackAbility::darkFuryAbility);
     public static final FullSetAttackAbility TEST_FULLSET = new FullSetAttackAbility(new AbilitySettings()
             .setId("test_fullset")
             .setManaCost(10)
-            .setCooldown(0), FullSetAttackAbility::testFullSetAbility);
+            .setCooldown(0)
+            .setSlot(Slot.ARMOR), FullSetAttackAbility::testFullSetAbility);
     public static final ItemAbility TERRA_STRIKE = new ItemAbility(new AbilitySettings()
             .setId("terra_strike")
             .setAbilityAction(ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK)
@@ -79,12 +84,14 @@ public class AbilityRegistry {
             .setId("roaring_flame")
             .setPassive(true)
             .setManaCost(0)
-            .setCooldown(0), FullSetAttackAbility::roaringFlameAbility);
+            .setCooldown(0)
+            .setSlot(Slot.ARMOR), FullSetAttackAbility::roaringFlameAbility);
     public static final MoveAbility LAVA_GLIDER = new MoveAbility(new AbilitySettings()
             .setId("lava_glider")
             .setPassive(true)
             .setManaCost(0)
-            .setCooldown(0), MoveAbility::lavaGliderAbility);
+            .setCooldown(0)
+            .setSlot(Slot.ARMOR), MoveAbility::lavaGliderAbility);
     public static final ItemAbility DARKCALL = new ItemAbility(new AbilitySettings()
             .setId("darkcall")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)

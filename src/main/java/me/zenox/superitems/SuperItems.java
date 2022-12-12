@@ -14,20 +14,23 @@ import me.zenox.superitems.command.MainCommand;
 import me.zenox.superitems.data.ConfigLoader;
 import me.zenox.superitems.data.LanguageLoader;
 import me.zenox.superitems.enchant.EnchantRegistry;
-import me.zenox.superitems.events.DimensionLocker;
-import me.zenox.superitems.events.InventoryListener;
-import me.zenox.superitems.events.OtherEvent;
-import me.zenox.superitems.events.PlayerUseItemEvent;
+import me.zenox.superitems.events.*;
 import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.item.VanillaItem;
 import me.zenox.superitems.network.GlowFilter;
 import me.zenox.superitems.recipe.RecipeRegistry;
+import me.zenox.superitems.util.Util;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SuperItems extends JavaPlugin {
 
     private static SuperItems plugin;
+
+    private static Economy econ = null;
+
     public boolean isUsingWorldGuard;
     public Modifiers modifiers;
     private LanguageLoader languageLoader;
@@ -54,6 +57,12 @@ public final class SuperItems extends JavaPlugin {
 
         } catch (NoClassDefFoundError e) {
             isUsingWorldGuard = false;
+        }
+
+        if (!setupEconomy() ) {
+            Util.logToConsole("Disabled due to no Vault dependency found!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
         }
 
         modifiers = new Modifiers(AureliumSkills.getPlugin(AureliumSkills.class));
@@ -85,12 +94,27 @@ public final class SuperItems extends JavaPlugin {
         new OtherEvent(plugin);
         new InventoryListener(plugin);
         new DimensionLocker(plugin);
+        new DeathManager(plugin);
     }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
+
 
     public static void registerGlobalGUIItems(){
         // Menu Glass Item
         Structure.addGlobalIngredient('#', new ItemBuilder(Material.LIGHT_GRAY_STAINED_GLASS_PANE).setDisplayName(""));
     }
+
 
     public LanguageLoader getLang() {
         return this.languageLoader;
@@ -102,6 +126,10 @@ public final class SuperItems extends JavaPlugin {
 
     public ProtocolManager getProtocolManager() {
         return protocolManager;
+    }
+
+    public static Economy getEconomy() {
+        return econ;
     }
 
     public void reload() {

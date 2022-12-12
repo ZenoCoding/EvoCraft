@@ -1,6 +1,7 @@
 package me.zenox.superitems.abilities;
 
 import me.zenox.superitems.Slot;
+import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.util.TriConsumer;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -8,6 +9,7 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.Random;
@@ -55,6 +57,12 @@ public class MoveAbility extends Ability<PlayerMoveEvent> {
                 loc.add(r.nextDouble() - 0.5d, r.nextDouble() - 0.5d, r.nextDouble() - 0.5d);
                 p.getWorld().spawnParticle(Particle.LAVA, loc, 1);
             }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    p.setWalkSpeed(0.2f);
+                }
+            }.runTaskLater(SuperItems.getPlugin(), 1);
         }
         else p.setWalkSpeed(0.2f);
 

@@ -225,11 +225,11 @@ public class ComplexItemMeta {
 
         dataContainer.getKeys().stream()
                 .filter(namespacedKey -> namespacedKey.getKey().startsWith(VAR_PREFIX))
-                .forEach(namespacedKey -> setVariable(VariableType.getVariableByPrefix(namespacedKey.getKey().substring(VAR_PREFIX.length())), dataContainer.get(namespacedKey, new SerializedPersistentType<>())));
+                .forEach(namespacedKey -> IsetVariable(VariableType.getVariableByPrefix(namespacedKey.getKey().substring(VAR_PREFIX.length())), dataContainer.get(namespacedKey, new SerializedPersistentType<>())));
 
         // if the meta doesn't contain rarity or type
-        if (getVariable(RARITY_VAR) == null) setVariable(RARITY_VAR, complexItemStack.getComplexItem().getRarity());
-        if (getVariable(TYPE_VAR) == null) setVariable(TYPE_VAR, complexItemStack.getComplexItem().getType());
+        if (getVariable(RARITY_VAR) == null) IsetVariable(RARITY_VAR, complexItemStack.getComplexItem().getRarity());
+        if (getVariable(TYPE_VAR) == null) IsetVariable(TYPE_VAR, complexItemStack.getComplexItem().getType());
 
         item.setItemMeta(meta);
         updateItem();
@@ -293,12 +293,16 @@ public class ComplexItemMeta {
         this.updateItem();
     }
 
-    public void setVariable(VariableType type, @NotNull Serializable value) {
+    private void IsetVariable(VariableType type, @NotNull Serializable value) {
         if (variableList.stream().filter(variable -> variable.getType() == type).toList().isEmpty())
             variableList.add(new Variable(this, type, value));
         else
             variableList.stream().filter(variable -> variable.getType() == type).forEach(variable -> variable.setValue(value));
-        updateItem();
+    }
+
+    public void setVariable(VariableType type, @NotNull Serializable value) {
+        this.IsetVariable(type, value);
+        this.updateItem();
     }
 
     // Gets the first variable of that variable type
