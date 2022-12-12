@@ -98,6 +98,13 @@ public class Util {
         return UUID.nameUUIDFromBytes(array);
     }
 
+    /**
+     * Gets nearby blocks given a radius and location
+     * @param loc The location
+     * @param radius The radius
+     * @param yradius The y radius
+     * @return
+     */
     public static List<Block> getNearbyBlocks(Location loc, int radius, int yradius) {
         List<Block> nearbyBlocks = new ArrayList();
         for (int x = loc.getBlockX() - radius; x <= loc.getBlockX() + radius; x++) {
@@ -113,19 +120,43 @@ public class Util {
     /**
      * Utility method to check if an entity is invulnerable to damage- should be used to do things like check if an entity should have custom knockback/damage applied to it.
      * @param entity the entity to check
-     * @return whether or not the entity is invulnerable
+     * @return whether the entity is invulnerable
      */
     public static boolean isInvulnerable(Entity entity){
         return (entity.hasMetadata("NPC") || (entity instanceof Player player && player.getGameMode() == GameMode.CREATIVE));
     }
 
+    /**
+     * Gets all the modifiers an item has
+     * @param item the item to check
+     * @param type the type of modifier to check
+     * @return the list of modifiers
+     */
     public static List<StatModifier> getAureliumModifiers(ItemStack item, ModifierType type){
         Modifiers modifiers = new Modifiers(AureliumSkills.getPlugin(AureliumSkills.class));
         return modifiers.getModifiers(type, item);
     }
 
+    /**
+     * Removes all modifiers of a certain type from an item
+     * @param item the item to remove the modifiers from
+     * @param type the type of modifiers to remove
+     * @param stat the stat to remove the modifiers from
+     * @return the item with the modifiers removed
+     */
     public static ItemStack removeAureliumModifier(ItemStack item, ModifierType type, Stat stat){
         Modifiers modifiers = new Modifiers(AureliumSkills.getPlugin(AureliumSkills.class));
         return modifiers.removeModifier(type, item, stat);
+    }
+
+    /**
+     * Rounds a given double to the specified number of decimal places.
+     * @param value the value to round
+     * @param digits the number of decimal places to round to
+     * @return the rounded value
+     */
+    public static double round(double value, int digits) {
+        double factor = Math.pow(10, digits);
+        return Math.round(value * factor) / factor;
     }
 }

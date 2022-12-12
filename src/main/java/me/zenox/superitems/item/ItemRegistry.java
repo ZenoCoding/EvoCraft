@@ -367,7 +367,7 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.RARE)
             .type(ComplexItem.Type.SWORD)
             .modifier(AttributeRegistry.ATTACK_DAMAGE, 20)
-            .modifier(AttributeRegistry.ATTACK_DAMAGE, -3.2)
+            .modifier(AttributeRegistry.ATTACK_SPEED, -3.2)
             .stat(Stats.STRENGTH, 50d)
             .ability(AbilityRegistry.TERRA_STRIKE));
 

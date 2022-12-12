@@ -4,27 +4,30 @@ import me.zenox.superitems.data.TranslatableText;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public abstract class Attribute implements Serializable {
     public final static String VALUE_PLACEHOLDER = "{value}";
     public final static List<Attribute> attributeRegistry = new ArrayList<>();
 
-    public final String id;
-    public final TranslatableText name;
-    public final ChatColor color;
-    public final String lore;
+    private final String id;
+    private final TranslatableText name;
+    private final ChatColor color;
     private final AttributeSource source;
 
-    public Attribute(String id, ChatColor color, String lore, AttributeSource source) {
+    private final Function<Double, String> valueFormatter;
+
+    public Attribute(String id, ChatColor color, AttributeSource source, Function<Double, String> valueFormatter) {
         this.id = id;
         this.name = new TranslatableText(TranslatableText.Type.ATTRIBUTE + "-" + id);
         this.color = color;
-        this.lore = lore;
         this.source = source;
+        this.valueFormatter = valueFormatter;
 
         for (Attribute attribute :
                 attributeRegistry) {
@@ -35,6 +38,22 @@ public abstract class Attribute implements Serializable {
         }
 
         attributeRegistry.add(this);
+    }
+
+    /**
+     * A static function that retrieves an attribute by its ID
+     * @param id The ID of the attribute
+     * @return The attribute with the given ID, or null if no attribute with the given ID exists
+     */
+    @Nullable
+    public static Attribute byId(String id) {
+        for (Attribute attribute :
+                attributeRegistry) {
+            if (attribute.id.equalsIgnoreCase(id)) {
+                return attribute;
+            }
+        }
+        return null;
     }
 
     /**
@@ -59,12 +78,12 @@ public abstract class Attribute implements Serializable {
         return color;
     }
 
-    public String getLore() {
-        return lore;
-    }
-
     public AttributeSource getSource() {
         return source;
+    }
+
+    public Function<Double, String> getValueFormatter() {
+        return valueFormatter;
     }
 
     public enum AttributeSource {

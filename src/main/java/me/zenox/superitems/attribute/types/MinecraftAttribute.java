@@ -6,28 +6,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.lang.reflect.Field;
+import java.util.function.Function;
 
 public class MinecraftAttribute extends Attribute {
 
     private final org.bukkit.attribute.Attribute mcAttribute;
 
     public MinecraftAttribute(String id, ChatColor color, org.bukkit.attribute.Attribute mcAttribute) {
-        super(id, color, null, AttributeSource.MINECRAFT);
-        try {
-            Field f = getClass().getSuperclass().getDeclaredField("lore");
-            f.setAccessible(true);
-            f.set(this, generateLore());
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        this(id, color, mcAttribute, value -> (value > 0 ? "+" : "") + value);
+    }
+
+    public MinecraftAttribute(String id, ChatColor color, org.bukkit.attribute.Attribute mcAttribute, Function<Double, String> valueFormatter) {
+        super(id, color, AttributeSource.MINECRAFT, valueFormatter);
         this.mcAttribute = mcAttribute;
     }
-
-    private String generateLore(){
-        return this.getName() + ": " + this.getColor() + Attribute.VALUE_PLACEHOLDER;
-    }
-
 
     @Override
     public ItemStack apply(ItemStack item, AttributeModifier modifier) {

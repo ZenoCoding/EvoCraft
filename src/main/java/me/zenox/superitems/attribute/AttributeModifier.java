@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class AttributeModifier implements Serializable {
@@ -109,9 +110,30 @@ public class AttributeModifier implements Serializable {
         return value;
     }
 
+    public String getDisplayValue(){
+        return attribute.getValueFormatter().apply(value);
+    }
+
     public AttributeModifier setValue(double value) {
         this.value = value;
         return this;
+    }
+
+    public HashMap<String, Object> serializeToMap(){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("uuid", uuid.toString());
+        map.put("attribute", attribute.getId());
+        map.put("value", value);
+        map.put("operation", operation.name());
+        map.put("slot", slot.name());
+        return map;
+    }
+
+    public static AttributeModifier deserializeFromMap(HashMap<String, Object> map){
+        return new AttributeModifier((String) map.get("name"), UUID.fromString((String) map.get("uuid")),
+                Attribute.byId((String) map.get("attribute")), (double) map.get("value"),
+                Operation.valueOf((String) map.get("operation")), Slot.valueOf((String) map.get("slot")));
     }
 
     @Override

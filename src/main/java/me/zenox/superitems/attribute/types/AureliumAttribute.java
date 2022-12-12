@@ -12,27 +12,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.List;
+import java.util.function.Function;
 
 public class AureliumAttribute extends Attribute {
 
     private final Stat stat;
 
     public AureliumAttribute(String id, ChatColor color, Stat stat) {
-        super(id, color, null, AttributeSource.AURELIUM);
-        try {
-            Field f = getClass().getSuperclass().getDeclaredField("lore");
-            f.setAccessible(true);
-            f.set(this, generateLore());
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        this.stat = stat;
+        this(id, color, stat, (value) -> (value > 0 ? "+" : "") + value);
     }
 
-    private @NotNull String generateLore(){
-        return this.getName() + ": " + this.getColor() + Attribute.VALUE_PLACEHOLDER;
+    public AureliumAttribute(String id, ChatColor color, Stat stat, Function<Double, String> valueFormatter) {
+        super(id, color, AttributeSource.AURELIUM, valueFormatter);
+        this.stat = stat;
     }
 
     @Override

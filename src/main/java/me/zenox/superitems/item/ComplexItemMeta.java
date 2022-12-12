@@ -77,7 +77,7 @@ public class ComplexItemMeta {
 
         // Write Stats
         List<String> attributeLore = new ArrayList<>();
-        modifierList.forEach(modifier -> attributeLore.add(ChatColor.GRAY + modifier.getAttribute().getName().toString() + ": " + modifier.getAttribute().getColor() + ((int) modifier.getValue())));
+        modifierList.forEach(modifier -> attributeLore.add(ChatColor.GRAY + modifier.getAttribute().getName().toString() + ": " + modifier.getAttribute().getColor() + modifier.getDisplayValue()));
 
         PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
         LoreBuilder lore = new LoreBuilder();
@@ -89,7 +89,7 @@ public class ComplexItemMeta {
         meta.setUnbreakable(true);
 
         // Write Attributes
-        dataContainer.set(ATTRIBUTE_KEY, new ArrayListType(), modifierList);
+        dataContainer.set(ATTRIBUTE_KEY, new ArrayListType(), new ArrayList<>(modifierList.stream().map(AttributeModifier::serializeToMap).toList()));
 
         // Clear Item's current attributes
         Arrays.stream(Attribute.values()).forEach(meta::removeAttributeModifier);
@@ -201,9 +201,21 @@ public class ComplexItemMeta {
 
         // apply aurelium stats
         if(hasComplexAttributes){
-            modifierList.addAll(dataContainer.get(ATTRIBUTE_KEY,  new ArrayListType<AttributeModifier>())
-                    .stream()
-                    .filter(attributeModifier -> attributeModifier.getAttribute() instanceof AureliumAttribute).toList());
+            // If attributes are still stored in prehistoric ways :dinosaur:
+            try {
+                if (dataContainer.get(ATTRIBUTE_KEY, new ArrayListType<>()).get(0) instanceof AttributeModifier) {
+                    modifierList.addAll(dataContainer.get(ATTRIBUTE_KEY, new ArrayListType<>()));
+                } else {
+                    modifierList.addAll(dataContainer.get(ATTRIBUTE_KEY, new ArrayListType<HashMap<String, Object>>())
+                            .stream()
+                            .map(AttributeModifier::deserializeFromMap)
+                            .filter(attributeModifier -> attributeModifier.getAttribute() instanceof AureliumAttribute)
+                            .toList());
+                }
+            } catch (IndexOutOfBoundsException ignored) {
+                // Do nothing because list is empty
+            }
+
         }
 
         // Update any attributes with the same name to match parent ComplexItem
