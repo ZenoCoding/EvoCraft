@@ -54,7 +54,7 @@ public class Geo {
         for (Vector vertex : vertices) {
             if (vertex == vertices.get(0)) continue;
             double distSqr = vertices.get(0).distanceSquared(vertex);
-            if (distSqr < minLengthSquared) minLengthSquared = Math.round(distSqr * 100.0) / 100.0;
+            if (distSqr < minLengthSquared) minLengthSquared = Util.round(distSqr, 2);
         }
 
 

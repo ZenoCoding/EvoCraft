@@ -45,7 +45,12 @@ public class AureliumAttribute extends Attribute {
             curValue += value;
         }
 
-        return AureliumAPI.addItemModifier(item, stat, curValue, false);
+        // Returns an armor modifier if the item's type is a valid armor type, otherwise adds an item modifier
+        if(List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.FEET, Slot.ARMOR).contains(modifier.getSlot())){
+            return AureliumAPI.addArmorModifier(item, stat, curValue, false);
+        } else {
+            return AureliumAPI.addItemModifier(item, stat, curValue, false);
+        }
     }
 
     @Override

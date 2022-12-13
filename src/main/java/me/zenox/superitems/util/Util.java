@@ -31,7 +31,7 @@ public class Util {
         sendMessage(p, message, false);
     }
 
-    public static void sendMessage(Player p, String message, boolean prefix) {
+    public static void sendMessage(@NotNull Player p, String message, boolean prefix) {
         p.sendMessage(prefix ? ChatColor.GOLD + "[SuperItems] " + ChatColor.WHITE + message : ChatColor.WHITE + message);
     }
 
@@ -39,11 +39,11 @@ public class Util {
         sendMessage(p, message, true);
     }
 
-    public static void sendMessage(CommandSender p, String message, boolean prefix) {
+    public static void sendMessage(@NotNull CommandSender p, String message, boolean prefix) {
         p.sendMessage(prefix ? ChatColor.GOLD + "[SuperItems] " + ChatColor.WHITE + message : ChatColor.WHITE + message);
     }
 
-    public static void sendActionBar(Player p, String message) {
+    public static void sendActionBar(@NotNull Player p, String message) {
         p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
     }
 
@@ -60,7 +60,7 @@ public class Util {
     }
 
     @NotNull
-    public static ItemStack makeSkull(ItemStack item, String base64EncodedString) {
+    public static ItemStack makeSkull(@NotNull ItemStack item, String base64EncodedString) {
         if (item.getType() != Material.PLAYER_HEAD) return item;
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         assert meta != null;

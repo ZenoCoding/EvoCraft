@@ -5,6 +5,7 @@ import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.gui.EnchantingGUI;
 import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.item.ItemRegistry;
+import me.zenox.superitems.item.VanillaItem;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -81,7 +82,7 @@ public class OtherEvent implements Listener {
         ItemStack item = e.getItemInHand();
         if (item == null) return;
         ComplexItem complexItem = ItemRegistry.byItem(item);
-        if (complexItem != null) {
+        if (!(complexItem instanceof VanillaItem)) {
             e.setCancelled(true);
         }
     }
