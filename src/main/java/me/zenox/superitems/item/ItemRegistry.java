@@ -9,7 +9,6 @@ import me.zenox.superitems.item.basicitems.CorruptPearl;
 import me.zenox.superitems.item.basicitems.GardenerSapling;
 import me.zenox.superitems.item.basicitems.RavagerSkin;
 import me.zenox.superitems.item.basicitems.TormentedSoul;
-import me.zenox.superitems.item.superitems.ObsidilithScythe;
 import me.zenox.superitems.item.superitems.VertexicalBlade;
 import me.zenox.superitems.item.superitems.VoidScepter;
 import me.zenox.superitems.util.Util;
@@ -92,6 +91,8 @@ public class ItemRegistry {
             .material(Material.BLAZE_ROD)
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .type(ComplexItem.Type.STAFF)
+            .modifier(AttributeRegistry.WISDOM, 50)
+            .modifier(AttributeRegistry.STRENGTH, 10)
             .ability(AbilityRegistry.SMALL_EMBER_SHOOT));
 
     public static final ComplexItem DARK_EMBER_STAFF = new ComplexItem(new ItemSettings()
@@ -101,13 +102,18 @@ public class ItemRegistry {
             .type(ComplexItem.Type.STAFF)
             .ability(new EmberAttune())
             .ability(AbilityRegistry.EMBER_SHOOT)
+            .modifier(AttributeRegistry.WISDOM, 75)
+            .modifier(AttributeRegistry.STRENGTH, 25)
             .variable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE, EmberAttune.Attunement.BLAZEBORN));
 
     public static final ComplexItem TORMENTED_BLADE = new ComplexItem(new ItemSettings()
             .id("tormented_blade")
             .material(Material.IRON_AXE)
-            .rarity(ComplexItem.Rarity.COMMON)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
             .type(ComplexItem.Type.AXE)
+            .modifier(AttributeRegistry.STRENGTH, 25)
+            .modifier(AttributeRegistry.ATTACK_DAMAGE, 14)
+            .modifier(AttributeRegistry.ATTACK_SPEED, -3.2)
             .ability(AbilityRegistry.TARHELM));
 
     public static final ComplexItem SWORD_OF_JUSTICE = new ComplexItem(new ItemSettings()
@@ -220,7 +226,16 @@ public class ItemRegistry {
 
 
     public static final ComplexItem VOID_SCEPTER = new VoidScepter();
-    public static final ComplexItem OBSIDIAN_SCYTHE = new ObsidilithScythe();
+    public static final ComplexItem OBSIDILITH_SCYTHE = new ComplexItem(new ItemSettings()
+            .id("obsidilith_scythe")
+            .material(Material.NETHERITE_HOE)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .ability(AbilityRegistry.OBSIDIAN_SHARD)
+            .type(ComplexItem.Type.SWORD)
+            .modifier(AttributeRegistry.ATTACK_SPEED, -2)
+            .modifier(AttributeRegistry.ATTACK_DAMAGE, 10)
+            .modifier(AttributeRegistry.STRENGTH, 30)
+            .modifier(AttributeRegistry.WISDOM, 100));
 
     public static final ComplexItem VOID_HELMET = new VoidMask();
     public static final ComplexItem VOID_CHESTPLATE = new VoidChestplate();

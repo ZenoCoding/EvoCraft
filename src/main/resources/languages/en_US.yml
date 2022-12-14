@@ -295,10 +295,10 @@ ability-lore-soul_rift:
   - "Deploys a &bsoul crystal&7, which lasts for &a5s &7and"
   - "pulls entities in, dealing &ctrue damage &7every second."
 
-ability-name-fiery_ember_shoot: Fiery Embers
+ability-name-small_ember_shoot: Fiery Embers
 
-ability-lore-fiery_ember_shoot:
-  - "Shoot a &cfireball &7 that explodes"
+ability-lore-small_ember_shoot:
+  - "Shoot a &cfireball &7that explodes"
   - "on impact. Fiery Explosions!"
 
 ability-name-dark_ember_attune: Attune
@@ -309,9 +309,9 @@ ability-lore-dark_ember_attune:
   - ""
   - "Swap between &6Blazeborn &7and &8Darksoul"
 
-ability-name-dark_ember_shoot: Dark Embers
+ability-name-ember_shoot: Dark Embers
 
-ability-lore-dark_ember_shoot:
+ability-lore-ember_shoot:
   - "Shoot a projectile based on the &battunement"
   - "of this weapon. Dark magic is cool, right?"
 
