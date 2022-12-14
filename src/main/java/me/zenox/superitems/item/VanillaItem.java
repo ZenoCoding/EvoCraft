@@ -4,6 +4,9 @@ import me.zenox.superitems.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -53,7 +56,7 @@ public class VanillaItem extends ComplexItem {
         return Objects.requireNonNullElse(Bukkit.getItemFactory().getItemMeta(getMaterial()).getDisplayName(), getMaterial().name().replace("_", " ").toLowerCase());
     }
 
-    public static ComplexItem of(Material material) {
+    public static VanillaItem of(Material material) {
         try {
             return vanillaItemList.stream().filter(vanillaItem -> Objects.equals(vanillaItem.getId(), material.getKey().getKey())).toList().get(0);
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -61,6 +64,18 @@ public class VanillaItem extends ComplexItem {
         }
     }
 
+    @Nullable
+    public static VanillaItem byItem(ItemStack item) {
+        try {
+            return vanillaItemList.stream()
+                    .filter(vanillaItem ->
+                            vanillaItem.getId() == item.getItemMeta()
+                                    .getPersistentDataContainer()
+                                    .get(ComplexItem.GLOBAL_ID, PersistentDataType.STRING)).toList().get(0);
+        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+            return null;
+        }
+    }
 
     public static void registerItems(){
         Arrays.stream(Material.values()).filter(material -> material.isItem()).forEach(material -> new VanillaItem(material));

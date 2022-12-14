@@ -113,7 +113,7 @@ public class EnchantingGUI extends SimpleGUI {
                     .filter(complexEnchantment ->
                             complexEnchantment.getTypes().contains(item.getComplexItem().getType())).toList()) {
                 if (r.nextInt(0, Math.max(1, ComplexEnchantment.getRegisteredEnchants().size() * (enchantment.getRarity() / 100))) == 0 && !excluded.contains(enchantment)) {
-                    result.put(enchantment, Math.max(1, r.nextInt((int) (enchantment.getMaxLevel() / (strength + 1)))));
+                    result.put(enchantment, Math.max(1, r.nextInt((int) Math.abs(enchantment.getMaxLevel() / (strength + 1)))));
                     excluded.addAll(enchantment.getExclusive());
                     variety--;
                 }

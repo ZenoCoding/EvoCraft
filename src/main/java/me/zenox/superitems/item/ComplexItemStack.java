@@ -61,6 +61,8 @@ public class ComplexItemStack {
 
         ItemMeta meta = item.getItemMeta();
 
+        meta.getPersistentDataContainer().set(ComplexItem.GLOBAL_ID, PersistentDataType.STRING, complexItem.getId());
+
         meta.setDisplayName(complexItem.getDisplayName());
 
         item.setItemMeta(meta);

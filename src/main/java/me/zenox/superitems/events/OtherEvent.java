@@ -3,8 +3,6 @@ package me.zenox.superitems.events;
 import de.studiocode.invui.window.impl.single.SimpleWindow;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.gui.EnchantingGUI;
-import me.zenox.superitems.item.ComplexItem;
-import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.item.VanillaItem;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Bukkit;
@@ -81,10 +79,8 @@ public class OtherEvent implements Listener {
     public void blockPlaceEvent(BlockPlaceEvent e) {
         ItemStack item = e.getItemInHand();
         if (item == null) return;
-        ComplexItem complexItem = ItemRegistry.byItem(item);
-        if (!(complexItem instanceof VanillaItem)) {
-            e.setCancelled(true);
-        }
+        // Check if the item is not a vanilla item, if it isn't, cancel the event
+        if (VanillaItem.byItem(item) == null) e.setCancelled(true);
     }
 
     @EventHandler
