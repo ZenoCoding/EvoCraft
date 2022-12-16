@@ -1,7 +1,5 @@
 package me.zenox.superitems.gui.item;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
-import com.archyx.aureliumskills.skills.Skills;
 import de.studiocode.invui.item.ItemProvider;
 import de.studiocode.invui.item.builder.ItemBuilder;
 import de.studiocode.invui.item.impl.controlitem.ControlItem;
@@ -39,6 +37,6 @@ public class EnchantItem extends ControlItem<EnchantingGUI> {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        if(EnchantingGUI.enchantValid(gui, level)) gui.enchantItem(level, 20 + level*10);
+        if(EnchantingGUI.enchantValid(gui, level, 20 + level * 10)) gui.enchantItem(level, 20 + level * 10);
     }
 }

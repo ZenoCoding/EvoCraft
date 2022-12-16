@@ -28,7 +28,7 @@ public class Util {
 
 
     public static void sendMessage(Player p, String message) {
-        sendMessage(p, message, false);
+        sendMessage(p, message, true);
     }
 
     public static void sendMessage(@NotNull Player p, String message, boolean prefix) {

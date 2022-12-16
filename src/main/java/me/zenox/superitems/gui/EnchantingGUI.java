@@ -13,6 +13,7 @@ import me.zenox.superitems.gui.item.BookshelfItem;
 import me.zenox.superitems.gui.item.BooleanItem;
 import me.zenox.superitems.gui.item.CloseItem;
 import me.zenox.superitems.gui.item.EnchantItem;
+import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.item.LoreEntry;
 import me.zenox.superitems.item.VariableType;
@@ -26,6 +27,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+
+import static java.lang.Math.min;
 
 /**
  * Enchantment GUI that is shown to players
@@ -74,78 +77,86 @@ public class EnchantingGUI extends SimpleGUI {
      * @param xp    the amount of experience to take (levels)
      * @return whether the enchantment process worked
      */
-    public boolean enchantItem(int level, int xp) {
-        Util.sendMessage(p, "Attempting to enchant... ");
+    public boolean enchantItem(int level, int xpRequired) {
         ComplexItemStack item = ComplexItemStack.of(getEItem());
-        ComplexItemStack cItem = ComplexItemStack.of(getFuelItem());
+        ComplexItemStack fuelItem = ComplexItemStack.of(getFuelItem());
         Random r = new Random();
 
-        if (item == null || cItem == null) {
-            Util.sendMessage(p, "Failed due to complexItems being null");
-            return false;
-        }
+        int fuelStrength = (int) (fuelItem.getComplexMeta().getVariable(ENCHANT_FUEL_VAR).getValue());
 
-        if (p.getLevel() < xp) {
-            Util.sendMessage(p, "Failed due to player xp being too little. Player XP was: " + p.getTotalExperience() + " | Required XP was: " + xp);
-            return false;
-        }
-
-        if (!fuelValid(this)) return false;
-
-        int fuelStrength = (int) ((int) (cItem.getComplexMeta().getVariable(ENCHANT_FUEL_VAR).getValue()) * Math.sqrt(cItem.getItem().getAmount()));
-
-        double variety = r.nextDouble(1d, (Math.sqrt(this.bookshelfPower) * level / 3d) + 1.01d);
-        // between 0 and 1
-        double strength = Math.min(1d, ((level / 2f + Math.sqrt(fuelStrength)) * (2f * Math.sqrt(AureliumAPI.getSkillLevel(p, Skills.ENCHANTING)))) / 200);
+        double variety = calculateVariety(bookshelfPower);
+        double strength = calculateStrength(level, fuelStrength, AureliumAPI.getSkillLevel(p, Skills.ENCHANTING));
 
         Util.sendMessage(p, "Enchant | Strength: " + strength + " | Variety: " + variety);
 
         HashMap<ComplexEnchantment, Integer> result = new HashMap<>();
-        Map<ComplexEnchantment, Integer> current = item.getComplexMeta().getComplexEnchants();
+        Map<ComplexEnchantment, Integer> currentEnchantments = item.getComplexMeta().getComplexEnchants();
 
         // Obtain list of enchantments that cannot be applied
-        List<ComplexEnchantment> excluded = new ArrayList<>();
-        for(ComplexEnchantment enchantment : current.keySet()) excluded.addAll(enchantment.getExclusive());
+        List<ComplexEnchantment> possibleEnchantments = new ArrayList<>(ComplexEnchantment.getRegisteredEnchants().stream().filter(ce -> ce.getTypes().contains(item.getComplexItem().getType())).toList());
+        for(ComplexEnchantment enchantment : currentEnchantments.keySet()) possibleEnchantments.removeAll(enchantment.getExclusive());
 
-        while (variety >= 1) {
-            for (ComplexEnchantment enchantment : ComplexEnchantment.getRegisteredEnchants()
-                    .stream()
-                    .filter(complexEnchantment ->
-                            complexEnchantment.getTypes().contains(item.getComplexItem().getType())).toList()) {
-                if (r.nextInt(0, Math.max(1, ComplexEnchantment.getRegisteredEnchants().size() * (enchantment.getRarity() / 100))) == 0 && !excluded.contains(enchantment)) {
-                    result.put(enchantment, Math.max(1, r.nextInt((int) Math.abs(enchantment.getMaxLevel() / (strength + 1)))));
-                    excluded.addAll(enchantment.getExclusive());
-                    variety--;
+        while (true) {
+            // Assign all enchantments that can be applied an index based on their weight
+            HashMap<ComplexEnchantment, Integer> enchantmentWeights = new HashMap<>();
+            int currentWeight = 0;
+            for (ComplexEnchantment enchantment : possibleEnchantments) {
+                if (enchantment.getWeight() > 0) {
+                    enchantmentWeights.put(enchantment, enchantment.getWeight() + currentWeight);
+                    currentWeight += enchantment.getWeight();
+                } else {
+                    throw new IllegalStateException("Enchantment " + enchantment.getName() + " has a weight of 0 or less!");
                 }
             }
-        }
-        HashMap<ComplexEnchantment, Integer> resultCombined = new HashMap<>();
 
-        // merge result with current
-        for (Map.Entry<ComplexEnchantment, Integer> entry : result.entrySet()) {
-            if (current.containsKey(entry.getKey())) {
-                Util.sendMessage(p, current.get(entry.getKey()) + " | " + entry.getValue());
-                if (current.get(entry.getKey()).equals(entry.getValue()))
-                    resultCombined.put(entry.getKey(), entry.getValue() + 1);
-                else resultCombined.put(entry.getKey(), Math.max(entry.getValue(), current.get(entry.getKey())));
-            } else resultCombined.put(entry.getKey(), entry.getValue());
+            // If there are no enchantments that can be applied, break
+            if (enchantmentWeights.isEmpty()) break;
+
+            // Get a random enchantment based on the weight
+            int randomWeight = r.nextInt(currentWeight);
+
+            ComplexEnchantment enchantment = null;
+            for (Map.Entry<ComplexEnchantment, Integer> entry : enchantmentWeights.entrySet()) {
+                if (randomWeight < entry.getValue()) {
+                    enchantment = entry.getKey();
+                    break;
+                }
+            }
+
+            if (enchantment == null) throw new IllegalStateException("Could not find a valid enchant!");
+
+            // Get the enchantment level
+            int enchantmentLevel = calculateLevel(strength, enchantment.getMaxLevel(), enchantment.getWeight());
+
+            // Append the enchantment to the result
+            result.put(enchantment, enchantmentLevel);
+
+            // Remove the enchantment from the list of possible enchantments
+            possibleEnchantments.remove(enchantment);
+
+            if(variety < 1 && r.nextDouble() > variety) break;
+            if(variety <= 0) break;
+            variety--;
         }
 
-        for (Map.Entry<ComplexEnchantment, Integer> entry : current.entrySet()) {
-            resultCombined.putIfAbsent(entry.getKey(), entry.getValue());
-        }
+        HashMap<ComplexEnchantment, Integer> resultCombined = combineEnchantMaps(result, currentEnchantments);
 
+        // Apply enchantments to item
         item.getComplexMeta().setComplexEnchantments(resultCombined);
 
         // Set fuel to be empty
-        VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1).setItemStack(null, 0, new ItemStack(Material.AIR));
+        VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1).setItemStack(null, 0, item.getItem().setAmount(item.getItem().getAmount()););
         // update virtual container with enchanted version
         VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_ITEM_KEY + p.getName()), 1).setItemStack(null, 0, item.getItem());
 
         this.eTable.getWorld().playSound(this.eTable.getLocation(), ENCHANT_SOUND, 1f + level, 1f - level * 0.15f);
 
-        p.sendExperienceChange(p.getExp(), p.getLevel() - xp);
-        p.setLevel(p.getLevel() - xp);
+        // Update player's XP levels
+        p.sendExperienceChange(p.getExp(), p.getLevel() - xpRequired);
+        p.setLevel(p.getLevel() - xpRequired);
+
+        // Update player's Skill XP
+        AureliumAPI.addXp(p, Skills.ENCHANTING, calculateSkillXP(level, strength, variety));
 
         Util.sendMessage(p, "Enchanted item " + item.getItem().getItemMeta().getDisplayName() + " w/ enchants: " + resultCombined);
         Util.sendMessage(p, "Not Combined: " + result);
@@ -179,21 +190,83 @@ public class EnchantingGUI extends SimpleGUI {
         this.bookshelfPower = bookshelfPower;
     }
 
-    public static boolean fuelValid(EnchantingGUI gui) {
+    public static boolean enchantValid(EnchantingGUI gui, int power, int XPRequired) {
+        int skillRequirement = 0;
+        switch (power) {
+            case 2 -> skillRequirement = 20;
+            case 3 -> skillRequirement = 35;
+        }
+        // Check XP and skill level
+        return fuelValid(gui.getFuelItem()) && itemValid(gui.getEItem()) && AureliumAPI.getSkillLevel(gui.p, Skills.ENCHANTING) >= skillRequirement && gui.p.getLevel() >= XPRequired;
+    }
+
+    private static boolean itemValid(ItemStack item) {
         try {
-            return ComplexItemStack.of(gui.getFuelItem()).getComplexMeta().hasVariable(ENCHANT_FUEL_VAR);
+            ComplexItem.Type type = ComplexItemStack.of(item).getComplexItem().getType();
+            return item != null && item.getType() != Material.AIR
+                    && ComplexEnchantment.getRegisteredEnchants()
+                    .stream()
+                    .filter(complexEnchantment ->
+                            complexEnchantment.getTypes().contains(type)).toList().size() > 0;
         } catch (NullPointerException e) {
             return false;
         }
     }
 
-    public static boolean enchantValid(EnchantingGUI gui, int level) {
-        int skillRequirement = 0;
-        switch (level) {
-            case 2 -> skillRequirement = 20;
-            case 3 -> skillRequirement = 35;
+    public static boolean fuelValid(ItemStack item) {
+        try {
+            return ComplexItemStack.of(item).getComplexMeta().hasVariable(ENCHANT_FUEL_VAR);
+        } catch (NullPointerException e) {
+            return false;
         }
-        return fuelValid(gui) && AureliumAPI.getSkillLevel(gui.p, Skills.ENCHANTING) >= skillRequirement && gui.p.getLevel() >= 20 + level * 10;
+    }
+
+    public static double calculateStrength(int level, int fuelStrength, int enchantingSkill) {
+        double levelFactor = 0.1d + level * 0.3d;
+        double fuelFactor = Math.cbrt(fuelStrength)/6;
+        double skillFactor = Math.sqrt(enchantingSkill + 4)/3;
+        return min(1d, (skillFactor * fuelFactor)) * levelFactor;
+    }
+
+    public static double calculateVariety(int bookshelfPower) {
+        return min(2, Math.pow(bookshelfPower, 1/4d)/2.569d + 1d);
+    }
+
+    public static int calculateLevel(double strength, int maxLevel, int weight){
+        double strengthFactor = strength * maxLevel;
+        Random random = new Random();
+        return Math.min(maxLevel, (int) strengthFactor - (random.nextDouble() < weight / 100 ? 1 : 0));
+    }
+
+    public static int calculateSkillXP(int power, double strength, double variety){
+        return (int) (Math.pow(power, 2) * strength * Math.sqrt(8 * variety) * 1000);
+    }
+
+    /**
+     * Combines two sets of enchantments to create a third resulting set of enchantments, similar to the behavior of an anvil
+     * @param enchantSet1 the first set of enchantments- in case of disputes, this one will take priority
+     * @param enchantSet2 the second set of enchantments
+     * @return the resulting set of enchantments
+     */
+    public static HashMap<ComplexEnchantment, Integer> combineEnchantMaps(HashMap<ComplexEnchantment, Integer> enchantSet1, Map<ComplexEnchantment, Integer> enchantSet2){
+        HashMap<ComplexEnchantment, Integer> result = (HashMap<ComplexEnchantment, Integer>) enchantSet1.clone();
+        // Create a list of enchants to ignore
+        List<ComplexEnchantment> invalidEnchantments = new ArrayList<>();
+        enchantSet1.forEach(((complexEnchantment, integer) -> invalidEnchantments.addAll(complexEnchantment.getExclusive())));
+
+        for (Map.Entry<ComplexEnchantment, Integer> entry : enchantSet2.entrySet()) {
+            if(invalidEnchantments.contains(entry.getKey())) continue;
+            result.computeIfPresent(entry.getKey(), ((complexEnchantment, integer) -> combineEnchantLevels(entry.getValue(), integer)));
+            result.putIfAbsent(entry.getKey(), entry.getValue());
+        }
+
+        return result;
+    }
+
+    private static int combineEnchantLevels(int enchantLevel1, int enchantLevel2){
+        int result = Math.max(enchantLevel1, enchantLevel1);
+        if(enchantLevel1 == enchantLevel2) return enchantLevel1 + 1;
+        return result;
     }
 
     public static GUI getGui(Player p, Block block) {
