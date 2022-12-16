@@ -74,7 +74,7 @@ public class EnchantingGUI extends SimpleGUI {
      * </ol>
      *
      * @param level enchantment level
-     * @param xp    the amount of experience to take (levels)
+     * @param xpRequired xp required to enchant
      * @return whether the enchantment process worked
      */
     public boolean enchantItem(int level, int xpRequired) {
@@ -93,8 +93,12 @@ public class EnchantingGUI extends SimpleGUI {
         Map<ComplexEnchantment, Integer> currentEnchantments = item.getComplexMeta().getComplexEnchants();
 
         // Obtain list of enchantments that cannot be applied
-        List<ComplexEnchantment> possibleEnchantments = new ArrayList<>(ComplexEnchantment.getRegisteredEnchants().stream().filter(ce -> ce.getTypes().contains(item.getComplexItem().getType())).toList());
+        List<ComplexEnchantment> possibleEnchantments = new ArrayList<>(ComplexEnchantment.getRegisteredEnchants()
+                .stream().filter(complexEnchantment -> complexEnchantment.getTypes().contains(item.getComplexItem().getType())).toList());
+        Util.logToConsole("Lambda Test: " + possibleEnchantments.get(0).getTypes().contains(item.getComplexItem().getType()));
         for(ComplexEnchantment enchantment : currentEnchantments.keySet()) possibleEnchantments.removeAll(enchantment.getExclusive());
+
+        Util.logToConsole("Possible Enchantments: " + possibleEnchantments.stream().map(ComplexEnchantment::getName).toList());
 
         while (true) {
             // Assign all enchantments that can be applied an index based on their weight
@@ -105,9 +109,11 @@ public class EnchantingGUI extends SimpleGUI {
                     enchantmentWeights.put(enchantment, enchantment.getWeight() + currentWeight);
                     currentWeight += enchantment.getWeight();
                 } else {
-                    throw new IllegalStateException("Enchantment " + enchantment.getName() + " has a weight of 0 or less!");
+                    //Util.logToConsole(ChatColor.RED + "[ERROR]" + ChatColor.WHITE + " Enchantment " + enchantment.getName() + " has a weight of 0 or less!");
                 }
             }
+
+            Util.logToConsole("Enchantment Weights: " + enchantmentWeights);
 
             // If there are no enchantments that can be applied, break
             if (enchantmentWeights.isEmpty()) break;
@@ -133,6 +139,7 @@ public class EnchantingGUI extends SimpleGUI {
 
             // Remove the enchantment from the list of possible enchantments
             possibleEnchantments.remove(enchantment);
+            possibleEnchantments.removeAll(enchantment.getExclusive());
 
             if(variety < 1 && r.nextDouble() > variety) break;
             if(variety <= 0) break;
@@ -144,8 +151,10 @@ public class EnchantingGUI extends SimpleGUI {
         // Apply enchantments to item
         item.getComplexMeta().setComplexEnchantments(resultCombined);
 
+        fuelItem.getItem().setAmount(fuelItem.getItem().getAmount() - 1);
+
         // Set fuel to be empty
-        VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1).setItemStack(null, 0, item.getItem().setAmount(item.getItem().getAmount()););
+        VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1).setItemStack(null, 0, fuelItem.getItem());
         // update virtual container with enchanted version
         VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_ITEM_KEY + p.getName()), 1).setItemStack(null, 0, item.getItem());
 
@@ -285,10 +294,10 @@ public class EnchantingGUI extends SimpleGUI {
                 .addIngredient('1', new EnchantItem(1, 0))
                 .addIngredient('2', new EnchantItem(2, 20))
                 .addIngredient('3', new EnchantItem(3, 35))
-                .addIngredient('@', new BooleanItem(EnchantingGUI::fuelValid))
-                .addIngredient('$', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 1)))
-                .addIngredient('%', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 2)))
-                .addIngredient('^', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 3)))
+                .addIngredient('@', new BooleanItem(enchantingGUI -> fuelValid(enchantingGUI.getFuelItem())))
+                .addIngredient('$', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 1, 30)))
+                .addIngredient('%', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 2, 40)))
+                .addIngredient('^', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 3, 50)))
                 .addIngredient('B', new BookshelfItem())
                 .addIngredient('C', new CloseItem())
                 .build();
