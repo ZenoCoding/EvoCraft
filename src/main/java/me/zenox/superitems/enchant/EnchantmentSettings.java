@@ -37,6 +37,7 @@ public class EnchantmentSettings {
         this.maxLevel = 1;
         this.rarity = 100;
         this.types = new ArrayList<>(List.of(ComplexItem.Type.values()));
+        this.types.remove(ComplexItem.Type.MISC);
         this.slots = new ArrayList<>();
         this.slots.add(Slot.MAIN_HAND);
         this.stats = new ArrayList<>();
@@ -76,12 +77,12 @@ public class EnchantmentSettings {
     }
 
     public EnchantmentSettings type(ComplexItem.Type type) {
-        this.types.add(type);
+        this.types = new ArrayList<>(List.of(type));
         return this;
     }
 
     public EnchantmentSettings types(ComplexItem.Type ... types) {
-        this.types.addAll(List.of(types));
+        this.types = new ArrayList<>(List.of(types));
         return this;
     }
 

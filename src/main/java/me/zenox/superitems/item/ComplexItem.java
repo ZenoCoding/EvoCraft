@@ -68,7 +68,7 @@ public class ComplexItem {
         this.abilities = abilities;
         this.variableMap.putAll(variableMap);
 
-        register();
+        register(false);
     }
 
     public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
@@ -106,15 +106,42 @@ public class ComplexItem {
         this.variableMap.putAll(settings.getVariableMap());
         this.attributeModifiers = settings.getAttributeModifiers();
 
-        register();
+        register(false);
     }
 
-    private void register(){
+    protected ComplexItem(ItemSettings settings, boolean override) {
+        this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + settings.getId());
+        this.id = settings.getId();
+        this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
+        this.key = new NamespacedKey(SuperItems.getPlugin(), id);
+        String str = String.valueOf(Math.abs(id.hashCode()));
+        this.customModelData = Ints.tryParse(str.substring(0, Math.min(7, str.length())));
+        this.unique = settings.isUnique();
+        this.glow = settings.doesGlow();
+        this.rarity = settings.getRarity();
+        this.type = settings.getType();
+        this.material = settings.getMaterial();
+        this.meta = settings.getMeta();
+        this.stats = settings.getStats();
+        this.skullURL = "";
+        this.abilities = settings.getAbilities() == null ? new ArrayList<>() : new ArrayList<>(settings.getAbilities());
+        this.variableMap.putAll(settings.getVariableMap());
+        this.attributeModifiers = settings.getAttributeModifiers();
+
+        register(true);
+    }
+
+    private void register(boolean override){
         for (ComplexItem item:
-                itemRegistry) {
+                new ArrayList<>(itemRegistry)) {
             if (item.getId().equalsIgnoreCase(id)) {
-                Util.logToConsole("Duplicate ComplexItem ID: " + id + " | Exact Match: " + item.equals(this));
-                throw new IllegalArgumentException("ComplexItem ID cannot be duplicate");
+                if (!override) {
+                    Util.logToConsole("Duplicate ComplexItem ID: " + id + " | Exact Match: " + item.equals(this));
+                    throw new IllegalArgumentException("ComplexItem ID cannot be duplicate");
+                } else {
+                    itemRegistry.remove(item);
+                    break;
+                }
             }
         }
 

@@ -95,10 +95,9 @@ public class EnchantingGUI extends SimpleGUI {
         // Obtain list of enchantments that cannot be applied
         List<ComplexEnchantment> possibleEnchantments = new ArrayList<>(ComplexEnchantment.getRegisteredEnchants()
                 .stream().filter(complexEnchantment -> complexEnchantment.getTypes().contains(item.getComplexItem().getType())).toList());
-        Util.logToConsole("Lambda Test: " + possibleEnchantments.get(0).getTypes().contains(item.getComplexItem().getType()));
+
         for(ComplexEnchantment enchantment : currentEnchantments.keySet()) possibleEnchantments.removeAll(enchantment.getExclusive());
 
-        Util.logToConsole("Possible Enchantments: " + possibleEnchantments.stream().map(ComplexEnchantment::getName).toList());
 
         while (true) {
             // Assign all enchantments that can be applied an index based on their weight
@@ -112,8 +111,6 @@ public class EnchantingGUI extends SimpleGUI {
                     //Util.logToConsole(ChatColor.RED + "[ERROR]" + ChatColor.WHITE + " Enchantment " + enchantment.getName() + " has a weight of 0 or less!");
                 }
             }
-
-            Util.logToConsole("Enchantment Weights: " + enchantmentWeights);
 
             // If there are no enchantments that can be applied, break
             if (enchantmentWeights.isEmpty()) break;
@@ -166,10 +163,6 @@ public class EnchantingGUI extends SimpleGUI {
 
         // Update player's Skill XP
         AureliumAPI.addXp(p, Skills.ENCHANTING, calculateSkillXP(level, strength, variety));
-
-        Util.sendMessage(p, "Enchanted item " + item.getItem().getItemMeta().getDisplayName() + " w/ enchants: " + resultCombined);
-        Util.sendMessage(p, "Not Combined: " + result);
-
         return true;
     }
 
@@ -244,7 +237,7 @@ public class EnchantingGUI extends SimpleGUI {
     public static int calculateLevel(double strength, int maxLevel, int weight){
         double strengthFactor = strength * maxLevel;
         Random random = new Random();
-        return Math.min(maxLevel, (int) strengthFactor - (random.nextDouble() < weight / 100 ? 1 : 0));
+        return Math.max(1, Math.min(maxLevel, (int) strengthFactor - (random.nextDouble() < weight / 100 ? 1 : 0)));
     }
 
     public static int calculateSkillXP(int power, double strength, double variety){

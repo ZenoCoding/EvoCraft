@@ -51,6 +51,21 @@ public class VanillaItem extends ComplexItem {
         vanillaItemList.add(this);
     }
 
+    /**
+     * Vanilla item constructor to override the default settings of a vanilla item.
+     * @param settings The settings to override.
+     */
+    public VanillaItem(ItemSettings settings) {
+        super(settings.id(settings.getMaterial().getKey().getKey()), true);
+        if (!settings.getMaterial().isItem()) throw new IllegalArgumentException("Material must have an item form");
+        for (VanillaItem item : new ArrayList<>(vanillaItemList)) {
+            // remove the old item
+            if (Objects.equals(item.getId(), this.getId()))
+                vanillaItemList.remove(item);
+        }
+        vanillaItemList.add(this);
+    }
+
     @Override
     public String getDisplayName() {
         return Objects.requireNonNullElse(Bukkit.getItemFactory().getItemMeta(getMaterial()).getDisplayName(), getMaterial().name().replace("_", " ").toLowerCase());
