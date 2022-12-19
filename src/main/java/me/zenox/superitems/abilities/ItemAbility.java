@@ -20,6 +20,8 @@ import me.zenox.superitems.item.ComplexItemMeta;
 import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.persistence.NBTEditor;
+import me.zenox.superitems.story.chapters.ChapterOne;
+import me.zenox.superitems.story.chapters.ChapterZero;
 import me.zenox.superitems.util.Geo;
 import me.zenox.superitems.util.TriConsumer;
 import me.zenox.superitems.util.Util;
@@ -825,6 +827,84 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
         f.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
         f.setYield(1f);
         f.setShooter(p);
+    }
+
+    public static void startButtonAbility(PlayerInteractEvent playerInteractEvent, Player player, ItemStack itemStack) {
+        // Check if the player has started using the "hasStarted" metadata value
+        try {
+            if (player.getMetadata("hasStarted").size() > 0 || player.getMetadata("hasStarted").get(0).asBoolean())
+                return;
+        } catch (IndexOutOfBoundsException ignored){
+
+        }
+
+        player.setMetadata("hasStarted", new FixedMetadataValue(SuperItems.getPlugin(), true));
+
+        BukkitRunnable startup = new BukkitRunnable(){
+            @Override
+            public void run() {
+                Util.sendMessage(player, "&aStarting Windows XP... &a&l(" + 100 + ")%", false);
+                ChapterZero.getInstance().onChapterEnd(playerInteractEvent);
+                ChapterOne.getInstance().onChapterStart(playerInteractEvent);
+            }
+        };
+
+        new BukkitRunnable(){
+            int a = 0;
+            @Override
+            public void run() {
+                if(a == 0) Util.sendMessage(player, "&aStarting Windows XP...", false);
+                else Util.sendMessage(player, "&aStarting Windows XP... &7(" + Math.min(100, a) + ")%", false);
+                a += Util.round(new Random().nextDouble()*10, 1);
+                if(a >= 100) {
+                    cancel();
+                    player.playSound(player.getLocation(), "story.0.startup", 1, 1);
+                    startup.runTaskLater(SuperItems.getPlugin(), 120);
+                }
+            }
+        }.runTaskTimer(SuperItems.getPlugin(), 5, 4);
+    }
+
+    public static void portalizerAbility(PlayerInteractEvent playerInteractEvent, Player player, ItemStack itemStack) {
+        if(playerInteractEvent.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            Block block = playerInteractEvent.getClickedBlock();
+            if(block != null) {
+                if(block.getType() == Material.WHITE_STAINED_GLASS) {
+                    itemStack.setAmount(0);
+                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1, 1);
+                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 1f);
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm m spawn -s LightCrystalCharger 1 " + player.getWorld() + "," + -347 + "," + -61 + "," + -511);
+                    new BukkitRunnable(){
+                        @Override
+                        public void run() {
+                            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 0.5f, 0.8f);
+                            player.teleport(new Location(player.getServer().getWorld("flat"), -369, -53, -594));
+                            player.setBedSpawnLocation(new Location(player.getServer().getWorld("flat"), -369, -53, -594), true);
+                            Util.sendMessage(player, "&b100BCE | &8The Desolated Temple", false);
+                            // Play second voiceover sounds
+                            player.playSound(player.getLocation(), "story.chapter.1.backstory_2", 20f, 1f);
+                        }
+                    }.runTaskLater(SuperItems.getPlugin(), 80);
+
+                } else if (block.getType() == Material.TINTED_GLASS) {
+                    itemStack.setAmount(0);
+                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1, 0.5f);
+                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 0.5f);
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm m spawn -s DarkCrystalCharger 1 " + player.getWorld() + "," + -369 + "," + -61 + "," + -594);
+                    new BukkitRunnable(){
+                    @Override
+                    public void run() {
+                        player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 1);
+                        player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 0.8f);
+
+                        Util.sendMessage(player, "&bPresent Day | &aEnsildia", false);
+                        SuperItems.getChapterManager().getChapter(player).progress(player, playerInteractEvent);
+                    }
+                }.runTaskLater(SuperItems.getPlugin(), 80);
+
+                }
+            }
+        }
     }
 
     public enum AbilityAction {

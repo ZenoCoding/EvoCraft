@@ -449,6 +449,23 @@ public class ItemRegistry {
             .ability(AbilityRegistry.GILDED_CONSUME)
             .rarity(ComplexItem.Rarity.RARE));
 
+    public static final ComplexItem START_BUTTON = new ComplexItem(new ItemSettings()
+            .id("start_button")
+            .material(Material.REDSTONE)
+            .ability(AbilityRegistry.START_BUTTON)
+            .rarity(ComplexItem.Rarity.MYTHIC));
+
+    public static final ComplexItem SOUL_STONE = new ComplexItem(new ItemSettings()
+            .id("soul_stone")
+            .material(Material.NETHER_STAR)
+            .ability(AbilityRegistry.PORTALIZER)
+            .rarity(ComplexItem.Rarity.MYTHIC));
+
+    public static final ComplexItem ARCANE_JEWEL = new ComplexItem(new ItemSettings()
+            .id("arcane_jewel")
+            .material(Material.DIAMOND)
+            .rarity(ComplexItem.Rarity.RARE));
+
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
     @Deprecated

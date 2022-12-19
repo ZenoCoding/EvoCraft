@@ -4,10 +4,12 @@ import com.google.common.primitives.Ints;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.enchant.ComplexEnchantment;
 import me.zenox.superitems.item.ComplexItem;
+import me.zenox.superitems.item.ComplexItemMeta;
 import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.loot.LootTable;
 import me.zenox.superitems.loot.LootTableRegistry;
+import me.zenox.superitems.story.ChapterManager;
 import me.zenox.superitems.tabcompleter.MainTabCompleter;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
@@ -163,7 +165,9 @@ public class MainCommand implements CommandExecutor {
                         level = 1;
                     }
 
-                    ComplexItemStack.of(enchanted.getInventory().getItemInMainHand()).getComplexMeta().addEnchantment(enchant, (Integer) level);
+                    ComplexItemMeta meta = ComplexItemStack.of(enchanted.getInventory().getItemInMainHand()).getComplexMeta();
+                    if(((int) level) > 0) meta.addEnchantment(enchant, (Integer) level);
+                    else meta.removeEnchantment(enchant);
                     Util.sendMessage(sender, "You enchanted " + enchanted.getDisplayName() + " with " + ChatColor.WHITE + enchant.getName() + " " + level);
                 }
                 return true;
@@ -181,6 +185,15 @@ public class MainCommand implements CommandExecutor {
                 }
                 Util.sendMessage(sender, ChatColor.WHITE + "The CustomModelData of " + item.getItemMeta().getDisplayName() + ChatColor.WHITE + "  is " + ComplexItemStack.of(item).getComplexItem().getCustomModelData());
                 return true;
+            }
+            case "removechapterdata" -> {
+                if (sender instanceof Player){
+                    ((Player) sender).getPersistentDataContainer().remove(ChapterManager.CHAPTER_KEY);
+                    Util.sendMessage(sender, "All chapter data has been removed.");
+                }
+                else {
+                    Util.sendMessage(sender, "You must be a player to use this command!");
+                }
             }
             default -> Util.sendMessage(sender, "SuperItems Help Page.");
         }

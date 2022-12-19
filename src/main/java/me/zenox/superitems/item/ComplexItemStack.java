@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.List;
@@ -72,7 +73,7 @@ public class ComplexItemStack {
         // Util.logToConsole("Item Name: " + meta.getDisplayName());
     }
 
-    public static ComplexItemStack of(ItemStack item) {
+    public static ComplexItemStack of(@NotNull ItemStack item) {
         if(item.getType() == Material.AIR) throw new IllegalArgumentException("You cannot create a ComplexItemStack of an ItemStack with material AIR");
         ComplexItem complexItem = Objects.requireNonNullElse(ItemRegistry.byItem(item), VanillaItem.of(item.getType()));
         return new ComplexItemStack(complexItem, item);

@@ -107,6 +107,12 @@ item-name-burning_smoke: Burning Smoke
 
 item-name-gilded_carrot: Gilded Carrot
 
+item-name-start_button: Start Button
+
+item-name-soul_stone: Soul Stone
+
+item-name-arcane_jewel: Arcane Jewel
+
 ##########################################################################
 ##                              ITEM LORE                               ##
 ##########################################################################
@@ -273,6 +279,16 @@ item-lore-burning_boots:
 item-lore-gilded_carrot:
   - "Really tasty!"
 
+item-lore-start_button:
+  - "Just press start."
+
+item-lore-soul_stone:
+  - "A stone imbued with the power of a soul."
+
+item-lore-arcane_jewel:
+  - "Holds the true power of a mage."
+  - "&6QUEST ITEM"
+
 ##########################################################################
 ##                              ABILITIES                               ##
 ##########################################################################
@@ -398,6 +414,13 @@ ability-name-gilded_consume: Consume
 
 ability-lore-gilded_consume:
   - "Refills all of your &6hunger &7bars, and then also grants &a50 &6saturation&7!"
+
+ability-name-start_button: Press Start
+
+ability-name-portalizer: Portalizer
+
+ability-lore-portalizer:
+  - "Activate an energy crystal, and travel through spacetime."
 
 ##########################################################################
 ##                             ENCHANTMENTS                             ##

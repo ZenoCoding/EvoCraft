@@ -224,7 +224,7 @@ public class ComplexItem {
         RARE(ChatColor.BLUE, "&9&lRARE&9&l"),
         EPIC(ChatColor.AQUA, "&b&lEPIC&b&l"),
         LEGENDARY(ChatColor.GOLD, "&6&lLEGENDARY&6&l"),
-        MYTHIC(ChatColor.LIGHT_PURPLE, "&d&k&lD &k&lMYTHIC&k D&d&l"),
+        MYTHIC(ChatColor.LIGHT_PURPLE, "&d&k&lD &d&lMYTHIC&k D&d&l"),
         OMEGA(ChatColor.GOLD, "&6&k&lD &6&lOMEGA&k D&6&l"),
         VERY_SPECIAL(ChatColor.RED, "&c&k&l| D &c&lVERY SPECIAL &kD |&c&l"),
         UNOBTAINABLE(ChatColor.DARK_AQUA, "&3&k&lD &3&lUNOBTAINABLE&k D&3&l"),

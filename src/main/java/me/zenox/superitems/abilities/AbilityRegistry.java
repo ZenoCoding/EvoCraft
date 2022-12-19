@@ -112,6 +112,16 @@ public class AbilityRegistry {
             .setAbilityAction(ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK)
             .setManaCost(10)
             .setCooldown(1), ItemAbility::voidularRecallAbility);
+    public static final ItemAbility START_BUTTON = new ItemAbility(new AbilitySettings()
+            .setId("start_button")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(0)
+            .setCooldown(0), ItemAbility::startButtonAbility);
+    public static final ItemAbility PORTALIZER = new ItemAbility(new AbilitySettings()
+            .setId("portalizer")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(0)
+            .setCooldown(0), ItemAbility::portalizerAbility);
 
     public static void registerAbilities(){
         Util.logToConsole("Registering %s abilities.".formatted(ChatColor.GOLD + "" + Ability.registeredAbilities.size() + "" + ChatColor.RESET));
