@@ -20,8 +20,6 @@ import me.zenox.superitems.item.ComplexItemMeta;
 import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.persistence.NBTEditor;
-import me.zenox.superitems.story.chapters.ChapterOne;
-import me.zenox.superitems.story.chapters.ChapterZero;
 import me.zenox.superitems.util.Geo;
 import me.zenox.superitems.util.TriConsumer;
 import me.zenox.superitems.util.Util;
@@ -844,8 +842,7 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
             @Override
             public void run() {
                 Util.sendMessage(player, "&aStarting Windows XP... &a&l(" + 100 + ")%", false);
-                ChapterZero.getInstance().onChapterEnd(playerInteractEvent);
-                ChapterOne.getInstance().onChapterStart(playerInteractEvent);
+                SuperItems.getChapterManager().getChapter(player).progress(player, playerInteractEvent);
             }
         };
 
@@ -892,16 +889,15 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                     player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 0.5f);
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm m spawn -s DarkCrystalCharger 1 " + player.getWorld() + "," + -369 + "," + -61 + "," + -594);
                     new BukkitRunnable(){
-                    @Override
-                    public void run() {
-                        player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 1);
-                        player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 0.8f);
+                        @Override
+                        public void run() {
+                            player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 1);
+                            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 0.8f);
 
-                        Util.sendMessage(player, "&bPresent Day | &aEnsildia", false);
-                        SuperItems.getChapterManager().getChapter(player).progress(player, playerInteractEvent);
-                    }
-                }.runTaskLater(SuperItems.getPlugin(), 80);
-
+                            Util.sendMessage(player, "&bPresent Day | &aEnsildia", false);
+                            SuperItems.getChapterManager().getChapter(player).progress(player, playerInteractEvent);
+                        }
+                    }.runTaskLater(SuperItems.getPlugin(), 80);
                 }
             }
         }

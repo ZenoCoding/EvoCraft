@@ -366,6 +366,8 @@ public class ItemRegistry {
             .material(Material.IRON_SWORD)
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .type(ComplexItem.Type.SWORD)
+            .modifier(AttributeRegistry.ATTACK_DAMAGE, 10d)
+            .modifier(AttributeRegistry.ATTACK_SPEED, -2.2d)
             .ability(AbilityRegistry.DARK_FURY));
 
     public static final ComplexItem DARK_ORB = new ComplexItem(new ItemSettings()
@@ -463,7 +465,12 @@ public class ItemRegistry {
 
     public static final ComplexItem ARCANE_JEWEL = new ComplexItem(new ItemSettings()
             .id("arcane_jewel")
-            .material(Material.DIAMOND)
+            .material(Material.AMETHYST_SHARD)
+            .rarity(ComplexItem.Rarity.RARE));
+
+    public static final ComplexItem WHACK_A_STICK = new ComplexItem(new ItemSettings()
+            .id("whack_a_stick")
+            .material(Material.STICK)
             .rarity(ComplexItem.Rarity.RARE));
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();

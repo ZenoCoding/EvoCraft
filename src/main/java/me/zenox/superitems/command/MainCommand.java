@@ -195,6 +195,15 @@ public class MainCommand implements CommandExecutor {
                     Util.sendMessage(sender, "You must be a player to use this command!");
                 }
             }
+            case "removemetadata" -> {
+                if (sender instanceof Player){
+                    sender.getServer().getPlayer(args[1]).removeMetadata("hasStarted", SuperItems.getPlugin());
+                    Util.sendMessage(sender, "All chapter data has been removed.");
+                }
+                else {
+                    Util.sendMessage(sender, "You must be a player to use this command!");
+                }
+            }
             default -> Util.sendMessage(sender, "SuperItems Help Page.");
         }
         return true;

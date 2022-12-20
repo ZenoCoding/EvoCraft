@@ -4,6 +4,7 @@ import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.story.chapters.ChapterOne;
 import me.zenox.superitems.story.chapters.ChapterTwo;
 import me.zenox.superitems.story.chapters.ChapterZero;
+import me.zenox.superitems.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -35,8 +36,8 @@ public class ChapterManager implements Listener {
                     if(manager.getChapter(p).isSolo()){
                         for(Player p2 : Bukkit.getOnlinePlayers()){
                             if(p != p2 ){
-                                if(!p2.getEffectivePermissions().contains("superitems.admin")) p.hidePlayer(SuperItems.getPlugin(), p2);
-                                p2.hidePlayer(SuperItems.getPlugin(), p);
+                                p.hidePlayer(SuperItems.getPlugin(), p2);
+                                if(!p2.getEffectivePermissions().contains("superitems.admin")) p2.hidePlayer(SuperItems.getPlugin(), p);
                             }
                         }
                     } else {
@@ -64,7 +65,8 @@ public class ChapterManager implements Listener {
             chapter = ChapterZero.getInstance();
             player.getPersistentDataContainer().set(CHAPTER_KEY, PersistentDataType.INTEGER, chapter.getId());
         }
-        chapter.onChapterStart(event);
+
+        if(chapter.equals(ChapterZero.getInstance())) chapter.onChapterStart(event);
     }
 
     @Nullable
@@ -82,6 +84,7 @@ public class ChapterManager implements Listener {
     }
 
     public void setChapter(Player p, int id){
+        Util.sendMessage(p, "Setting chapter of player %s to %s.".formatted(p.getName(), id));
         try{
             setChapter(p, chapters.get(id));
         } catch (IndexOutOfBoundsException e){

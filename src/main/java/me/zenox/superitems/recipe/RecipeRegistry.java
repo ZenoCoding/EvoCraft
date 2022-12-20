@@ -38,6 +38,13 @@ public class RecipeRegistry {
                 .addChoice('E', new MaterialAmountChoice(Material.ENDER_PEARL, 9))
                 .build());
 
+        final Recipe ENCHANTED_MAGMA_BLOCK = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.ENCHANTED_MAGMA_BLOCK).getItem())
+                .id("enchanted_magma_block")
+                .shape("MMM", "MMM", "MMM")
+                .addChoice('M', new MaterialAmountChoice(Material.MAGMA_BLOCK, 9))
+                .build());
+
         final Recipe ABSOLUTE_ENDER_PEARL = registerRecipe(new ShapedRecipeBuilder()
                 .setResult(new ComplexItemStack(ItemRegistry.ABSOLUTE_ENDER_PEARL).getItem())
                 .id("absolute_ender_pearl")

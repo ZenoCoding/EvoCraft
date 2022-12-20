@@ -11,7 +11,7 @@ public class ChapterTwo extends Chapter<PlayerInteractEvent, PlayerInteractEvent
     private static ChapterTwo instance = null;
 
     private ChapterTwo() {
-        super(2, true);
+        super(2, false);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class ChapterTwo extends Chapter<PlayerInteractEvent, PlayerInteractEvent
         event.getPlayer().teleport(new Location(event.getPlayer().getServer().getWorld("flat"), -134, 78, -466));
         event.getPlayer().setBedSpawnLocation(new Location(event.getPlayer().getServer().getWorld("flat"), -134, 78, -466), true);
         event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 1.5f);
-        // Begin Voiceover
+        Util.sendMessage(event.getPlayer(), "&b&lQUICK TIP: &fExplore the island! Head to the portal at the center of the island once you would like to begin your adventure.");
 
     }
 
