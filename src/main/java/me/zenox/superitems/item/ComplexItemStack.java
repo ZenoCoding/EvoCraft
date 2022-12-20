@@ -76,7 +76,15 @@ public class ComplexItemStack {
     public static ComplexItemStack of(@NotNull ItemStack item) {
         if(item.getType() == Material.AIR) throw new IllegalArgumentException("You cannot create a ComplexItemStack of an ItemStack with material AIR");
         ComplexItem complexItem = Objects.requireNonNullElse(ItemRegistry.byItem(item), VanillaItem.of(item.getType()));
-        return new ComplexItemStack(complexItem, item);
+        ComplexItemStack cItem = new ComplexItemStack(complexItem, item);
+        // add vanilla variables???
+        if (cItem.getComplexItem() instanceof VanillaItem) {
+            for(Map.Entry<VariableType, Serializable> entry : complexItem.getVariableMap().entrySet()){
+                if(!cItem.getComplexMeta().hasVariable(entry.getKey())) cItem.getComplexMeta().setVariable(entry.getKey(), entry.getValue());
+            }
+        }
+        cItem.getComplexMeta().updateItem();
+        return cItem;
     }
 
     private ItemStack buildItem(int amount) {

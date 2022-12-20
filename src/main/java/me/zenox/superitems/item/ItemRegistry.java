@@ -473,6 +473,11 @@ public class ItemRegistry {
             .material(Material.STICK)
             .rarity(ComplexItem.Rarity.RARE));
 
+    // Vanilla Items
+    public static final VanillaItem LAPIS_LAZULI = new VanillaItem(new ItemSettings()
+            .material(Material.LAPIS_LAZULI)
+            .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 1));
+
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
     @Deprecated

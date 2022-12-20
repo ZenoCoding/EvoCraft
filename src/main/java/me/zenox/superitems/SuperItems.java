@@ -88,9 +88,9 @@ public final class SuperItems extends JavaPlugin {
 
         AttributeRegistry.registerAttributes();
         AbilityRegistry.registerAbilities();
+        VanillaItem.registerItems();
         ItemRegistry.registerRecipes();
         ItemRegistry.registerItems();
-        VanillaItem.registerItems();
         RecipeRegistry.registerRecipes();
         EnchantRegistry.registerEnchants();
 
