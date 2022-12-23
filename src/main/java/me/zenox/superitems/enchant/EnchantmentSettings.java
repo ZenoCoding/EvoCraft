@@ -10,7 +10,6 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +28,7 @@ public class EnchantmentSettings {
     private List<StatModifier> stats;
     private QuadConsumer<Event, Integer, ItemStack, Player> executable;
     private Enchantment vanillaEnchant;
-    private List<ComplexEnchantment> exclusive;
+    private List<EnchantRegistry.EnchantmentWrapper> exclusive;
 
 
     public EnchantmentSettings() {
@@ -132,12 +131,12 @@ public class EnchantmentSettings {
         return this;
     }
 
-    public List<ComplexEnchantment> getExclusive() {
+    public List<EnchantRegistry.EnchantmentWrapper> getExclusive() {
         return exclusive;
     }
 
     public EnchantmentSettings exclusive(EnchantRegistry.EnchantmentWrapper ... exclusive) {
-        this.exclusive.addAll(Arrays.stream(exclusive).map(enchantmentWrapper -> enchantmentWrapper.getEnchant()).toList());
+        this.exclusive.addAll(List.of(exclusive));
         return this;
     }
 }

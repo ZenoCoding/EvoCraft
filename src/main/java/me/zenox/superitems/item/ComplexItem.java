@@ -155,7 +155,7 @@ public class ComplexItem {
 
     @Deprecated
     public ItemStack getItemStack(Integer amount) {
-        return new ComplexItemStack(this, 2).getItem();
+        return new ComplexItemStack(this, amount).getItem();
     }
 
     protected void writeAbilityLore(List<String> lore) {
@@ -279,7 +279,8 @@ public class ComplexItem {
 
         SWORD("SWORD", false), AXE("AXE", false), BOW("BOW", false), CROSSBOW("CROSSBOW", false),
         TRIDENT("TRIDENT", false),
-        PICKAXE("PICKAXE", false), FISHING_ROD("FISHING ROD", false),
+        PICKAXE("PICKAXE", false), FISHING_ROD("FISHING ROD", false), SHOVEL("SHOVEL", false),
+        SHIELD("SHIELD", false), HOE("HOE", false),
         WAND("WAND", false), STAFF("STAFF", false), SUPERITEM("SUPERITEM", false),
         DEPLOYABLE("DEPLOYABLE", false), MISC("", false), ENCHANTING_FUEL("ENCHANTING FUEL", false),
         HELMET("HELMET", true), CHESTPLATE("CHESTPLATE", true), LEGGINGS("LEGGINGS", true), BOOTS("BOOTS", true);

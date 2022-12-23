@@ -27,10 +27,10 @@ public class BookshelfItem extends ControlItem<EnchantingGUI> {
         int bookshelfPower = 0;
         for (Block block : Util.getNearbyBlocks(gui.getETable().getLocation(), 5, 5))
             if(block.getType() == Material.BOOKSHELF) bookshelfPower ++;
-        bookshelfPower = Math.min(bookshelfPower, 15);
+        bookshelfPower = Math.min(bookshelfPower, 50);
         gui.setBookshelfPower(bookshelfPower);
 
-        return new ItemBuilder(Material.BOOKSHELF).setDisplayName("§dBookshelf Power").setLegacyLore(List.of("", "§dPower: " + bookshelfPower, "", "§7Gain bookshelf power by placing", "§dbookshelves §around the enchantment table.", "", "§e§nClick to update!"));
+        return new ItemBuilder(Material.BOOKSHELF).setDisplayName("§dBookshelf Power").setLegacyLore(List.of("", "§dPower: " + bookshelfPower, "", "§7Gain bookshelf power by placing", "§dbookshelves §7around the enchantment table. (Caps at 50)", "", "§e§nClick to update!"));
     }
 
     @Override

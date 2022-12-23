@@ -41,7 +41,7 @@ public class EnchantRegistry {
 
     public static ComplexEnchantment CULLING = new AttackEnchantment(new EnchantmentSettings()
             .id("culling")
-            .maxLevel(2)
+            .maxLevel(4)
             .rarity(20)
             .types(ComplexItem.Type.SWORD)
             .slots(Slot.MAIN_HAND)
@@ -107,7 +107,7 @@ public class EnchantRegistry {
             .id("efficiency")
             .maxLevel(5)
             .rarity(40)
-            .types(ComplexItem.Type.PICKAXE, ComplexItem.Type.AXE)
+            .types(ComplexItem.Type.PICKAXE, ComplexItem.Type.AXE, ComplexItem.Type.SHOVEL)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.DIG_SPEED));
 
@@ -148,7 +148,7 @@ public class EnchantRegistry {
             .id("fortune")
             .maxLevel(3)
             .rarity(20)
-            .types(ComplexItem.Type.PICKAXE)
+            .types(ComplexItem.Type.PICKAXE, ComplexItem.Type.HOE, ComplexItem.Type.SHOVEL, ComplexItem.Type.AXE)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.LOOT_BONUS_BLOCKS)
             .exclusive(EnchantmentWrapper.SILK_TOUCH));
@@ -176,8 +176,7 @@ public class EnchantRegistry {
             .rarity(10)
             .types(ComplexItem.Type.BOW)
             .slots(Slot.MAIN_HAND)
-            .vanillaEnchant(Enchantment.ARROW_INFINITE)
-            .exclusive(EnchantmentWrapper.MENDING));
+            .vanillaEnchant(Enchantment.ARROW_INFINITE));
 
     public static ComplexEnchantment KNOCKBACK = new AttackEnchantment(new EnchantmentSettings()
             .id("knockback")
@@ -220,15 +219,6 @@ public class EnchantRegistry {
             .types(ComplexItem.Type.FISHING_ROD)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.LURE));
-
-    public static ComplexEnchantment MENDING = new DamagedEnchantment(new EnchantmentSettings()
-            .id("mending")
-            .maxLevel(1)
-            .rarity(0)
-            .types(ComplexItem.Type.values())
-            .slots(Slot.ARMOR, Slot.EITHER_HAND)
-            .vanillaEnchant(Enchantment.MENDING)
-            .exclusive(EnchantmentWrapper.INFINITY));
 
     public static ComplexEnchantment MULTISHOT = new DamagedEnchantment(new EnchantmentSettings()
             .id("multishot")
@@ -320,7 +310,7 @@ public class EnchantRegistry {
             .id("silk_touch")
             .maxLevel(1)
             .rarity(20)
-            .types(ComplexItem.Type.PICKAXE)
+            .types(ComplexItem.Type.PICKAXE, ComplexItem.Type.HOE, ComplexItem.Type.SHOVEL, ComplexItem.Type.AXE)
             .slots(Slot.MAIN_HAND)
             .vanillaEnchant(Enchantment.SILK_TOUCH)
             .exclusive(EnchantmentWrapper.FORTUNE));
@@ -366,13 +356,6 @@ public class EnchantRegistry {
             .slots(Slot.ARMOR)
             .vanillaEnchant(Enchantment.THORNS));
 
-    public static ComplexEnchantment UNBREAKING = new DamagedEnchantment(new EnchantmentSettings()
-            .id("unbreaking")
-            .maxLevel(3)
-            .rarity(60)
-            .types(ComplexItem.Type.values())
-            .slots(Slot.ARMOR, Slot.EITHER_HAND)
-            .vanillaEnchant(Enchantment.DURABILITY));
 
 
     // static function methods
@@ -434,31 +417,33 @@ public class EnchantRegistry {
     }
 
     enum EnchantmentWrapper {
-        AQUA_AFFINITY(EnchantRegistry.AQUA_AFFINITY), BANE_OF_ARTHROPODS(EnchantRegistry.BANE_OF_ARTHROPODS),
-        BLAST_PROTECTION(EnchantRegistry.BLAST_PROTECTION), CHANNELING(EnchantRegistry.CHANNELING),
-        DEPTH_STRIDER(EnchantRegistry.DEPTH_STRIDER), EFFICIENCY(EnchantRegistry.EFFICIENCY),
-        FEATHER_FALLING(EnchantRegistry.FEATHER_FALLING), FIRE_ASPECT(EnchantRegistry.FIRE_ASPECT), FIRE_PROTECTION(EnchantRegistry.FIRE_PROTECTION),
-        FORTUNE(EnchantRegistry.FORTUNE), FROST_WALKER(EnchantRegistry.FROST_WALKER), IMPALING(EnchantRegistry.IMPALING),
-        INFINITY(EnchantRegistry.INFINITY), KNOCKBACK(EnchantRegistry.KNOCKBACK), LOOTING(EnchantRegistry.LOOTING),
-        LOYALTY(EnchantRegistry.LOYALTY), LUCK_OF_THE_SEA(EnchantRegistry.LUCK_OF_THE_SEA),
-        LURE(EnchantRegistry.LURE), MENDING(EnchantRegistry.MENDING), MULTISHOT(EnchantRegistry.MULTISHOT),
-        PIERCING(EnchantRegistry.PIERCING), POWER(EnchantRegistry.POWER),
-        PROJECTILE_PROTECTION(EnchantRegistry.PROJECTILE_PROTECTION), PROTECTION(EnchantRegistry.PROTECTION),
-        PUNCH(EnchantRegistry.PUNCH), QUICK_CHARGE(EnchantRegistry.QUICK_CHARGE), RESPIRATION(EnchantRegistry.RESPIRATION),
-        RIPTIDE(EnchantRegistry.RIPTIDE), SHARPNESS(EnchantRegistry.SHARPNESS), SILK_TOUCH(EnchantRegistry.SILK_TOUCH),
-        SMITE(EnchantRegistry.SMITE), SOUL_SPEED(EnchantRegistry.SOUL_SPEED), SWEEPING_EDGE(EnchantRegistry.SWEEPING_EDGE),
-        SWIFT_SNEAK(EnchantRegistry.SWIFT_SNEAK), THORNS(EnchantRegistry.THORNS), UNBREAKING(EnchantRegistry.UNBREAKING),
+        AQUA_AFFINITY, BANE_OF_ARTHROPODS,
+        BLAST_PROTECTION, CHANNELING,
+        DEPTH_STRIDER, EFFICIENCY,
+        FEATHER_FALLING, FIRE_ASPECT, FIRE_PROTECTION,
+        FORTUNE, FROST_WALKER, IMPALING,
+        INFINITY, KNOCKBACK, LOOTING,
+        LOYALTY, LUCK_OF_THE_SEA,
+        LURE, MULTISHOT,
+        PIERCING, POWER,
+        PROJECTILE_PROTECTION, PROTECTION,
+        PUNCH, QUICK_CHARGE, RESPIRATION,
+        RIPTIDE, SHARPNESS, SILK_TOUCH,
+        SMITE, SOUL_SPEED, SWEEPING_EDGE,
+        SWIFT_SNEAK, THORNS,
 
-        CULLING(EnchantRegistry.CULLING), DARKSOUL(EnchantRegistry.DARKSOUL), SIPHON(EnchantRegistry.SIPHON), SNIPE(EnchantRegistry.SNIPE);
+        CULLING, DARKSOUL, SIPHON, SNIPE;
 
         private ComplexEnchantment complexEnchantment;
 
-        EnchantmentWrapper(ComplexEnchantment complexEnchantment){
-            this.complexEnchantment = complexEnchantment;
+        EnchantmentWrapper(){
         }
 
         public ComplexEnchantment getEnchant() {
-            return complexEnchantment;
+            return ComplexEnchantment.getRegisteredEnchants().stream()
+                    .filter(enchant -> enchant.getId().equals(this.name().toLowerCase()))
+                    .findFirst().orElseThrow(() ->
+                            new IllegalArgumentException("Enchantment " + this.name() + " not found."));
         }
     }
 

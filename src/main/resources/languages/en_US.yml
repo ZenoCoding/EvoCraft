@@ -87,6 +87,7 @@ item-name-flaming_boots: Flaming Boots
 item-name-volken_axe: Volken Axe
 
 item-name-lapis_orbitex: Lapis Orbitex
+item-name-infused_orbitex: Infused Orbitex
 
 item-name-shadow_blade: Shadow Blade
 
@@ -107,11 +108,20 @@ item-name-burning_smoke: Burning Smoke
 
 item-name-gilded_carrot: Gilded Carrot
 
+item-name-whack_a_stick: Whack-A-Stick
+
 item-name-start_button: Start Button
 
 item-name-soul_stone: Soul Stone
 
 item-name-arcane_jewel: Arcane Jewel
+
+item-name-super_snow_blaster: Super Snow Blaster
+
+item-name-diamantine_helmet: Diamantine Helmet
+item-name-diamantine_chestplate: Diamantine Chestplate
+item-name-diamantine_leggings: Diamantine Leggings
+item-name-diamantine_boots: Diamantine Boots
 
 ##########################################################################
 ##                              ITEM LORE                               ##
@@ -237,6 +247,11 @@ item-lore-volken_axe:
 item-lore-lapis_orbitex:
   - "Possesses &dmagical &7abilities, unlike that blue rock stuff."
 
+item-lore-infused_orbitex:
+  - "Possesses extreme &dmagical &7abilities, radiating magical energy."
+  - ""
+  - "Infusion technology!"
+
 item-lore-shadow_blade:
   - "&8Dark and mysterious."
 
@@ -279,6 +294,9 @@ item-lore-burning_boots:
 item-lore-gilded_carrot:
   - "Really tasty!"
 
+item-lore-whack_a_stick:
+    - "&oWHEEEEEEEEEEEeeeeeeeeeeeeeeeeeeeeee!"
+
 item-lore-start_button:
   - "Just press start."
 
@@ -288,6 +306,32 @@ item-lore-soul_stone:
 item-lore-arcane_jewel:
   - "Holds the true power of a mage."
   - "&6QUEST ITEM"
+
+item-lore-super_snow_blaster:
+  - "&oEEEEXTREEEEME!"
+  - ""
+  - "A super snowball blaster that shoots snowballs at a rapid rate!"
+  - "&8&oPremium Brand!"
+
+item-lore-diamantine_helmet:
+  - "A helmet made of pure &bdiamonds, &7with immense defensive power."
+  -
+  - "11 on the hardness scale!"
+
+item-lore-diamantine_chestplate:
+    - "A chestplate made of pure &bdiamonds, &7with immense defensive power."
+    -
+    - "11 on the hardness scale!"
+
+item-lore-diamantine_leggings:
+    - "A pair of leggings made of pure &bdiamonds, &7with immense defensive power."
+    -
+    - "11 on the hardness scale!"
+
+item-lore-diamantine_boots:
+    - "A pair of boots made of pure &bdiamonds, &7with immense defensive power."
+    -
+    - "11 on the hardness scale!"
 
 ##########################################################################
 ##                              ABILITIES                               ##
@@ -389,8 +433,7 @@ ability-lore-justice:
 ability-name-dark_fury: Dark Fury
 
 ability-lore-dark_fury:
-  - "When &8unnoticed&7, deal &a2x &cdamage &7to opponents."
-  -
+  - "When &8unnoticed&7, deal &a1.5x &cdamage &7to opponents."
 
 ability-name-terra_strike: Terra-Strike
 
@@ -422,6 +465,17 @@ ability-name-portalizer: Portalizer
 ability-lore-portalizer:
   - "Activate an energy crystal, and travel through spacetime."
 
+ability-name-snow_shot: Snow Blast
+
+ability-lore-snow_shot:
+  - "Shoots a &bsnowball &7that deals knockback enemies on impact."
+  - "Deals &f&lFROSTBITE &7damage to enemies."
+
+ability-name-diamantine_shield: Diamantine Shield
+
+ability-lore-diamantine_shield:
+  - "Upon being attacked, &a10% &7chance to block all incoming &cdamage."
+  - "Grants 2 &eabsorption ♥ &7hearts!"
 ##########################################################################
 ##                             ENCHANTMENTS                             ##
 ##########################################################################

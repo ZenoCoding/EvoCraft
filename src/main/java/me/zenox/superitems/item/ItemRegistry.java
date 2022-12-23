@@ -352,6 +352,14 @@ public class ItemRegistry {
             .glow()
             .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 5));
 
+    public static final ComplexItem INFUSED_ORBITEX = new ComplexItem(new ItemSettings()
+            .id("infused_orbitex")
+            .material(Material.PURPLE_DYE)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.ENCHANTING_FUEL)
+            .glow()
+            .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 15));
+
     public static final ComplexItem CREATIVE_MIND = new ComplexItem((new ItemSettings()
             .id("creative_mind")
             .material(Material.PAINTING)
@@ -472,6 +480,56 @@ public class ItemRegistry {
             .id("whack_a_stick")
             .material(Material.STICK)
             .rarity(ComplexItem.Rarity.RARE));
+
+    public static final ComplexItem SUPER_SNOW_BLASTER = new ComplexItem(new ItemSettings()
+            .id("super_snow_blaster")
+            .material(Material.STONE_HOE)
+            .rarity(ComplexItem.Rarity.MYTHIC)
+            .ability(AbilityRegistry.SNOW_SHOT));
+
+    public static final ComplexItem DIAMANTINE_HELMET = new ComplexItem(new ItemSettings()
+            .id("diamantine_helmet")
+            .material(Material.DIAMOND_HELMET)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.HELMET)
+            .modifier(AttributeRegistry.HEALTH, 5)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.03, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 4)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
+            .abilities(AbilityRegistry.DIAMANTINE_SHIELD));
+
+    public static final ComplexItem DIAMANTINE_CHESTPLATE = new ComplexItem(new ItemSettings()
+            .id("diamantine_chestplate")
+            .material(Material.DIAMOND_CHESTPLATE)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.CHESTPLATE)
+            .modifier(AttributeRegistry.HEALTH, 12)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.03, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 10)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
+            .abilities(AbilityRegistry.DIAMANTINE_SHIELD));
+
+    public static final ComplexItem DIAMANTINE_LEGGINGS = new ComplexItem(new ItemSettings()
+            .id("diamantine_leggings")
+            .material(Material.DIAMOND_LEGGINGS)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.LEGGINGS)
+            .modifier(AttributeRegistry.HEALTH, 10)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.03, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 8)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
+            .abilities(AbilityRegistry.DIAMANTINE_SHIELD));
+
+    public static final ComplexItem DIAMANTINE_BOOTS = new ComplexItem(new ItemSettings()
+            .id("diamantine_boots")
+            .material(Material.DIAMOND_BOOTS)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.BOOTS)
+            .modifier(AttributeRegistry.HEALTH, 5)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.03, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 3)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
+            .abilities(AbilityRegistry.DIAMANTINE_SHIELD));
 
     // Vanilla Items
     public static final VanillaItem LAPIS_LAZULI = new VanillaItem(new ItemSettings()

@@ -9,6 +9,7 @@ import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.loot.LootTable;
 import me.zenox.superitems.loot.LootTableRegistry;
+import me.zenox.superitems.story.Chapter;
 import me.zenox.superitems.story.ChapterManager;
 import me.zenox.superitems.tabcompleter.MainTabCompleter;
 import me.zenox.superitems.util.Util;
@@ -203,6 +204,25 @@ public class MainCommand implements CommandExecutor {
                 else {
                     Util.sendMessage(sender, "You must be a player to use this command!");
                 }
+            }
+            case "setchapter" -> {
+                // Set the chapter given the player and the chapter's id
+                if (args.length < 2 || sender.getServer().getPlayer(args[1]) == null) {
+                    Util.sendMessage(sender, "Please specify a valid user to set the chapter of.");
+                    return true;
+                }
+                if (args.length < 3) {
+                    Util.sendMessage(sender, "Please specify a valid chapter.");
+                    return true;
+                }
+                Player player = sender.getServer().getPlayer(args[1]);
+                Chapter chapter = SuperItems.getChapterManager().getChapter(Ints.tryParse(args[2]));
+                if (chapter == null) {
+                    Util.sendMessage(sender, "This chapter does not exist!");
+                    return true;
+                }
+                SuperItems.getChapterManager().setChapter(player, chapter);
+                return true;
             }
             default -> Util.sendMessage(sender, "SuperItems Help Page.");
         }

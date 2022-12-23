@@ -87,7 +87,7 @@ public class EnchantingGUI extends SimpleGUI {
         double variety = calculateVariety(bookshelfPower);
         double strength = calculateStrength(level, fuelStrength, AureliumAPI.getSkillLevel(p, Skills.ENCHANTING));
 
-        Util.sendMessage(p, "Enchant | Strength: " + strength + " | Variety: " + variety);
+        // Util.sendMessage(p, "Enchant | Strength: " + strength + " | Variety: " + variety);
 
         HashMap<ComplexEnchantment, Integer> result = new HashMap<>();
         Map<ComplexEnchantment, Integer> currentEnchantments = item.getComplexMeta().getComplexEnchants();
@@ -195,8 +195,8 @@ public class EnchantingGUI extends SimpleGUI {
     public static boolean enchantValid(EnchantingGUI gui, int power, int XPRequired) {
         int skillRequirement = 0;
         switch (power) {
-            case 2 -> skillRequirement = 20;
-            case 3 -> skillRequirement = 35;
+            case 2 -> skillRequirement = 10;
+            case 3 -> skillRequirement = 25;
         }
         // Check XP and skill level
         return fuelValid(gui.getFuelItem()) && itemValid(gui.getEItem()) && AureliumAPI.getSkillLevel(gui.p, Skills.ENCHANTING) >= skillRequirement && gui.p.getLevel() >= XPRequired;
@@ -241,7 +241,7 @@ public class EnchantingGUI extends SimpleGUI {
     }
 
     public static int calculateSkillXP(int power, double strength, double variety){
-        return (int) (Math.pow(power, 2) * strength * Math.sqrt(8 * variety) * 1000);
+        return (int) (Math.pow(power, 2) * strength * Math.sqrt(8 * variety) * 4000);
     }
 
     /**
@@ -258,17 +258,17 @@ public class EnchantingGUI extends SimpleGUI {
 
         for (Map.Entry<ComplexEnchantment, Integer> entry : enchantSet2.entrySet()) {
             if(invalidEnchantments.contains(entry.getKey())) continue;
-            result.computeIfPresent(entry.getKey(), ((complexEnchantment, integer) -> combineEnchantLevels(entry.getValue(), integer)));
+            result.computeIfPresent(entry.getKey(), ((complexEnchantment, integer) -> combineEnchantLevels(entry.getKey().getMaxLevel(), entry.getValue(), integer)));
             result.putIfAbsent(entry.getKey(), entry.getValue());
         }
 
         return result;
     }
 
-    private static int combineEnchantLevels(int enchantLevel1, int enchantLevel2){
+    private static int combineEnchantLevels(int maxLevel, int enchantLevel1, int enchantLevel2){
         int result = Math.max(enchantLevel1, enchantLevel1);
         if(enchantLevel1 == enchantLevel2) return enchantLevel1 + 1;
-        return result;
+        return Math.min(maxLevel, result);
     }
 
     public static GUI getGui(Player p, Block block) {

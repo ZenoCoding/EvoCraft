@@ -4,10 +4,12 @@ import com.archyx.aureliumskills.api.AureliumAPI;
 import com.archyx.aureliumskills.stats.Stat;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
+import me.zenox.superitems.enchant.ComplexEnchantment;
 import me.zenox.superitems.persistence.SerializedPersistentType;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -15,10 +17,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Class that represents a "custom" ItemStack.
@@ -75,8 +74,12 @@ public class ComplexItemStack {
 
     public static ComplexItemStack of(@NotNull ItemStack item) {
         if(item.getType() == Material.AIR) throw new IllegalArgumentException("You cannot create a ComplexItemStack of an ItemStack with material AIR");
+
+        Map<Enchantment, Integer> vanillaEnchantments = item.getEnchantments();
+
         ComplexItem complexItem = Objects.requireNonNullElse(ItemRegistry.byItem(item), VanillaItem.of(item.getType()));
         ComplexItemStack cItem = new ComplexItemStack(complexItem, item);
+
         // add vanilla variables???
         if (cItem.getComplexItem() instanceof VanillaItem) {
             for(Map.Entry<VariableType, Serializable> entry : complexItem.getVariableMap().entrySet()){
@@ -84,6 +87,21 @@ public class ComplexItemStack {
             }
         }
         cItem.getComplexMeta().updateItem();
+
+        // add vanilla enchantments?
+        for (Map.Entry<Enchantment, Integer> entry : vanillaEnchantments.entrySet()) {
+            ComplexEnchantment cEnchantment = ComplexEnchantment.byVanillaEnchantment(entry.getKey());
+            if(cEnchantment == null) continue;
+            item.removeEnchantment(entry.getKey());
+            cItem.getComplexMeta().addEnchantment(cEnchantment, entry.getValue());
+        }
+
+        ItemMeta meta = cItem.getItem().getItemMeta();
+
+        if(complexItem instanceof VanillaItem) meta.setCustomModelData(0);
+
+        cItem.getItem().setItemMeta(meta);
+
         return cItem;
     }
 
@@ -96,7 +114,7 @@ public class ComplexItemStack {
         ItemMeta meta = item.getItemMeta();
 
         // Set CustomModelData
-        meta.setCustomModelData(complexItem.getCustomModelData());
+        meta.setCustomModelData(complexItem instanceof VanillaItem ? 0 : complexItem.getCustomModelData());
 
         item.setAmount(amount);
 

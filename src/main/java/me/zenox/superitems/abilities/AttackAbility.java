@@ -59,8 +59,8 @@ public class AttackAbility extends Ability<EntityDamageByEntityEvent> {
 
     public static void darkFuryAbility(EntityDamageByEntityEvent event, Player p, ItemStack item) {
         List<MetadataValue> values = p.getMetadata("last_damaged");
-        if (values.isEmpty() || (System.currentTimeMillis() - values.get(0).asLong() > 30 * 1000)) {
-            event.setDamage(event.getDamage()*2);
+        if (values.isEmpty() || (System.currentTimeMillis() - values.get(0).asLong() > 60 * 1000)) {
+            event.setDamage(event.getDamage()*1.5);
         }
 
     }

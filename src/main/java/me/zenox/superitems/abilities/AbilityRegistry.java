@@ -122,6 +122,17 @@ public class AbilityRegistry {
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
             .setManaCost(0)
             .setCooldown(0), ItemAbility::portalizerAbility);
+    public static final ItemAbility SNOW_SHOT = new ItemAbility(new AbilitySettings()
+            .setId("snow_shot")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(5)
+            .setCooldown(0), ItemAbility::snowShotAbility);
+    public static final FullSetDamagedAbility DIAMANTINE_SHIELD = new FullSetDamagedAbility(new AbilitySettings()
+            .setId("diamantine_shield")
+            .setPassive(true)
+            .setManaCost(0)
+            .setCooldown(0)
+            .setSlot(Slot.ARMOR), FullSetDamagedAbility::diamantineShieldAbility);
 
     public static void registerAbilities(){
         Util.logToConsole("Registering %s abilities.".formatted(ChatColor.GOLD + "" + Ability.registeredAbilities.size() + "" + ChatColor.RESET));

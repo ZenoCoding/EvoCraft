@@ -29,14 +29,11 @@ public record VariableType<T extends Serializable>(String name, LoreEntry loreEn
 
     @Nullable
     public static VariableType getVariableByPrefix(String name) {
-        try {
-            return variableList.stream().filter(variableType -> {
-                return variableType.name().equalsIgnoreCase(name);
-            }).toList().get(0);
-        } catch (IndexOutOfBoundsException e) {
-            Util.logToConsole(ChatColor.RED + "[ERROR] Variable with name " + name + " doesn't seem to be registered!");
-            return null;
-        }
+        VariableType result = variableList.stream().filter(variableType ->
+            variableType.name().equalsIgnoreCase(name)).findFirst().orElse(null);
+
+        if(result == null) Util.logToConsole(ChatColor.RED + "[ERROR] Variable with name " + name + " doesn't seem to be registered!");
+        return result;
     }
 
     public Variable<T> createVariable(T value, ComplexItemMeta meta) {

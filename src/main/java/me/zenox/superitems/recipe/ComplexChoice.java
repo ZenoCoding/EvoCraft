@@ -39,7 +39,7 @@ public class ComplexChoice implements RecipeChoice {
     @NotNull
     @Override
     public ItemStack getItemStack() {
-        return ItemRegistry.byId(((Map.Entry<String, Integer>) choices.entrySet().toArray()[0]).getKey()).getItemStack(((Map.Entry<String, Integer>) choices.entrySet().toArray()[0]).getValue());
+        return new ComplexItemStack(ItemRegistry.byId(((Map.Entry<String, Integer>) choices.entrySet().toArray()[0]).getKey()), ((Map.Entry<String, Integer>) choices.entrySet().toArray()[0]).getValue()).getItem();
     }
 
     public Map<ComplexItem, Integer> getChoices() {

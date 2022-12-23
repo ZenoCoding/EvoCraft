@@ -903,8 +903,16 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
         }
     }
 
-    public enum AbilityAction {
+    public static void snowShotAbility(PlayerInteractEvent playerInteractEvent, Player player, ItemStack itemStack) {
+        // Summon a snowball and shoot it, then apply a metadata tag that will be used to check if the snowball is a snowball shot by the player
+        Snowball snowball = player.launchProjectile(Snowball.class, player.getLocation().getDirection().multiply(3));
+        snowball.setMetadata("super_snowball", new FixedMetadataValue(SuperItems.getPlugin(), true));
+        snowball.setShooter(player);
+        // Create particles at the player's location
+        player.getWorld().spawnParticle(Particle.SNOWBALL, player.getLocation(), 20, 0.3, 2, 0.3, 0.1);
+    }
 
+    public enum AbilityAction {
         LEFT_CLICK_BLOCK("LEFT CLICK", new Action[]{Action.LEFT_CLICK_BLOCK}, false),
         LEFT_CLICK_AIR("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR}, false),
         LEFT_CLICK_ALL("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, false),

@@ -37,6 +37,19 @@ public class EnchantItem extends ControlItem<EnchantingGUI> {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        if(EnchantingGUI.enchantValid(gui, level, 20 + level * 10)) gui.enchantItem(level, 20 + level * 10);
+        if(EnchantingGUI.enchantValid(gui, level, getXPRequired())) gui.enchantItem(level, getXPRequired());
+    }
+
+    public int getXPRequired(){
+        switch(level){
+            case 1:
+                return 20;
+            case 2:
+                return 30;
+            case 3:
+                return 60;
+            default:
+                return 100;
+        }
     }
 }

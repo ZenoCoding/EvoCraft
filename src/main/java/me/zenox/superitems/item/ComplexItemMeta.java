@@ -125,9 +125,11 @@ public class ComplexItemMeta {
         writeVariables(VariableType.Priority.ABOVE_ENCHANTS, dataContainer, lore, true);
 
         HashMap<String, Integer> complexEnchMap = new HashMap<>();
-        for (Map.Entry<ComplexEnchantment, Integer> entry :
-                this.complexEnchantments.entrySet()) {
-            complexEnchMap.put(entry.getKey().getId(), entry.getValue());
+        if(!this.complexEnchantments.entrySet().stream().findFirst().isEmpty()) {
+            for (Map.Entry<ComplexEnchantment, Integer> entry :
+                    this.complexEnchantments.entrySet()) {
+                complexEnchMap.put(entry.getKey().getId(), entry.getValue());
+            }
         }
 
         // Write ComplexEnchants
@@ -240,8 +242,8 @@ public class ComplexItemMeta {
                 .forEach(namespacedKey -> IsetVariable(VariableType.getVariableByPrefix(namespacedKey.getKey().substring(VAR_PREFIX.length())), dataContainer.get(namespacedKey, new SerializedPersistentType<>())));
 
         // if the meta doesn't contain rarity or type
-        if (getVariable(RARITY_VAR) == null) IsetVariable(RARITY_VAR, complexItemStack.getComplexItem().getRarity());
-        if (getVariable(TYPE_VAR) == null) IsetVariable(TYPE_VAR, complexItemStack.getComplexItem().getType());
+        IsetVariable(RARITY_VAR, complexItemStack.getComplexItem().getRarity());
+        IsetVariable(TYPE_VAR, complexItemStack.getComplexItem().getType());
 
         item.setItemMeta(meta);
         updateItem();
@@ -321,7 +323,7 @@ public class ComplexItemMeta {
     @Nullable
     public Variable getVariable(VariableType type) {
         try {
-            return variableList.stream().filter(variable -> variable.getType() == type).toList().get(0);
+            return variableList.stream().filter(variable -> variable.getType() == type).findFirst().orElse(null);
         } catch (IndexOutOfBoundsException e) {
             return null;
         }

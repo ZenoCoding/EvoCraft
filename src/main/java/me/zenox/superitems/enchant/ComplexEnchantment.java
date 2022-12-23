@@ -12,6 +12,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public abstract class ComplexEnchantment {
     private final List<StatModifier> stats;
     private final QuadConsumer<Event, Integer, ItemStack, Player> executable;
     private final Enchantment vanillaEnchant;
-    private final List<ComplexEnchantment> exclusive;
+    private final List<EnchantRegistry.EnchantmentWrapper> exclusive;
 
     private final Class<? extends Event> eventType;
 
@@ -49,7 +50,7 @@ public abstract class ComplexEnchantment {
      * @param exclusive
      * @param eventType
      */
-    public ComplexEnchantment(String id, int maxLevel, int weight, List<ComplexItem.Type> types, List<Slot> slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Enchantment vanillaEnchant, List<ComplexEnchantment> exclusive, Class<? extends Event> eventType){
+    public ComplexEnchantment(String id, int maxLevel, int weight, List<ComplexItem.Type> types, List<Slot> slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Enchantment vanillaEnchant, List<EnchantRegistry.EnchantmentWrapper> exclusive, Class<? extends Event> eventType){
         this.id = id;
         this.name = new TranslatableText(TranslatableText.Type.ENCHANT_NAME + "-" + id);
         this.maxLevel = maxLevel;
@@ -73,23 +74,25 @@ public abstract class ComplexEnchantment {
         registeredEnchants.add(this);
     }
 
-    public ComplexEnchantment(EnchantmentSettings settings, Class<? extends Event> eventType) {
+    public ComplexEnchantment(@NotNull EnchantmentSettings settings, Class<? extends Event> eventType) {
         this(settings.getId(), settings.getMaxLevel(), settings.getRarity(), settings.getTypes(), settings.getSlots(), settings.getStats(), settings.getExecutable(), settings.getVanillaEnchant(), settings.getExclusive(), eventType);
     }
 
-    public ComplexEnchantment(String id, int maxLevel, int weight, List<ComplexItem.Type> types, Slot slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Enchantment vanillaEnchant, List<ComplexEnchantment> exclusive, Class<? extends Event> eventType){
+    public ComplexEnchantment(String id, int maxLevel, int weight, List<ComplexItem.Type> types, Slot slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Enchantment vanillaEnchant, List<EnchantRegistry.EnchantmentWrapper> exclusive, Class<? extends Event> eventType){
         this(id, maxLevel, weight, types, List.of(slot), stats, executable, vanillaEnchant, exclusive, eventType);
     }
 
     @Nullable
     public static ComplexEnchantment byId(String id){
-        try {
-            return registeredEnchants.stream()
-                    .filter(enchantment -> enchantment.getId().equalsIgnoreCase(id))
-                    .toList().get(0);
-        } catch(ArrayIndexOutOfBoundsException ignored){
-            return null;
-        }
+        return registeredEnchants.stream()
+                .filter(enchantment -> enchantment.getId().equalsIgnoreCase(id)).findFirst().orElse(null);
+    }
+
+    @Nullable
+    public static ComplexEnchantment byVanillaEnchantment(Enchantment enchantment){
+        return registeredEnchants.stream()
+                .filter(enchantment1 -> enchantment.equals(enchantment1.getVanillaEnchant()))
+                .findFirst().orElse(null);
     }
 
     public static List<ComplexEnchantment> getRegisteredEnchants() {
@@ -156,6 +159,8 @@ public abstract class ComplexEnchantment {
     }
 
     public List<ComplexEnchantment> getExclusive() {
-        return exclusive;
+        return exclusive.stream()
+                .map(EnchantRegistry.EnchantmentWrapper::getEnchant)
+                .toList();
     }
 }

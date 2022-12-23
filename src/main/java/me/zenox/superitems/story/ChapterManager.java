@@ -33,18 +33,25 @@ public class ChapterManager implements Listener {
             public void run() {
                 ChapterManager manager = SuperItems.getPlugin().getChapterManager();
                 for(Player p : Bukkit.getOnlinePlayers()){
-                    if(manager.getChapter(p).isSolo()){
-                        for(Player p2 : Bukkit.getOnlinePlayers()){
-                            if(p != p2 ){
-                                p.hidePlayer(SuperItems.getPlugin(), p2);
-                                if(!p2.getEffectivePermissions().contains("superitems.admin")) p2.hidePlayer(SuperItems.getPlugin(), p);
+                    try {
+                        if (manager.getChapter(p).isSolo()) {
+                            for (Player p2 : Bukkit.getOnlinePlayers()) {
+                                if (p != p2) {
+                                    p.hidePlayer(SuperItems.getPlugin(), p2);
+                                    if (!p2.getEffectivePermissions().contains("superitems.admin"))
+                                        p2.hidePlayer(SuperItems.getPlugin(), p);
+                                }
+                            }
+                        } else {
+                            for (Player p2 : Bukkit.getOnlinePlayers()) {
+                                p.showPlayer(SuperItems.getPlugin(), p2);
+                                p2.showPlayer(SuperItems.getPlugin(), p);
                             }
                         }
-                    } else {
-                        for(Player p2 : Bukkit.getOnlinePlayers()){
-                            p.showPlayer(SuperItems.getPlugin(), p2);
-                            p2.showPlayer(SuperItems.getPlugin(), p);
-                        }
+                    } catch (NullPointerException e){
+                        Util.logToConsole("Player " + p.getName() + " has no chapter data!");
+                        manager.setChapter(p, manager.getChapter(2));
+                        //p.kickPlayer("You have no chapter data! Please rejoin.");
                     }
                 }
             }
@@ -61,6 +68,7 @@ public class ChapterManager implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Chapter chapter = getChapter(player);
+        Util.logToConsole("Player " + player.getName() + " joined with chapter " + chapter.getId());
         if(chapter == null) {
             chapter = ChapterZero.getInstance();
             player.getPersistentDataContainer().set(CHAPTER_KEY, PersistentDataType.INTEGER, chapter.getId());
