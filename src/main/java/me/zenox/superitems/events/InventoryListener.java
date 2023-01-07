@@ -4,13 +4,14 @@ import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.item.ComplexItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDropItemEvent;
+import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -33,34 +34,38 @@ public class InventoryListener implements Listener {
         ArrayList<ItemStack> contents = new ArrayList<>();
         contents.addAll(Arrays.asList(event.getPlayer().getInventory().getContents()));
         contents.addAll(Arrays.asList(event.getPlayer().getInventory().getArmorContents()));
-        updateInventory(contents, event.getPlayer());
+        updateInventory(contents);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void inventoryInteractEvent(InventoryClickEvent event) {
         ArrayList<ItemStack> contents = new ArrayList<>();
-        contents.addAll(Arrays.asList(event.getWhoClicked().getInventory().getContents()));
-        contents.addAll(Arrays.asList(event.getWhoClicked().getInventory().getArmorContents()));
         contents.add(event.getCurrentItem());
-        if(!event.isCancelled()) updateInventory(contents, event.getWhoClicked());
-    }
-
-    @EventHandler
-    public void inventoryDragItemEvent(InventoryDragEvent event) {
-        ArrayList<ItemStack> contents = new ArrayList<>();
-        contents.addAll(Arrays.asList(event.getWhoClicked().getInventory().getContents()));
-        contents.addAll(Arrays.asList(event.getWhoClicked().getInventory().getArmorContents()));
-        updateInventory(contents, event.getWhoClicked());
+        if(!event.isCancelled()) updateInventory(contents);
     }
 
     @EventHandler
     public void inventoryPickupEvent(EntityPickupItemEvent event) {
         ArrayList<ItemStack> contents = new ArrayList<>();
         contents.add(event.getItem().getItemStack());
-        updateInventory(contents, event.getEntity());
+        updateInventory(contents);
     }
 
-    private void updateInventory(List<ItemStack> contents, Entity p) {
+    @EventHandler
+    public void itemDropEvent(EntityDropItemEvent event){
+        ArrayList<ItemStack> contents = new ArrayList<>();
+        contents.add(event.getItemDrop().getItemStack());
+        updateInventory(contents);
+    }
+
+    @EventHandler
+    public void itemDropEvent(BlockDropItemEvent event){
+        ArrayList<ItemStack> contents = new ArrayList<>();
+        contents.addAll(event.getItems().stream().map(Item::getItemStack).toList());
+        updateInventory(contents);
+    }
+
+    private void updateInventory(List<ItemStack> contents) {
         contents.removeIf(Objects::isNull);
 
         // Update ComplexItems

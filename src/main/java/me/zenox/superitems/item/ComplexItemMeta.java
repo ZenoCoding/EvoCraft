@@ -50,7 +50,7 @@ public class ComplexItemMeta {
                 RARITY_VAR.name()).get(0).setLore(List.of(loreBuilder.getLoreEntryById(RARITY_VAR.name()).get(0).getLore().get(0) + " " + loreEntry.getLore().get(0)));
         loreEntry.setLore(List.of());
     })), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Type) variable.getValue()).getName())));
-    private static final NamespacedKey ENCHANT_KEY = new NamespacedKey(SuperItems.getPlugin(), "complexEnchants");
+    public static final NamespacedKey ENCHANT_KEY = new NamespacedKey(SuperItems.getPlugin(), "complexEnchants");
     private static final NamespacedKey ATTRIBUTE_KEY = new NamespacedKey(SuperItems.getPlugin(), "attributes");
     private List<Ability> abilities;
     private final List<Variable> variableList = new ArrayList<>();
@@ -134,8 +134,6 @@ public class ComplexItemMeta {
 
         // Write ComplexEnchants
         dataContainer.set(ENCHANT_KEY, new SerializedPersistentType<HashMap>(), complexEnchMap);
-
-
 
         // Clear vanilla enchantments
         for (Enchantment enchant:
@@ -298,11 +296,19 @@ public class ComplexItemMeta {
                         ((ComplexItem.Type) meta.getVariable(ComplexItemMeta.TYPE_VAR).getValue()).isWearable() ? ModifierType.ARMOR : ModifierType.ITEM)){
             modifiers.add(AttributeModifier.of(modifier));
         }
+        modifiers = modifiers.stream().filter(modifier -> !modifier.getName().contains("enchant")).toList();
 
-        return modifiers;
+
+        // Enchant modifiers
+        List<AttributeModifier> finalModifiers = modifiers;
+        meta.getComplexEnchants().forEach((complexEnchantment, integer) -> {
+            finalModifiers.addAll(complexEnchantment.getStats().stream().map(attributeModifier -> attributeModifier.setValue(attributeModifier.getValue()*integer)).toList());
+        });
+
+        return finalModifiers;
     }
 
-    public void addVariable(Variable var) {
+    public void addVariable(Variable var) { 
         this.variableList.add(var);
         this.updateItem();
     }
@@ -350,6 +356,7 @@ public class ComplexItemMeta {
 
     public void removeEnchantment(ComplexEnchantment enchantment){
         this.complexEnchantments.remove(enchantment);
+        updateItem();
     }
 
     public List<Variable> getVariableList() {

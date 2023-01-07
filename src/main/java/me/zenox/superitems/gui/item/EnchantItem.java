@@ -47,7 +47,7 @@ public class EnchantItem extends ControlItem<EnchantingGUI> {
             case 2:
                 return 30;
             case 3:
-                return 60;
+                return 50;
             default:
                 return 100;
         }

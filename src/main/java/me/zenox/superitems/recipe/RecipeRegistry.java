@@ -302,6 +302,14 @@ public class RecipeRegistry {
                 .shape("   ", "D D", "D D")
                 .addChoice('D', new RecipeChoice.ExactChoice(new ComplexItemStack(VanillaItem.of(Material.DIAMOND_BLOCK)).getItem()))
                 .build());
+
+        final Recipe SHADOW_BLADE = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.SHADOW_BLADE).getItem())
+                .id("shadow_blade")
+                .shape("CCC", "CSC", "CCC")
+                .addChoice('C', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.CORRUPT_PEARL).getItem()))
+                .addChoice('S', new RecipeChoice.ExactChoice(new ComplexItemStack(VanillaItem.of(Material.NETHERITE_SWORD)).getItem()))
+                .build());
     }
 
     private static Recipe registerRecipe(Recipe recipe) {

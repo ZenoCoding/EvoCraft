@@ -38,6 +38,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -660,7 +661,7 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                     for (Block block : blocks) {
                         if (block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD))
                             continue;
-                        if (r.nextDouble() > 0.7) continue;
+                        if (r.nextDouble() > 0.8) continue;
                         FallingBlock fallingBlock = p.getWorld().spawnFallingBlock(block.getLocation(), block.getBlockData());
                         fallingBlock.setVelocity(fallingBlock.getLocation().toVector().subtract(arr.getLocation().clone().toVector()).multiply(2).normalize());
                         fallingBlock.setDropItem(false);
@@ -668,20 +669,20 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                         fallingBlock.setMetadata("temporary", new FixedMetadataValue(SuperItems.getPlugin(), true));
                     }
 
-                    for(Entity entity : arr.getNearbyEntities(5, 5, 5)){
+                    for(Entity entity : arr.getNearbyEntities(4, 2, 4)){
                         if(entity instanceof LivingEntity && !Util.isInvulnerable(entity)){
                             LivingEntity lentity = ((LivingEntity) entity);
                             lentity.damage(75, p);
-                            lentity.setVelocity(lentity.getVelocity().add(lentity.getLocation().toVector().subtract(arr.getLocation().clone().toVector())));
                         }
                     }
                 }
                 if((contacted && arr.getTicksLived() > 80) || arr.getTicksLived() > 200){
                     arr.remove();
                     giant.remove();
+                    cancel();
                 }
             }
-        }.runTaskTimer(SuperItems.getPlugin(), 0, 1);
+        }.runTaskTimer(SuperItems.getPlugin(), 0, 4);
     }
 
     public static void consumeAbility(PlayerInteractEvent event, Player p, ItemStack item) {
@@ -903,13 +904,85 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
         }
     }
 
-    public static void snowShotAbility(PlayerInteractEvent playerInteractEvent, Player player, ItemStack itemStack) {
+    public static void snowShotAbility(PlayerInteractEvent playerInteractEvent, @NotNull Player player, ItemStack itemStack) {
         // Summon a snowball and shoot it, then apply a metadata tag that will be used to check if the snowball is a snowball shot by the player
         Snowball snowball = player.launchProjectile(Snowball.class, player.getLocation().getDirection().multiply(3));
         snowball.setMetadata("super_snowball", new FixedMetadataValue(SuperItems.getPlugin(), true));
         snowball.setShooter(player);
         // Create particles at the player's location
         player.getWorld().spawnParticle(Particle.SNOWBALL, player.getLocation(), 20, 0.3, 2, 0.3, 0.1);
+    }
+
+    public static void crystalSpikeAbility(PlayerInteractEvent event, @NotNull Player player, ItemStack itemStack) {
+        // Create an ability that runs a command with different locations in a line where the player is facing
+        Location eyeLoc = player.getEyeLocation();
+        Location loc = eyeLoc.add(eyeLoc.getDirection().normalize().setY(0).multiply(5));
+        new BukkitRunnable() {
+            int a = 0;
+            @Override
+            public void run() {
+                if(a >= 7) cancel();
+
+                loc.add(eyeLoc.getDirection().normalize().setY(0).multiply(5));
+                // Loop down the y-axis to get the location of a ground block
+                while (loc.getBlock().getType() == Material.AIR) {
+                    loc.subtract(0, 1, 0);
+                }
+
+                // Loop up the y-axis to get the location of a block above the ground block
+                while (loc.clone().add(0, 1, 0).getBlock().getType() != Material.AIR) {
+                    loc.add(0, 1, 0);
+                }
+
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm m spawn -s ColossusCrystalSpike 1 " + player.getWorld().getName() + "," + loc.getBlockX() + "," + (loc.getBlockY()+1) + "," + loc.getBlockZ());
+                // Crystal particle effects
+                player.getWorld().spawnParticle(Particle.CRIT_MAGIC, loc, 10, 0.3, 0.3, 0.3, 0.1);
+
+                a++;
+            }
+        }.runTaskTimer(SuperItems.getPlugin(), 0, 3);
+
+    }
+
+    public static void manaBoostAbility(PlayerInteractEvent event, Player player, ItemStack itemStack) {
+        // An ability that refuels the player to full mana instantaneously, and grants them 2x mana regeneration for the next 10 seconds
+        AureliumAPI.setMana(player, AureliumAPI.getMaxMana(player));
+        // Send and action bar
+        Util.sendActionBar(player, "&b&lMana Refueled!");
+        // Play a sound
+        player.playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 1, 2);
+
+        // Consume the item
+        itemStack.setAmount(0);
+
+        // Create a task that will run every second for 10 seconds
+        new BukkitRunnable() {
+            int a = 0;
+
+            @Override
+            public void run() {
+                a++;
+                // If the task has run for 10 seconds, cancel it
+                if (a >= 10) {
+                    cancel();
+                }
+                // If the player is not online, cancel the task
+                if (!player.isOnline()) {
+                    cancel();
+                }
+                // Get the players current mana regeneration
+                double manaRegen = AureliumAPI.getManaRegen(player);
+                // Add that amount to the player's mana
+                AureliumAPI.setMana(player, Math.min(AureliumAPI.getMaxMana(player), AureliumAPI.getMana(player) + manaRegen));
+
+            }
+        }.runTaskTimer(SuperItems.getPlugin(), 0, 20);
+
+    }
+
+    public static void colossalSweepAbility(PlayerInteractEvent event, Player player, ItemStack itemStack) {
+        // An ability that creates a large AOE sweeping damage ability, displaying sweeping particles, and knocking enemies back
+
     }
 
     public enum AbilityAction {

@@ -1,7 +1,9 @@
 package me.zenox.superitems.events;
 
+import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import de.studiocode.invui.window.impl.single.SimpleWindow;
 import me.zenox.superitems.SuperItems;
+import me.zenox.superitems.enchant.ComplexEnchantment;
 import me.zenox.superitems.gui.EnchantingGUI;
 import me.zenox.superitems.item.ComplexItemMeta;
 import me.zenox.superitems.item.ComplexItemStack;
@@ -14,18 +16,20 @@ import org.bukkit.entity.Explosive;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.PrepareGrindstoneEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.GrindstoneInventory;
+import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -80,8 +84,8 @@ public class OtherEvent implements Listener {
         if (!snowballValues.isEmpty()) {
             Entity hitEntity = e.getHitEntity();
             if (!Util.isInvulnerable(hitEntity)){
-                hitEntity.setVelocity(hitEntity.getVelocity().add(hitEntity.getLocation().toVector().subtract(entity.getLocation().add(0, -0.3, 0).toVector()).normalize().multiply(1.2)));
-                hitEntity.setFreezeTicks(Math.max(0, hitEntity.getFreezeTicks()) + 40);
+                hitEntity.setVelocity(hitEntity.getVelocity().add(hitEntity.getLocation().toVector().subtract(entity.getLocation().add(0, -0.3, 0).toVector()).normalize().multiply(0.5)));
+                hitEntity.setFreezeTicks(Math.max(0, hitEntity.getFreezeTicks()) + 20);
                 if (hitEntity instanceof Player player) player.damage(1);
             }
 
@@ -132,14 +136,26 @@ public class OtherEvent implements Listener {
     }
 
     // If a grindstone is used on an item, remove all ComplexEnchantments from it
-    @EventHandler
-    public void grindstoneUse(PrepareGrindstoneEvent e){
-        GrindstoneInventory inventory = e.getInventory();
-        ComplexItemStack stack = ComplexItemStack.of(inventory.getResult());
-        ComplexItemMeta meta = stack.getComplexMeta();
-        meta.getComplexEnchants().clear();
-        meta.updateItem();
-        //inventory.setResult(stack.getItem());
+    @EventHandler(priority= EventPriority.HIGHEST)
+    public void grindstoneUse(PrepareResultEvent e){
+        if (e.getResult() == null) return;
+        ComplexItemStack resultStack = ComplexItemStack.of(e.getResult());
+        ComplexItemMeta resultMeta = resultStack.getComplexMeta();
+        if(e.getInventory().getType() == InventoryType.GRINDSTONE) {
+            resultMeta.setComplexEnchantments(new HashMap<>());
+            resultMeta.updateItem();
+            e.setResult(resultStack.getItem());
+        } else if(e.getInventory().getType() == InventoryType.ANVIL){
+            AnvilInventory inventory = (AnvilInventory) e.getInventory();
+            // Get the enchantmaps of both of the items in the AnvilInventory
+            HashMap<ComplexEnchantment, Integer> firstEnchants = (HashMap<ComplexEnchantment, Integer>) ComplexItemStack.of(inventory.getFirstItem()).getComplexMeta().getComplexEnchants();
+            HashMap<ComplexEnchantment, Integer> secondEnchants = (HashMap<ComplexEnchantment, Integer>) ComplexItemStack.of(inventory.getSecondItem()).getComplexMeta().getComplexEnchants();
+            resultMeta.setComplexEnchantments(EnchantingGUI.combineEnchantMaps(firstEnchants, secondEnchants));
+            resultMeta.updateItem();
+            e.setResult(resultStack.getItem());
+
+            plugin.getServer().getScheduler().runTask(plugin, () -> inventory.setRepairCost(0));
+        }
     }
 
 

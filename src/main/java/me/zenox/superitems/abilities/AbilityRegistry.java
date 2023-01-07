@@ -4,8 +4,11 @@ import me.zenox.superitems.Slot;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public class AbilityRegistry {
     public static final ItemAbility SOUL_RIFT = new ItemAbility(new AbilitySettings()
@@ -127,12 +130,41 @@ public class AbilityRegistry {
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
             .setManaCost(5)
             .setCooldown(0), ItemAbility::snowShotAbility);
-    public static final FullSetDamagedAbility DIAMANTINE_SHIELD = new FullSetDamagedAbility(new AbilitySettings()
+    public static final FullSetEntityDamagedAbility DIAMANTINE_SHIELD = new FullSetEntityDamagedAbility(new AbilitySettings()
             .setId("diamantine_shield")
             .setPassive(true)
             .setManaCost(0)
             .setCooldown(0)
-            .setSlot(Slot.ARMOR), FullSetDamagedAbility::diamantineShieldAbility);
+            .setSlot(Slot.ARMOR), FullSetEntityDamagedAbility::diamantineShieldAbility);
+    public static final FullSetDamagedAbility GOLEMS_HEART = new FullSetDamagedAbility(new AbilitySettings()
+            .setId("golems_heart")
+            .setPassive(true)
+            .setManaCost(0)
+            .setCooldown(0)
+            .setSlot(Slot.ARMOR), FullSetDamagedAbility::golemsHeartAbility, List.of(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, EntityDamageEvent.DamageCause.BLOCK_EXPLOSION));
+
+    public static final FullSetDamagedAbility TITANS_HEART = new FullSetDamagedAbility(new AbilitySettings()
+.setId("titans_heart")
+            .setPassive(true)
+            .setManaCost(0)
+            .setCooldown(0)
+            .setSlot(Slot.ARMOR), FullSetDamagedAbility::titansHeartAbility, List.of(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, EntityDamageEvent.DamageCause.BLOCK_EXPLOSION));
+    public static final ItemAbility CRYSTAL_SPIKE = new ItemAbility(new AbilitySettings()
+            .setId("crystal_spike")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(75)
+            .setCooldown(1), ItemAbility::crystalSpikeAbility);
+    public static final ItemAbility MANA_BOOST = new ItemAbility(new AbilitySettings()
+            .setId("mana_boost")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(0)
+            .setCooldown(0), ItemAbility::manaBoostAbility);
+    public static final ItemAbility COLOSSAL_SWEEP = new ItemAbility(new AbilitySettings()
+            .setId("colossal_sweep")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .setManaCost(100)
+            .setCooldown(0), ItemAbility::colossalSweepAbility);
+
 
     public static void registerAbilities(){
         Util.logToConsole("Registering %s abilities.".formatted(ChatColor.GOLD + "" + Ability.registeredAbilities.size() + "" + ChatColor.RESET));

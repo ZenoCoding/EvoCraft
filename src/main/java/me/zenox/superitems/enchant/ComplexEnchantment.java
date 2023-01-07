@@ -1,10 +1,11 @@
 package me.zenox.superitems.enchant;
 
-import com.archyx.aureliumskills.modifier.StatModifier;
 import me.zenox.superitems.Slot;
+import me.zenox.superitems.attribute.AttributeModifier;
 import me.zenox.superitems.data.TranslatableText;
 import me.zenox.superitems.item.ComplexItem;
-import me.zenox.superitems.item.ComplexItemStack;
+import me.zenox.superitems.item.ComplexItemMeta;
+import me.zenox.superitems.persistence.SerializedPersistentType;
 import me.zenox.superitems.util.QuadConsumer;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Material;
@@ -12,10 +13,12 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -27,14 +30,17 @@ public abstract class ComplexEnchantment {
     private final int weight;
     private final List<ComplexItem.Type> types;
     private final List<Slot> slots;
-    private final List<StatModifier> stats;
+    private final List<AttributeModifier> stats;
     private final QuadConsumer<Event, Integer, ItemStack, Player> executable;
     private final Enchantment vanillaEnchant;
     private final List<EnchantRegistry.EnchantmentWrapper> exclusive;
 
     private final Class<? extends Event> eventType;
+    public static final List<Class<? extends Event>> registeredEvents = new ArrayList<>();
 
     private static final List<ComplexEnchantment> registeredEnchants = new ArrayList<>();
+    // List of all enchants that have an executable
+    private static final List<ComplexEnchantment> executableEnchants = new ArrayList<>();
 
     /**
      * New instance of ComplexEnchantment
@@ -50,7 +56,7 @@ public abstract class ComplexEnchantment {
      * @param exclusive
      * @param eventType
      */
-    public ComplexEnchantment(String id, int maxLevel, int weight, List<ComplexItem.Type> types, List<Slot> slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Enchantment vanillaEnchant, List<EnchantRegistry.EnchantmentWrapper> exclusive, Class<? extends Event> eventType){
+    public ComplexEnchantment(String id, int maxLevel, int weight, List<ComplexItem.Type> types, List<Slot> slot, List<AttributeModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Enchantment vanillaEnchant, List<EnchantRegistry.EnchantmentWrapper> exclusive, Class<? extends Event> eventType){
         this.id = id;
         this.name = new TranslatableText(TranslatableText.Type.ENCHANT_NAME + "-" + id);
         this.maxLevel = maxLevel;
@@ -72,13 +78,17 @@ public abstract class ComplexEnchantment {
         }
 
         registeredEnchants.add(this);
+        if(this.executable != null) {
+            executableEnchants.add(this);
+            registeredEvents.add(eventType);
+        }
     }
 
     public ComplexEnchantment(@NotNull EnchantmentSettings settings, Class<? extends Event> eventType) {
         this(settings.getId(), settings.getMaxLevel(), settings.getRarity(), settings.getTypes(), settings.getSlots(), settings.getStats(), settings.getExecutable(), settings.getVanillaEnchant(), settings.getExclusive(), eventType);
     }
 
-    public ComplexEnchantment(String id, int maxLevel, int weight, List<ComplexItem.Type> types, Slot slot, List<StatModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Enchantment vanillaEnchant, List<EnchantRegistry.EnchantmentWrapper> exclusive, Class<? extends Event> eventType){
+    public ComplexEnchantment(String id, int maxLevel, int weight, List<ComplexItem.Type> types, Slot slot, List<AttributeModifier> stats, QuadConsumer<Event, Integer, ItemStack, Player> executable, Enchantment vanillaEnchant, List<EnchantRegistry.EnchantmentWrapper> exclusive, Class<? extends Event> eventType){
         this(id, maxLevel, weight, types, List.of(slot), stats, executable, vanillaEnchant, exclusive, eventType);
     }
 
@@ -99,6 +109,10 @@ public abstract class ComplexEnchantment {
         return registeredEnchants;
     }
 
+    public static List<ComplexEnchantment> getExecutableEnchants() {
+        return executableEnchants;
+    }
+
     public void useEnchant(Event e){
         if (!this.eventType.isInstance(e)) return;
         if (!checkEvent(e)) return;
@@ -109,12 +123,13 @@ public abstract class ComplexEnchantment {
         }
         for (ItemStack item : items){
             if (item == null || item.getType() == Material.AIR || item.getItemMeta() == null) continue;
-            ComplexItemStack cItem = ComplexItemStack.of(item);
-            if(cItem != null && cItem.getComplexMeta().getComplexEnchants().containsKey(this))
-            executable.accept(e, cItem.getComplexMeta().getComplexEnchants().get(this), item, p);
+            PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+            HashMap<ComplexEnchantment, Integer> enchantmentMap = container.get(ComplexItemMeta.ENCHANT_KEY, new SerializedPersistentType<>());
+            if(enchantmentMap.keySet().contains(this.id)){
+                int level = enchantmentMap.get(this.id);
+                this.executable.accept(e, level, item, p);
+            }
         }
-
-
     }
 
     abstract boolean checkEvent(Event e);
@@ -146,7 +161,7 @@ public abstract class ComplexEnchantment {
         return slots;
     }
 
-    public List<StatModifier> getStats() {
+    public List<AttributeModifier> getStats() {
         return stats;
     }
 
