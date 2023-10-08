@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:item/template_skull",
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1016872
+      },
+      "model": "minecraft:item/crucified_amulet"
+    }
+  ]
+}

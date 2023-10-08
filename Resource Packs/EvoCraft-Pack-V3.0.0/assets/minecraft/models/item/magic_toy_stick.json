@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "evocraft:item/magic_toy_stick"
+  }
+}

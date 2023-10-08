@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/magma_block",
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 9787122
+      },
+      "model": "minecraft:item/enchanted_magma_block"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "minecraft:item/blaze_rod"
+  },
+    "overrides": [
+    {
+        "predicate": {
+            "custom_model_data": 2673713
+        },
+        "model": "minecraft:item/fiery_ember_staff"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 3240166
+      },
+      "model": "minecraft:item/enchanted_blaze_rod"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 4732991
+      },
+      "model": "minecraft:item/dark_ember_staff"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 4732992
+      },
+      "model": "minecraft:item/dark_ember_staff_2"
+    }
+  ]
+}
