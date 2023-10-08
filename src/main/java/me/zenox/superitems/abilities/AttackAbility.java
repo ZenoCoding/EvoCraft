@@ -130,7 +130,7 @@ public class AttackAbility extends Ability<EntityDamageByEntityEvent> {
                         }
                     }
 
-                    count += Math.sqrt(stacks) * 6;
+                    count += (int) (Math.sqrt(stacks) * 6);
                     truecount++;
                 }
             }.runTaskTimer(SuperItems.getPlugin(), 0, 7);

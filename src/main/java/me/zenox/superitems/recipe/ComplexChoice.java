@@ -60,7 +60,7 @@ public class ComplexChoice implements RecipeChoice {
     @Override
     public boolean test(@NotNull ItemStack t) {
         for (Map.Entry<ComplexItem, Integer> match : choices.entrySet()) {
-            if (ComplexItemStack.of(t).getComplexItem().equals(match) && (t.getAmount() == match.getValue() || match.getValue() == -1)) {
+            if (ComplexItemStack.of(t).getComplexItem().equals(match.getKey()) && (t.getAmount() == match.getValue() || match.getValue() == -1)) {
                 return true;
             }
         }

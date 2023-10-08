@@ -18,7 +18,7 @@ public record VariableType<T extends Serializable>(String name, LoreEntry loreEn
      * @throws IllegalArgumentException
      */
     public VariableType(String name, LoreEntry loreEntry, Priority priority, BiConsumer<LoreEntry, Variable> loreModifier) {
-        if (variableList.stream().anyMatch(variable -> variable.name == name))
+        if (variableList.stream().anyMatch(variable -> variable.name.equals(name)))
             throw new IllegalArgumentException("ComplexItemMeta VariableType Key " + name + " is a duplicate");
         this.name = name;
         this.priority = priority;

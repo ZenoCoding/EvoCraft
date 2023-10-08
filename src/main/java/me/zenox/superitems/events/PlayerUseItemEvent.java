@@ -56,7 +56,6 @@ public class PlayerUseItemEvent implements Listener {
         ItemStack item = event.getItem();
         if (item == null) return;
         ComplexItemStack complexItem = ComplexItemStack.of(item);
-        if (complexItem == null) return;
         for (Ability ability : complexItem.getAbilities()) {
             if (ability instanceof ItemAbility) ability.useAbility(event);
         }

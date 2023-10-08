@@ -84,9 +84,9 @@ public class VanillaItem extends ComplexItem {
         try {
             return vanillaItemList.stream()
                     .filter(vanillaItem ->
-                            vanillaItem.getId() == item.getItemMeta()
+                            Objects.equals(vanillaItem.getId(), Objects.requireNonNull(item.getItemMeta())
                                     .getPersistentDataContainer()
-                                    .get(ComplexItem.GLOBAL_ID, PersistentDataType.STRING)).toList().get(0);
+                                    .get(ComplexItem.GLOBAL_ID, PersistentDataType.STRING))).toList().get(0);
         } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
             return null;
         }

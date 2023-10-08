@@ -58,13 +58,11 @@ public class Geo {
         }
 
 
-        List<Vector> connected = new ArrayList<>();
-
         for (Vector vertex : vertices) {
             List<Vector> lConnected = new ArrayList<>();
             for (Vector v : vertices) {
                 if (lConnected.size() == 3) break;
-                if (v.equals(vertex) || connected.contains(v)) continue;
+                if (v.equals(vertex)) continue;
                 if (Math.round(vertex.distanceSquared(v) * 100.0) / 100.0 == minLengthSquared) {
                     lConnected.add(v);
                     for (int i = 0; i < steps; i++) {

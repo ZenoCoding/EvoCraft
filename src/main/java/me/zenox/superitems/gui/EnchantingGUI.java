@@ -107,9 +107,8 @@ public class EnchantingGUI extends SimpleGUI {
                 if (enchantment.getWeight() > 0) {
                     enchantmentWeights.put(enchantment, enchantment.getWeight() + currentWeight);
                     currentWeight += enchantment.getWeight();
-                } else {
-                    //Util.logToConsole(ChatColor.RED + "[ERROR]" + ChatColor.WHITE + " Enchantment " + enchantment.getName() + " has a weight of 0 or less!");
-                }
+                }  //Util.logToConsole(ChatColor.RED + "[ERROR]" + ChatColor.WHITE + " Enchantment " + enchantment.getName() + " has a weight of 0 or less!");
+
             }
 
             // If there are no enchantments that can be applied, break
@@ -205,8 +204,7 @@ public class EnchantingGUI extends SimpleGUI {
     private static boolean itemValid(ItemStack item) {
         try {
             ComplexItem.Type type = ComplexItemStack.of(item).getComplexItem().getType();
-            return item != null && item.getType() != Material.AIR
-                    && ComplexEnchantment.getRegisteredEnchants()
+            return item.getType() != Material.AIR && ComplexEnchantment.getRegisteredEnchants()
                     .stream()
                     .filter(complexEnchantment ->
                             complexEnchantment.getTypes().contains(type)).toList().size() > 0;
@@ -237,7 +235,7 @@ public class EnchantingGUI extends SimpleGUI {
     public static int calculateLevel(double strength, int maxLevel, int weight){
         double strengthFactor = strength * maxLevel;
         Random random = new Random();
-        return Math.max(1, Math.min(maxLevel, (int) strengthFactor - (random.nextDouble() < weight / 100 ? 1 : 0)));
+        return Math.max(1, Math.min(maxLevel, (int) strengthFactor - (random.nextDouble() < (double) weight / 100 ? 1 : 0)));
     }
 
     public static int calculateSkillXP(int power, double strength, double variety){

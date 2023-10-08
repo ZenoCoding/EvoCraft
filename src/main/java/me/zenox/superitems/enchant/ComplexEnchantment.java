@@ -107,8 +107,8 @@ public abstract class ComplexEnchantment {
         for (ItemStack item : items){
             if (item == null || item.getType() == Material.AIR || item.getItemMeta() == null) continue;
             ComplexItemStack cItem = ComplexItemStack.of(item);
-            if(cItem != null && cItem.getComplexMeta().getComplexEnchants().containsKey(this))
-            executable.accept(e, cItem.getComplexMeta().getComplexEnchants().get(this), item, p);
+            if(cItem.getComplexMeta().getComplexEnchants().containsKey(this))
+                executable.accept(e, cItem.getComplexMeta().getComplexEnchants().get(this), item, p);
         }
 
 

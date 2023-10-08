@@ -175,7 +175,7 @@ public class MainCommand implements CommandExecutor {
             }
             case "model" -> {
                 ItemStack item = ((Player) sender).getEquipment().getItemInMainHand();
-                if(item == null || item.getType() == Material.AIR) {
+                if(item.getType() == Material.AIR) {
                     Util.sendMessage(sender, ChatColor.WHITE + "This item has no CustomModelData (that is created by superitems)");
                     return true;
                 }

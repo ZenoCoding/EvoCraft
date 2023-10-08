@@ -78,7 +78,6 @@ public class OtherEvent implements Listener {
     @EventHandler
     public void blockPlaceEvent(BlockPlaceEvent e) {
         ItemStack item = e.getItemInHand();
-        if (item == null) return;
         // Check if the item is not a vanilla item, if it isn't, cancel the event
         if (VanillaItem.byItem(item) == null) e.setCancelled(true);
     }

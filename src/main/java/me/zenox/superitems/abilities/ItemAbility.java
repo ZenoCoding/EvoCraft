@@ -741,7 +741,7 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
             String locationString = container.get(locationKey, PersistentDataType.STRING);
             List<String> locationStringList = List.of(locationString.split("\\|"));
             container.remove(locationKey);
-            locationOfBlock = new Location(p.getServer().getWorld(locationStringList.get(0)), Doubles.tryParse(locationStringList.get(1)), Doubles.tryParse(locationStringList.get(2)), Doubles.tryParse(locationStringList.get(3)));
+            locationOfBlock = new Location(p.getServer().getWorld(locationStringList.get(0)), Double.parseDouble(locationStringList.get(1)), Double.parseDouble(locationStringList.get(2)), Double.parseDouble(locationStringList.get(3)));
 
             World w = p.getWorld();
 

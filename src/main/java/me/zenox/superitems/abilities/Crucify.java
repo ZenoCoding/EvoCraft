@@ -104,7 +104,7 @@ public class Crucify extends ItemAbility implements Listener {
             Inventory inv = p.getInventory();
             for (ItemStack item : inv.getContents()) {
                 ComplexItem complexItemMaterial = ItemRegistry.byItem(item);
-                if (complexItemMaterial != null && complexItemMaterial.getId() == CRUCIFIED_AMULET.getId()) {
+                if (complexItemMaterial != null && complexItemMaterial.getId().equals(CRUCIFIED_AMULET.getId())) {
                     item.setAmount(item.getAmount() - 1);
 
                     p.getWorld().playSound(p.getLocation(), Sound.BLOCK_SCULK_SHRIEKER_SHRIEK, 1f, 0);
