@@ -10,7 +10,7 @@ import de.studiocode.invui.gui.structure.Structure;
 import de.studiocode.invui.item.builder.ItemBuilder;
 import me.zenox.superitems.abilities.AbilityRegistry;
 import me.zenox.superitems.attribute.AttributeRegistry;
-import me.zenox.superitems.command.MainCommand;
+import me.zenox.superitems.command.Command;
 import me.zenox.superitems.data.ConfigLoader;
 import me.zenox.superitems.data.LanguageLoader;
 import me.zenox.superitems.enchant.EnchantRegistry;
@@ -83,7 +83,7 @@ public final class SuperItems extends JavaPlugin {
         RecipeRegistry.registerRecipes();
         EnchantRegistry.registerEnchants();
 
-        new MainCommand(plugin);
+        new Command(plugin);
 
         registerListeners();
 

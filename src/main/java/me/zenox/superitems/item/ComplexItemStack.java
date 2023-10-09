@@ -82,8 +82,11 @@ public class ComplexItemStack {
                 if(!cItem.getComplexMeta().hasVariable(entry.getKey())) cItem.getComplexMeta().setVariable(entry.getKey(), entry.getValue());
             }
         }
-        cItem.getComplexMeta().updateItem();
         return cItem;
+    }
+
+    public void updateItem() {
+        complexMeta.updateItem();
     }
 
     private ItemStack buildItem(int amount) {

@@ -27,7 +27,6 @@ import java.util.List;
 
 public abstract class Ability<T extends Event> implements Serializable {
     public static final List<Ability> registeredAbilities = new ArrayList<>();
-    public static final List<Class<? extends Event>> registeredEvents = new ArrayList<>();
 
     private final TranslatableText name;
     private final String id;
@@ -90,7 +89,6 @@ public abstract class Ability<T extends Event> implements Serializable {
         }
 
         Ability.registeredAbilities.add(this);
-        if(!Ability.registeredEvents.contains(eventType)) Ability.registeredEvents.add(eventType);
     }
 
     private Type getType() {
@@ -217,5 +215,9 @@ public abstract class Ability<T extends Event> implements Serializable {
 
     public boolean isPassive() {
         return isPassive;
+    }
+
+    public Class<? extends Event> getEventType() {
+        return eventType;
     }
 }

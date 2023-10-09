@@ -12,7 +12,6 @@ import me.zenox.superitems.tabcompleter.MainTabCompleter;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,18 +19,18 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-public class MainCommand implements CommandExecutor {
+public class Command implements CommandExecutor {
 
     private final SuperItems plugin;
 
-    public MainCommand(SuperItems plugin) {
+    public Command(SuperItems plugin) {
         this.plugin = plugin;
         plugin.getCommand("superitems").setExecutor(this);
         plugin.getCommand("superitems").setTabCompleter(new MainTabCompleter());
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
 
         if (args.length == 0) {
             Util.sendMessage(sender, "SuperItems Help Page.");

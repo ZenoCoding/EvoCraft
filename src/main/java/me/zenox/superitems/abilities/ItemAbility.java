@@ -806,13 +806,30 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
             f.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
             f.setMetadata("knockback", new FixedMetadataValue(SuperItems.getPlugin(), 1.5));
             f.setShooter(p);
-            f.setYield(((float) AureliumAPI.getMaxMana(p)) / 100f);
+            f.setYield(((float) Math.sqrt(AureliumAPI.getMaxMana(p))) / 10f);
+
+            // get rid of the fireball after 10 seconds
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    f.remove();
+                }
+            }.runTaskLater(SuperItems.getPlugin(), 200);
+
         } else if (complexMeta.getVariable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE).getValue().equals(EmberAttune.Attunement.DARKSOUL)) {
             WitherSkull f = (WitherSkull) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.WITHER_SKULL);
             f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, AureliumAPI.getMaxMana(event.getPlayer()) / 50)));
             f.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
             f.setShooter(p);
-            f.setYield(((float) AureliumAPI.getMaxMana(p)) / 60f);
+            f.setYield((float) Math.sqrt(AureliumAPI.getMaxMana(p)) / 6f);
+
+            // get rid of the fireball after 10 seconds
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    f.remove();
+                }
+            }.runTaskLater(SuperItems.getPlugin(), 200);
         }
     }
 
@@ -823,7 +840,7 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
         Fireball f = (Fireball) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.FIREBALL);
         f.setVelocity(eyeLoc.getDirection().normalize());
         f.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
-        f.setYield(1f);
+        f.setYield(2f);
         f.setShooter(p);
     }
 

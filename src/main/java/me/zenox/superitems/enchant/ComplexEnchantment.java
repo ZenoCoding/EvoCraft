@@ -158,4 +158,8 @@ public abstract class ComplexEnchantment {
     public List<ComplexEnchantment> getExclusive() {
         return exclusive;
     }
+
+    public Class<? extends Event> getEventType() {
+        return eventType;
+    }
 }

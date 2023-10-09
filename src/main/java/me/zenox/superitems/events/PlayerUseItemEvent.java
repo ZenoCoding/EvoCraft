@@ -15,12 +15,36 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class PlayerUseItemEvent implements Listener {
 
     private final SuperItems plugin;
+    private final Map<Class<? extends Event>, List<Ability>> eventToAbilitiesMap = new HashMap<>();
+    private final Map<Class<? extends Event>, List<ComplexEnchantment>> eventToEnchantmentsMap = new HashMap<>();
+
 
     public PlayerUseItemEvent(SuperItems plugin) {
         this.plugin = plugin;
+
+        // Populate eventToAbilitiesMap based on registered abilities
+        for (Ability ability : Ability.registeredAbilities) {
+            Class<? extends Event> eventType = ability.getEventType(); // Assuming you have a method to get the event type
+            eventToAbilitiesMap
+                    .computeIfAbsent(eventType, k -> new ArrayList<>())
+                    .add(ability);
+        }
+
+        for (ComplexEnchantment enchantment : ComplexEnchantment.getRegisteredEnchants()) {
+            Class<? extends Event> eventType = enchantment.getEventType();
+            eventToEnchantmentsMap
+                    .computeIfAbsent(eventType, k -> new ArrayList<>())
+                    .add(enchantment);
+        }
+
         RegisteredListener registeredListener = new RegisteredListener(this, (listener, event) -> useEvent(event), EventPriority.NORMAL, plugin, false);
         for (HandlerList handler : HandlerList.getHandlerLists())
             handler.register(registeredListener);
@@ -28,12 +52,19 @@ public class PlayerUseItemEvent implements Listener {
 
     @EventHandler
     public void useEvent(Event event) {
-        for (Ability ability : Ability.registeredAbilities){
-            ability.useAbility(event);
+        // PERFORMANCE ISSUE: This is called for every event, and every single ability is called.
+        List<Ability> relevantAbilities = eventToAbilitiesMap.get(event.getClass());
+        if (relevantAbilities != null) {
+            for (Ability ability : relevantAbilities) {
+                ability.useAbility(event);
+            }
         }
 
-        for (ComplexEnchantment enchantment : ComplexEnchantment.getRegisteredEnchants()){
-            enchantment.useEnchant(event);
+        List<ComplexEnchantment> relevantEnchantments = eventToEnchantmentsMap.get(event.getClass());
+        if (relevantEnchantments != null) {
+            for (ComplexEnchantment enchantment : relevantEnchantments) {
+                enchantment.useEnchant(event);
+            }
         }
 
 //        if (event instanceof EntityDamageByEntityEvent e) {

@@ -52,6 +52,7 @@ public class OtherEvent implements Listener {
         if (!values.isEmpty() && !values.get(0).asBoolean()) {
             if (entity instanceof Explosive explosive) {
                 e.setCancelled(true);
+                e.getEntity().remove();
                 entity.getWorld().createExplosion(entity.getLocation(), explosive.getYield(), false, false, entity instanceof Projectile ? (Entity) ((Projectile) entity).getShooter() : entity);
             }
         }
