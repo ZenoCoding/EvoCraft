@@ -378,9 +378,8 @@ public class EnchantRegistry {
         Random r = new Random();
         // 3-15% chance to...
         if (r.nextDouble() <= level * 0.05) {
-            List<Monster> entities = new ArrayList<>();
-            entities.addAll(((EntityDamageByEntityEvent) event).getEntity().getNearbyEntities(10, 10, 10).stream()
-                    .filter(entity -> entity instanceof LivingEntity && entity instanceof Monster)
+            List<Monster> entities = new ArrayList<>(((EntityDamageByEntityEvent) event).getEntity().getNearbyEntities(10, 10, 10).stream()
+                    .filter(entity -> entity instanceof Monster)
                     .map(entity -> ((Monster) entity))
                     .toList());
 

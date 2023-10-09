@@ -105,6 +105,10 @@ public class ComplexItemStack {
         return cItem;
     }
 
+    public void updateItem() {
+        complexMeta.updateItem();
+    }
+
     private ItemStack buildItem(int amount) {
         item = new ItemStack(this.complexItem.getMaterial());
 

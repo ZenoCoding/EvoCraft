@@ -61,7 +61,7 @@ public class ComplexItemMeta {
     public ComplexItemMeta(ComplexItemStack complexItemStack, List<Ability> abilities) {
         this.abilities = abilities == null ? new ArrayList<>() : new ArrayList<>(abilities);
         this.complexItemStack = complexItemStack;
-        this.read(false);
+        this.read();
     }
 
     public ComplexItemMeta(ComplexItemStack complexItemStack) {
@@ -176,22 +176,22 @@ public class ComplexItemMeta {
 
     /**
      * A method to read and get a clone of the ComplexItemMeta of a normal ItemStack
-     *
-     * @param force whether to force- whether this is a new/unfinished item or a preexisting item
      */
-    public void read(Boolean force) {
+    public void read() {
         ItemStack item = complexItemStack.getItem();
         ItemMeta meta = item.getItemMeta();
 
+        assert meta != null;
         PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
-        if (force) {
-            this.abilities = (dataContainer
-                    .get(ABILITY_ID, new ArrayListType<>()) == null ? new ArrayList<>() : new ArrayList<>(dataContainer.get(ABILITY_ID, new ArrayListType<>()))).stream().map(o -> {
-                if (o instanceof String) return Ability.getAbility(((String) o));
-                else return Ability.getAbility(((Ability) o).getId());
-            }).toList();
-        }
 
+        readAttributes(dataContainer, meta);
+        readEnchantments(dataContainer);
+        readVariables(dataContainer);
+
+        item.setItemMeta(meta);
+    }
+
+    private void readAttributes(@NotNull PersistentDataContainer dataContainer, @NotNull ItemMeta meta) {
         // Attributes
         boolean hasComplexAttributes = dataContainer.has(ATTRIBUTE_KEY, new ArrayListType<>());
         modifierList = new ArrayList<>();
@@ -199,42 +199,40 @@ public class ComplexItemMeta {
         // apply minecraft's attributes
         if (Objects.nonNull(meta.getAttributeModifiers())) meta.getAttributeModifiers().forEach((attribute, modifier) -> modifierList.add(AttributeModifier.of(attribute, modifier)));
 
-        // apply aurelium stats
-        if(hasComplexAttributes){
-            // If attributes are still stored in prehistoric ways :dinosaur:
-            try {
-                if (dataContainer.get(ATTRIBUTE_KEY, new ArrayListType<>()).get(0) instanceof AttributeModifier) {
-                    modifierList.addAll(dataContainer.get(ATTRIBUTE_KEY, new ArrayListType<>()));
-                } else {
-                    modifierList.addAll(dataContainer.get(ATTRIBUTE_KEY, new ArrayListType<HashMap<String, Object>>())
-                            .stream()
-                            .map(AttributeModifier::deserializeFromMap)
-                            .filter(attributeModifier -> attributeModifier.getAttribute() instanceof AureliumAttribute)
-                            .toList());
-                }
-            } catch (IndexOutOfBoundsException ignored) {
-                // Do nothing because list is empty
-            }
-
-        }
+        // read aurelium stats
+        if(hasComplexAttributes)
+            modifierList.addAll(dataContainer.get(ATTRIBUTE_KEY, new ArrayListType<HashMap<String, Object>>())
+                    .stream()
+                    .map(AttributeModifier::deserializeFromMap)
+                    .filter(attributeModifier -> attributeModifier.getAttribute() instanceof AureliumAttribute)
+                    .toList());
 
         // Update any attributes with the same name to match parent ComplexItem
-        modifierList.stream()
-                .forEach(attributeModifier -> {
-                    try{
-                        double d = ((AttributeModifier) complexItemStack.getComplexItem().getAttributeModifiers().stream().filter(attributeModifier::equals).toArray()[0]).getValue();
-                        attributeModifier.setValue(d);
-                    } catch(IndexOutOfBoundsException ignored) {
-                    }
-                });
+        List<AttributeModifier> parentAttributes = complexItemStack.getComplexItem().getAttributeModifiers();
+        for (AttributeModifier currentModifier : modifierList) {
+            Optional<AttributeModifier> matchingParentModifier = parentAttributes.stream()
+                    .filter(currentModifier::equals)
+                    .findFirst();
 
-        // Read Enchantments
-        HashMap<String, Integer> complexEnchMap = dataContainer.has(ENCHANT_KEY, new SerializedPersistentType<>()) ? dataContainer.get(ENCHANT_KEY, new SerializedPersistentType<>()) : new HashMap<>();
-
-        for (Map.Entry<String, Integer> entry: complexEnchMap.entrySet()){
-            this.complexEnchantments.put(ComplexEnchantment.byId(entry.getKey()), entry.getValue());
+            if (matchingParentModifier.isPresent()) {
+                double newValue = matchingParentModifier.get().getValue();
+                currentModifier.setValue(newValue);
+            }
         }
+    }
 
+    private void readEnchantments(@NotNull PersistentDataContainer dataContainer){
+        HashMap<String, Integer> complexEnchMap =
+                dataContainer.has(ENCHANT_KEY, new SerializedPersistentType<>())
+                        ? dataContainer.get(ENCHANT_KEY, new SerializedPersistentType<>()) : new HashMap<>();
+
+        assert complexEnchMap != null;
+        for (Map.Entry<String, Integer> entry: complexEnchMap.entrySet())
+            complexEnchantments.put(ComplexEnchantment.byId(entry.getKey()), entry.getValue());
+    }
+
+    private void readVariables(PersistentDataContainer dataContainer) {
+        // Read Variables
         dataContainer.getKeys().stream()
                 .filter(namespacedKey -> namespacedKey.getKey().startsWith(VAR_PREFIX))
                 .forEach(namespacedKey -> IsetVariable(VariableType.getVariableByPrefix(namespacedKey.getKey().substring(VAR_PREFIX.length())), dataContainer.get(namespacedKey, new SerializedPersistentType<>())));
@@ -242,9 +240,6 @@ public class ComplexItemMeta {
         // if the meta doesn't contain rarity or type
         IsetVariable(RARITY_VAR, complexItemStack.getComplexItem().getRarity());
         IsetVariable(TYPE_VAR, complexItemStack.getComplexItem().getType());
-
-        item.setItemMeta(meta);
-        updateItem();
     }
 
     private void writeVariables(VariableType.Priority priority, PersistentDataContainer container, LoreBuilder builder, Boolean newline) {
@@ -308,7 +303,7 @@ public class ComplexItemMeta {
         return finalModifiers;
     }
 
-    public void addVariable(Variable var) { 
+    public void addVariable(Variable var) {
         this.variableList.add(var);
         this.updateItem();
     }

@@ -72,17 +72,7 @@ public class InventoryListener implements Listener {
         for (ItemStack item : contents) {
             if (item.getItemMeta() == null) continue;
             ComplexItemStack itemStack = ComplexItemStack.of(item);
-            if (itemStack != null) {
-                //itemStack.update(false);
-            } else {
-                // Update Normal Items
-                if (item.getItemMeta() == null) continue;
-
-                ItemMeta meta = item.getItemMeta();
-                meta.setLore(List.of());
-                if (meta.hasCustomModelData())
-                    meta.setLore(List.of(ChatColor.RED + "This item has CustomModelData, but isn't registered as a ComplexItem. It appears that this item is bugged. Please report this."));
-            }
+            itemStack.updateItem();
         }
     }
 }

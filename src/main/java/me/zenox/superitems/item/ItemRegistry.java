@@ -18,6 +18,7 @@ import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -164,6 +165,8 @@ public class ItemRegistry {
     public static final ComplexItem PSYCHEDELIC_ORB = new ComplexItem(new ItemSettings()
             .id("psychedelic_orb")
             .material(Material.ENDER_PEARL)
+            .stat(Stats.WISDOM, 1000d)
+            .ability(new Psychic())
             .glow());
 
     public static final ComplexItem HYPER_CRUX = new ComplexItem(new ItemSettings()
@@ -225,7 +228,12 @@ public class ItemRegistry {
             .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWExNTlkOWFjMmZkYjE2NDg1OGI2MzUwZTAzYzE5MjRmMTdlNWFhODYxMWEzNDdkNTViNmI4OTgyMGZhZjA5NCJ9fX0="));
 
 
-    public static final ComplexItem VOID_SCEPTER = new VoidScepter();
+    public static final ComplexItem VOID_SCEPTER = new ComplexItem(new ItemSettings()
+            .id("void_scepter")
+            .modifier(AttributeRegistry.ATTACK_DAMAGE, 15)
+            .modifier(AttributeRegistry.ATTACK_SPEED, -3)
+
+    );
     public static final ComplexItem OBSIDILITH_SCYTHE = new ComplexItem(new ItemSettings()
             .id("obsidilith_scythe")
             .material(Material.NETHERITE_HOE)

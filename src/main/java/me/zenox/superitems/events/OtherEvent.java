@@ -62,7 +62,7 @@ public class OtherEvent implements Listener {
         if (!values.isEmpty() && !values.get(0).asBoolean()) {
             if (entity instanceof Explosive explosive) {
                 e.setCancelled(true);
-                entity.remove();
+                e.getEntity().remove();
                 entity.getWorld().createExplosion(entity.getLocation(), explosive.getYield(), false, false, entity instanceof Projectile ? (Entity) ((Projectile) entity).getShooter() : entity);
             }
         }
@@ -105,7 +105,6 @@ public class OtherEvent implements Listener {
     @EventHandler
     public void blockPlaceEvent(BlockPlaceEvent e) {
         ItemStack item = e.getItemInHand();
-        if (item == null) return;
         // Check if the item is not a vanilla item, if it isn't, cancel the event
         if (VanillaItem.byItem(item) == null) e.setCancelled(true);
     }

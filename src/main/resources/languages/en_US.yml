@@ -431,15 +431,17 @@ item-lore-colossal_blade:
 
 ability-name-magic_missile: Magic Missile
 
-ability-lore-magic_missile_dev:
-  - "Shoots a magic missile that explodes"
-  - "on impact and deals massive &cdamage."
-
 ability-lore-magic_missile:
   - "Shoots a magic missile that explodes"
   - "on impact and deals massive &cdamage."
   -
   - "20% chance for the item to &6combust &7and disappear."
+
+ability-name-magic_missile_dev: Magic Missile
+
+ability-lore-magic_missile_dev:
+  - "Shoots a magic missile that explodes"
+  - "on impact and deals massive &cdamage."
 
 ability-name-soul_rift: Soul Rift
 
@@ -499,9 +501,9 @@ ability-name-void_warp: Void Warp
 ability-lore-void_warp:
   - "Creates a &drift &7in space and pulls you through it."
 
-ability-name-void_recall: Voidular Recall
+ability-name-voidular_recall: Voidular Recall
 
-ability-lore-void_recall:
+ability-lore-voidular_recall:
   - "Binds a nearby block to your &bsoul."
   - "Teleports you back to the &bsoulbound &7block."
 

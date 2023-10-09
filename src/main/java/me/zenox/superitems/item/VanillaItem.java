@@ -110,9 +110,9 @@ public class VanillaItem extends ComplexItem {
         try {
             return vanillaItemList.stream()
                     .filter(vanillaItem ->
-                            vanillaItem.getId() == item.getItemMeta()
+                            Objects.equals(vanillaItem.getId(), Objects.requireNonNull(item.getItemMeta())
                                     .getPersistentDataContainer()
-                                    .get(ComplexItem.GLOBAL_ID, PersistentDataType.STRING)).findFirst().orElse(null);
+                                    .get(ComplexItem.GLOBAL_ID, PersistentDataType.STRING))).findFirst().orElse(null);
         } catch (NullPointerException e) {
             return null;
         }

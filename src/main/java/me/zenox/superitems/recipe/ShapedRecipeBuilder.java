@@ -15,7 +15,7 @@ public class ShapedRecipeBuilder {
     private String id;
     private List<String> shape;
     private ItemStack result;
-    private Map<Character, RecipeChoice> choiceMap = new HashMap<>();
+    private Map<Character, RecipeChoice> choiceMap;
 
     public ShapedRecipeBuilder() {
         this.choiceMap = new HashMap<>();

@@ -178,4 +178,8 @@ public abstract class ComplexEnchantment {
                 .map(EnchantRegistry.EnchantmentWrapper::getEnchant)
                 .toList();
     }
+
+    public Class<? extends Event> getEventType() {
+        return eventType;
+    }
 }

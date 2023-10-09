@@ -632,7 +632,10 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
         Giant giant = (Giant) p.getWorld().spawnEntity(loc, EntityType.GIANT);
         giant.setInvisible(true);
         giant.setInvulnerable(true);
+        giant.setCollidable(false);
         giant.setCustomName("Dinnerbone");
+        giant.setAI(false);
+        giant.setSilent(true);
         giant.getEquipment().setItemInMainHand(new ComplexItemStack(ItemRegistry.GREATSWORD_VOLKUMOS).getItem());
 
         PacketContainer destroyArrow = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
@@ -647,9 +650,20 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
             public void run() {
                 giant.setCustomName("Dinnerbone");
 
-                Location giantLocation = arr.getLocation();
-                giantLocation.setY(arr.getLocation().getY()-1);
-                giant.teleport(giantLocation);
+                Location arrowLocation = arr.getLocation();
+
+
+                // Calculate the giant's base location to align its hand with the arrow
+                Location giantBaseLocation = arrowLocation.clone();
+
+                // Offset the giant's location by moving in the opposite direction of the arrow by 3 blocks (ignoring y axis)
+                giantBaseLocation.add(arrowLocation.getDirection().normalize().setY(0).multiply(-3));
+
+                // Set the giant's direction to match the arrow's direction
+                giantBaseLocation.setDirection(arrowLocation.getDirection());
+
+                // Teleport the giant to the calculated location
+                giant.teleport(giantBaseLocation);
 
                 if(arr.isInBlock() && !contacted){
                     contacted = true;
@@ -661,18 +675,18 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                     for (Block block : blocks) {
                         if (block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD))
                             continue;
-                        if (r.nextDouble() > 0.8) continue;
-                        FallingBlock fallingBlock = p.getWorld().spawnFallingBlock(block.getLocation(), block.getBlockData());
-                        fallingBlock.setVelocity(fallingBlock.getLocation().toVector().subtract(arr.getLocation().clone().toVector()).multiply(2).normalize());
-                        fallingBlock.setDropItem(false);
-                        fallingBlock.setHurtEntities(true);
-                        fallingBlock.setMetadata("temporary", new FixedMetadataValue(SuperItems.getPlugin(), true));
+                        if (r.nextDouble() < 0.2) {
+                            FallingBlock fallingBlock = p.getWorld().spawnFallingBlock(block.getLocation(), block.getBlockData());
+                            fallingBlock.setVelocity(fallingBlock.getLocation().toVector().subtract(arr.getLocation().clone().toVector()).multiply(2).normalize());
+                            fallingBlock.setDropItem(false);
+                            fallingBlock.setHurtEntities(true);
+                            fallingBlock.setMetadata("temporary", new FixedMetadataValue(SuperItems.getPlugin(), true));
+                        }
                     }
 
                     for(Entity entity : arr.getNearbyEntities(4, 2, 4)){
-                        if(entity instanceof LivingEntity && !Util.isInvulnerable(entity)){
-                            LivingEntity lentity = ((LivingEntity) entity);
-                            lentity.damage(75, p);
+                        if(entity instanceof Damageable && !entity.equals(p)){
+                            ((Damageable) entity).damage(50, p);
                         }
                     }
                 }
@@ -742,7 +756,7 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
             String locationString = container.get(locationKey, PersistentDataType.STRING);
             List<String> locationStringList = List.of(locationString.split("\\|"));
             container.remove(locationKey);
-            locationOfBlock = new Location(p.getServer().getWorld(locationStringList.get(0)), Doubles.tryParse(locationStringList.get(1)), Doubles.tryParse(locationStringList.get(2)), Doubles.tryParse(locationStringList.get(3)));
+            locationOfBlock = new Location(p.getServer().getWorld(locationStringList.get(0)), Double.parseDouble(locationStringList.get(1)), Double.parseDouble(locationStringList.get(2)), Double.parseDouble(locationStringList.get(3)));
 
             World w = p.getWorld();
 
@@ -807,13 +821,30 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
             f.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
             f.setMetadata("knockback", new FixedMetadataValue(SuperItems.getPlugin(), 1.5));
             f.setShooter(p);
-            f.setYield(((float) AureliumAPI.getMaxMana(p)) / 100f);
+            f.setYield(((float) Math.sqrt(AureliumAPI.getMaxMana(p))) / 10f);
+
+            // get rid of the fireball after 10 seconds
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    f.remove();
+                }
+            }.runTaskLater(SuperItems.getPlugin(), 200);
+
         } else if (complexMeta.getVariable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE).getValue().equals(EmberAttune.Attunement.DARKSOUL)) {
             WitherSkull f = (WitherSkull) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.WITHER_SKULL);
             f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, AureliumAPI.getMaxMana(event.getPlayer()) / 50)));
             f.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
             f.setShooter(p);
-            f.setYield(((float) AureliumAPI.getMaxMana(p)) / 60f);
+            f.setYield((float) Math.sqrt(AureliumAPI.getMaxMana(p)) / 6f);
+
+            // get rid of the fireball after 10 seconds
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    f.remove();
+                }
+            }.runTaskLater(SuperItems.getPlugin(), 200);
         }
     }
 
@@ -824,7 +855,7 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
         Fireball f = (Fireball) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.FIREBALL);
         f.setVelocity(eyeLoc.getDirection().normalize());
         f.setMetadata("dmgEnv", new FixedMetadataValue(SuperItems.getPlugin(), false));
-        f.setYield(1f);
+        f.setYield(2f);
         f.setShooter(p);
     }
 
