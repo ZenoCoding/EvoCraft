@@ -65,7 +65,7 @@ public class InventoryListener implements Listener {
         for (ItemStack item : contents) {
             if (item.getItemMeta() == null) continue;
             ComplexItemStack itemStack = ComplexItemStack.of(item);
-            //itemStack.update(false);
+            itemStack.updateItem();
         }
     }
 }

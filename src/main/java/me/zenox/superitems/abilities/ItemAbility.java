@@ -631,7 +631,10 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
         Giant giant = (Giant) p.getWorld().spawnEntity(loc, EntityType.GIANT);
         giant.setInvisible(true);
         giant.setInvulnerable(true);
+        giant.setCollidable(false);
         giant.setCustomName("Dinnerbone");
+        giant.setAI(false);
+        giant.setSilent(true);
         giant.getEquipment().setItemInMainHand(new ComplexItemStack(ItemRegistry.GREATSWORD_VOLKUMOS).getItem());
 
         PacketContainer destroyArrow = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
@@ -646,9 +649,20 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
             public void run() {
                 giant.setCustomName("Dinnerbone");
 
-                Location giantLocation = arr.getLocation();
-                giantLocation.setY(arr.getLocation().getY()-1);
-                giant.teleport(giantLocation);
+                Location arrowLocation = arr.getLocation();
+
+
+                // Calculate the giant's base location to align its hand with the arrow
+                Location giantBaseLocation = arrowLocation.clone();
+
+                // Offset the giant's location by moving in the opposite direction of the arrow by 3 blocks (ignoring y axis)
+                giantBaseLocation.add(arrowLocation.getDirection().normalize().setY(0).multiply(-3));
+
+                // Set the giant's direction to match the arrow's direction
+                giantBaseLocation.setDirection(arrowLocation.getDirection());
+
+                // Teleport the giant to the calculated location
+                giant.teleport(giantBaseLocation);
 
                 if(arr.isInBlock() && !contacted){
                     contacted = true;
@@ -660,19 +674,18 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                     for (Block block : blocks) {
                         if (block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD))
                             continue;
-                        if (r.nextDouble() > 0.7) continue;
-                        FallingBlock fallingBlock = p.getWorld().spawnFallingBlock(block.getLocation(), block.getBlockData());
-                        fallingBlock.setVelocity(fallingBlock.getLocation().toVector().subtract(arr.getLocation().clone().toVector()).multiply(2).normalize());
-                        fallingBlock.setDropItem(false);
-                        fallingBlock.setHurtEntities(true);
-                        fallingBlock.setMetadata("temporary", new FixedMetadataValue(SuperItems.getPlugin(), true));
+                        if (r.nextDouble() < 0.2) {
+                            FallingBlock fallingBlock = p.getWorld().spawnFallingBlock(block.getLocation(), block.getBlockData());
+                            fallingBlock.setVelocity(fallingBlock.getLocation().toVector().subtract(arr.getLocation().clone().toVector()).multiply(2).normalize());
+                            fallingBlock.setDropItem(false);
+                            fallingBlock.setHurtEntities(true);
+                            fallingBlock.setMetadata("temporary", new FixedMetadataValue(SuperItems.getPlugin(), true));
+                        }
                     }
 
                     for(Entity entity : arr.getNearbyEntities(5, 5, 5)){
-                        if(entity instanceof LivingEntity && !Util.isInvulnerable(entity)){
-                            LivingEntity lentity = ((LivingEntity) entity);
-                            lentity.damage(75, p);
-                            lentity.setVelocity(lentity.getVelocity().add(lentity.getLocation().toVector().subtract(arr.getLocation().clone().toVector())));
+                        if(entity instanceof Damageable && !entity.equals(p)){
+                            ((Damageable) entity).damage(50, p);
                         }
                     }
                 }
