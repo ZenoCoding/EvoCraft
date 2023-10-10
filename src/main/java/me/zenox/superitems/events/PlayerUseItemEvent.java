@@ -1,16 +1,11 @@
 package me.zenox.superitems.events;
 
-import me.zenox.superitems.Slot;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.abilities.Ability;
-import me.zenox.superitems.abilities.AttackAbility;
 import me.zenox.superitems.abilities.ItemAbility;
 import me.zenox.superitems.enchant.ComplexEnchantment;
 import me.zenox.superitems.item.ComplexItemStack;
-import me.zenox.superitems.util.Util;
-import org.bukkit.entity.Player;
 import org.bukkit.event.*;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredListener;
@@ -66,21 +61,6 @@ public class PlayerUseItemEvent implements Listener {
                 enchantment.useEnchant(event);
             }
         }
-
-//        if (event instanceof EntityDamageByEntityEvent e) {
-//            if (e.getDamager() instanceof Player p) {
-//                for (Ability ability :
-//                        Slot.uniqueEquipped(p)) {
-//                    if (ability instanceof AttackAbility) {
-//                        ability.useAbility(event);
-//                    }
-//                }
-//            }
-//        }
-//
-//        if (event instanceof PlayerInteractEvent) {
-//            interact(((PlayerInteractEvent) event));
-//        }
     }
 
     private void interact(PlayerInteractEvent event) {
@@ -91,6 +71,7 @@ public class PlayerUseItemEvent implements Listener {
             if (ability instanceof ItemAbility) ability.useAbility(event);
         }
     }
+
 
 
 }

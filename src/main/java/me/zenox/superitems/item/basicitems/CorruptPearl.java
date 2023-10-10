@@ -3,6 +3,7 @@ package me.zenox.superitems.item.basicitems;
 
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.item.ComplexItem;
+import me.zenox.superitems.persistence.SerializedPersistentType;
 import org.bukkit.*;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.EntityType;
@@ -11,9 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 
 import java.util.List;
 import java.util.Map;
@@ -46,16 +44,17 @@ public class CorruptPearl extends ComplexItem implements Listener {
         World w = entity.getWorld();
         Location loc = entity.getLocation();
 
-        if (r.nextDouble() < 0.01) {
+        if (r.nextDouble() < 0.1) {
 
             Enderman specialEnderman = (Enderman) w.spawnEntity(loc.clone().add(Math.sin(r.nextDouble(2) * Math.PI) * r.nextDouble(2), 1, Math.sin(r.nextDouble(2) * Math.PI) * r.nextDouble(2)), EntityType.ENDERMAN);
 
             specialEnderman.setCarriedBlock(Material.END_PORTAL_FRAME.createBlockData());
-            specialEnderman.setMetadata("corrupted", new FixedMetadataValue(SuperItems.getPlugin(), true));
+            specialEnderman.getPersistentDataContainer().set(new NamespacedKey(SuperItems.getPlugin(), "corrupted"), new SerializedPersistentType<>(), true);
         }
 
-        List<MetadataValue> values = entity.getMetadata("corrupted");
-        if (!values.isEmpty() && values.get(0).asBoolean()) {
+        boolean isCorrupted = entity.getPersistentDataContainer().has(new NamespacedKey(SuperItems.getPlugin(), "corrupted"), new SerializedPersistentType<>()) ?
+                entity.getPersistentDataContainer().get(new NamespacedKey(SuperItems.getPlugin(), "corrupted"), new SerializedPersistentType<>()) : false;
+        if (isCorrupted) {
             event.getDrops().removeIf((ItemStack item) -> item.getType().equals(Material.END_PORTAL_FRAME));
             w.dropItemNaturally(loc, CORRUPT_PEARL.getItemStack(1));
         }

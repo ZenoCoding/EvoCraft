@@ -36,6 +36,34 @@ public class VanillaItem extends ComplexItem {
         unobtainableList.forEach(material -> rarityMap.put(material, Rarity.UNOBTAINABLE));
 
         Arrays.stream(Material.values()).forEach(material -> typeMap.put(material, Type.MISC));
+        List<Material> swordList = List.of(Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.DIAMOND_SWORD, Material.NETHERITE_SWORD);
+        List<Material> pickaxeList = List.of(Material.WOODEN_PICKAXE, Material.STONE_PICKAXE, Material.IRON_PICKAXE, Material.GOLDEN_PICKAXE, Material.DIAMOND_PICKAXE, Material.NETHERITE_PICKAXE);
+        List<Material> axeList = List.of(Material.WOODEN_AXE, Material.STONE_AXE, Material.IRON_AXE, Material.GOLDEN_AXE, Material.DIAMOND_AXE, Material.NETHERITE_AXE);
+        List<Material> shovelList = List.of(Material.WOODEN_SHOVEL, Material.STONE_SHOVEL, Material.IRON_SHOVEL, Material.GOLDEN_SHOVEL, Material.DIAMOND_SHOVEL, Material.NETHERITE_SHOVEL);
+        List<Material> hoeList = List.of(Material.WOODEN_HOE, Material.STONE_HOE, Material.IRON_HOE, Material.GOLDEN_HOE, Material.DIAMOND_HOE, Material.NETHERITE_HOE);
+        List<Material> helmetList = List.of(Material.LEATHER_HELMET, Material.CHAINMAIL_HELMET, Material.IRON_HELMET, Material.GOLDEN_HELMET, Material.DIAMOND_HELMET, Material.NETHERITE_HELMET);
+        List<Material> chestplateList = List.of(Material.LEATHER_CHESTPLATE, Material.CHAINMAIL_CHESTPLATE, Material.IRON_CHESTPLATE, Material.GOLDEN_CHESTPLATE, Material.DIAMOND_CHESTPLATE, Material.NETHERITE_CHESTPLATE);
+        List<Material> leggingsList = List.of(Material.LEATHER_LEGGINGS, Material.CHAINMAIL_LEGGINGS, Material.IRON_LEGGINGS, Material.GOLDEN_LEGGINGS, Material.DIAMOND_LEGGINGS, Material.NETHERITE_LEGGINGS);
+        List<Material> bootsList = List.of(Material.LEATHER_BOOTS, Material.CHAINMAIL_BOOTS, Material.IRON_BOOTS, Material.GOLDEN_BOOTS, Material.DIAMOND_BOOTS, Material.NETHERITE_BOOTS);
+        List<Material> bowList = List.of(Material.BOW);
+        List<Material> crossbowList = List.of(Material.CROSSBOW);
+        List<Material> tridentList = List.of(Material.TRIDENT);
+        List<Material> shieldList = List.of(Material.SHIELD);
+        List<Material> fishingRodList = List.of(Material.FISHING_ROD);
+        swordList.forEach(material -> typeMap.put(material, Type.SWORD));
+        pickaxeList.forEach(material -> typeMap.put(material, Type.PICKAXE));
+        axeList.forEach(material -> typeMap.put(material, Type.AXE));
+        shovelList.forEach(material -> typeMap.put(material, Type.SHOVEL));
+        hoeList.forEach(material -> typeMap.put(material, Type.HOE));
+        helmetList.forEach(material -> typeMap.put(material, Type.HELMET));
+        chestplateList.forEach(material -> typeMap.put(material, Type.CHESTPLATE));
+        leggingsList.forEach(material -> typeMap.put(material, Type.LEGGINGS));
+        bootsList.forEach(material -> typeMap.put(material, Type.BOOTS));
+        bowList.forEach(material -> typeMap.put(material, Type.BOW));
+        crossbowList.forEach(material -> typeMap.put(material, Type.CROSSBOW));
+        tridentList.forEach(material -> typeMap.put(material, Type.TRIDENT));
+        shieldList.forEach(material -> typeMap.put(material, Type.SHIELD));
+        fishingRodList.forEach(material -> typeMap.put(material, Type.FISHING_ROD));
 
         vanillaItemList.removeIf(vanillaItem -> vanillaItem.getMaterial() == Material.AIR);
     }
@@ -72,11 +100,9 @@ public class VanillaItem extends ComplexItem {
     }
 
     public static VanillaItem of(Material material) {
-        try {
-            return vanillaItemList.stream().filter(vanillaItem -> Objects.equals(vanillaItem.getId(), material.getKey().getKey())).toList().get(0);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("VanillaItem with material " + material + " does not exist");
-        }
+            return vanillaItemList.stream()
+                    .filter(vanillaItem -> Objects.equals(vanillaItem.getId(), material.getKey().getKey()))
+                    .findFirst().orElseThrow(() -> new IllegalArgumentException("VanillaItem with material " + material + " does not exist"));
     }
 
     @Nullable
@@ -86,8 +112,8 @@ public class VanillaItem extends ComplexItem {
                     .filter(vanillaItem ->
                             Objects.equals(vanillaItem.getId(), Objects.requireNonNull(item.getItemMeta())
                                     .getPersistentDataContainer()
-                                    .get(ComplexItem.GLOBAL_ID, PersistentDataType.STRING))).toList().get(0);
-        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+                                    .get(ComplexItem.GLOBAL_ID, PersistentDataType.STRING))).findFirst().orElse(null);
+        } catch (NullPointerException e) {
             return null;
         }
     }

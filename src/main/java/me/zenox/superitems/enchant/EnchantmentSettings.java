@@ -1,7 +1,7 @@
 package me.zenox.superitems.enchant;
 
-import com.archyx.aureliumskills.modifier.StatModifier;
 import me.zenox.superitems.Slot;
+import me.zenox.superitems.attribute.AttributeModifier;
 import me.zenox.superitems.item.ComplexItem;
 import me.zenox.superitems.util.QuadConsumer;
 import org.bukkit.enchantments.Enchantment;
@@ -10,7 +10,6 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,10 +25,10 @@ public class EnchantmentSettings {
     private int rarity;
     private List<ComplexItem.Type> types;
     private List<Slot> slots;
-    private List<StatModifier> stats;
+    private List<AttributeModifier> stats;
     private QuadConsumer<Event, Integer, ItemStack, Player> executable;
     private Enchantment vanillaEnchant;
-    private List<ComplexEnchantment> exclusive;
+    private List<EnchantRegistry.EnchantmentWrapper> exclusive;
 
 
     public EnchantmentSettings() {
@@ -42,7 +41,7 @@ public class EnchantmentSettings {
         this.slots.add(Slot.MAIN_HAND);
         this.stats = new ArrayList<>();
         this.exclusive = new ArrayList<>();
-        this.executable = ((event, integer, itemStack, player) -> {});
+        this.executable = null;
     }
 
     public String getId() {
@@ -100,16 +99,16 @@ public class EnchantmentSettings {
         return this;
     }
 
-    public List<StatModifier> getStats() {
+    public List<AttributeModifier> getStats() {
         return stats;
     }
 
-    public EnchantmentSettings stat(StatModifier stat) {
+    public EnchantmentSettings stat(AttributeModifier stat) {
         this.stats.add(stat);
         return this;
     }
 
-    public EnchantmentSettings stats(StatModifier ... stats) {
+    public EnchantmentSettings stats(AttributeModifier ... stats) {
         this.stats.addAll(List.of(stats));
         return this;
     }
@@ -132,12 +131,12 @@ public class EnchantmentSettings {
         return this;
     }
 
-    public List<ComplexEnchantment> getExclusive() {
+    public List<EnchantRegistry.EnchantmentWrapper> getExclusive() {
         return exclusive;
     }
 
     public EnchantmentSettings exclusive(EnchantRegistry.EnchantmentWrapper ... exclusive) {
-        this.exclusive.addAll(Arrays.stream(exclusive).map(enchantmentWrapper -> enchantmentWrapper.getEnchant()).toList());
+        this.exclusive.addAll(List.of(exclusive));
         return this;
     }
 }

@@ -2,8 +2,11 @@ package me.zenox.superitems.recipe;
 
 import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.item.ItemRegistry;
+import me.zenox.superitems.item.VanillaItem;
 import me.zenox.superitems.util.Util;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -23,26 +26,33 @@ public class RecipeRegistry {
                 .setResult(new ComplexItemStack(ItemRegistry.ENCHANTED_BLAZE_ROD).getItem())
                 .id("blaze_to_enchanted_blaze")
                 .shape("BBB", "BBB", "BBB")
-                .addChoice('B', new MaterialAmountChoice(Material.BLAZE_ROD, 5))
+                .addChoice('B', new RecipeChoice.MaterialChoice(Material.BLAZE_ROD))
                 .build());
 
         final Recipe ENCHANTED_BLAZE_TO_BLAZE = registerRecipe(new ShapelessRecipeBuilder()
                 .setResult(new ItemStack(Material.BLAZE_ROD, 9))
                 .id("enchanted_blaze_to_blaze")
-                .addChoice(new ComplexChoice(ItemRegistry.ENCHANTED_BLAZE_ROD, -1)).build());
+                .addChoice(new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.ENCHANTED_BLAZE_ROD).getItem())).build());
 
         final Recipe ENCHANTED_ENDER_PEARL = registerRecipe(new ShapedRecipeBuilder()
                 .setResult(new ComplexItemStack(ItemRegistry.ENCHANTED_ENDER_PEARL).getItem())
                 .id("enchanted_ender_pearl")
                 .shape("EEE", "EEE", "EEE")
-                .addChoice('E', new MaterialAmountChoice(Material.ENDER_PEARL, 9))
+                .addChoice('E', new RecipeChoice.MaterialChoice(Material.ENDER_PEARL))
+                .build());
+
+        final Recipe ENCHANTED_MAGMA_BLOCK = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.ENCHANTED_MAGMA_BLOCK).getItem())
+                .id("enchanted_magma_block")
+                .shape("MMM", "MMM", "MMM")
+                .addChoice('M', new RecipeChoice.MaterialChoice(Material.MAGMA_BLOCK))
                 .build());
 
         final Recipe ABSOLUTE_ENDER_PEARL = registerRecipe(new ShapedRecipeBuilder()
                 .setResult(new ComplexItemStack(ItemRegistry.ABSOLUTE_ENDER_PEARL).getItem())
                 .id("absolute_ender_pearl")
                 .shape("EEE", "EEE", "EEE")
-                .addChoice('E', new ComplexChoice(ItemRegistry.ENCHANTED_ENDER_PEARL, 9))
+                .addChoice('E', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.ENCHANTED_ENDER_PEARL).getItem()))
                 .build());
 
         final Recipe PURIFIED_MAGMA_DISTILLATE = registerRecipe(new ShapedRecipeBuilder()
@@ -55,8 +65,8 @@ public class RecipeRegistry {
                 .build());
 
         final Recipe TITANIUM_CUBE = registerRecipe(new ShapedRecipeBuilder()
-                .setResult(new ComplexItemStack(ItemRegistry.PURIFIED_MAGMA_DISTILLATE).getItem())
-                .id("purified_magma_distillate")
+                .setResult(new ComplexItemStack(ItemRegistry.TITANIUM_CUBE).getItem())
+                .id("titanium_cube")
                 .shape("III", "III", "III")
                 .addChoice('I', new RecipeChoice.MaterialChoice(Material.IRON_BLOCK))
                 .build());
@@ -64,11 +74,11 @@ public class RecipeRegistry {
         final Recipe MAGIC_TOY_STICK = registerRecipe(new ShapedRecipeBuilder()
                 .setResult(new ComplexItemStack(ItemRegistry.MAGIC_TOY_STICK).getItem())
                 .id("magic_toy_stick")
-                .shape("PHP", "TDT", "TDT")
-                .addChoice('P', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.PURIFIED_MAGMA_DISTILLATE).getItem()))
-                .addChoice('H', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.HYPER_CRUX).getItem()))
+                .shape("EAE", "TDT", "TDT")
+                .addChoice('E', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.ENCHANTED_ENDER_PEARL).getItem()))
+                .addChoice('A', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.ABSOLUTE_ENDER_PEARL).getItem()))
                 .addChoice('T', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.TITANIUM_CUBE).getItem()))
-                .addChoice('P', new RecipeChoice.MaterialChoice(Material.DEBUG_STICK))
+                .addChoice('D', new RecipeChoice.MaterialChoice(Material.DEBUG_STICK))
                 .build());
 
         final Recipe SOUL_CRYSTAL = registerRecipe(new ShapedRecipeBuilder()
@@ -264,6 +274,42 @@ public class RecipeRegistry {
                 .addChoice('A', new RecipeChoice.ExactChoice(ItemRegistry.TITANIUM_CUBE.getItemStack(1)))
                 //if its more than 1 we have to increase stats
                 .build());
+
+        final Recipe DIAMANTINE_HELMET = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.DIAMANTINE_HELMET).getItem())
+                .id("diamantine_helmet")
+                .shape("DDD", "D D", "   ")
+                .addChoice('D', new RecipeChoice.ExactChoice(new ComplexItemStack(VanillaItem.of(Material.DIAMOND_BLOCK)).getItem()))
+                .build());
+
+        final Recipe DIAMANTINE_CHESTPLATE = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.DIAMANTINE_CHESTPLATE).getItem())
+                .id("diamantine_chestplate")
+                .shape("D D", "DDD", "DDD")
+                .addChoice('D', new RecipeChoice.ExactChoice(new ComplexItemStack(VanillaItem.of(Material.DIAMOND_BLOCK)).getItem()))
+                .build());
+
+        final Recipe DIAMANTINE_LEGGINGS = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.DIAMANTINE_LEGGINGS).getItem())
+                .id("diamantine_leggings")
+                .shape("DDD", "D D", "D D")
+                .addChoice('D', new RecipeChoice.ExactChoice(new ComplexItemStack(VanillaItem.of(Material.DIAMOND_BLOCK)).getItem()))
+                .build());
+
+        final Recipe DIAMANTINE_BOOTS = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.DIAMANTINE_BOOTS).getItem())
+                .id("diamantine_boots")
+                .shape("   ", "D D", "D D")
+                .addChoice('D', new RecipeChoice.ExactChoice(new ComplexItemStack(VanillaItem.of(Material.DIAMOND_BLOCK)).getItem()))
+                .build());
+
+        final Recipe SHADOW_BLADE = registerRecipe(new ShapedRecipeBuilder()
+                .setResult(new ComplexItemStack(ItemRegistry.SHADOW_BLADE).getItem())
+                .id("shadow_blade")
+                .shape("CCC", "CSC", "CCC")
+                .addChoice('C', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.CORRUPT_PEARL).getItem()))
+                .addChoice('S', new RecipeChoice.ExactChoice(new ComplexItemStack(VanillaItem.of(Material.NETHERITE_SWORD)).getItem()))
+                .build());
     }
 
     private static Recipe registerRecipe(Recipe recipe) {
@@ -272,6 +318,16 @@ public class RecipeRegistry {
     }
 
     public static void registerRecipes() {
+        for (Recipe recipe : registeredRecipes) {
+            try {
+                Bukkit.addRecipe(recipe);
+            } catch (IllegalStateException e) {
+                if (recipe instanceof Keyed) {
+                    Bukkit.removeRecipe(((Keyed) recipe).getKey());
+                    Bukkit.addRecipe(recipe);
+                }
+            }
+        }
         Util.logToConsole(ChatColor.WHITE + "Registering " + ChatColor.GOLD + registeredRecipes.size() + ChatColor.WHITE + " recipes.");
     }
 }

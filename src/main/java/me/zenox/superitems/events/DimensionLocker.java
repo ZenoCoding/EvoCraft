@@ -34,12 +34,16 @@ public class DimensionLocker implements Listener {
         if(e.getCause().equals(PlayerTeleportEvent.TeleportCause.NETHER_PORTAL) || e.getCause().equals(PlayerTeleportEvent.TeleportCause.END_PORTAL)){
             PersistentDataContainer container = e.getPlayer().getPersistentDataContainer();
             if (container.has(DIMENSION_KEY, PersistentDataType.INTEGER)){
-                if(container.get(DIMENSION_KEY, PersistentDataType.INTEGER) < Dimension.of(e.getTo().getWorld().getEnvironment()).value){
+                if(Dimension.of(e.getTo().getWorld().getEnvironment()).environment == World.Environment.THE_END){
                     e.setCancelled(true);
                     e.getPlayer().getWorld().createExplosion(e.getPlayer().getLocation(), 4, true, true);
                 }
             } else {
                 container.set(DIMENSION_KEY, PersistentDataType.INTEGER, Dimension.OVERWORLD.value);
+                if(Dimension.of(e.getTo().getWorld().getEnvironment()).environment == World.Environment.THE_END){
+                    e.setCancelled(true);
+                    e.getPlayer().getWorld().createExplosion(e.getPlayer().getLocation(), 4, true, true);
+                }
             }
         }
     }

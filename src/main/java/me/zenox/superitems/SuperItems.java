@@ -19,8 +19,10 @@ import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.item.VanillaItem;
 import me.zenox.superitems.network.GlowFilter;
 import me.zenox.superitems.recipe.RecipeRegistry;
+import me.zenox.superitems.story.ChapterManager;
 import me.zenox.superitems.util.Util;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Material;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,12 +32,14 @@ public final class SuperItems extends JavaPlugin {
     private static SuperItems plugin;
 
     private static Economy econ = null;
+    private static Permission perms = null;
 
     public boolean isUsingWorldGuard;
-    public Modifiers modifiers;
-    private LanguageLoader languageLoader;
-    private ConfigLoader configLoader;
-    private ProtocolManager protocolManager;
+    public static Modifiers modifiers;
+    private static LanguageLoader languageLoader;
+    private static ConfigLoader configLoader;
+    private static ProtocolManager protocolManager;
+    private static ChapterManager chapterManager;
 
     public static SuperItems getPlugin() {
         return plugin;
@@ -65,10 +69,17 @@ public final class SuperItems extends JavaPlugin {
             return;
         }
 
+        if (!setupPermissions() ) {
+            Util.logToConsole("Disabled due to no Vault dependency found!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         modifiers = new Modifiers(AureliumSkills.getPlugin(AureliumSkills.class));
 
         configLoader = new ConfigLoader(plugin);
         languageLoader = new LanguageLoader(plugin);
+        chapterManager = new ChapterManager(plugin);
 
         registerGlobalGUIItems();
 
@@ -109,6 +120,18 @@ public final class SuperItems extends JavaPlugin {
         return true;
     }
 
+    private boolean setupPermissions() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        if (rsp == null) {
+            return false;
+        }
+        perms = rsp.getProvider();
+        return perms != null;
+    }
+
 
     public static void registerGlobalGUIItems(){
         // Menu Glass Item
@@ -116,20 +139,28 @@ public final class SuperItems extends JavaPlugin {
     }
 
 
-    public LanguageLoader getLang() {
-        return this.languageLoader;
+    public static LanguageLoader getLang() {
+        return languageLoader;
     }
 
-    public ConfigLoader getConfigLoader() {
+    public static ConfigLoader getConfigLoader() {
         return configLoader;
     }
 
-    public ProtocolManager getProtocolManager() {
+    public static ProtocolManager getProtocolManager() {
         return protocolManager;
     }
 
     public static Economy getEconomy() {
         return econ;
+    }
+
+    public static Permission getPermissions() {
+        return perms;
+    }
+
+    public static ChapterManager getChapterManager() {
+        return chapterManager;
     }
 
     public void reload() {

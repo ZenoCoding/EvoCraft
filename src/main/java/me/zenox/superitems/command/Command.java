@@ -4,10 +4,13 @@ import com.google.common.primitives.Ints;
 import me.zenox.superitems.SuperItems;
 import me.zenox.superitems.enchant.ComplexEnchantment;
 import me.zenox.superitems.item.ComplexItem;
+import me.zenox.superitems.item.ComplexItemMeta;
 import me.zenox.superitems.item.ComplexItemStack;
 import me.zenox.superitems.item.ItemRegistry;
 import me.zenox.superitems.loot.LootTable;
 import me.zenox.superitems.loot.LootTableRegistry;
+import me.zenox.superitems.story.Chapter;
+import me.zenox.superitems.story.ChapterManager;
 import me.zenox.superitems.tabcompleter.MainTabCompleter;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
@@ -162,7 +165,9 @@ public class Command implements CommandExecutor {
                         level = 1;
                     }
 
-                    ComplexItemStack.of(enchanted.getInventory().getItemInMainHand()).getComplexMeta().addEnchantment(enchant, (Integer) level);
+                    ComplexItemMeta meta = ComplexItemStack.of(enchanted.getInventory().getItemInMainHand()).getComplexMeta();
+                    if(((int) level) > 0) meta.addEnchantment(enchant, (Integer) level);
+                    else meta.removeEnchantment(enchant);
                     Util.sendMessage(sender, "You enchanted " + enchanted.getDisplayName() + " with " + ChatColor.WHITE + enchant.getName() + " " + level);
                 }
                 return true;
@@ -179,6 +184,43 @@ public class Command implements CommandExecutor {
                     return true;
                 }
                 Util.sendMessage(sender, ChatColor.WHITE + "The CustomModelData of " + item.getItemMeta().getDisplayName() + ChatColor.WHITE + "  is " + ComplexItemStack.of(item).getComplexItem().getCustomModelData());
+                return true;
+            }
+            case "removechapterdata" -> {
+                if (sender instanceof Player){
+                    ((Player) sender).getPersistentDataContainer().remove(ChapterManager.CHAPTER_KEY);
+                    Util.sendMessage(sender, "All chapter data has been removed.");
+                }
+                else {
+                    Util.sendMessage(sender, "You must be a player to use this command!");
+                }
+            }
+            case "removemetadata" -> {
+                if (sender instanceof Player){
+                    sender.getServer().getPlayer(args[1]).removeMetadata("hasStarted", SuperItems.getPlugin());
+                    Util.sendMessage(sender, "All chapter data has been removed.");
+                }
+                else {
+                    Util.sendMessage(sender, "You must be a player to use this command!");
+                }
+            }
+            case "setchapter" -> {
+                // Set the chapter given the player and the chapter's id
+                if (args.length < 2 || sender.getServer().getPlayer(args[1]) == null) {
+                    Util.sendMessage(sender, "Please specify a valid user to set the chapter of.");
+                    return true;
+                }
+                if (args.length < 3) {
+                    Util.sendMessage(sender, "Please specify a valid chapter.");
+                    return true;
+                }
+                Player player = sender.getServer().getPlayer(args[1]);
+                Chapter chapter = SuperItems.getChapterManager().getChapter(Ints.tryParse(args[2]));
+                if (chapter == null) {
+                    Util.sendMessage(sender, "This chapter does not exist!");
+                    return true;
+                }
+                SuperItems.getChapterManager().setChapter(player, chapter);
                 return true;
             }
             default -> Util.sendMessage(sender, "SuperItems Help Page.");

@@ -20,6 +20,7 @@ import me.zenox.superitems.item.VariableType;
 import me.zenox.superitems.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -87,7 +88,7 @@ public class EnchantingGUI extends SimpleGUI {
         double variety = calculateVariety(bookshelfPower);
         double strength = calculateStrength(level, fuelStrength, AureliumAPI.getSkillLevel(p, Skills.ENCHANTING));
 
-        Util.sendMessage(p, "Enchant | Strength: " + strength + " | Variety: " + variety);
+        // Util.sendMessage(p, "Enchant | Strength: " + strength + " | Variety: " + variety);
 
         HashMap<ComplexEnchantment, Integer> result = new HashMap<>();
         Map<ComplexEnchantment, Integer> currentEnchantments = item.getComplexMeta().getComplexEnchants();
@@ -156,12 +157,17 @@ public class EnchantingGUI extends SimpleGUI {
 
         this.eTable.getWorld().playSound(this.eTable.getLocation(), ENCHANT_SOUND, 1f + level, 1f - level * 0.15f);
 
+        // Send Enchanting Particles
+        for (int i = 0; i < 5; i++) {
+            this.eTable.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, this.eTable.getLocation().add(0.5, 1.5, 0.5), 5, 0.5, 0, 0.5);
+        }
+
         // Update player's XP levels
-        p.sendExperienceChange(p.getExp(), p.getLevel() - xpRequired);
-        p.setLevel(p.getLevel() - xpRequired);
+        // the "-level + 1" is to account for some underlying issue regarding enchanting :thinking:
+        p.setLevel(p.getLevel() - xpRequired - level + 1);
 
         // Update player's Skill XP
-        AureliumAPI.addXp(p, Skills.ENCHANTING, calculateSkillXP(level, strength, variety));
+        AureliumAPI.addXp(p, Skills.ENCHANTING, calculateSkillXP(level, strength, calculateVariety(bookshelfPower)));
         return true;
     }
 
@@ -194,8 +200,8 @@ public class EnchantingGUI extends SimpleGUI {
     public static boolean enchantValid(EnchantingGUI gui, int power, int XPRequired) {
         int skillRequirement = 0;
         switch (power) {
-            case 2 -> skillRequirement = 20;
-            case 3 -> skillRequirement = 35;
+            case 2 -> skillRequirement = 10;
+            case 3 -> skillRequirement = 25;
         }
         // Check XP and skill level
         return fuelValid(gui.getFuelItem()) && itemValid(gui.getEItem()) && AureliumAPI.getSkillLevel(gui.p, Skills.ENCHANTING) >= skillRequirement && gui.p.getLevel() >= XPRequired;
@@ -239,7 +245,7 @@ public class EnchantingGUI extends SimpleGUI {
     }
 
     public static int calculateSkillXP(int power, double strength, double variety){
-        return (int) (Math.pow(power, 2) * strength * Math.sqrt(8 * variety) * 1000);
+        return (int) (Math.pow(power, 2) * strength * Math.sqrt(8 * variety) * 4000);
     }
 
     /**
@@ -256,17 +262,17 @@ public class EnchantingGUI extends SimpleGUI {
 
         for (Map.Entry<ComplexEnchantment, Integer> entry : enchantSet2.entrySet()) {
             if(invalidEnchantments.contains(entry.getKey())) continue;
-            result.computeIfPresent(entry.getKey(), ((complexEnchantment, integer) -> combineEnchantLevels(entry.getValue(), integer)));
+            result.computeIfPresent(entry.getKey(), ((complexEnchantment, integer) -> combineEnchantLevels(entry.getKey().getMaxLevel(), entry.getValue(), integer)));
             result.putIfAbsent(entry.getKey(), entry.getValue());
         }
 
         return result;
     }
 
-    private static int combineEnchantLevels(int enchantLevel1, int enchantLevel2){
+    private static int combineEnchantLevels(int maxLevel, int enchantLevel1, int enchantLevel2){
         int result = Math.max(enchantLevel1, enchantLevel1);
         if(enchantLevel1 == enchantLevel2) return enchantLevel1 + 1;
-        return result;
+        return Math.min(maxLevel, result);
     }
 
     public static GUI getGui(Player p, Block block) {
@@ -283,11 +289,11 @@ public class EnchantingGUI extends SimpleGUI {
                 .addIngredient('F', new SlotElement.VISlotElement(VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1), 0, new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)))
                 .addIngredient('R', new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName(""))
                 .addIngredient('1', new EnchantItem(1, 0))
-                .addIngredient('2', new EnchantItem(2, 20))
-                .addIngredient('3', new EnchantItem(3, 35))
+                .addIngredient('2', new EnchantItem(2, 10))
+                .addIngredient('3', new EnchantItem(3, 25))
                 .addIngredient('@', new BooleanItem(enchantingGUI -> fuelValid(enchantingGUI.getFuelItem())))
-                .addIngredient('$', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 1, 30)))
-                .addIngredient('%', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 2, 40)))
+                .addIngredient('$', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 1, 20)))
+                .addIngredient('%', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 2, 30)))
                 .addIngredient('^', new BooleanItem(enchantingGUI -> enchantValid(enchantingGUI, 3, 50)))
                 .addIngredient('B', new BookshelfItem())
                 .addIngredient('C', new CloseItem())

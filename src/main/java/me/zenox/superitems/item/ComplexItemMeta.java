@@ -50,7 +50,7 @@ public class ComplexItemMeta {
                 RARITY_VAR.name()).get(0).setLore(List.of(loreBuilder.getLoreEntryById(RARITY_VAR.name()).get(0).getLore().get(0) + " " + loreEntry.getLore().get(0)));
         loreEntry.setLore(List.of());
     })), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Type) variable.getValue()).getName())));
-    private static final NamespacedKey ENCHANT_KEY = new NamespacedKey(SuperItems.getPlugin(), "complexEnchants");
+    public static final NamespacedKey ENCHANT_KEY = new NamespacedKey(SuperItems.getPlugin(), "complexEnchants");
     private static final NamespacedKey ATTRIBUTE_KEY = new NamespacedKey(SuperItems.getPlugin(), "attributes");
     private List<Ability> abilities;
     private final List<Variable> variableList = new ArrayList<>();
@@ -125,15 +125,15 @@ public class ComplexItemMeta {
         writeVariables(VariableType.Priority.ABOVE_ENCHANTS, dataContainer, lore, true);
 
         HashMap<String, Integer> complexEnchMap = new HashMap<>();
-        for (Map.Entry<ComplexEnchantment, Integer> entry :
-                this.complexEnchantments.entrySet()) {
-            complexEnchMap.put(entry.getKey().getId(), entry.getValue());
+        if(!this.complexEnchantments.entrySet().stream().findFirst().isEmpty()) {
+            for (Map.Entry<ComplexEnchantment, Integer> entry :
+                    this.complexEnchantments.entrySet()) {
+                complexEnchMap.put(entry.getKey().getId(), entry.getValue());
+            }
         }
 
         // Write ComplexEnchants
         dataContainer.set(ENCHANT_KEY, new SerializedPersistentType<HashMap>(), complexEnchMap);
-
-
 
         // Clear vanilla enchantments
         for (Enchantment enchant:
@@ -238,8 +238,8 @@ public class ComplexItemMeta {
                 .forEach(namespacedKey -> IsetVariable(VariableType.getVariableByPrefix(namespacedKey.getKey().substring(VAR_PREFIX.length())), dataContainer.get(namespacedKey, new SerializedPersistentType<>())));
 
         // if the meta doesn't contain rarity or type
-        if (getVariable(RARITY_VAR) == null) IsetVariable(RARITY_VAR, complexItemStack.getComplexItem().getRarity());
-        if (getVariable(TYPE_VAR) == null) IsetVariable(TYPE_VAR, complexItemStack.getComplexItem().getType());
+        IsetVariable(RARITY_VAR, complexItemStack.getComplexItem().getRarity());
+        IsetVariable(TYPE_VAR, complexItemStack.getComplexItem().getType());
     }
 
     private void writeVariables(VariableType.Priority priority, PersistentDataContainer container, LoreBuilder builder, Boolean newline) {
@@ -291,8 +291,16 @@ public class ComplexItemMeta {
                         ((ComplexItem.Type) meta.getVariable(ComplexItemMeta.TYPE_VAR).getValue()).isWearable() ? ModifierType.ARMOR : ModifierType.ITEM)){
             modifiers.add(AttributeModifier.of(modifier));
         }
+        modifiers = modifiers.stream().filter(modifier -> !modifier.getName().contains("enchant")).toList();
 
-        return modifiers;
+
+        // Enchant modifiers
+        List<AttributeModifier> finalModifiers = modifiers;
+        meta.getComplexEnchants().forEach((complexEnchantment, integer) -> {
+            finalModifiers.addAll(complexEnchantment.getStats().stream().map(attributeModifier -> attributeModifier.setValue(attributeModifier.getValue()*integer)).toList());
+        });
+
+        return finalModifiers;
     }
 
     public void addVariable(Variable var) {
@@ -316,7 +324,7 @@ public class ComplexItemMeta {
     @Nullable
     public Variable getVariable(VariableType type) {
         try {
-            return variableList.stream().filter(variable -> variable.getType() == type).toList().get(0);
+            return variableList.stream().filter(variable -> variable.getType() == type).findFirst().orElse(null);
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
@@ -343,6 +351,7 @@ public class ComplexItemMeta {
 
     public void removeEnchantment(ComplexEnchantment enchantment){
         this.complexEnchantments.remove(enchantment);
+        updateItem();
     }
 
     public List<Variable> getVariableList() {

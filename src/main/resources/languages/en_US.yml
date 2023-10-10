@@ -87,6 +87,7 @@ item-name-flaming_boots: Flaming Boots
 item-name-volken_axe: Volken Axe
 
 item-name-lapis_orbitex: Lapis Orbitex
+item-name-infused_orbitex: Infused Orbitex
 
 item-name-shadow_blade: Shadow Blade
 
@@ -106,6 +107,48 @@ item-name-burning_boots: Burning Boots
 item-name-burning_smoke: Burning Smoke
 
 item-name-gilded_carrot: Gilded Carrot
+
+item-name-whack_a_stick: Whack-A-Stick
+
+item-name-start_button: Start Button
+
+item-name-soul_stone: Soul Stone
+
+item-name-arcane_jewel: Arcane Jewel
+
+item-name-super_snow_blaster: Super Snow Blaster
+
+item-name-diamantine_helmet: Diamantine Helmet
+item-name-diamantine_chestplate: Diamantine Chestplate
+item-name-diamantine_leggings: Diamantine Leggings
+item-name-diamantine_boots: Diamantine Boots
+
+item-name-golem_heart: Golem Heart
+item-name-golem_heart_fragment: Golem Heart Fragment
+
+item-name-golem_helmet: Golem Helmet
+item-name-golem_chestplate: Golem Chestplate
+item-name-golem_leggings: Golem Leggings
+item-name-golem_boots: Golem Boots
+
+item-name-titan_helmet: Titan Helmet
+item-name-titan_chestplate: Titan Chestplate
+item-name-titan_leggings: Titan Leggings
+item-name-titan_boots: Titan Boots
+
+item-name-amethyst_core: Amethyst Core
+item-name-amethyst_staff: Amethyst Staff
+item-name-amethyst_elixir: Amethyst Elixir
+
+item-name-crystal_capacitor: Crystal Capacitor
+
+item-name-enchanted_amethyst_crystal: Enchanted Amethyst Crystal
+item-name-flawless_amethyst_crystal: Flawless Amethyst Crystal
+item-name-pristine_amethyst_crystal: Pristine Amethyst Crystal
+
+item-name-hard_stone: Hard Stone
+
+item-name-colossal_blade: Colossal Blade
 
 ##########################################################################
 ##                              ITEM LORE                               ##
@@ -231,6 +274,11 @@ item-lore-volken_axe:
 item-lore-lapis_orbitex:
   - "Possesses &dmagical &7abilities, unlike that blue rock stuff."
 
+item-lore-infused_orbitex:
+  - "Possesses extreme &dmagical &7abilities, radiating magical energy."
+  - ""
+  - "Infusion technology!"
+
 item-lore-shadow_blade:
   - "&8Dark and mysterious."
 
@@ -272,6 +320,110 @@ item-lore-burning_boots:
 
 item-lore-gilded_carrot:
   - "Really tasty!"
+
+item-lore-whack_a_stick:
+    - "&oWHEEEEEEEEEEEeeeeeeeeeeeeeeeeeeeeee!"
+
+item-lore-start_button:
+  - "Just press start."
+
+item-lore-soul_stone:
+  - "A stone imbued with the power of a soul."
+
+item-lore-arcane_jewel:
+  - "Holds the true power of a mage."
+  - "&6QUEST ITEM"
+
+item-lore-super_snow_blaster:
+  - "&oEEEEXTREEEEME!"
+  - ""
+  - "A super snowball blaster that shoots snowballs at a rapid rate!"
+  - "&8&oPremium Brand!"
+
+item-lore-diamantine_helmet:
+  - "A helmet made of pure &bdiamonds, &7with immense defensive power."
+  -
+  - "11 on the hardness scale!"
+
+item-lore-diamantine_chestplate:
+  - "A chestplate made of pure &bdiamonds, &7with immense defensive power."
+  -
+  - "11 on the hardness scale!"
+
+item-lore-diamantine_leggings:
+  - "A pair of leggings made of pure &bdiamonds, &7with immense defensive power."
+  -
+  - "11 on the hardness scale!"
+
+item-lore-diamantine_boots:
+  - "A pair of boots made of pure &bdiamonds, &7with immense defensive power."
+  -
+  - "11 on the hardness scale!"
+
+item-lore-golem_heart:
+  - "A heart of a golem, radiating crystal energy."
+item-lore-golem_heart_fragment:
+  - "A fragment of a golem's heart."
+
+item-lore-golem_helmet:
+  - "A helmet pieced together from a fragments of a golem's heart."
+
+item-lore-golem_chestplate:
+  - "A chestplate pieced together from a fragments of a golem's heart."
+
+item-lore-golem_leggings:
+  - "A pair of leggings pieced together from a fragments of a golem's heart."
+
+item-lore-titan_helmet:
+  - "A helmet once worn by a true titan."
+  - ""
+  - "A relic of the past."
+
+item-lore-titan_chestplate:
+  - "A chestplate once worn by a true titan."
+  - ""
+  - "A relic of the past."
+
+item-lore-titan_leggings:
+  - "A pair of leggings once worn by a true titan."
+  - ""
+  - "A relic of the past."
+
+item-lore-titan_boots:
+  - "A pair of boots once worn by a true titan."
+  - ""
+  - "A relic of the past."
+
+item-lore-amethyst_core:
+  - "A core of pure amethyst, refracting the sunlight."
+
+item-lore-amethyst_staff:
+  - "A staff made of pure amethyst."
+  - ""
+  - "Crystal magic!"
+
+item-lore-amethyst_elixir:
+  - "A magical elixir, it's power drained from a pure amethyst core."
+
+item-lore-crystal_capacitor:
+  - "A capacitor that can hold a lot of crystal energy."
+  - ""
+  - "Infusion technology!"
+
+item-lore-enchanted_amethyst_crystal:
+  - "It glows!"
+
+item-lore-flawless_amethyst_crystal:
+  - "Flawless!"
+
+item-lore-pristine_amethyst_crystal:
+  - "Pristine!"
+
+item-lore-hard_stone:
+  - "Hard... stone. Very hard. Hard. Stone. Stone. Hard."
+
+item-lore-colossal_blade:
+  - "A magical blade, so big that it was thought to be a hunk of stone."
 
 item-lore-vertex_blade:
   - "Using &5vertexical math and convex geometry,"
@@ -379,8 +531,7 @@ ability-lore-justice:
 ability-name-dark_fury: Dark Fury
 
 ability-lore-dark_fury:
-  - "When &8unnoticed&7, deal &a2x &cdamage &7to opponents."
-  -
+  - "When &8unnoticed&7, deal &a1.5x &cdamage &7to opponents."
 
 ability-name-terra_strike: Terra-Strike
 
@@ -412,6 +563,60 @@ ability-lore-vertex_ability:
   - "construct a point on a &6Tesseract,&7 increasing"
   - "&4damage&7 against that enemy."
 
+ability-name-start_button: Press Start
+
+ability-name-portalizer: Portalizer
+
+ability-lore-portalizer:
+  - "Activate an energy crystal, and travel through spacetime."
+
+ability-name-snow_shot: Snow Blast
+
+ability-lore-snow_shot:
+  - "Shoots a &bsnowball &7that deals knockback enemies on impact."
+  - "Deals &f&lFROSTBITE &7damage to enemies."
+
+ability-name-diamantine_shield: Diamantine Shield
+
+ability-lore-diamantine_shield:
+  - "Upon being attacked, &a10% &7chance to block all incoming &cdamage."
+  - "Grants 2 &eabsorption ♥ &7hearts!"
+  -
+
+ability-name-golems_heart: Golem's Heart
+
+ability-lore-golems_heart:
+  - "Reduce all &cexplosion damage &7by &a24%&7."
+  - ""
+  - "Stone fortitude!"
+
+ability-name-titans_heart: Titan's Heart
+
+ability-lore-titans_heart:
+  - "Reduce all &cexplosion damage &7by &a50%&7."
+  - ""
+  - "Titan's fortitude!"
+
+ability-name-crystal_spike: Crystal Spike
+
+ability-lore-crystal_spike:
+  - "Creates a row of crystals that rise out of the ground, dealing massive &cdamage &7to enemies."
+
+ability-name-mana_boost: Mana Boost
+
+ability-lore-mana_boost:
+  - "Restores &a10% &7of your &bmana."
+  - ""
+  - "Doubles your &bmana regeneration &7for &a10s&7."
+
+ability-name-colossal_sweep: Colossal Sweep
+
+ability-lore-colossal_sweep:
+  - "Sweep your sword in a wide arc, dealing &cdamage &7to all enemies in a &a5 block &7radius."
+  - ""
+  - "Massive knockback damage!"
+
+
 ##########################################################################
 ##                             ENCHANTMENTS                             ##
 ##########################################################################
@@ -429,7 +634,7 @@ enchant-name-blast_protection: Blast Protection
 enchant-name-channeling: Channeling
 enchant-name-depth_strider: Depth Strider
 enchant-name-efficiency: Efficiency
-enchant_name-feather_falling: Feather Falling
+enchant-name-feather_falling: Feather Falling
 enchant-name-fire_aspect: Fire Aspect
 enchant-name-fire_protection: Fire Protection
 enchant-name-flame: Flame
@@ -467,30 +672,30 @@ enchant-name-unbreaking: Unbreaking
 
 gui-enchant-action-title-1: "&3Enchant &7→ &eLevel 1"
 gui-enchant-action-lore-1:
-  - "&3Enchanting &7will consume &630 &eXP levels,"
-  - "&7and consume all &d&nenchanting fuel."
+  - "&3Enchanting &7will consume &620 &eXP levels,"
+  - "&7and consume a single &d&nenchanting fuel."
   - ""
   - "&e&nRequires no enchanting level!"
 
 gui-enchant-action-title-2: "&3Enchant &7→ &eLevel 2"
 gui-enchant-action-lore-2:
-  - "&3Enchanting &7will consume &640 &eXP levels,"
-  - "&7and consume all &d&nenchanting fuel."
+  - "&3Enchanting &7will consume &630 &eXP levels,"
+  - "&7and consume a single &d&nenchanting fuel."
   - ""
-  - "&c&nRequires enchanting level 20!"
+  - "&c&nRequires enchanting level 10!"
 
 gui-enchant-action-title-3: "&3Enchant &7→ &eLevel 3"
 gui-enchant-action-lore-3:
   - "&3Enchanting &7will consume &650 &eXP levels,"
-  - "&7and consume all &d&nenchanting fuel."
+  - "&7and consume a single &d&nenchanting fuel."
   - ""
-  - "&c&nRequires enchanting level 35!"
+  - "&c&nRequires enchanting level 25!"
 
 ##########################################################################
 ##                              ATTRIBUTES                              ##
 ##########################################################################
 
-attribute-mc-mac_health: True Health
+attribute-mc-max_health: True Health
 attribute-mc-follow_range: Follow Range
 attribute-mc-knockback_resistance: Knockback Resistance
 attribute-mc-movement_speed: Speed

@@ -360,6 +360,14 @@ public class ItemRegistry {
             .glow()
             .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 5));
 
+    public static final ComplexItem INFUSED_ORBITEX = new ComplexItem(new ItemSettings()
+            .id("infused_orbitex")
+            .material(Material.PURPLE_DYE)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.ENCHANTING_FUEL)
+            .glow()
+            .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 15));
+
     public static final ComplexItem CREATIVE_MIND = new ComplexItem((new ItemSettings()
             .id("creative_mind")
             .material(Material.PAINTING)
@@ -374,6 +382,8 @@ public class ItemRegistry {
             .material(Material.IRON_SWORD)
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .type(ComplexItem.Type.SWORD)
+            .modifier(AttributeRegistry.ATTACK_DAMAGE, 10d)
+            .modifier(AttributeRegistry.ATTACK_SPEED, -2.2d)
             .ability(AbilityRegistry.DARK_FURY));
 
     public static final ComplexItem DARK_ORB = new ComplexItem(new ItemSettings()
@@ -456,6 +466,263 @@ public class ItemRegistry {
             .material(Material.GOLDEN_CARROT)
             .ability(AbilityRegistry.GILDED_CONSUME)
             .rarity(ComplexItem.Rarity.RARE));
+
+    public static final ComplexItem START_BUTTON = new ComplexItem(new ItemSettings()
+            .id("start_button")
+            .material(Material.REDSTONE)
+            .ability(AbilityRegistry.START_BUTTON)
+            .rarity(ComplexItem.Rarity.MYTHIC));
+
+    public static final ComplexItem SOUL_STONE = new ComplexItem(new ItemSettings()
+            .id("soul_stone")
+            .material(Material.NETHER_STAR)
+            .ability(AbilityRegistry.PORTALIZER)
+            .rarity(ComplexItem.Rarity.MYTHIC));
+
+    public static final ComplexItem ARCANE_JEWEL = new ComplexItem(new ItemSettings()
+            .id("arcane_jewel")
+            .material(Material.AMETHYST_SHARD)
+            .rarity(ComplexItem.Rarity.RARE));
+
+    public static final ComplexItem WHACK_A_STICK = new ComplexItem(new ItemSettings()
+            .id("whack_a_stick")
+            .material(Material.STICK)
+            .rarity(ComplexItem.Rarity.RARE));
+
+    public static final ComplexItem SUPER_SNOW_BLASTER = new ComplexItem(new ItemSettings()
+            .id("super_snow_blaster")
+            .material(Material.STONE_HOE)
+            .rarity(ComplexItem.Rarity.MYTHIC)
+            .ability(AbilityRegistry.SNOW_SHOT));
+
+    public static final ComplexItem DIAMANTINE_HELMET = new ComplexItem(new ItemSettings()
+            .id("diamantine_helmet")
+            .material(Material.DIAMOND_HELMET)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.HELMET)
+            .modifier(AttributeRegistry.HEALTH, 5)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.03, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 4)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
+            .abilities(AbilityRegistry.DIAMANTINE_SHIELD));
+
+    public static final ComplexItem DIAMANTINE_CHESTPLATE = new ComplexItem(new ItemSettings()
+            .id("diamantine_chestplate")
+            .material(Material.DIAMOND_CHESTPLATE)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.CHESTPLATE)
+            .modifier(AttributeRegistry.HEALTH, 12)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.03, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 10)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
+            .abilities(AbilityRegistry.DIAMANTINE_SHIELD));
+
+    public static final ComplexItem DIAMANTINE_LEGGINGS = new ComplexItem(new ItemSettings()
+            .id("diamantine_leggings")
+            .material(Material.DIAMOND_LEGGINGS)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.LEGGINGS)
+            .modifier(AttributeRegistry.HEALTH, 10)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.03, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 8)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
+            .abilities(AbilityRegistry.DIAMANTINE_SHIELD));
+
+    public static final ComplexItem DIAMANTINE_BOOTS = new ComplexItem(new ItemSettings()
+            .id("diamantine_boots")
+            .material(Material.DIAMOND_BOOTS)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.BOOTS)
+            .modifier(AttributeRegistry.HEALTH, 5)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.03, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 3)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
+            .abilities(AbilityRegistry.DIAMANTINE_SHIELD));
+
+    public static final ComplexItem GOLEM_HEART = new ComplexItem(new ItemSettings()
+            .id("golem_heart")
+            .material(Material.NETHERITE_INGOT)
+            .rarity(ComplexItem.Rarity.RARE));
+
+    public static final ComplexItem GOLEM_HEART_FRAGMENT = new ComplexItem(new ItemSettings()
+            .id("golem_heart_fragment")
+            .material(Material.NETHERITE_INGOT)
+            .rarity(ComplexItem.Rarity.RARE));
+
+    public static final ComplexItem GOLEM_HELMET = new ComplexItem(new ItemSettings()
+            .id("golem_helmet")
+            .material(Material.IRON_HELMET)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.HELMET)
+            .modifier(AttributeRegistry.HEALTH, 10)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.02, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 6)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 2)
+            .modifier(AttributeRegistry.STRENGTH, 10)
+            .modifier(AttributeRegistry.WISDOM, 10)
+            .modifier(AttributeRegistry.KNOCKBACK_RESISTANCE, 0.01)
+            .abilities(AbilityRegistry.GOLEMS_HEART));
+
+    public static final ComplexItem GOLEM_CHESTPLATE = new ComplexItem(new ItemSettings()
+            .id("golem_chestplate")
+            .material(Material.IRON_CHESTPLATE)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.CHESTPLATE)
+            .modifier(AttributeRegistry.HEALTH, 20)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.04, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 12)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 2)
+            .modifier(AttributeRegistry.STRENGTH, 20)
+            .modifier(AttributeRegistry.WISDOM, 20)
+            .modifier(AttributeRegistry.KNOCKBACK_RESISTANCE, 0.02)
+            .abilities(AbilityRegistry.GOLEMS_HEART));
+
+    public static final ComplexItem GOLEM_LEGGINGS = new ComplexItem(new ItemSettings()
+            .id("golem_leggings")
+            .material(Material.IRON_LEGGINGS)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.LEGGINGS)
+            .modifier(AttributeRegistry.HEALTH, 15)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.03, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 10)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 2)
+            .modifier(AttributeRegistry.STRENGTH, 15)
+            .modifier(AttributeRegistry.WISDOM, 15)
+            .modifier(AttributeRegistry.KNOCKBACK_RESISTANCE, 0.01)
+            .abilities(AbilityRegistry.GOLEMS_HEART));
+
+    public static final ComplexItem GOLEM_BOOTS = new ComplexItem(new ItemSettings()
+            .id("golem_boots")
+            .material(Material.IRON_BOOTS)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.BOOTS)
+            .modifier(AttributeRegistry.HEALTH, 10)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.02, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 5)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 2)
+            .modifier(AttributeRegistry.STRENGTH, 10)
+            .modifier(AttributeRegistry.WISDOM, 10)
+            .modifier(AttributeRegistry.KNOCKBACK_RESISTANCE, 0.01)
+            .abilities(AbilityRegistry.GOLEMS_HEART));
+
+
+    public static final ComplexItem TITAN_HELMET = new ComplexItem(new ItemSettings()
+            .id("titan_helmet")
+            .material(Material.NETHERITE_HELMET)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.HELMET)
+            .modifier(AttributeRegistry.HEALTH, 15)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.02, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 8)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 3)
+            .modifier(AttributeRegistry.STRENGTH, 15)
+            .modifier(AttributeRegistry.WISDOM, 15)
+            .modifier(AttributeRegistry.KNOCKBACK_RESISTANCE, 0.01)
+            .abilities(AbilityRegistry.TITANS_HEART));
+
+    public static final ComplexItem TITAN_CHESTPLATE = new ComplexItem(new ItemSettings()
+            .id("titan_chestplate")
+            .material(Material.NETHERITE_CHESTPLATE)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.CHESTPLATE)
+            .modifier(AttributeRegistry.HEALTH, 30)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.04, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 16)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 3)
+            .modifier(AttributeRegistry.STRENGTH, 30)
+            .modifier(AttributeRegistry.WISDOM, 30)
+            .modifier(AttributeRegistry.KNOCKBACK_RESISTANCE, 0.02)
+            .abilities(AbilityRegistry.TITANS_HEART));
+
+    public static final ComplexItem TITAN_LEGGINGS = new ComplexItem(new ItemSettings()
+            .id("titan_leggings")
+            .material(Material.NETHERITE_LEGGINGS)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.LEGGINGS)
+            .modifier(AttributeRegistry.HEALTH, 22)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.03, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 13)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 3)
+            .modifier(AttributeRegistry.STRENGTH, 22)
+            .modifier(AttributeRegistry.WISDOM, 22)
+            .modifier(AttributeRegistry.KNOCKBACK_RESISTANCE, 0.01)
+            .abilities(AbilityRegistry.TITANS_HEART));
+
+    public static final ComplexItem TITAN_BOOTS = new ComplexItem(new ItemSettings()
+            .id("titan_boots")
+            .material(Material.NETHERITE_BOOTS)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.BOOTS)
+            .modifier(AttributeRegistry.HEALTH, 15)
+            .modifier(AttributeRegistry.MOVEMENT_SPEED, -0.02, AttributeModifier.Operation.ADD_SCALAR)
+            .modifier(AttributeRegistry.ARMOR, 7)
+            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 3)
+            .modifier(AttributeRegistry.STRENGTH, 15)
+            .modifier(AttributeRegistry.WISDOM, 15)
+            .modifier(AttributeRegistry.KNOCKBACK_RESISTANCE, 0.01)
+            .abilities(AbilityRegistry.TITANS_HEART));
+
+    public static final ComplexItem AMETHYST_CORE = new ComplexItem(new ItemSettings()
+            .id("amethyst_core")
+            .material(Material.AMETHYST_SHARD)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.MISC));
+
+    public static final ComplexItem AMETHYST_STAFF = new ComplexItem(new ItemSettings()
+            .id("amethyst_staff")
+            .material(Material.AMETHYST_SHARD)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.STAFF)
+            .modifier(AttributeRegistry.WISDOM, 50)
+            .ability(AbilityRegistry.CRYSTAL_SPIKE));
+
+    public static final ComplexItem HARD_STONE = new ComplexItem(new ItemSettings()
+            .id("hard_stone")
+            .material(Material.STONE)
+            .rarity(ComplexItem.Rarity.COMMON)
+            .type(ComplexItem.Type.MISC));
+
+    public static final ComplexItem CRYSTAL_CAPACITOR = new ComplexItem(new ItemSettings()
+            .id("crystal_capacitor")
+            .material(Material.DIAMOND)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.MISC));
+
+    public static final ComplexItem AMETHYST_ELIXIR = new ComplexItem(new ItemSettings()
+            .id("amethyst_elixir")
+            .material(Material.POTION)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.MISC)
+            .ability(AbilityRegistry.MANA_BOOST));
+
+    public static final ComplexItem COLOSSAL_BLADE = new ComplexItem(new ItemSettings()
+            .id("colossal_blade")
+            .material(Material.DIAMOND_SWORD)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.SWORD)
+            .modifier(AttributeRegistry.STRENGTH, 50)
+            .modifier(AttributeRegistry.WISDOM, 50)
+            .ability(AbilityRegistry.COLOSSAL_SWEEP));
+
+    // Compacted versions of amethyst crystals
+    public static final ComplexItem ENCHANTED_AMETHYST_CRYSTAL = new ComplexItem(new ItemSettings()
+            .id("enchanted_amethyst_crystal")
+            .material(Material.SMALL_AMETHYST_BUD)
+            .rarity(ComplexItem.Rarity.COMMON)
+            .type(ComplexItem.Type.MISC));
+
+    public static final ComplexItem FLAWLESS_AMETHYST_CRYSTAL = new ComplexItem(new ItemSettings()
+            .id("flawless_amethyst_crystal")
+            .material(Material.MEDIUM_AMETHYST_BUD)
+            .rarity(ComplexItem.Rarity.COMMON)
+            .type(ComplexItem.Type.MISC));
+
+    // second tier
+    public static final ComplexItem PRISTINE_AMETHYST_CRYSTAL = new ComplexItem(new ItemSettings()
+            .id("pristine_amethyst_crystal")
+            .material(Material.LARGE_AMETHYST_BUD)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.MISC));
 
     // Vanilla Items
     public static final VanillaItem LAPIS_LAZULI = new VanillaItem(new ItemSettings()

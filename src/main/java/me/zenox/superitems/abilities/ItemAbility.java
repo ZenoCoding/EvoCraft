@@ -37,6 +37,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -683,7 +684,7 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                         }
                     }
 
-                    for(Entity entity : arr.getNearbyEntities(5, 5, 5)){
+                    for(Entity entity : arr.getNearbyEntities(4, 2, 4)){
                         if(entity instanceof Damageable && !entity.equals(p)){
                             ((Damageable) entity).damage(50, p);
                         }
@@ -692,9 +693,10 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                 if((contacted && arr.getTicksLived() > 80) || arr.getTicksLived() > 200){
                     arr.remove();
                     giant.remove();
+                    cancel();
                 }
             }
-        }.runTaskTimer(SuperItems.getPlugin(), 0, 1);
+        }.runTaskTimer(SuperItems.getPlugin(), 0, 4);
     }
 
     public static void consumeAbility(PlayerInteractEvent event, Player p, ItemStack item) {
@@ -857,8 +859,164 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
         f.setShooter(p);
     }
 
-    public enum AbilityAction {
+    public static void startButtonAbility(PlayerInteractEvent playerInteractEvent, Player player, ItemStack itemStack) {
+        // Check if the player has started using the "hasStarted" metadata value
+        try {
+            if (player.getMetadata("hasStarted").size() > 0 || player.getMetadata("hasStarted").get(0).asBoolean())
+                return;
+        } catch (IndexOutOfBoundsException ignored){
 
+        }
+
+        player.setMetadata("hasStarted", new FixedMetadataValue(SuperItems.getPlugin(), true));
+
+        BukkitRunnable startup = new BukkitRunnable(){
+            @Override
+            public void run() {
+                Util.sendMessage(player, "&aStarting Windows XP... &a&l(" + 100 + ")%", false);
+                SuperItems.getChapterManager().getChapter(player).progress(player, playerInteractEvent);
+            }
+        };
+
+        new BukkitRunnable(){
+            int a = 0;
+            @Override
+            public void run() {
+                if(a == 0) Util.sendMessage(player, "&aStarting Windows XP...", false);
+                else Util.sendMessage(player, "&aStarting Windows XP... &7(" + Math.min(100, a) + ")%", false);
+                a += Util.round(new Random().nextDouble()*10, 1);
+                if(a >= 100) {
+                    cancel();
+                    player.playSound(player.getLocation(), "story.0.startup", 1, 1);
+                    startup.runTaskLater(SuperItems.getPlugin(), 120);
+                }
+            }
+        }.runTaskTimer(SuperItems.getPlugin(), 5, 4);
+    }
+
+    public static void portalizerAbility(PlayerInteractEvent playerInteractEvent, Player player, ItemStack itemStack) {
+        if(playerInteractEvent.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            Block block = playerInteractEvent.getClickedBlock();
+            if(block != null) {
+                if(block.getType() == Material.WHITE_STAINED_GLASS) {
+                    itemStack.setAmount(0);
+                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1, 1);
+                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 1f);
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm m spawn -s LightCrystalCharger 1 " + player.getWorld() + "," + -347 + "," + -61 + "," + -511);
+                    new BukkitRunnable(){
+                        @Override
+                        public void run() {
+                            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 0.5f, 0.8f);
+                            player.teleport(new Location(player.getServer().getWorld("flat"), -369, -53, -594));
+                            player.setBedSpawnLocation(new Location(player.getServer().getWorld("flat"), -369, -53, -594), true);
+                            Util.sendMessage(player, "&b100BCE | &8The Desolated Temple", false);
+                            // Play second voiceover sounds
+                            player.playSound(player.getLocation(), "story.chapter.1.backstory_2", 20f, 1f);
+                        }
+                    }.runTaskLater(SuperItems.getPlugin(), 80);
+
+                } else if (block.getType() == Material.TINTED_GLASS) {
+                    itemStack.setAmount(0);
+                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1, 0.5f);
+                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 0.5f);
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm m spawn -s DarkCrystalCharger 1 " + player.getWorld() + "," + -369 + "," + -61 + "," + -594);
+                    new BukkitRunnable(){
+                        @Override
+                        public void run() {
+                            player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 1);
+                            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 0.8f);
+
+                            Util.sendMessage(player, "&bPresent Day | &aEnsildia", false);
+                            SuperItems.getChapterManager().getChapter(player).progress(player, playerInteractEvent);
+                        }
+                    }.runTaskLater(SuperItems.getPlugin(), 80);
+                }
+            }
+        }
+    }
+
+    public static void snowShotAbility(PlayerInteractEvent playerInteractEvent, @NotNull Player player, ItemStack itemStack) {
+        // Summon a snowball and shoot it, then apply a metadata tag that will be used to check if the snowball is a snowball shot by the player
+        Snowball snowball = player.launchProjectile(Snowball.class, player.getLocation().getDirection().multiply(3));
+        snowball.setMetadata("super_snowball", new FixedMetadataValue(SuperItems.getPlugin(), true));
+        snowball.setShooter(player);
+        // Create particles at the player's location
+        player.getWorld().spawnParticle(Particle.SNOWBALL, player.getLocation(), 20, 0.3, 2, 0.3, 0.1);
+    }
+
+    public static void crystalSpikeAbility(PlayerInteractEvent event, @NotNull Player player, ItemStack itemStack) {
+        // Create an ability that runs a command with different locations in a line where the player is facing
+        Location eyeLoc = player.getEyeLocation();
+        Location loc = eyeLoc.add(eyeLoc.getDirection().normalize().setY(0).multiply(5));
+        new BukkitRunnable() {
+            int a = 0;
+            @Override
+            public void run() {
+                if(a >= 7) cancel();
+
+                loc.add(eyeLoc.getDirection().normalize().setY(0).multiply(5));
+                // Loop down the y-axis to get the location of a ground block
+                while (loc.getBlock().getType() == Material.AIR) {
+                    loc.subtract(0, 1, 0);
+                }
+
+                // Loop up the y-axis to get the location of a block above the ground block
+                while (loc.clone().add(0, 1, 0).getBlock().getType() != Material.AIR) {
+                    loc.add(0, 1, 0);
+                }
+
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm m spawn -s ColossusCrystalSpike 1 " + player.getWorld().getName() + "," + loc.getBlockX() + "," + (loc.getBlockY()+1) + "," + loc.getBlockZ());
+                // Crystal particle effects
+                player.getWorld().spawnParticle(Particle.CRIT_MAGIC, loc, 10, 0.3, 0.3, 0.3, 0.1);
+
+                a++;
+            }
+        }.runTaskTimer(SuperItems.getPlugin(), 0, 3);
+
+    }
+
+    public static void manaBoostAbility(PlayerInteractEvent event, Player player, ItemStack itemStack) {
+        // An ability that refuels the player to full mana instantaneously, and grants them 2x mana regeneration for the next 10 seconds
+        AureliumAPI.setMana(player, AureliumAPI.getMaxMana(player));
+        // Send and action bar
+        Util.sendActionBar(player, "&b&lMana Refueled!");
+        // Play a sound
+        player.playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 1, 2);
+
+        // Consume the item
+        itemStack.setAmount(0);
+
+        // Create a task that will run every second for 10 seconds
+        new BukkitRunnable() {
+            int a = 0;
+
+            @Override
+            public void run() {
+                a++;
+                // If the task has run for 10 seconds, cancel it
+                if (a >= 10) {
+                    cancel();
+                }
+                // If the player is not online, cancel the task
+                if (!player.isOnline()) {
+                    cancel();
+                }
+                // Get the players current mana regeneration
+                double manaRegen = AureliumAPI.getManaRegen(player);
+                // Add that amount to the player's mana
+                AureliumAPI.setMana(player, Math.min(AureliumAPI.getMaxMana(player), AureliumAPI.getMana(player) + manaRegen));
+
+            }
+        }.runTaskTimer(SuperItems.getPlugin(), 0, 20);
+
+    }
+
+    public static void colossalSweepAbility(PlayerInteractEvent event, Player player, ItemStack itemStack) {
+        // An ability that creates a large AOE sweeping damage ability, displaying sweeping particles, and knocking enemies back
+
+    }
+
+    public enum AbilityAction {
         LEFT_CLICK_BLOCK("LEFT CLICK", new Action[]{Action.LEFT_CLICK_BLOCK}, false),
         LEFT_CLICK_AIR("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR}, false),
         LEFT_CLICK_ALL("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, false),

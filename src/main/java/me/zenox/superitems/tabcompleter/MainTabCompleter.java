@@ -22,6 +22,7 @@ public class MainTabCompleter implements TabCompleter {
             arguments.add("dropitematplayer");
             arguments.add("enchant");
             arguments.add("reload");
+            arguments.add("removechapterdata");
         }
 
         if (items.isEmpty()) {

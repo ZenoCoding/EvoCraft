@@ -26,7 +26,6 @@ public class Transcendence extends ItemAbility {
         super("dimensional_travel", AbilityAction.RIGHT_CLICK_ALL, 350, 0);
     }
 
-    // TODO: Change this to a CIM Variable
 
     @Override
     public void runExecutable(PlayerInteractEvent event, Player p, ItemStack item) {
