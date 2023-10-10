@@ -62,7 +62,7 @@ public class AbilityRegistry {
             .setSlot(Slot.MAIN_HAND), AttackAbility::justiceAbility);
     public static final AttackAbility VERTEX_ABILITY = new AttackAbility(new AbilitySettings()
             .setId("vertex_ability")
-            .setManaCost(5)
+            .setManaCost(20)
             .setCooldown(0)
             .setSlot(Slot.MAIN_HAND), AttackAbility::vertexAbility);
     public static final AttackAbility DARK_FURY = new AttackAbility(new AbilitySettings()
@@ -105,7 +105,7 @@ public class AbilityRegistry {
     public static final ItemAbility VOID_WARP = new ItemAbility(new AbilitySettings()
             .setId("void_warp")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(10)
+            .setManaCost(100)
             .setCooldown(1), ItemAbility::voidWarpAbility);
     public static final ItemAbility VOIDULAR_RECALL= new ItemAbility(new AbilitySettings()
             .setId("voidular_recall")

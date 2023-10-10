@@ -83,7 +83,7 @@ public class AttackAbility extends Ability<EntityDamageByEntityEvent> {
         }
         p.setMetadata("vertex_hit_id", new FixedMetadataValue(SuperItems.getPlugin(), event.getEntity().getEntityId()));
 
-        Util.sendMessage(p, "Stacks: " + stacks);
+        Util.sendActionBar(p, ChatColor.GOLD + "Vertexical Blade: " + ChatColor.RED + stacks + " stacks");
 
 
         if (stacks >= 3) {

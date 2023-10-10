@@ -273,6 +273,10 @@ item-lore-burning_boots:
 item-lore-gilded_carrot:
   - "Really tasty!"
 
+item-lore-vertex_blade:
+  - "Using &5vertexical math and convex geometry,"
+  - "this blade bends the fabric of &8space-time."
+
 ##########################################################################
 ##                              ABILITIES                               ##
 ##########################################################################
@@ -400,6 +404,13 @@ ability-name-gilded_consume: Consume
 
 ability-lore-gilded_consume:
   - "Refills all of your &6hunger &7bars, and then also grants &a50 &6saturation&7!"
+
+ability-name-vertex_ability: Atom-split Alignment
+
+ability-lore-vertex_ability:
+  - "For every &4consecutive&7 hit on an entity,"
+  - "construct a point on a &6Tesseract,&7 increasing"
+  - "&4damage&7 against that enemy."
 
 ##########################################################################
 ##                             ENCHANTMENTS                             ##
