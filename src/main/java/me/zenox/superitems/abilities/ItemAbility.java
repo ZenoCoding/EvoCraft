@@ -3,7 +3,6 @@ package me.zenox.superitems.abilities;
 import com.archyx.aureliumskills.api.AureliumAPI;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
-import com.google.common.primitives.Doubles;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
@@ -281,7 +280,7 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                     for (Block block : blocks) {
                         if (block.getType().getBlastResistance() > 1200 || block.getType().equals(Material.PLAYER_HEAD) || block.getType().equals(Material.PLAYER_WALL_HEAD))
                             continue;
-                        if (r.nextDouble() > 0.7) continue;
+                        if (r.nextDouble() < 0.2) continue;
                         if (SuperItems.getPlugin().isUsingWorldGuard) {
                             LocalPlayer localPlayer2 = WorldGuardPlugin.inst().wrapPlayer(p);
                             com.sk89q.worldedit.util.Location guardLoc2 = BukkitAdapter.adapt(block.getLocation());
@@ -314,7 +313,7 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                 }
 
             }
-        }.runTaskTimer(SuperItems.getPlugin(), 0, 2);
+        }.runTaskTimer(SuperItems.getPlugin(), 0, 5);
     }
 
     public static void centralizeAbility(PlayerInteractEvent event, Player p, ItemStack item, Boolean corrupted, Integer duration) {
@@ -656,8 +655,9 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                 // Calculate the giant's base location to align its hand with the arrow
                 Location giantBaseLocation = arrowLocation.clone();
 
-                // Offset the giant's location by moving in the opposite direction of the arrow by 3 blocks (ignoring y axis)
-                giantBaseLocation.add(arrowLocation.getDirection().normalize().setY(0).multiply(-3));
+                // Offset the giant's location by moving in the opposite direction of the arrow by 5 blocks (ignoring y axis)
+                giantBaseLocation.add(arrowLocation.getDirection().setY(0).normalize().multiply(-5));
+                giantBaseLocation.add(arrowLocation.getDirection().rotateAroundY(Math.PI/2).setY(0).normalize().multiply(-1.5));
 
                 // Set the giant's direction to match the arrow's direction
                 giantBaseLocation.setDirection(arrowLocation.getDirection());

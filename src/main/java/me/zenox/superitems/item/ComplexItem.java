@@ -245,15 +245,23 @@ public class ComplexItem {
     }
 
     public enum Rarity {
-
+        // Game Rarities
         COMMON(ChatColor.WHITE, "&f&lCOMMON&f&l"),
         UNCOMMON(ChatColor.GREEN, "&a&lUNCOMMON&a&l"),
         RARE(ChatColor.BLUE, "&9&lRARE&9&l"),
         EPIC(ChatColor.AQUA, "&b&lEPIC&b&l"),
         LEGENDARY(ChatColor.GOLD, "&6&lLEGENDARY&6&l"),
+
+        // One-of-a-kind Rarities
         MYTHIC(ChatColor.LIGHT_PURPLE, "&d&k&lD &d&lMYTHIC&k D&d&l"),
+
+        // Quest rarity pertaining to the story
         OMEGA(ChatColor.GOLD, "&6&k&lD &6&lOMEGA&k D&6&l"),
+
+        // Reserved for symbol items
         VERY_SPECIAL(ChatColor.RED, "&c&k&l| D &c&lVERY SPECIAL &kD |&c&l"),
+
+        // Reserved for unobtainable/unknown items
         UNOBTAINABLE(ChatColor.DARK_AQUA, "&3&k&lD &3&lUNOBTAINABLE&k D&3&l"),
         UNKNOWN(ChatColor.RED, "&c&k& D &c&lUNKNOWN &kD&c&l");
 

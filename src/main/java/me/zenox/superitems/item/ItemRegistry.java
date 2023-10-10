@@ -9,8 +9,6 @@ import me.zenox.superitems.item.basicitems.CorruptPearl;
 import me.zenox.superitems.item.basicitems.GardenerSapling;
 import me.zenox.superitems.item.basicitems.RavagerSkin;
 import me.zenox.superitems.item.basicitems.TormentedSoul;
-import me.zenox.superitems.item.superitems.VertexicalBlade;
-import me.zenox.superitems.item.superitems.VoidScepter;
 import me.zenox.superitems.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,7 +16,6 @@ import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -232,6 +229,11 @@ public class ItemRegistry {
             .id("void_scepter")
             .modifier(AttributeRegistry.ATTACK_DAMAGE, 15)
             .modifier(AttributeRegistry.ATTACK_SPEED, -3)
+            .modifier(AttributeRegistry.WISDOM, 50)
+            .abilities(AbilityRegistry.VOID_WARP, AbilityRegistry.VOIDULAR_RECALL)
+            .rarity(ComplexItem.Rarity.EPIC)
+            .material(Material.NETHERITE_SHOVEL)
+            .type(ComplexItem.Type.STAFF)
 
     );
     public static final ComplexItem OBSIDILITH_SCYTHE = new ComplexItem(new ItemSettings()
@@ -292,8 +294,6 @@ public class ItemRegistry {
             .material(Material.PLAYER_HEAD)
             .rarity(ComplexItem.Rarity.RARE)
             .skullURL("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWYwMjMwNTExYjg0NGNmM2FmZjBjZWRiNDRjMTMyNDI3OTlkMzMxNTIyMzVmMTdjZWU1NzQ2NTE4NzhlZDVkMCJ9fX0="));
-
-    public static final ComplexItem VERTEXICAL_BLADE = new VertexicalBlade();
 
     public static final ComplexItem DEV_STICK = new ComplexItem(new ItemSettings()
             .id("dev_stick")
@@ -729,6 +729,16 @@ public class ItemRegistry {
             .material(Material.LAPIS_LAZULI)
             .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 1));
 
+    public static final ComplexItem VERTEXICAL_BLADE = new ComplexItem(new ItemSettings()
+            .id("vertex_blade")
+            .material(Material.AMETHYST_SHARD)
+            .rarity(ComplexItem.Rarity.RARE)
+            .type(ComplexItem.Type.MISC)
+            .modifier(AttributeRegistry.STRENGTH, 50d)
+            .modifier(AttributeRegistry.WISDOM, 100d)
+            .modifier(AttributeRegistry.ATTACK_DAMAGE, 12)
+            .modifier(AttributeRegistry.ATTACK_SPEED, -2)
+            .ability(AbilityRegistry.VERTEX_ABILITY));
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
