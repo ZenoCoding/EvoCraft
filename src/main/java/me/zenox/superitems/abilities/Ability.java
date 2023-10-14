@@ -178,7 +178,7 @@ public abstract class Ability<T extends Event> implements Serializable {
             }
         }
 
-        AureliumAPI.getPlugin().getActionBar().setPaused(p, 20);
+        //AureliumAPI.getPlugin().getActionBar().setPaused(p, 20);
         String manaMessage = this.manaCost > 0 ? ChatColor.AQUA + "-" + manaCost + " Mana " + "(" + ChatColor.GOLD + name + ChatColor.AQUA + ")" : ChatColor.GOLD + "Used " + name;
         if(!isPassive) Util.sendActionBar(p, manaMessage);
 

@@ -1,7 +1,9 @@
 package me.zenox.superitems;
 
 import com.archyx.aureliumskills.AureliumSkills;
+import com.archyx.aureliumskills.api.AureliumAPI;
 import com.archyx.aureliumskills.modifier.Modifiers;
+import com.archyx.aureliumskills.ui.ActionBar;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.sk89q.worldguard.WorldGuard;
@@ -40,10 +42,12 @@ public final class SuperItems extends JavaPlugin {
     private static ConfigLoader configLoader;
     private static ProtocolManager protocolManager;
     private static ChapterManager chapterManager;
+    private static ActionBar actionBar;
 
     public static SuperItems getPlugin() {
         return plugin;
     }
+
 
     @Override
     public void onEnable() {
@@ -75,7 +79,8 @@ public final class SuperItems extends JavaPlugin {
             return;
         }
 
-        modifiers = new Modifiers(AureliumSkills.getPlugin(AureliumSkills.class));
+        modifiers = new Modifiers(AureliumAPI.getPlugin());
+        actionBar = AureliumAPI.getPlugin().getActionBar();
 
         configLoader = new ConfigLoader(plugin);
         languageLoader = new LanguageLoader(plugin);
@@ -163,6 +168,9 @@ public final class SuperItems extends JavaPlugin {
         return chapterManager;
     }
 
+    public static ActionBar getActionBar() {
+        return actionBar;
+    }
     public void reload() {
         this.reloadConfig();
         this.languageLoader = new LanguageLoader(this);
