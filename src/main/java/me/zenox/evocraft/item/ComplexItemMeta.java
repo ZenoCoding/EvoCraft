@@ -1,0 +1,368 @@
+package me.zenox.evocraft.item;
+
+import com.archyx.aureliumskills.modifier.ModifierType;
+import com.archyx.aureliumskills.modifier.StatModifier;
+import com.archyx.aureliumskills.stats.Stats;
+import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.abilities.Ability;
+import me.zenox.evocraft.abilities.FullSetArmorAbility;
+import me.zenox.evocraft.abilities.ItemAbility;
+import me.zenox.evocraft.attribute.AttributeModifier;
+import me.zenox.evocraft.attribute.types.AureliumAttribute;
+import me.zenox.evocraft.enchant.ComplexEnchantment;
+import me.zenox.evocraft.persistence.ArrayListType;
+import me.zenox.evocraft.persistence.SerializedPersistentType;
+import me.zenox.evocraft.util.Romans;
+import me.zenox.evocraft.util.Util;
+import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.stream.Stream;
+
+/**
+ * ComplexItemMeta Class
+ * <p>
+ * A "complex" version of ItemMeta that stores more information about stats, upgrades, etc.
+ * <p>
+ * Converts between PersistentDataStorage and Class, at an abstract level,
+ * manipulating normal ItemMeta in an attempt to get rid of functional programming inconsistencies
+ *
+ */
+
+public class ComplexItemMeta {
+    public static final NamespacedKey ABILITY_ID = new NamespacedKey(EvoCraft.getPlugin(), "ability");
+    public static final String VAR_PREFIX = "var_";
+    public static final String ATTRIBUTE_BASE_KEY = "base";
+    public static final VariableType<ComplexItem.Rarity> RARITY_VAR = new VariableType<>("rarity", new LoreEntry("rarity", List.of("Rarity Lore")), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Rarity) variable.getValue()).color() + ((ComplexItem.Rarity) variable.getValue()).getName())));
+    public static final VariableType<ComplexItem.Type> TYPE_VAR = new VariableType<>("type", new LoreEntry("type", List.of("Type Lore"), ((loreBuilder, loreEntry) -> {
+        loreBuilder.getLoreEntryById(
+                RARITY_VAR.name()).get(0).setLore(List.of(loreBuilder.getLoreEntryById(RARITY_VAR.name()).get(0).getLore().get(0) + " " + loreEntry.getLore().get(0)));
+        loreEntry.setLore(List.of());
+    })), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Type) variable.getValue()).getName())));
+    public static final NamespacedKey ENCHANT_KEY = new NamespacedKey(EvoCraft.getPlugin(), "complexEnchants");
+    private static final NamespacedKey ATTRIBUTE_KEY = new NamespacedKey(EvoCraft.getPlugin(), "attributes");
+    private List<Ability> abilities;
+    private final List<Variable> variableList = new ArrayList<>();
+    private HashMap<ComplexEnchantment, Integer> complexEnchantments = new HashMap<>();
+    private List<AttributeModifier> modifierList = new ArrayList<>();
+    private final ComplexItemStack complexItemStack;
+
+    public ComplexItemMeta(ComplexItemStack complexItemStack, List<Ability> abilities) {
+        this.abilities = abilities == null ? new ArrayList<>() : new ArrayList<>(abilities);
+        this.complexItemStack = complexItemStack;
+        this.read();
+    }
+
+    public ComplexItemMeta(ComplexItemStack complexItemStack) {
+        this(complexItemStack, complexItemStack.getComplexItem().getAbilities());
+    }
+
+    /**
+     * Updates the ItemStack to match the current ComplexItemMeta
+     */
+    public void updateItem() {
+        ItemStack item = complexItemStack.getItem();
+        ItemMeta meta = item.getItemMeta();
+
+        // Write Stats
+        List<String> attributeLore = new ArrayList<>();
+        modifierList.forEach(modifier -> attributeLore.add(ChatColor.GRAY + modifier.getAttribute().getName().toString() + ": " + modifier.getAttribute().getColor() + modifier.getDisplayValue()));
+
+        PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
+        LoreBuilder lore = new LoreBuilder();
+
+        // Make Minecraft's default lore invisible
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.setUnbreakable(true);
+
+        // Write Attributes
+        dataContainer.set(ATTRIBUTE_KEY, new ArrayListType(), new ArrayList<>(modifierList.stream().map(AttributeModifier::serializeToMap).toList()));
+
+        // Clear Item's current attributes
+        Arrays.stream(Attribute.values()).forEach(meta::removeAttributeModifier);
+        item.setItemMeta(meta);
+
+        Arrays.stream(Stats.values()).forEach(stats -> item.setItemMeta(Util.removeAureliumModifier(item, ((ComplexItem.Type) getVariable(TYPE_VAR).getValue()).isWearable() ? ModifierType.ARMOR : ModifierType.ITEM, stats).getItemMeta()));
+
+        meta = item.getItemMeta();
+
+        // Set itemMeta so modifier can use it (important)
+        item.setItemMeta(meta);
+
+        modifierList.forEach(attributeModifier -> item.setItemMeta(attributeModifier.apply(item).getItemMeta()));
+
+        // get it again
+        meta = item.getItemMeta();
+        dataContainer = meta.getPersistentDataContainer();
+
+        writeVariables(VariableType.Priority.ABOVE_STATS, dataContainer, lore, true);
+
+        if (!attributeLore.isEmpty()) {
+            lore.entry(new LoreEntry("modifier_lore", attributeLore));
+            lore.entry(new LoreEntry("newline", List.of("")));
+        }
+
+        writeVariables(VariableType.Priority.ABOVE_LORE, dataContainer, lore, true);
+
+        List<String> trueLore = complexItemStack.getComplexItem().getDefaultLore();
+
+        lore.entry(new LoreEntry("true_lore", trueLore == null ? new ArrayList<>() : trueLore));
+        if (trueLore != null && !trueLore.isEmpty()) lore.entry(new LoreEntry("newline", List.of("")));
+
+        writeVariables(VariableType.Priority.ABOVE_ENCHANTS, dataContainer, lore, true);
+
+        HashMap<String, Integer> complexEnchMap = new HashMap<>();
+        if(!this.complexEnchantments.entrySet().stream().findFirst().isEmpty()) {
+            for (Map.Entry<ComplexEnchantment, Integer> entry :
+                    this.complexEnchantments.entrySet()) {
+                complexEnchMap.put(entry.getKey().getId(), entry.getValue());
+            }
+        }
+
+        // Write ComplexEnchants
+        dataContainer.set(ENCHANT_KEY, new SerializedPersistentType<HashMap>(), complexEnchMap);
+
+        // Clear vanilla enchantments
+        for (Enchantment enchant:
+             Enchantment.values()) {
+            meta.removeEnchant(enchant);
+        }
+
+        // Apply custom enchantments
+        for (Map.Entry<ComplexEnchantment, Integer> e : this.complexEnchantments.entrySet()) {
+            ChatColor color = ChatColor.GRAY;
+            String enchantName = e.getKey().getName().toString();
+            if (e.getValue() == e.getKey().getMaxLevel()) color = ChatColor.AQUA;
+            if (e.getValue() > e.getKey().getMaxLevel()) color = ChatColor.LIGHT_PURPLE;
+            lore.entry(new LoreEntry("enchant_" + e.getKey().getId(), List.of(color + enchantName + " " + Romans.encode(e.getValue()))));
+
+            // Apply vanilla enchant if it has
+            if(e.getKey().getVanillaEnchant() != null) meta.addEnchant(e.getKey().getVanillaEnchant(), e.getValue(), true);
+        }
+
+        if (!this.complexEnchantments.isEmpty()) lore.entry(new LoreEntry("newline", List.of("")));
+
+        writeVariables(VariableType.Priority.ABOVE_ABILITIES, dataContainer, lore, true);
+
+        // Write Abilities
+        writeAbilityLore(lore);
+        dataContainer.set(ABILITY_ID, new ArrayListType(), new ArrayList<>(abilities.stream().map(Ability::getId).toList()));
+
+        writeVariables(VariableType.Priority.BELOW_ABILITIES, dataContainer, lore, true);
+
+        writeVariables(VariableType.Priority.BELOW, dataContainer, lore, false);
+
+        meta.setLore(lore.build());
+
+        dataContainer.set(ComplexItem.GLOW_ID, PersistentDataType.INTEGER, complexItemStack.getComplexItem().doesGlow() ? 1 : 0);
+
+
+        // Finally, set the meta
+        item.setItemMeta(meta);
+    }
+
+    /**
+     * A method to read and get a clone of the ComplexItemMeta of a normal ItemStack
+     */
+    public void read() {
+        ItemStack item = complexItemStack.getItem();
+        ItemMeta meta = item.getItemMeta();
+
+        assert meta != null;
+        PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
+
+        readAttributes(dataContainer, meta);
+        readEnchantments(dataContainer);
+        readVariables(dataContainer);
+
+        item.setItemMeta(meta);
+    }
+
+    private void readAttributes(@NotNull PersistentDataContainer dataContainer, @NotNull ItemMeta meta) {
+        // Attributes
+        boolean hasComplexAttributes = dataContainer.has(ATTRIBUTE_KEY, new ArrayListType<>());
+        modifierList = new ArrayList<>();
+
+        // apply minecraft's attributes
+        if (Objects.nonNull(meta.getAttributeModifiers())) meta.getAttributeModifiers().forEach((attribute, modifier) -> modifierList.add(AttributeModifier.of(attribute, modifier)));
+
+        // read aurelium stats
+        if(hasComplexAttributes)
+            modifierList.addAll(dataContainer.get(ATTRIBUTE_KEY, new ArrayListType<HashMap<String, Object>>())
+                    .stream()
+                    .map(AttributeModifier::deserializeFromMap)
+                    .filter(attributeModifier -> attributeModifier.getAttribute() instanceof AureliumAttribute)
+                    .toList());
+
+        // Update any attributes with the same name to match parent ComplexItem
+        List<AttributeModifier> parentAttributes = complexItemStack.getComplexItem().getAttributeModifiers();
+        for (AttributeModifier currentModifier : modifierList) {
+            Optional<AttributeModifier> matchingParentModifier = parentAttributes.stream()
+                    .filter(currentModifier::equals)
+                    .findFirst();
+
+            if (matchingParentModifier.isPresent()) {
+                double newValue = matchingParentModifier.get().getValue();
+                currentModifier.setValue(newValue);
+            }
+        }
+    }
+
+    private void readEnchantments(@NotNull PersistentDataContainer dataContainer){
+        HashMap<String, Integer> complexEnchMap =
+                dataContainer.has(ENCHANT_KEY, new SerializedPersistentType<>())
+                        ? dataContainer.get(ENCHANT_KEY, new SerializedPersistentType<>()) : new HashMap<>();
+
+        assert complexEnchMap != null;
+        for (Map.Entry<String, Integer> entry: complexEnchMap.entrySet())
+            complexEnchantments.put(ComplexEnchantment.byId(entry.getKey()), entry.getValue());
+    }
+
+    private void readVariables(PersistentDataContainer dataContainer) {
+        // Read Variables
+        dataContainer.getKeys().stream()
+                .filter(namespacedKey -> namespacedKey.getKey().startsWith(VAR_PREFIX))
+                .forEach(namespacedKey -> IsetVariable(VariableType.getVariableByPrefix(namespacedKey.getKey().substring(VAR_PREFIX.length())), dataContainer.get(namespacedKey, new SerializedPersistentType<>())));
+
+        // if the meta doesn't contain rarity or type
+        IsetVariable(RARITY_VAR, complexItemStack.getComplexItem().getRarity());
+        IsetVariable(TYPE_VAR, complexItemStack.getComplexItem().getType());
+    }
+
+    private void writeVariables(VariableType.Priority priority, PersistentDataContainer container, LoreBuilder builder, Boolean newline) {
+        Stream<Variable> filteredList = variableList.stream().filter(variable -> variable.getType().priority() == priority);
+        filteredList.forEachOrdered(variable -> {
+            try {
+                variable.write(container, builder);
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        });
+        if (!variableList.stream().filter(variable -> variable.getType().priority() == priority).toList().isEmpty() && newline)
+            builder.entry(new LoreEntry("newline", List.of("")));
+
+    }
+
+    private void writeAbilityLore(LoreBuilder loreBuilder) {
+        for (Ability ability : this.abilities) {
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GOLD + (ability.isPassive() ? "Passive " : "") + (ability instanceof FullSetArmorAbility ? "Full Set " : "") + "Ability: " + ability.getDisplayName() + ChatColor.YELLOW + ChatColor.BOLD + " " + (ability instanceof ItemAbility ? ((ItemAbility) ability).getAction().getName() : ""));
+            lore.addAll(ability.getLore());
+
+            if (ability.getManaCost() > 0)
+                lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + ability.getManaCost());
+            if (ability.getCooldown() > 0)
+                lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + ability.getCooldown() + "s");
+            loreBuilder.entry(new LoreEntry("ability_" + ability.getId(), lore));
+            loreBuilder.entry(new LoreEntry("newline", List.of(" ")));
+        }
+    }
+
+    /**
+     * Read previous modifiers, used for registering modifiers that don't exist in NBT data
+     * @param stack the ComplexItemStack to read
+     * @return the list of attribute modifiers
+     */
+    public static @NotNull List<AttributeModifier> readModifiers(@NotNull ComplexItemStack stack){
+        ComplexItemMeta meta = stack.getComplexMeta();
+        List<AttributeModifier> modifiers = new ArrayList<>();
+
+        // Read Minecraft Attribute Modifiers
+        for(Map.Entry<Attribute, org.bukkit.attribute.AttributeModifier> modifier : stack.getItem().getItemMeta().getAttributeModifiers().entries()) {
+            modifiers.add(AttributeModifier.of(modifier.getKey(), modifier.getValue()));
+        }
+
+        // Read AureliumSkills Modifiers
+        for(StatModifier modifier :
+                Util.getAureliumModifiers(stack.getItem(),
+                        ((ComplexItem.Type) meta.getVariable(ComplexItemMeta.TYPE_VAR).getValue()).isWearable() ? ModifierType.ARMOR : ModifierType.ITEM)){
+            modifiers.add(AttributeModifier.of(modifier));
+        }
+        modifiers = modifiers.stream().filter(modifier -> !modifier.getName().contains("enchant")).toList();
+
+
+        // Enchant modifiers
+        List<AttributeModifier> finalModifiers = modifiers;
+        meta.getComplexEnchants().forEach((complexEnchantment, integer) -> {
+            finalModifiers.addAll(complexEnchantment.getStats().stream().map(attributeModifier -> attributeModifier.setValue(attributeModifier.getValue()*integer)).toList());
+        });
+
+        return finalModifiers;
+    }
+
+    public void addVariable(Variable var) {
+        this.variableList.add(var);
+        this.updateItem();
+    }
+
+    private void IsetVariable(VariableType type, @NotNull Serializable value) {
+        if (variableList.stream().filter(variable -> variable.getType() == type).toList().isEmpty())
+            variableList.add(new Variable(this, type, value));
+        else
+            variableList.stream().filter(variable -> variable.getType() == type).forEach(variable -> variable.setValue(value));
+    }
+
+    public void setVariable(VariableType type, @NotNull Serializable value) {
+        this.IsetVariable(type, value);
+        this.updateItem();
+    }
+
+    // Gets the first variable of that variable type
+    @Nullable
+    public Variable getVariable(VariableType type) {
+        try {
+            return variableList.stream().filter(variable -> variable.getType() == type).findFirst().orElse(null);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    public boolean hasVariable(VariableType type){
+        return Objects.nonNull(getVariable(type));
+    }
+
+
+    public Map<ComplexEnchantment, Integer> getComplexEnchants(){
+        return this.complexEnchantments;
+    }
+
+    public void addEnchantment(ComplexEnchantment enchantment, Integer level){
+        this.complexEnchantments.put(enchantment, level);
+        updateItem();
+    }
+
+    public void setComplexEnchantments(HashMap<ComplexEnchantment, Integer> complexEnchantments){
+        this.complexEnchantments = complexEnchantments;
+        updateItem();
+    }
+
+    public void removeEnchantment(ComplexEnchantment enchantment){
+        this.complexEnchantments.remove(enchantment);
+        updateItem();
+    }
+
+    public List<Variable> getVariableList() {
+        return variableList;
+    }
+
+    public List<Ability> getAbilities() {
+        return abilities;
+    }
+
+    public List<AttributeModifier> getModifierList() {
+        return modifierList;
+    }
+}

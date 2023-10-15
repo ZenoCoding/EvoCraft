@@ -1,15 +1,15 @@
-name: SuperItems
+name: EvoCraft
 version: '${project.version}'
-main: me.zenox.superitems.SuperItems
+main: me.zenox.evocraft.EvoCraft
 api-version: 1.19
 authors: [ ZenoX ]
-description: Implements custom hypixel inspired items!
+description: Transforms your game into an highly specialized MMORPG experience.
 softdepend: [ Citizens, WorldGuard, WorldEdit ]
 depend: [ AureliumSkills, ProtocolLib, ModelEngine, Vault ]
 
 commands:
-  superitems:
-    aliases: [ si ]
-    description: Base command for SuperItems
-    usage: /si
-    permission: superitems.admin
+  evocraft:
+    aliases: [ ec ]
+    description: Base command for EvoCraft
+    usage: /evocraft
+    permission: evocraft.admin

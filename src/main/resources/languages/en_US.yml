@@ -150,6 +150,8 @@ item-name-hard_stone: Hard Stone
 
 item-name-colossal_blade: Colossal Blade
 
+item-name-thunderstrike_staff: Thunderstrike Staff
+
 ##########################################################################
 ##                              ITEM LORE                               ##
 ##########################################################################
@@ -429,6 +431,9 @@ item-lore-vertex_blade:
   - "Using &5vertexical math and convex geometry,"
   - "this blade bends the fabric of &8space-time."
 
+item-lore-thunderstrike_staff:
+  - "Smite enemies from above!"
+
 ##########################################################################
 ##                              ABILITIES                               ##
 ##########################################################################
@@ -480,7 +485,7 @@ ability-lore-tarhelm:
 
 ability-name-crucify: Crucify
 
-ablity-lore-crucify:
+ability-lore-crucify:
   - "Disables all &cregeneration&o, but gives a"
   - "permanent &cstrength &7and &fspeed &7boost."
   - ""
@@ -616,6 +621,12 @@ ability-lore-colossal_sweep:
   - ""
   - "Massive knockback damage!"
 
+ability-name-thunderstrike: Thunderstrike
+
+ability-lore-thunderstrike:
+  - "Strike down your enemies with the power of &cthunder."
+  - ""
+  - "Deals &cdamage &7to all enemies in a &a5 block &7radius."
 
 ##########################################################################
 ##                             ENCHANTMENTS                             ##

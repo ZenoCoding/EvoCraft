@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.zenox</groupId>
-    <artifactId>superitems</artifactId>
+    <artifactId>evocraft</artifactId>
     <version>1.2.0-ALPHA</version>
     <packaging>jar</packaging>
 
-    <name>SuperItems</name>
+    <name>EvoCraft</name>
 
     <description>Implements many systems for implementing items, abilities, enchants, and more!</description>
     <properties>
