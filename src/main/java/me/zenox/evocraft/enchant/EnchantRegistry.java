@@ -33,13 +33,13 @@ public class EnchantRegistry {
             .slots(Slot.MAIN_HAND)
             .executable(EnchantRegistry::syphonExecutable));
 
-    public static ComplexEnchantment DARKSOUL = new AttackEnchantment(new EnchantmentSettings()
-            .id("darksoul")
-            .maxLevel(5)
-            .rarity(2)
-            .types(ComplexItem.Type.SWORD, ComplexItem.Type.AXE)
-            .slots(Slot.MAIN_HAND)
-            .executable(EnchantRegistry::darksoulExecutable));
+//    public static ComplexEnchantment DARKSOUL = new AttackEnchantment(new EnchantmentSettings()
+//            .id("darksoul")
+//            .maxLevel(5)
+//            .rarity(2)
+//            .types(ComplexItem.Type.SWORD, ComplexItem.Type.AXE)
+//            .slots(Slot.MAIN_HAND)
+//            .executable(EnchantRegistry::darksoulExecutable));
 
     public static ComplexEnchantment CULLING = new AttackEnchantment(new EnchantmentSettings()
             .id("culling")
