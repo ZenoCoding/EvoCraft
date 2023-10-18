@@ -17,6 +17,7 @@ import me.zenox.evocraft.data.LanguageLoader;
 import me.zenox.evocraft.enchant.EnchantRegistry;
 import me.zenox.evocraft.events.*;
 import me.zenox.evocraft.item.ItemRegistry;
+import me.zenox.evocraft.item.PackGenerator;
 import me.zenox.evocraft.item.VanillaItem;
 import me.zenox.evocraft.network.GlowFilter;
 import me.zenox.evocraft.recipe.RecipeRegistry;
@@ -101,6 +102,8 @@ public final class EvoCraft extends JavaPlugin {
         new Command(plugin);
 
         registerListeners();
+
+        new PackGenerator();
 
     }
 
