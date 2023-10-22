@@ -80,7 +80,7 @@ public class AbilityRegistry {
             .setSlot(Slot.ARMOR), FullSetAttackAbility::testFullSetAbility);
     public static final ItemAbility TERRA_STRIKE = new ItemAbility(new AbilitySettings()
             .setId("terra_strike")
-            .setAbilityAction(ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK)
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
             .setManaCost(10)
             .setCooldown(5), ItemAbility::terraStrikeAbility);
     public static final FullSetAttackAbility ROARING_FLAME = new FullSetAttackAbility(new AbilitySettings()
@@ -110,11 +110,6 @@ public class AbilityRegistry {
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
             .setManaCost(100)
             .setCooldown(1), ItemAbility::voidWarpAbility);
-    public static final ItemAbility VOIDULAR_RECALL= new ItemAbility(new AbilitySettings()
-            .setId("voidular_recall")
-            .setAbilityAction(ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK)
-            .setManaCost(10)
-            .setCooldown(1), ItemAbility::voidularRecallAbility);
     public static final ItemAbility START_BUTTON = new ItemAbility(new AbilitySettings()
             .setId("start_button")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)

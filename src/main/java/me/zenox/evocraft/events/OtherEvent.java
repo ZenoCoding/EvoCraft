@@ -45,11 +45,10 @@ public class OtherEvent implements Listener {
     @EventHandler
     public void tileEntityInteract(PlayerInteractEvent e){
         if(e.getAction() == Action.RIGHT_CLICK_BLOCK){
-            switch(e.getClickedBlock().getType()){
-                case ENCHANTING_TABLE -> new SimpleWindow(e.getPlayer(), "Enchantment Table", EnchantingGUI.getGui(e.getPlayer(), e.getClickedBlock()), true, true).show();
-                default -> {
-                    return;
-                }
+            if (e.getClickedBlock().getType() == Material.ENCHANTING_TABLE) {
+                new SimpleWindow(e.getPlayer(), "Enchantment Table", EnchantingGUI.getGui(e.getPlayer(), e.getClickedBlock()), true, true).show();
+            } else {
+                return;
             }
             e.setCancelled(true);
         }

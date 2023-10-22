@@ -96,7 +96,7 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
 
     @Override
     public boolean checkEvent(PlayerInteractEvent event) {
-        return action.isAction(event.getAction(), event.getPlayer().isSneaking());
+        return action.isAction(event.getAction()) && !event.getPlayer().isSneaking();
     }
 
     /**
@@ -1078,32 +1078,28 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
     }
 
     public enum AbilityAction {
-        LEFT_CLICK_BLOCK("LEFT CLICK", new Action[]{Action.LEFT_CLICK_BLOCK}, false),
-        LEFT_CLICK_AIR("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR}, false),
-        LEFT_CLICK_ALL("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, false),
-        SHIFT_LEFT_CLICK("SHIFT LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, true),
-        RIGHT_CLICK_BLOCK("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR}, false),
-        RIGHT_CLICK_AIR("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK}, false),
-        RIGHT_CLICK_ALL("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR}, false),
-        SHIFT_RIGHT_CLICK("SHIFT RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK}, true),
-        NONE("", new Action[]{}, false);
+        LEFT_CLICK_BLOCK("LEFT CLICK", new Action[]{Action.LEFT_CLICK_BLOCK}),
+        LEFT_CLICK_AIR("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR}),
+        LEFT_CLICK_ALL("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}),
+        RIGHT_CLICK_BLOCK("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR}),
+        RIGHT_CLICK_AIR("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK}),
+        RIGHT_CLICK_ALL("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR}),
+
+        NONE("", new Action[]{});
 
         private final String name;
         private final Action[] actionList;
-        private final boolean requiresShift;
 
-        AbilityAction(String name, Action[] actionList, boolean requiresShift) {
+        AbilityAction(String name, Action[] actionList) {
             this.name = name;
             this.actionList = actionList;
-            this.requiresShift = requiresShift;
         }
 
         public String getName() {
             return this.name;
         }
 
-        public boolean isAction(Action action, boolean isCrouching) {
-            if (this.requiresShift && !isCrouching) return false;
+        public boolean isAction(Action action) {
 
             return Arrays.asList(actionList).contains(action);
 

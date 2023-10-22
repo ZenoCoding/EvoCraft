@@ -16,6 +16,7 @@ import me.zenox.evocraft.data.ConfigLoader;
 import me.zenox.evocraft.data.LanguageLoader;
 import me.zenox.evocraft.enchant.EnchantRegistry;
 import me.zenox.evocraft.events.*;
+import me.zenox.evocraft.gameclass.ClassAbilityListener;
 import me.zenox.evocraft.item.ItemRegistry;
 import me.zenox.evocraft.item.VanillaItem;
 import me.zenox.evocraft.network.GlowFilter;
@@ -101,7 +102,6 @@ public final class EvoCraft extends JavaPlugin {
         new Command(plugin);
 
         registerListeners();
-
     }
 
     private void registerListeners() {
@@ -110,6 +110,7 @@ public final class EvoCraft extends JavaPlugin {
         new InventoryListener(plugin);
         new DimensionLocker(plugin);
         new DeathManager(plugin);
+        new ClassAbilityListener(plugin);
     }
 
     private boolean setupEconomy() {

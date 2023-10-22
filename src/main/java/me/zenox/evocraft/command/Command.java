@@ -1,8 +1,10 @@
 package me.zenox.evocraft.command;
 
 import com.google.common.primitives.Ints;
+import de.studiocode.invui.window.impl.single.SimpleWindow;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
+import me.zenox.evocraft.gameclass.GameClass;
 import me.zenox.evocraft.item.ComplexItem;
 import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
@@ -225,6 +227,8 @@ public class Command implements CommandExecutor, TabCompleter {
                 EvoCraft.getChapterManager().setChapter(player, chapter);
                 return true;
             }
+            case "class" -> // Open the class selection GUI
+                    new SimpleWindow(((Player) sender), "Class Selection", GameClass.getGui(), true, true).show();
             default -> Util.sendMessage(sender, "EvoCraft Help Page.");
         }
         return true;
@@ -243,6 +247,9 @@ public class Command implements CommandExecutor, TabCompleter {
             arguments.add("enchant");
             arguments.add("reload");
             arguments.add("removechapterdata");
+            arguments.add("removemetadata");
+            arguments.add("setchapter");
+            arguments.add("class");
         }
 
         if (items.isEmpty()) {

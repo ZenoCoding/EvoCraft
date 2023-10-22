@@ -4,6 +4,7 @@ import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.abilities.Ability;
 import me.zenox.evocraft.abilities.ItemAbility;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
+import me.zenox.evocraft.gameclass.ClassAbilityListener;
 import me.zenox.evocraft.item.ComplexItemStack;
 import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -47,6 +48,10 @@ public class PlayerUseItemEvent implements Listener {
 
     @EventHandler
     public void useEvent(Event event) {
+        // check for class abilities
+        if (event instanceof PlayerInteractEvent && ClassAbilityListener.playerInitiated(((PlayerInteractEvent) event).getPlayer()))
+            return;
+
         // PERFORMANCE ISSUE: This is called for every event, and every single ability is called.
         List<Ability> relevantAbilities = eventToAbilitiesMap.get(event.getClass());
         if (relevantAbilities != null) {

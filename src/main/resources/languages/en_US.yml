@@ -702,6 +702,85 @@ gui-enchant-action-lore-3:
   - ""
   - "&c&nRequires enchanting level 25!"
 
+gui-class-action-title-mage: "&b&lMage &7→ &eClick to Select"
+gui-class-action-lore-mage:
+  - "&fHarness the power of &bmana&f and &bmagic&f."
+  - ""
+  - "&7Weapons: &fStaffs, Wands, Potions"
+  - ""
+  - "&7Subclasses: "
+  - "&eRunecaster, Arcanist, Lightweaver"
+  - ""
+  - "&8(Low health, high damage, medium speed)"
+
+gui-class-action-title-warrior: "&c&lWarrior &7→ &eClick to Select"
+gui-class-action-lore-warrior:
+  - "&fA mobile melee combatant,"
+  - "excelling in close quarters."
+  - ""
+  - "&7Weapons: &fSwords, Axes"
+  - ""
+  - "&7Subclasses: "
+  - "&eGladiator, Rogue, Bladestorm"
+  - ""
+  - "&8(Fast, agile, low health siphon)"
+
+gui-class-action-title-tank: "&a&lTank &7→ &eClick to Select"
+gui-class-action-lore-tank:
+  - "&fBecome the shield of your team,"
+  - "&fand deal massive blows."
+  - ""
+  - "&7Weapons: &fMaces, Greatswords, Hammers"
+  - ""
+  - "&7Subclasses: "
+  - "&eStoneheart, Warden, Centurion"
+  - ""
+  - "&8(High health, slower, high damage)"
+
+gui-class-action-title-archer: "&6&lArcher &7→ &eClick to Select"
+gui-class-action-lore-archer:
+  - "&fMaster the art of ranged combat,"
+  - "&fand deal damage from afar."
+  - ""
+  - "&7Weapons: &fBows, Blasters"
+  - ""
+  - "&7Subclasses: "
+  - "&eDeadeye, Skirmisher, Fusillade"
+  - ""
+  - "&8(Medium health, good speed, medium damage)"
+
+##########################################################################
+##                               CLASSES                                ##
+##########################################################################
+class-name-mage: "&b&lMage"
+class-desc-mage:
+  - "&7Harness the mystical arts and control the battlefield with your spells."
+  - "&7Wield powerful &fStaffs, Wands &7and craft potent &fPotions."
+  - "&8Subclasses: &eRunecaster, Arcanist, Lightweaver"
+  - "&8(Low health, high damage, medium speed)"
+
+class-name-warrior: "&c&lWarrior"
+class-desc-warrior:
+  - "&7Engage in close combat with agility and precision."
+  - "&7Brandish deadly &fSwords &7and swift &fAxes."
+  - "&8Subclasses: &eGladiator, Rogue, Bladestorm"
+  - "&8(Fast, agile, low health siphon)"
+
+class-name-tank: "&a&lTank"
+class-desc-tank:
+  - "&7Hold the front line and protect your allies with might."
+  - "&7Swing devastating &fMaces, Greatswords &7and crushing &fHammers."
+  - "&8Subclasses: &eStoneheart, Warden, Centurion"
+  - "&8(High health, slower, high damage)"
+
+class-name-archer: "&6&lArcher"
+class-desc-archer:
+  - "&7Take down foes from a distance, mastering the bow's art."
+  - "&7Equip versatile &fBows &7and modern &fBlasters."
+  - "&8Subclasses: &eDeadeye, Skirmisher, Fusillade"
+  - "&8(Medium health, good speed, medium damage)"
+
+
 ##########################################################################
 ##                              ATTRIBUTES                              ##
 ##########################################################################

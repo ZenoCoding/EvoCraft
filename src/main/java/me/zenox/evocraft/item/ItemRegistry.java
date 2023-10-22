@@ -224,7 +224,7 @@ public class ItemRegistry {
             .modifier(AttributeRegistry.ATTACK_DAMAGE, 15)
             .modifier(AttributeRegistry.ATTACK_SPEED, -3)
             .modifier(AttributeRegistry.WISDOM, 50)
-            .abilities(AbilityRegistry.VOID_WARP, AbilityRegistry.VOIDULAR_RECALL)
+            .abilities(AbilityRegistry.VOID_WARP)
             .rarity(ComplexItem.Rarity.EPIC)
             .material(Material.NETHERITE_SHOVEL)
             .type(ComplexItem.Type.STAFF)
