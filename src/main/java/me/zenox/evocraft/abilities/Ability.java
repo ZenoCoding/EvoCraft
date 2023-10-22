@@ -1,11 +1,11 @@
 package me.zenox.evocraft.abilities;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
-import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.data.TranslatableList;
 import me.zenox.evocraft.data.TranslatableText;
-import me.zenox.evocraft.item.ComplexItemStack;
+import me.zenox.evocraft.item.ComplexItem;
 import me.zenox.evocraft.util.TriConsumer;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.ChatColor;
@@ -18,7 +18,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -144,7 +143,7 @@ public abstract class Ability<T extends Event> {
         // Perhaps change this in the future to support passing multiple items to the consumer
         for(ItemStack i : items) {
             if (i == null || i.getType() == Material.AIR || i.getItemMeta() == null) continue;
-            if (!ComplexItemStack.of(i).getAbilities().contains(this)) continue;
+            if (!ComplexItem.of(i).getAbilities().contains(this)) continue;
             item = i;
             break;
         }

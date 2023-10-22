@@ -77,7 +77,7 @@ public class ComplexItemStack {
 
         Map<Enchantment, Integer> vanillaEnchantments = item.getEnchantments();
 
-        ComplexItem complexItem = Objects.requireNonNullElse(ItemRegistry.byItem(item), VanillaItem.of(item.getType()));
+        ComplexItem complexItem = Objects.requireNonNullElse(ComplexItem.of(item), VanillaItem.of(item.getType()));
         ComplexItemStack cItem = new ComplexItemStack(complexItem, item);
 
         // add vanilla variables???
@@ -175,7 +175,7 @@ public class ComplexItemStack {
     }
 
     public List<Ability> getAbilities() {
-        return this.complexMeta.getAbilities();
+        return this.complexItem.getAbilities();
     }
 
     public ComplexItem getComplexItem() {

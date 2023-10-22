@@ -209,7 +209,7 @@ public class EnchantingGUI extends SimpleGUI {
 
     private static boolean itemValid(ItemStack item) {
         try {
-            ComplexItem.Type type = ComplexItemStack.of(item).getComplexItem().getType();
+            ComplexItem.Type type = ComplexItem.of(item).getType();
             return item.getType() != Material.AIR && ComplexEnchantment.getRegisteredEnchants()
                     .stream()
                     .filter(complexEnchantment ->

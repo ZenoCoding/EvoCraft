@@ -32,38 +32,37 @@ public class InventoryListener implements Listener {
         ArrayList<ItemStack> contents = new ArrayList<>();
         contents.addAll(Arrays.asList(event.getPlayer().getInventory().getContents()));
         contents.addAll(Arrays.asList(event.getPlayer().getInventory().getArmorContents()));
-        updateInventory(contents);
+        updateItems(contents);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void inventoryInteractEvent(InventoryClickEvent event) {
         ArrayList<ItemStack> contents = new ArrayList<>();
         contents.add(event.getCurrentItem());
-        if(!event.isCancelled()) updateInventory(contents);
+        if(!event.isCancelled()) updateItems(contents);
     }
 
     @EventHandler
     public void inventoryPickupEvent(EntityPickupItemEvent event) {
         ArrayList<ItemStack> contents = new ArrayList<>();
         contents.add(event.getItem().getItemStack());
-        updateInventory(contents);
+        updateItems(contents);
     }
 
     @EventHandler
     public void itemDropEvent(EntityDropItemEvent event){
         ArrayList<ItemStack> contents = new ArrayList<>();
         contents.add(event.getItemDrop().getItemStack());
-        updateInventory(contents);
+        updateItems(contents);
     }
 
     @EventHandler
     public void itemDropEvent(BlockDropItemEvent event){
-        ArrayList<ItemStack> contents = new ArrayList<>();
-        contents.addAll(event.getItems().stream().map(Item::getItemStack).toList());
-        updateInventory(contents);
+        ArrayList<ItemStack> contents = new ArrayList<>(event.getItems().stream().map(Item::getItemStack).toList());
+        updateItems(contents);
     }
 
-    private void updateInventory(List<ItemStack> contents) {
+    private void updateItems(List<ItemStack> contents) {
         contents.removeIf(Objects::isNull);
 
         // Update ComplexItems

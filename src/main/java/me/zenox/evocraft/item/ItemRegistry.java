@@ -15,15 +15,10 @@ import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ItemRegistry {
 
@@ -737,7 +732,7 @@ public class ItemRegistry {
 
     @Deprecated
     public static List<Recipe> registerRecipes() {
-        for (ComplexItem item : ComplexItem.itemRegistry) {
+        for (ComplexItem item : ComplexItem.itemRegistry.values()) {
             registeredRecipes.addAll(item.getRecipes());
         }
 
@@ -758,27 +753,5 @@ public class ItemRegistry {
 
     public static void registerItems() {
         Util.logToConsole(ChatColor.WHITE + "Registering " + ChatColor.GOLD + ComplexItem.itemRegistry.size() + ChatColor.WHITE + " items.");
-    }
-
-    @Nullable
-    public static ComplexItem byItem(ItemStack item) {
-        try {
-            PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer();
-            String id = container.get(ComplexItem.GLOBAL_ID, PersistentDataType.STRING);
-            return byId(id);
-        } catch (NullPointerException e) {
-            return null;
-        }
-    }
-
-    @Nullable
-    public static ComplexItem byId(String id) {
-        for (ComplexItem item : ComplexItem.itemRegistry) {
-            if (id == null) return null;
-            if (id.equals(item.getId())) {
-                return item;
-            }
-        }
-        return null;
     }
 }

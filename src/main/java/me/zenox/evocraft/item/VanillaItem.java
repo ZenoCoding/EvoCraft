@@ -84,7 +84,7 @@ public class VanillaItem extends ComplexItem {
      * @param settings The settings to override.
      */
     public VanillaItem(ItemSettings settings) {
-        super(settings.id(settings.getMaterial().getKey().getKey()), true);
+        super(settings.id(settings.getMaterial().getKey().getKey()));
         if (!settings.getMaterial().isItem()) throw new IllegalArgumentException("Material must have an item form");
         for (VanillaItem item : new ArrayList<>(vanillaItemList)) {
             // remove the old item

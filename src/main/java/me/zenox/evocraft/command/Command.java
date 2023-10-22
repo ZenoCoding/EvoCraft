@@ -8,7 +8,6 @@ import me.zenox.evocraft.gameclass.GameClass;
 import me.zenox.evocraft.item.ComplexItem;
 import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
-import me.zenox.evocraft.item.ItemRegistry;
 import me.zenox.evocraft.loot.LootTable;
 import me.zenox.evocraft.loot.LootTableRegistry;
 import me.zenox.evocraft.story.Chapter;
@@ -56,7 +55,7 @@ public class Command implements CommandExecutor, TabCompleter {
                     Util.sendMessage(p, "Please specify a item to give.");
                     return true;
                 }
-                ComplexItem itemtype = ItemRegistry.byId(args[2]);
+                ComplexItem itemtype = ComplexItem.itemRegistry.get(args[2]);
                 if (itemtype == null) {
                     Util.sendMessage(p, "This item could not be found!");
                 } else {
@@ -108,7 +107,7 @@ public class Command implements CommandExecutor, TabCompleter {
                     Util.sendMessage(sender, "Please specify a item to drop.");
                     return true;
                 }
-                ComplexItem itemtypetodrop = ItemRegistry.byId(args[2]);
+                ComplexItem itemtypetodrop = ComplexItem.itemRegistry.get(args[2]);
                 if (itemtypetodrop == null) {
                     Util.sendMessage(sender, "This item could not be found!");
                 } else {
@@ -187,7 +186,7 @@ public class Command implements CommandExecutor, TabCompleter {
                     Util.sendMessage(sender, ChatColor.WHITE + "This item has no CustomModelData (that is created by EvoCraft)");
                     return true;
                 }
-                Util.sendMessage(sender, ChatColor.WHITE + "The CustomModelData of " + item.getItemMeta().getDisplayName() + ChatColor.WHITE + "  is " + ComplexItemStack.of(item).getComplexItem().getCustomModelData());
+                Util.sendMessage(sender, ChatColor.WHITE + "The CustomModelData of " + item.getItemMeta().getDisplayName() + ChatColor.WHITE + "  is " + ComplexItem.of(item).getCustomModelData());
                 return true;
             }
             case "removechapterdata" -> {
@@ -253,9 +252,7 @@ public class Command implements CommandExecutor, TabCompleter {
         }
 
         if (items.isEmpty()) {
-            for (ComplexItem item : ComplexItem.itemRegistry) {
-                items.add(item.getId());
-            }
+            items.addAll(ComplexItem.itemRegistry.keySet());
         }
 
         List<String> results = new ArrayList<>();

@@ -2,7 +2,6 @@ package me.zenox.evocraft.abilities;
 
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.item.ComplexItem;
-import me.zenox.evocraft.item.ItemRegistry;
 import org.bukkit.*;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
@@ -103,7 +102,7 @@ public class Crucify extends ItemAbility implements Listener {
             p.setMetadata("crucify_active", new FixedMetadataValue(EvoCraft.getPlugin(), false));
             Inventory inv = p.getInventory();
             for (ItemStack item : inv.getContents()) {
-                ComplexItem complexItemMaterial = ItemRegistry.byItem(item);
+                ComplexItem complexItemMaterial = ComplexItem.of(item);
                 if (complexItemMaterial != null && complexItemMaterial.getId().equals(CRUCIFIED_AMULET.getId())) {
                     item.setAmount(item.getAmount() - 1);
 

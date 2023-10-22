@@ -1,7 +1,7 @@
 package me.zenox.evocraft.gameclass;
 
 import me.zenox.evocraft.EvoCraft;
-import me.zenox.evocraft.item.ComplexItemStack;
+import me.zenox.evocraft.item.ComplexItem;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -33,7 +33,7 @@ public class ClassAbilityListener implements Listener {
 
             // filter by player's class
             if (GameClass.getClass(player) == null) return;
-            if (!GameClass.getClass(player).items().contains(ComplexItemStack.of(player.getEquipment().getItemInMainHand()).getComplexItem().getType())) return;
+            if (!GameClass.getClass(player).items().contains(ComplexItem.of(player.getEquipment().getItemInMainHand()).getType())) return;
             // Prime the ability action bar for PlayerInteractEvent
             Util.sendActionBar(event.getPlayer(), "&bSHIFT&7-&b_&7-&b_");
             player.playSound(player.getLocation(), Sound.BLOCK_STONE_BUTTON_CLICK_ON, 2, 0.5f);
@@ -57,7 +57,7 @@ public class ClassAbilityListener implements Listener {
 
         // filter by player's class
         if (GameClass.getClass(player) == null) return;
-        if (!GameClass.getClass(player).items().contains(ComplexItemStack.of(event.getItem()).getComplexItem().getType())) return;
+        if (!GameClass.getClass(player).items().contains(ComplexItem.of(event.getItem()).getType())) return;
 
         if (actionMap.containsKey(player) && (action.isLeftClick() || action.isRightClick())) {
             if (actionMap.get(player) != null){

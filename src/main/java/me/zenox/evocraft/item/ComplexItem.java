@@ -15,6 +15,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ import java.util.Map;
 @SuppressWarnings("UnstableApiUsage")
 public class ComplexItem {
 
-    public static final List<ComplexItem> itemRegistry = new ArrayList<>();
+    public static final HashMap<String, ComplexItem> itemRegistry = new HashMap<>();
 
     public static final NamespacedKey GLOBAL_ID = new NamespacedKey(EvoCraft.getPlugin(), "evocraft");
     public static final NamespacedKey GLOW_ID = new NamespacedKey(EvoCraft.getPlugin(), "glow");
@@ -68,7 +70,7 @@ public class ComplexItem {
         this.abilities = abilities;
         this.variableMap.putAll(variableMap);
 
-        register(false);
+        register();
     }
 
     public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
@@ -106,46 +108,29 @@ public class ComplexItem {
         this.variableMap.putAll(settings.getVariableMap());
         this.attributeModifiers = settings.getAttributeModifiers();
 
-        register(false);
+        register();
     }
 
-    protected ComplexItem(ItemSettings settings, boolean override) {
-        this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + settings.getId());
-        this.id = settings.getId();
-        this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
-        this.key = new NamespacedKey(EvoCraft.getPlugin(), id);
-        String str = String.valueOf(Math.abs(id.hashCode()));
-        this.customModelData = Ints.tryParse(str.substring(0, Math.min(7, str.length())));
-        this.unique = settings.isUnique();
-        this.glow = settings.doesGlow();
-        this.rarity = settings.getRarity();
-        this.type = settings.getType();
-        this.material = settings.getMaterial();
-        this.meta = settings.getMeta();
-        this.stats = settings.getStats();
-        this.skullURL = "";
-        this.abilities = settings.getAbilities() == null ? new ArrayList<>() : new ArrayList<>(settings.getAbilities());
-        this.variableMap.putAll(settings.getVariableMap());
-        this.attributeModifiers = settings.getAttributeModifiers();
-
-        register(true);
+    /**
+     * Faster, more streamlined method to fetch the ComplexItem attribute without having to read or update ComplexItemMeta
+     *
+     * @param item The item to get the ComplexItem from
+     * @return The ComplexItem object of the item
+     */
+    public static ComplexItem of(ItemStack item) {
+        PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+        if (container.has(GLOBAL_ID, PersistentDataType.STRING))
+            return itemRegistry.get(container.get(GLOBAL_ID, PersistentDataType.STRING));
+        else return ComplexItemStack.of(item).getComplexItem();
     }
 
-    private void register(boolean override){
-        for (ComplexItem item:
-                new ArrayList<>(itemRegistry)) {
-            if (item.getId().equalsIgnoreCase(id)) {
-                if (!override) {
-                    Util.logToConsole("Duplicate ComplexItem ID: " + id + " | Exact Match: " + item.equals(this));
-                    throw new IllegalArgumentException("ComplexItem ID cannot be duplicate");
-                } else {
-                    itemRegistry.remove(item);
-                    break;
-                }
-            }
+    private void register(){
+        if (itemRegistry.containsKey(id)) {
+            Util.logToConsole("Duplicate ComplexItem ID: " + id + " | Exact Match: " + itemRegistry.get(id).equals(this));
+            throw new IllegalArgumentException("ComplexItem ID cannot be duplicate");
         }
 
-        itemRegistry.add(this);
+        itemRegistry.put(id, this);
     }
 
 

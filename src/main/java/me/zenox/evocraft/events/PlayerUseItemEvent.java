@@ -2,13 +2,10 @@ package me.zenox.evocraft.events;
 
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.abilities.Ability;
-import me.zenox.evocraft.abilities.ItemAbility;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
 import me.zenox.evocraft.gameclass.ClassAbilityListener;
-import me.zenox.evocraft.item.ComplexItemStack;
 import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredListener;
 
 import java.util.ArrayList;
@@ -67,16 +64,4 @@ public class PlayerUseItemEvent implements Listener {
             }
         }
     }
-
-    private void interact(PlayerInteractEvent event) {
-        ItemStack item = event.getItem();
-        if (item == null) return;
-        ComplexItemStack complexItem = ComplexItemStack.of(item);
-        for (Ability ability : complexItem.getAbilities()) {
-            if (ability instanceof ItemAbility) ability.useAbility(event);
-        }
-    }
-
-
-
 }

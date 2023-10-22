@@ -41,7 +41,6 @@ import java.util.stream.Stream;
  */
 
 public class ComplexItemMeta {
-    public static final NamespacedKey ABILITY_ID = new NamespacedKey(EvoCraft.getPlugin(), "ability");
     public static final String VAR_PREFIX = "var_";
     public static final String ATTRIBUTE_BASE_KEY = "base";
     public static final VariableType<ComplexItem.Rarity> RARITY_VAR = new VariableType<>("rarity", new LoreEntry("rarity", List.of("Rarity Lore")), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Rarity) variable.getValue()).color() + ((ComplexItem.Rarity) variable.getValue()).getName())));
@@ -52,20 +51,14 @@ public class ComplexItemMeta {
     })), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Type) variable.getValue()).getName())));
     public static final NamespacedKey ENCHANT_KEY = new NamespacedKey(EvoCraft.getPlugin(), "complexEnchants");
     private static final NamespacedKey ATTRIBUTE_KEY = new NamespacedKey(EvoCraft.getPlugin(), "attributes");
-    private List<Ability> abilities;
     private final List<Variable> variableList = new ArrayList<>();
     private HashMap<ComplexEnchantment, Integer> complexEnchantments = new HashMap<>();
     private List<AttributeModifier> modifierList = new ArrayList<>();
     private final ComplexItemStack complexItemStack;
 
-    public ComplexItemMeta(ComplexItemStack complexItemStack, List<Ability> abilities) {
-        this.abilities = abilities == null ? new ArrayList<>() : new ArrayList<>(abilities);
+    public ComplexItemMeta(ComplexItemStack complexItemStack) {
         this.complexItemStack = complexItemStack;
         this.read();
-    }
-
-    public ComplexItemMeta(ComplexItemStack complexItemStack) {
-        this(complexItemStack, complexItemStack.getComplexItem().getAbilities());
     }
 
     /**
@@ -159,7 +152,6 @@ public class ComplexItemMeta {
 
         // Write Abilities
         writeAbilityLore(lore);
-        dataContainer.set(ABILITY_ID, new ArrayListType(), new ArrayList<>(abilities.stream().map(Ability::getId).toList()));
 
         writeVariables(VariableType.Priority.BELOW_ABILITIES, dataContainer, lore, true);
 
@@ -257,7 +249,7 @@ public class ComplexItemMeta {
     }
 
     private void writeAbilityLore(LoreBuilder loreBuilder) {
-        for (Ability ability : this.abilities) {
+        for (Ability ability : complexItemStack.getComplexItem().getAbilities()) {
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GOLD + (ability.isPassive() ? "Passive " : "") + (ability instanceof FullSetArmorAbility ? "Full Set " : "") + "Ability: " + ability.getDisplayName() + ChatColor.YELLOW + ChatColor.BOLD + " " + (ability instanceof ItemAbility ? ((ItemAbility) ability).getAction().getName() : ""));
             lore.addAll(ability.getLore());
@@ -356,10 +348,6 @@ public class ComplexItemMeta {
 
     public List<Variable> getVariableList() {
         return variableList;
-    }
-
-    public List<Ability> getAbilities() {
-        return abilities;
     }
 
     public List<AttributeModifier> getModifierList() {

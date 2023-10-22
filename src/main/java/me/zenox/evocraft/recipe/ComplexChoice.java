@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import me.zenox.evocraft.item.ComplexItem;
 import me.zenox.evocraft.item.ComplexItemStack;
-import me.zenox.evocraft.item.ItemRegistry;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +38,8 @@ public class ComplexChoice implements RecipeChoice {
     @NotNull
     @Override
     public ItemStack getItemStack() {
-        return new ComplexItemStack(ItemRegistry.byId(((Map.Entry<String, Integer>) choices.entrySet().toArray()[0]).getKey()), ((Map.Entry<String, Integer>) choices.entrySet().toArray()[0]).getValue()).getItem();
+        return new ComplexItemStack(ComplexItem.itemRegistry.get(((Map.Entry<String, Integer>) choices.entrySet().toArray()[0]).getKey()),
+                ((Map.Entry<String, Integer>) choices.entrySet().toArray()[0]).getValue()).getItem();
     }
 
     public Map<ComplexItem, Integer> getChoices() {
@@ -60,7 +60,7 @@ public class ComplexChoice implements RecipeChoice {
     @Override
     public boolean test(@NotNull ItemStack t) {
         for (Map.Entry<ComplexItem, Integer> match : choices.entrySet()) {
-            if (ComplexItemStack.of(t).getComplexItem().equals(match.getKey()) && (t.getAmount() == match.getValue() || match.getValue() == -1)) {
+            if (ComplexItem.of(t).equals(match.getKey()) && (t.getAmount() == match.getValue() || match.getValue() == -1)) {
                 return true;
             }
         }

@@ -1,7 +1,7 @@
 package me.zenox.evocraft.abilities;
 
 import me.zenox.evocraft.Slot;
-import me.zenox.evocraft.item.ComplexItemStack;
+import me.zenox.evocraft.item.ComplexItem;
 import me.zenox.evocraft.util.TriConsumer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -27,7 +27,7 @@ public abstract class FullSetArmorAbility<T extends Event> extends Ability<T> {
     protected boolean checkEvent(T e) {
         return checkEventExec(e) && Slot.ARMOR.item(getPlayerOfEvent(e)).stream().allMatch(itemStack -> {
             try {
-                return ComplexItemStack.of(itemStack).getAbilities().contains(this);
+                return ComplexItem.of(itemStack).getAbilities().contains(this);
             } catch (NullPointerException exception){
                 return false;
             }
