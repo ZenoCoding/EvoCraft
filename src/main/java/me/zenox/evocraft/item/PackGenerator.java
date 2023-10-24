@@ -13,10 +13,20 @@ import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.bukkit.Material;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
+import java.io.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 
 /**
@@ -251,7 +261,59 @@ public class PackGenerator {
      * @param items
      */
     private void compileVanillaItemJSON(List<ComplexItem> items) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+        // Organize the ComplexItems by their material.
+        Map<String, List<ComplexItem>> materialItemsMap = new HashMap<>();
+        for (ComplexItem item : items) {
+            Material material = item.getMaterial(); // Assuming ComplexItem has a method 'getMaterial'
+            if (!materialItemsMap.containsKey(material.toString())) {
+                materialItemsMap.put(material.toString(), new ArrayList<>());
+            }
+            materialItemsMap.get(material.toString()).add(item);
+        }
+
+        //loop over each material type
+        for (String material : materialItemsMap.keySet()) {
+            //get the vanilla item json file
+            //add the overrides for each complex item
+            //save the json file
+
+            //making object handheld
+            JsonObject rootObject = new JsonObject();
+            rootObject.addProperty("parent", "minecraft:item/handheld");
+
+            //making object textures
+            JsonObject textures = new JsonObject();
+            textures.addProperty("layerO", "minecraft:item/" + material);
+
+
+            //making object overrides
+            JsonObject overrides = new JsonObject();
+            for (ComplexItem item : materialItemsMap.get(material)) {
+                //explain what this is doing
+                //this is adding the overrides for each complex item
+                JsonObject predicate = new JsonObject();
+                predicate.addProperty("custom_model_data", item.getCustomModelData());
+                JsonObject model = new JsonObject();
+                model.addProperty("model", "evocraft:item/" + item.getId());
+                JsonObject override = new JsonObject();
+                override.add("predicate", predicate);
+                override.add("model", model);
+                overrides.add(item.getId(), override);
+            }
+
+            rootObject.add("overrides", overrides);
+
+            //write json file to resource pack folder
+            try {
+                FileWriter fileWriter = new FileWriter("assets/minecraft/models/item/" + material + ".json");
+                fileWriter.write(gson.toJson(rootObject));
+                fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
