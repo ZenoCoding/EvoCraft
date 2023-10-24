@@ -1,14 +1,21 @@
 package me.zenox.evocraft.item;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import me.zenox.evocraft.EvoCraft;
+import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,18 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
-
-import javax.json.Json;
-
-import org.bukkit.Material;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-
-import java.io.*;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 
@@ -166,8 +161,15 @@ public class PackGenerator {
      * @return the resulting resource pack folder
      */
     private File copyTemplatePack(File directory) {
-        return null;
+        File outFile = new File(directory, targetPath);
+        try (InputStream in = EvoCraft.getPlugin().getResource("assets/pack_template")) {
+            Files.copy(in, outFile.toPath(),  StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return outFile;
     }
+
 
     /**
      * Copies PNG files to the resource pack folder
@@ -176,6 +178,11 @@ public class PackGenerator {
      * @param map a HashMap of ComplexItems and their associated PNG files
      */
     private void copyPNGToPack(HashMap<ComplexItem, File> map) {
+        // Copy PNG files to resource pack folder
+        for (ComplexItem item : map.keySet()) {
+            // Copy PNG file to resource pack folder
+
+        }
     }
 
     /**
@@ -351,7 +358,7 @@ public class PackGenerator {
      * Zip and save the resource pack folder into the resource pack directory. Make sure you zip the contents of the folder, not the folder itself, as that will cause issues.
      * @param directory the directory to zip
      */
-    private void zipResourcePack(File directory) {
+    private void zipResourcePack(@NotNull File directory) {
         // Zip the directory
         // Save the zip file to the resource pack directory
         try {
