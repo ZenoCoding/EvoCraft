@@ -18,6 +18,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import javax.json.Json;
+
 import org.bukkit.Material;
 
 import com.google.gson.Gson;
@@ -201,11 +203,34 @@ public class PackGenerator {
      * @param items The list of items to compile JSON files for
      */
     private void compileComplexItemJSON(List<ComplexItem> items) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         // Create a new JSON file for every single item with the format above, referencing the PNG file (Hint: it's just the id of the item + .png)
         for (ComplexItem item : items) {
             // Create JSON file
             // Write JSON file to resource pack folder (hint: saveResource())
+            // Use gson to write JSON file
+            // Use the item's ID to reference the PNG file
+            // Use the item's ID to reference the JSON file
+            // Use the item's ID to reference the vanilla JSON file
+            // Use the item's ID to reference the vanilla model file
+            // Use the item's ID to reference the vanilla texture file
+            //we need to add the vanilla json file
+            //we need to add the vanilla model file
+            //we need to add the vanilla texture file
+            JsonObject vanillaObject = new JsonObject();
+            vanillaObject.addProperty("parent", "minecraft:item/generated");
+            JsonObject vanillaTextures = new JsonObject();
+            vanillaTextures.addProperty("layer0", "minecraft:item/" + item.getMaterial().toString());
+            vanillaObject.add("textures", vanillaTextures);
+            try {
+                FileWriter fileWriter = new FileWriter("assets/minecraft/models/item/" + item.getMaterial().toString() + ".json");
+                fileWriter.write(gson.toJson(vanillaObject));
+                fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     /**
@@ -315,6 +340,12 @@ public class PackGenerator {
             }
         }
     }
+    //the above function :
+    //it creates a json file for each material type
+    //it adds the overrides for each complex item
+    //it saves the json file
+    //it writes the json file to the resource pack folder
+    //it uses the gson library to write the json file
 
     /**
      * Zip and save the resource pack folder into the resource pack directory. Make sure you zip the contents of the folder, not the folder itself, as that will cause issues.
