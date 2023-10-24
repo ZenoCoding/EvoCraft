@@ -175,7 +175,7 @@ public final class EvoCraft extends JavaPlugin {
     }
     public void reload() {
         this.reloadConfig();
-        EvoCraft.languageLoader = new LanguageLoader(this);
+        languageLoader = new LanguageLoader(this);
     }
 
     @Override
