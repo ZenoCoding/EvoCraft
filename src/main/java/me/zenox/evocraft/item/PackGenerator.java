@@ -3,15 +3,21 @@ package me.zenox.evocraft.item;
 import me.zenox.evocraft.EvoCraft;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
+
+
 
 /**
  * Resource pack generator that is used to generate resource packs for the plugin
@@ -91,11 +97,13 @@ public class PackGenerator {
                 String extension = file.getName().substring(file.getName().length() - 4);
                 if (!extension.equals(".png")) {
                     // Log message, continue
+                    System.out.println("File " + file.getName() + " is not a PNG file");
                 } else {
                     String name = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
                     ComplexItem item = ItemRegistry.byId(name);
                     if (item == null) {
                         // Log message
+                        System.out.println("ComplexItem not found for " + name);
                     } else {
                         map.put(item, file);
                     }
@@ -251,8 +259,31 @@ public class PackGenerator {
      * @param directory the directory to zip
      */
     private void zipResourcePack(File directory) {
-
+        // Zip the directory
+        // Save the zip file to the resource pack directory
+        try {
+            //input file zip path
+            pack(directory.getAbsolutePath(), directory.getAbsolutePath() + ".zip");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
-
+    private static void pack(String sourceDirPath, String zipFilePath) throws IOException {
+        Path p = Files.createFile(Paths.get(zipFilePath));
+        try (ZipOutputStream zs = new ZipOutputStream(Files.newOutputStream(p))) {
+            Path pp = Paths.get(sourceDirPath);
+            Files.walk(pp)
+              .filter(path -> !Files.isDirectory(path))
+              .forEach(path -> {
+                  ZipEntry zipEntry = new ZipEntry(pp.relativize(path).toString());
+                  try {
+                      zs.putNextEntry(zipEntry);
+                      Files.copy(path, zs);
+                      zs.closeEntry();
+                  } catch (IOException e) {
+                      System.err.println(e);
+                  }
+              });
+        }
+    }
 }
