@@ -179,9 +179,14 @@ public class PackGenerator {
      */
     private void copyPNGToPack(HashMap<ComplexItem, File> map) {
         // Copy PNG files to resource pack folder
+        // The path of the files in the resource pack folder should be `assets/evocraft/textures/items`
         for (ComplexItem item : map.keySet()) {
-            // Copy PNG file to resource pack folder
-
+            File file = map.get(item);
+            try {
+                Files.copy(file.toPath(), Paths.get("assets/evocraft/textures/items/" + file.getName()), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
