@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.util.Util;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,16 +12,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.CodeSource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -45,11 +46,12 @@ public class PackGenerator {
         // Location of the png files for items, this is where devs/users will add them
         File pngDirectory = new File(EvoCraft.getPlugin().getDataFolder(), "assets/textures/items");
         HashMap<ComplexItem, File> map = readPngs(pngDirectory);
+        Util.logToConsole(map.toString());
 
         // Next, we want to compile a new resource pack folder
         // We can use a bare-bones template with all the required files and folders and simply copy it
         // For a first prototype, we'll only modify item files and textures, and deal with sounds + MEG later on
-        File resourcePack = copyTemplatePack(new File(EvoCraft.getPlugin().getDataFolder(), targetPath));
+        File resourcePack = copyTemplatePack(EvoCraft.getPlugin().getDataFolder());
 
         // Now we need to copy the PNG files into the resource pack
         copyPNGToPack(map);
@@ -125,6 +127,7 @@ public class PackGenerator {
                         String entryName = ze.getName();
                         if (entryName.startsWith("assets/textures/items") && entryName.endsWith(".png")) {
                             // Found a PNG, now copy it
+                            Util.logToConsole("Copying " + entryName);
                             File outFile = new File(directory, new File(entryName).getName());
                             if (!outFile.exists()) {
                                 try (InputStream in = EvoCraft.getPlugin().getResource(entryName)) {
@@ -147,13 +150,48 @@ public class PackGenerator {
      * @return the resulting resource pack folder
      */
     private File copyTemplatePack(File directory) {
-        File outFile = new File(directory, targetPath);
-        try (InputStream in = EvoCraft.getPlugin().getResource("assets/pack_template")) {
-            Files.copy(in, outFile.toPath(),  StandardCopyOption.REPLACE_EXISTING);
+        String resourcePath = "assets/pack_template";
+        File copiedDirectory = new File(directory, resourcePath);
+
+        try {
+            URL dirURL = EvoCraft.getPlugin().getClass().getClassLoader().getResource(resourcePath);
+            if (dirURL != null && dirURL.getProtocol().equals("jar")) {
+                JarURLConnection jarConnection = (JarURLConnection) dirURL.openConnection();
+                JarFile jar = jarConnection.getJarFile();
+                Enumeration<JarEntry> entries = jar.entries();
+                while (entries.hasMoreElements()) {
+                    JarEntry entry = entries.nextElement();
+                    String name = entry.getName();
+                    if (name.startsWith(resourcePath)) {
+                        String entryPath = name.substring(resourcePath.length() + 1); // +1 to remove the leading slash
+                        File outputFile = new File(directory, entryPath);
+                        if (!entry.isDirectory()) {
+                            try (InputStream in = EvoCraft.getPlugin().getClass().getClassLoader().getResourceAsStream(name)) {
+                                Files.copy(in, outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                            }
+                        } else {
+                            outputFile.mkdirs();
+                        }
+                    }
+                }
+            } else {
+                // Handle the case where it's not in a JAR - possibly during development
+                File source = new File(dirURL.getPath());
+                Files.walk(source.toPath())
+                        .forEach(sourcePath -> {
+                            Path destPath = Paths.get(directory.getPath(), sourcePath.subpath(source.toPath().getNameCount(), sourcePath.getNameCount()).toString());
+                            try {
+                                Files.copy(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
+                            } catch (IOException e) {
+                                throw new RuntimeException("Error copying files", e);
+                            }
+                        });
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to copy template pack", e);
         }
-        return outFile;
+
+        return copiedDirectory;
     }
 
 
