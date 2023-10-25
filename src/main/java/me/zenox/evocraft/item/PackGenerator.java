@@ -216,8 +216,7 @@ public class PackGenerator {
             //we need to add the vanilla model file
             //we need to add the vanilla texture file
             JsonObject vanillaObject = new JsonObject();
-            //TODO: not all items are generated :p
-            vanillaObject.addProperty("parent", "minecraft:item/generated");
+            vanillaObject.addProperty("parent", "minecraft:item/" + item.getMaterial().toString());
             JsonObject vanillaTextures = new JsonObject();
             vanillaTextures.addProperty("layer0", "minecraft:item/" + item.getMaterial().toString());
             vanillaObject.add("textures", vanillaTextures);
@@ -305,8 +304,8 @@ public class PackGenerator {
 
             //making object handheld
             JsonObject rootObject = new JsonObject();
-            //TODO: not all items are handheld :p
-            rootObject.addProperty("parent", "minecraft:item/handheld");
+            String value = "minecraft:item/" + material;
+            rootObject.addProperty("parent", value);
 
             //making object textures
             JsonObject textures = new JsonObject();
