@@ -51,7 +51,7 @@ public class PackGenerator {
         // Next, we want to compile a new resource pack folder
         // We can use a bare-bones template with all the required files and folders and simply copy it
         // For a first prototype, we'll only modify item files and textures, and deal with sounds + MEG later on
-        File resourcePack = copyTemplatePack(EvoCraft.getPlugin().getDataFolder());
+        File resourcePack = copyTemplatePack(new File(EvoCraft.getPlugin().getDataFolder(), targetPath));
 
         // Now we need to copy the PNG files into the resource pack
         copyPNGToPack(map);
