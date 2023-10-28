@@ -46,7 +46,6 @@ public class PackGenerator {
         // Location of the png files for items, this is where devs/users will add them
         File pngDirectory = new File(EvoCraft.getPlugin().getDataFolder(), "assets/textures/items");
         HashMap<ComplexItem, File> map = readPngs(pngDirectory);
-        Util.logToConsole(map.toString());
 
         // Next, we want to compile a new resource pack folder
         // We can use a bare-bones template with all the required files and folders and simply copy it
@@ -92,13 +91,13 @@ public class PackGenerator {
                 String extension = file.getName().substring(file.getName().length() - 4);
                 if (!extension.equals(".png")) {
                     // Log message, continue
-                    System.out.println("File " + file.getName() + " is not a PNG file");
+                    Util.logToConsole("File " + file.getName() + " is not a PNG file");
                 } else {
                     String name = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
                     ComplexItem item = ItemRegistry.byId(name);
                     if (item == null) {
                         // Log message
-                        System.out.println("ComplexItem not found for " + name);
+                        Util.logToConsole("ComplexItem not found for " + name);
                     } else {
                         map.put(item, file);
                     }
@@ -120,6 +119,7 @@ public class PackGenerator {
         try {
             CodeSource src = EvoCraft.class.getProtectionDomain().getCodeSource();
             if (src != null) {
+                int count = 0;
                 URL jar = src.getLocation();
                 try (ZipInputStream zip = new ZipInputStream(jar.openStream())) {
                     ZipEntry ze = null;
@@ -127,7 +127,7 @@ public class PackGenerator {
                         String entryName = ze.getName();
                         if (entryName.startsWith("assets/textures/items") && entryName.endsWith(".png")) {
                             // Found a PNG, now copy it
-                            Util.logToConsole("Copying " + entryName);
+                            count++;
                             File outFile = new File(directory, new File(entryName).getName());
                             if (!outFile.exists()) {
                                 try (InputStream in = EvoCraft.getPlugin().getResource(entryName)) {
@@ -137,6 +137,7 @@ public class PackGenerator {
                         }
                     }
                 }
+                Util.logToConsole("Copied " + count + " PNG files from JAR");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,7 +152,6 @@ public class PackGenerator {
      */
     private File copyTemplatePack(File directory) {
         String resourcePath = "assets/pack_template";
-        File copiedDirectory = new File(directory, resourcePath);
 
         try {
             URL dirURL = EvoCraft.getPlugin().getClass().getClassLoader().getResource(resourcePath);
@@ -191,23 +191,21 @@ public class PackGenerator {
             throw new RuntimeException("Failed to copy template pack", e);
         }
 
-        return copiedDirectory;
+        return directory; // Return the directory where the files have been copied
     }
 
 
     /**
      * Copies PNG files to the resource pack folder
      *
-     * The path of the files in the resource pack folder should be `assets/evocraft/textures/items`
+     * The path of the files in the resource pack folder should be `assets/textures/items`
      * @param map a HashMap of ComplexItems and their associated PNG files
      */
     private void copyPNGToPack(HashMap<ComplexItem, File> map) {
-        // Copy PNG files to resource pack folder
-        // The path of the files in the resource pack folder should be `assets/evocraft/textures/items`
         for (ComplexItem item : map.keySet()) {
             File file = map.get(item);
             try {
-                Files.copy(file.toPath(), Paths.get("assets/evocraft/textures/items/" + file.getName()), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(file.toPath(), Paths.get(EvoCraft.getPlugin().getDataFolder().getAbsolutePath(), "assets/textures/items/" + file.getName()), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -259,7 +257,9 @@ public class PackGenerator {
             vanillaTextures.addProperty("layer0", "minecraft:item/" + item.getMaterial().toString());
             vanillaObject.add("textures", vanillaTextures);
             try {
-                FileWriter fileWriter = new FileWriter("assets/minecraft/models/item/" + item.getMaterial().toString() + ".json");
+                File file = new File(EvoCraft.getPlugin().getDataFolder(), targetPath + File.separator + "assets/minecraft/models/item/" + item.getMaterial().toString() + ".json");
+                file.createNewFile();
+                FileWriter fileWriter = new FileWriter(file);
                 fileWriter.write(gson.toJson(vanillaObject));
                 fileWriter.close();
             } catch (IOException e) {
@@ -369,7 +369,10 @@ public class PackGenerator {
 
             //write json file to resource pack folder
             try {
-                FileWriter fileWriter = new FileWriter("assets/minecraft/models/item/" + material + ".json");
+
+                File file = new File(EvoCraft.getPlugin().getDataFolder(), targetPath + File.separator + "assets/minecraft/models/item/" + material + ".json");
+                file.createNewFile();
+                FileWriter fileWriter = new FileWriter(file);
                 fileWriter.write(gson.toJson(rootObject));
                 fileWriter.close();
             } catch (IOException e) {
@@ -399,7 +402,12 @@ public class PackGenerator {
         }
     }
     private static void pack(String sourceDirPath, String zipFilePath) throws IOException {
-        Path p = Files.createFile(Paths.get(zipFilePath));
+        Path p = Paths.get(zipFilePath);
+        if (Files.exists(p)) {
+            Files.delete(p);
+        }
+
+        Files.createFile(p);
         try (ZipOutputStream zs = new ZipOutputStream(Files.newOutputStream(p))) {
             Path pp = Paths.get(sourceDirPath);
             Files.walk(pp)
@@ -411,7 +419,7 @@ public class PackGenerator {
                       Files.copy(path, zs);
                       zs.closeEntry();
                   } catch (IOException e) {
-                      System.err.println(e);
+                      e.printStackTrace();
                   }
               });
         }

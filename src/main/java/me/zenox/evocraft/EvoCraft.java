@@ -103,7 +103,7 @@ public final class EvoCraft extends JavaPlugin {
 
         registerListeners();
 
-        new PackGenerator("resource_pack - NO MEG");
+        new PackGenerator("pack");
 
     }
 
