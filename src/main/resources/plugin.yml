@@ -9,7 +9,7 @@ depend: [ AureliumSkills, ProtocolLib, ModelEngine, Vault ]
 
 commands:
   evocraft:
-    aliases: [ ec ]
+    aliases: [ evc, ec, evo ]
     description: Base command for EvoCraft
     usage: /evocraft
     permission: evocraft.admin
