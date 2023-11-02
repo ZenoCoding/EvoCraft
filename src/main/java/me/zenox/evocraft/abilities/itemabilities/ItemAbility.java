@@ -1,4 +1,4 @@
-package me.zenox.evocraft.abilities;
+package me.zenox.evocraft.abilities.itemabilities;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
 import com.comphenix.protocol.PacketType;
@@ -15,6 +15,9 @@ import com.ticxo.modelengine.api.model.ModeledEntity;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.abilities.AbilitySettings;
+import me.zenox.evocraft.abilities.EventAbility;
+import me.zenox.evocraft.abilities.itemabilities.specific.EmberAttune;
 import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
 import me.zenox.evocraft.item.ItemRegistry;
@@ -44,7 +47,7 @@ import java.util.*;
 import static me.zenox.evocraft.item.ItemRegistry.TOTEM_POLE;
 import static me.zenox.evocraft.util.Util.getNearbyBlocks;
 
-public class ItemAbility extends Ability<PlayerInteractEvent> {
+public class ItemAbility extends EventAbility<PlayerInteractEvent> {
     private static final int SHARD_SPEED = 3;
     private static final int SHARD_RADIUS = 3;
     private final AbilityAction action;
@@ -81,12 +84,12 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
     }
 
     @Override
-    Player getPlayerOfEvent(PlayerInteractEvent e) {
+    protected Player getPlayerOfEvent(PlayerInteractEvent e) {
         return e.getPlayer();
     }
 
     @Override
-    List<ItemStack> getItem(Player p, PlayerInteractEvent e) {
+    protected List<ItemStack> getItem(Player p, PlayerInteractEvent e) {
         return Arrays.stream(new ItemStack[]{e.getItem()}).filter(Objects::nonNull).toList();
     }
 

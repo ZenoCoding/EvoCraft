@@ -4,7 +4,7 @@ import com.archyx.aureliumskills.stats.Stat;
 import com.google.common.primitives.Ints;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.abilities.Ability;
-import me.zenox.evocraft.abilities.ItemAbility;
+import me.zenox.evocraft.abilities.itemabilities.ItemAbility;
 import me.zenox.evocraft.attribute.AttributeModifier;
 import me.zenox.evocraft.data.TranslatableList;
 import me.zenox.evocraft.data.TranslatableText;
@@ -44,14 +44,14 @@ public class ComplexItem {
     private final Material material;
     private final ItemMeta meta;
     private final Map<Stat, Double> stats;
-    private final List<Ability> abilities;
+    private final List<Ability<?>> abilities;
     private final HashMap<VariableType, Serializable> variableMap = new HashMap<>();
     private final List<AttributeModifier> attributeModifiers;
 
     private String skullURL;
 
 
-    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap, List<AttributeModifier> attributeModifiers) {
+    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability<?>> abilities, HashMap<VariableType, Serializable> variableMap, List<AttributeModifier> attributeModifiers) {
         this.id = id;
         this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + id);
         this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
@@ -73,11 +73,11 @@ public class ComplexItem {
         register();
     }
 
-    public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
+    public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability<?>> abilities) {
         this(id, unique, false, rarity, type, material, stats, abilities, new HashMap<>(), new ArrayList<>());
     }
 
-    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability> abilities) {
+    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability<?>> abilities) {
         this(id, false, rarity, type, material, stats, abilities);
     }
 
@@ -144,7 +144,7 @@ public class ComplexItem {
     }
 
     protected void writeAbilityLore(List<String> lore) {
-        for (Ability ability : this.abilities) {
+        for (Ability<?> ability : this.abilities) {
             lore.add("");
             lore.add(ChatColor.GOLD + "Ability: " + ability.getDisplayName() + ChatColor.YELLOW + ChatColor.BOLD + " " + (ability instanceof ItemAbility ? ((ItemAbility) ability).getAction().getName() : ""));
             lore.addAll(ability.getLore());
@@ -217,7 +217,7 @@ public class ComplexItem {
         this.skullURL = URL;
     }
 
-    public List<Ability> getAbilities() {
+    public List<Ability<?>> getAbilities() {
         return this.abilities;
     }
 

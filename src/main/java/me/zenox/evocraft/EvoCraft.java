@@ -98,6 +98,7 @@ public final class EvoCraft extends JavaPlugin {
         ItemRegistry.registerItems();
         RecipeRegistry.registerRecipes();
         EnchantRegistry.registerEnchants();
+        TreeRegistry.registerNodes();
 
         new Command(plugin);
 

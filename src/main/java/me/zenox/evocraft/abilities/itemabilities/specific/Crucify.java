@@ -1,6 +1,7 @@
-package me.zenox.evocraft.abilities;
+package me.zenox.evocraft.abilities.itemabilities.specific;
 
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.abilities.itemabilities.ItemAbility;
 import me.zenox.evocraft.item.ComplexItem;
 import org.bukkit.*;
 import org.bukkit.entity.Damageable;

@@ -2,6 +2,10 @@ package me.zenox.evocraft.item;
 
 import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.evocraft.abilities.*;
+import me.zenox.evocraft.abilities.itemabilities.specific.Crucify;
+import me.zenox.evocraft.abilities.itemabilities.specific.EmberAttune;
+import me.zenox.evocraft.abilities.itemabilities.specific.Psychic;
+import me.zenox.evocraft.abilities.itemabilities.specific.Transcendence;
 import me.zenox.evocraft.attribute.AttributeRegistry;
 import me.zenox.evocraft.gui.EnchantingGUI;
 import me.zenox.evocraft.item.basicitems.CorruptPearl;

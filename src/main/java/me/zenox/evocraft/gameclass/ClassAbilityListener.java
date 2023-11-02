@@ -56,6 +56,8 @@ public class ClassAbilityListener implements Listener {
         Action action = event.getAction();
 
         // filter by player's class
+        if (event.getItem() == null) return;
+
         if (GameClass.getClass(player) == null) return;
         if (!GameClass.getClass(player).items().contains(ComplexItem.of(event.getItem()).getType())) return;
 

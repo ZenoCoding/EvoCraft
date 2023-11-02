@@ -5,8 +5,8 @@ import com.archyx.aureliumskills.modifier.StatModifier;
 import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.abilities.Ability;
-import me.zenox.evocraft.abilities.FullSetArmorAbility;
-import me.zenox.evocraft.abilities.ItemAbility;
+import me.zenox.evocraft.abilities.itemabilities.FullSetArmorAbility;
+import me.zenox.evocraft.abilities.itemabilities.ItemAbility;
 import me.zenox.evocraft.attribute.AttributeModifier;
 import me.zenox.evocraft.attribute.types.AureliumAttribute;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
@@ -249,7 +249,7 @@ public class ComplexItemMeta {
     }
 
     private void writeAbilityLore(LoreBuilder loreBuilder) {
-        for (Ability ability : complexItemStack.getComplexItem().getAbilities()) {
+        for (Ability<?> ability : complexItemStack.getComplexItem().getAbilities()) {
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GOLD + (ability.isPassive() ? "Passive " : "") + (ability instanceof FullSetArmorAbility ? "Full Set " : "") + "Ability: " + ability.getDisplayName() + ChatColor.YELLOW + ChatColor.BOLD + " " + (ability instanceof ItemAbility ? ((ItemAbility) ability).getAction().getName() : ""));
             lore.addAll(ability.getLore());

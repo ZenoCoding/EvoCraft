@@ -22,16 +22,16 @@ import java.util.List;
 public enum GameClass {
     MAGE("mage", ChatColor.BLUE,
             List.of(ComplexItem.Type.STAFF, ComplexItem.Type.WAND), Material.BLAZE_ROD,
-            new SkillTree()),
+            TreeRegistry.MAGE_TELEPORT_TREE),
     WARRIOR("warrior", ChatColor.RED,
             List.of(ComplexItem.Type.SWORD), Material.IRON_SWORD,
-            new SkillTree()),
+            new AbilityTree()),
     TANK("tank", ChatColor.GREEN,
             List.of(ComplexItem.Type.AXE), Material.IRON_AXE,
-            new SkillTree()),
+            new AbilityTree()),
     ARCHER("archer", ChatColor.YELLOW,
             List.of(ComplexItem.Type.BOW), Material.BOW,
-            new SkillTree());
+            new AbilityTree());
 
     private static final NamespacedKey KEY = new NamespacedKey(EvoCraft.getPlugin(), "class");
     private final String id;
@@ -40,9 +40,9 @@ public enum GameClass {
     private final String description;
     private final List<ComplexItem.Type> items;
     private final Material icon;
-    private final SkillTree tree;
+    private final AbilityTree tree;
 
-    GameClass(String id, ChatColor color, List<ComplexItem.Type> items, Material icon, SkillTree tree) {
+    GameClass(String id, ChatColor color, List<ComplexItem.Type> items, Material icon, AbilityTree tree) {
         this.id = id;
         this.name = new TranslatableText(TranslatableText.Type.CLASS_NAME + "-" + id).toString();
         this.color = color;
@@ -105,7 +105,7 @@ public enum GameClass {
         return icon;
     }
 
-    public SkillTree tree() {
+    public AbilityTree tree() {
         return tree;
     }
 }

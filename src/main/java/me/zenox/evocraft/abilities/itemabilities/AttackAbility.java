@@ -1,7 +1,9 @@
-package me.zenox.evocraft.abilities;
+package me.zenox.evocraft.abilities.itemabilities;
 
 import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.abilities.AbilitySettings;
+import me.zenox.evocraft.abilities.EventAbility;
 import me.zenox.evocraft.util.Geo;
 import me.zenox.evocraft.util.TriConsumer;
 import me.zenox.evocraft.util.Util;
@@ -20,7 +22,7 @@ import org.bukkit.util.Vector;
 import java.util.List;
 import java.util.Random;
 
-public class AttackAbility extends Ability<EntityDamageByEntityEvent> {
+public class AttackAbility extends EventAbility<EntityDamageByEntityEvent> {
 
 
     public AttackAbility(AbilitySettings settings) {
@@ -41,12 +43,12 @@ public class AttackAbility extends Ability<EntityDamageByEntityEvent> {
     }
 
     @Override
-    Player getPlayerOfEvent(EntityDamageByEntityEvent e) {
+    protected Player getPlayerOfEvent(EntityDamageByEntityEvent e) {
         return ((Player) e.getDamager());
     }
 
     @Override
-    List<ItemStack> getItem(Player p, EntityDamageByEntityEvent e) {
+    protected List<ItemStack> getItem(Player p, EntityDamageByEntityEvent e) {
         return this.getSlot().item(p);
     }
 

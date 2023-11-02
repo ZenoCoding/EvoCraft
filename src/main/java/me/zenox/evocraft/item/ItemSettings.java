@@ -28,7 +28,7 @@ public class ItemSettings {
     private ItemMeta meta;
     private Map<Stat, Double> stats;
     private String skullURL;
-    private List<Ability> abilities;
+    private List<Ability<?>> abilities;
     private HashMap<VariableType, Serializable> variableMap;
     private List<me.zenox.evocraft.attribute.AttributeModifier> attributeModifiers;
 
@@ -47,7 +47,7 @@ public class ItemSettings {
         this.attributeModifiers = new ArrayList<>();
     }
 
-    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap, List<me.zenox.evocraft.attribute.AttributeModifier> attributeModifiers) {
+    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability<?>> abilities, HashMap<VariableType, Serializable> variableMap, List<me.zenox.evocraft.attribute.AttributeModifier> attributeModifiers) {
         this.id = id;
         this.unique = unique;
         this.glow = glow;
@@ -62,7 +62,7 @@ public class ItemSettings {
         this.attributeModifiers = attributeModifiers;
     }
 
-    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities){
+    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability<?>> abilities){
         this(id, unique, glow, rarity, type, material, meta, stats, skullURL, abilities, new HashMap<>(), new ArrayList<>());
     }
 
@@ -113,7 +113,7 @@ public class ItemSettings {
         return skullURL;
     }
 
-    public List<Ability> getAbilities() {
+    public List<Ability<?>> getAbilities() {
         return abilities;
     }
 
@@ -206,22 +206,22 @@ public class ItemSettings {
         return this;
     }
 
-    public ItemSettings abilities(List<Ability> abilities) {
+    public ItemSettings abilities(List<Ability<?>> abilities) {
         this.abilities = abilities;
         return this;
     }
 
-    public ItemSettings abilities(Ability... abilities) {
+    public ItemSettings abilities(Ability<?>... abilities) {
         this.abilities = List.of(abilities);
         return this;
     }
 
-    public ItemSettings addAbilities(Ability... abilities) {
+    public ItemSettings addAbilities(Ability<?>... abilities) {
         this.abilities.addAll(List.of(abilities));
         return this;
     }
 
-    public ItemSettings ability(Ability ability) {
+    public ItemSettings ability(Ability<?> ability) {
         this.abilities.add(ability);
         return this;
     }

@@ -36,7 +36,7 @@ public class ComplexItemStack {
     private ItemStack item;
     private ComplexItemMeta complexMeta;
 
-    private String skullURL;
+    private final String skullURL;
 
     public ComplexItemStack(ComplexItem complexItem, int amount) {
         this(complexItem, new ItemStack(complexItem.getMaterial()));
@@ -174,7 +174,7 @@ public class ComplexItemStack {
         return this.complexItem.getKey();
     }
 
-    public List<Ability> getAbilities() {
+    public List<Ability<?>> getAbilities() {
         return this.complexItem.getAbilities();
     }
 

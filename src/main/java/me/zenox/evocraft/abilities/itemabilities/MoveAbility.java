@@ -1,7 +1,9 @@
-package me.zenox.evocraft.abilities;
+package me.zenox.evocraft.abilities.itemabilities;
 
 import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.abilities.AbilitySettings;
+import me.zenox.evocraft.abilities.EventAbility;
 import me.zenox.evocraft.util.TriConsumer;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,7 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
 import java.util.Random;
 
-public class MoveAbility extends Ability<PlayerMoveEvent> {
+public class MoveAbility extends EventAbility<PlayerMoveEvent> {
 
     public MoveAbility(AbilitySettings settings) {
         super(settings);
@@ -34,12 +36,12 @@ public class MoveAbility extends Ability<PlayerMoveEvent> {
     }
 
     @Override
-    Player getPlayerOfEvent(PlayerMoveEvent e) {
+    protected Player getPlayerOfEvent(PlayerMoveEvent e) {
         return ((PlayerMoveEvent) e).getPlayer();
     }
 
     @Override
-    List<ItemStack> getItem(Player p, PlayerMoveEvent e) {
+    protected List<ItemStack> getItem(Player p, PlayerMoveEvent e) {
         return this.getSlot().item(p);
     }
 
