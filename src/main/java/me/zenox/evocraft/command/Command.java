@@ -3,8 +3,11 @@ package me.zenox.evocraft.command;
 import com.google.common.primitives.Ints;
 import de.studiocode.invui.window.impl.single.SimpleWindow;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.data.PlayerData;
+import me.zenox.evocraft.data.PlayerDataManager;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
 import me.zenox.evocraft.gameclass.GameClass;
+import me.zenox.evocraft.gameclass.tree.Path;
 import me.zenox.evocraft.item.ComplexItem;
 import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
@@ -228,6 +231,21 @@ public class Command implements CommandExecutor, TabCompleter {
             }
             case "class" -> // Open the class selection GUI
                     new SimpleWindow(((Player) sender), "Class Selection", GameClass.getGui(), true, true).show();
+            case "progresspath" -> {
+                if (args.length < 2) {
+                    Util.sendMessage(sender, "Please specify a valid path.");
+                    return true;
+                }
+                Player player = ((Player) sender);
+                PlayerData data = PlayerDataManager.getInstance().getPlayerData(player.getUniqueId());
+                Path path = data.getPlayerClass().tree().path(args[1]);
+                if (path == null) {
+                    Util.sendMessage(sender, "This path does not exist!");
+                    return true;
+                }
+                data.progressAbility(path);
+                return true;
+            }
             default -> Util.sendMessage(sender, "EvoCraft Help Page.");
         }
         return true;
@@ -249,6 +267,7 @@ public class Command implements CommandExecutor, TabCompleter {
             arguments.add("removemetadata");
             arguments.add("setchapter");
             arguments.add("class");
+            arguments.add("progresspath");
         }
 
         if (items.isEmpty()) {
@@ -263,6 +282,13 @@ public class Command implements CommandExecutor, TabCompleter {
                 }
             }
             return results;
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("progresspath")){
+            GameClass gameClass = PlayerDataManager.getInstance().getPlayerData(((Player) sender).getUniqueId()).getPlayerClass();
+            for (Path path: gameClass.tree().paths()){
+                if (path.getId().toLowerCase().startsWith(args[1].toLowerCase())){
+                    results.add(path.getId());
+                }
+            }
         } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
             for (String b : items) {
                 if (b.toLowerCase().startsWith(args[2].toLowerCase())) {

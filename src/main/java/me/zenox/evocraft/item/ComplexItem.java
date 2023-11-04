@@ -70,7 +70,7 @@ public class ComplexItem {
         this.abilities = abilities;
         this.variableMap.putAll(variableMap);
 
-        register();
+        register(false);
     }
 
     public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability<?>> abilities) {
@@ -89,7 +89,7 @@ public class ComplexItem {
         this(id, false, rarity, type, material, Map.of(), List.of());
     }
 
-    public ComplexItem(ItemSettings settings) {
+    public ComplexItem(ItemSettings settings, boolean override) {
         this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + settings.getId());
         this.id = settings.getId();
         this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
@@ -108,7 +108,11 @@ public class ComplexItem {
         this.variableMap.putAll(settings.getVariableMap());
         this.attributeModifiers = settings.getAttributeModifiers();
 
-        register();
+        register(override);
+    }
+
+    public ComplexItem(ItemSettings settings) {
+        this(settings, false);
     }
 
     /**
@@ -121,11 +125,11 @@ public class ComplexItem {
         PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
         if (container.has(GLOBAL_ID, PersistentDataType.STRING))
             return itemRegistry.get(container.get(GLOBAL_ID, PersistentDataType.STRING));
-        else return ComplexItemStack.of(item).getComplexItem();
+        else return VanillaItem.of(item.getType());
     }
 
-    private void register(){
-        if (itemRegistry.containsKey(id)) {
+    private void register(boolean override){
+        if (itemRegistry.containsKey(id) && !override) {
             Util.logToConsole("Duplicate ComplexItem ID: " + id + " | Exact Match: " + itemRegistry.get(id).equals(this));
             throw new IllegalArgumentException("ComplexItem ID cannot be duplicate");
         }

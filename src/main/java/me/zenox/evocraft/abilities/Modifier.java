@@ -5,7 +5,6 @@ import me.zenox.evocraft.data.TranslatableText;
 import me.zenox.evocraft.util.TriConsumer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 public abstract class Modifier {
 
@@ -38,7 +37,7 @@ public abstract class Modifier {
         },
         EXECUTABLE {
             @Override
-            Modifier create(String id, TriConsumer<PlayerInteractEvent, Player, ItemStack> executable) {
+            Modifier create(String id, TriConsumer<PlayerInteractEvent, Player, ClassAbility> executable) {
                 return new Modifier(id) {
                     @Override
                     void modify(ClassAbility ability) {
@@ -74,7 +73,7 @@ public abstract class Modifier {
             throw new UnsupportedOperationException("This operation is not supported for type: " + this);
         }
 
-        Modifier create(String id, TriConsumer<PlayerInteractEvent, Player, ItemStack> executable) {
+        Modifier create(String id, TriConsumer<PlayerInteractEvent, Player, ClassAbility> executable) {
             throw new UnsupportedOperationException("This operation is not supported for type: " + this);
         }
     }
@@ -89,7 +88,7 @@ public abstract class Modifier {
         return type.create(id, value);
     }
 
-    public static Modifier of(Type type, String id, TriConsumer<PlayerInteractEvent, Player, ItemStack> executable) {
+    public static Modifier of(Type type, String id, TriConsumer<PlayerInteractEvent, Player, ClassAbility> executable) {
         return type.create(id, executable);
     }
 

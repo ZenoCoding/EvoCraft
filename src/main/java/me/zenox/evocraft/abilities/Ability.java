@@ -4,7 +4,6 @@ import com.archyx.aureliumskills.api.AureliumAPI;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.data.TranslatableList;
 import me.zenox.evocraft.data.TranslatableText;
-import me.zenox.evocraft.util.TriConsumer;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -20,7 +19,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.zenox.evocraft.abilities.ClassAbility.*;
+import static me.zenox.evocraft.abilities.ClassAbility.SaveState;
 
 public abstract class Ability<T extends Event> {
     public static final List<Ability<?>> registeredAbilities = new ArrayList<>();
@@ -33,8 +32,6 @@ public abstract class Ability<T extends Event> {
     private double cooldown;
     private final boolean isPassive;
     private TranslatableList lore;
-    @SaveState
-    protected TriConsumer<T, Player, ItemStack> executable;
 
     public Ability(String id, int manaCost, double cooldown, boolean isPassive) {
         this.name = new TranslatableText(TranslatableText.Type.ABILITY_NAME + "-" + id);
@@ -43,16 +40,6 @@ public abstract class Ability<T extends Event> {
         this.cooldown = cooldown;
         this.lore = new TranslatableList(TranslatableText.Type.ABILITY_LORE + "-" + id);
         this.isPassive = isPassive;
-    }
-
-    public Ability(String id, int manaCost, double cooldown, boolean isPassive, TriConsumer<T, Player, ItemStack> executable) {
-        this.name = new TranslatableText(TranslatableText.Type.ABILITY_NAME + "-" + id);
-        this.id = id;
-        this.manaCost = manaCost;
-        this.cooldown = cooldown;
-        this.lore = new TranslatableList(TranslatableText.Type.ABILITY_LORE + "-" + id);
-        this.isPassive = isPassive;
-        this.executable = executable;
     }
 
     /**
@@ -166,10 +153,6 @@ public abstract class Ability<T extends Event> {
         return isPassive;
     }
 
-    public TriConsumer<T, Player, ItemStack> getExecutable() {
-        return this.executable;
-    }
-
     public void setManaCost(int manaCost) {
         this.manaCost = manaCost;
     }
@@ -178,7 +161,4 @@ public abstract class Ability<T extends Event> {
         this.cooldown = cooldown;
     }
 
-    public void setExecutable(TriConsumer<T, Player, ItemStack> executable) {
-        this.executable = executable;
-    }
 }

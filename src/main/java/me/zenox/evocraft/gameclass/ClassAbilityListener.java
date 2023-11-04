@@ -1,6 +1,9 @@
 package me.zenox.evocraft.gameclass;
 
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.abilities.ClassAbility;
+import me.zenox.evocraft.data.PlayerData;
+import me.zenox.evocraft.data.PlayerDataManager;
 import me.zenox.evocraft.item.ComplexItem;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.Sound;
@@ -71,6 +74,16 @@ public class ClassAbilityListener implements Listener {
                 Character firstAction = actionMap.get(player);
                 Util.sendActionBar(event.getPlayer(), "&bSHIFT&7-&b%s&7-&b%s&r".formatted(firstAction, action.toString().charAt(0)));
                 Util.sendTitle(player, "", "&7Class Ability: &b&l%s&f-&b&l%s&r".formatted(firstAction, action.toString().charAt(0)), 10, 20, 5);
+
+                PlayerData data = PlayerDataManager.getInstance().getPlayerData(player.getUniqueId());
+                ClickCombination cc = ClickCombination.getFromChars(firstAction, action.toString().charAt(0));
+
+                if (cc == null) throw new IllegalStateException("ClickCombination for ability casting is null");
+
+                GameClass gameClass = data.getPlayerClass();
+                ClassAbility ability = gameClass.tree().getAbility(cc);
+                ability.useAbility(event);
+
                 actionMap.remove(player); // Clear the action after processing the combo
             } else {
                 // First Action

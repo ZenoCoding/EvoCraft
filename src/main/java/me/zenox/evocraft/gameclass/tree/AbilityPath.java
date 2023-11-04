@@ -21,6 +21,6 @@ public class AbilityPath extends Path {
 
     @Override
     public void apply(PlayerData playerData) {
-
+        // Nothing, this is just a linear progression with no side effects
     }
 }

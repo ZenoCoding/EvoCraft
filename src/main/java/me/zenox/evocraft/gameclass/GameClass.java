@@ -4,6 +4,8 @@ import de.studiocode.invui.gui.GUI;
 import de.studiocode.invui.gui.builder.GUIBuilder;
 import de.studiocode.invui.gui.builder.guitype.GUIType;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.abilities.AbilityRegistry;
+import me.zenox.evocraft.data.PlayerDataManager;
 import me.zenox.evocraft.data.TranslatableText;
 import me.zenox.evocraft.gameclass.tree.AbilityTree;
 import me.zenox.evocraft.gui.item.ClassItem;
@@ -13,7 +15,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
@@ -23,16 +24,20 @@ import java.util.List;
 public enum GameClass {
     MAGE("mage", ChatColor.BLUE,
             List.of(ComplexItem.Type.STAFF, ComplexItem.Type.WAND), Material.BLAZE_ROD,
-            new AbilityTree()),
+            new AbilityTree(AbilityRegistry.TELEPORT, null, null, null)),
     WARRIOR("warrior", ChatColor.RED,
             List.of(ComplexItem.Type.SWORD), Material.IRON_SWORD,
-            new AbilityTree()),
+            null),
     TANK("tank", ChatColor.GREEN,
             List.of(ComplexItem.Type.AXE), Material.IRON_AXE,
-            new AbilityTree()),
+            null),
     ARCHER("archer", ChatColor.YELLOW,
             List.of(ComplexItem.Type.BOW), Material.BOW,
-            new AbilityTree());
+            null),
+
+    NONE("none", ChatColor.WHITE,
+            List.of(), Material.BARRIER,
+            null);
 
     private static final NamespacedKey KEY = new NamespacedKey(EvoCraft.getPlugin(), "class");
     private final String id;
@@ -54,11 +59,11 @@ public enum GameClass {
     }
 
     public static void setClass(Player player, GameClass gameClass) {
-        player.getPersistentDataContainer().set(GameClass.KEY, PersistentDataType.STRING, gameClass.id());
+        PlayerDataManager.getInstance().getPlayerData(player.getUniqueId()).setPlayerClass(gameClass);
     }
 
     public static GameClass getClass(Player player) {
-        return GameClass.getFromID(player.getPersistentDataContainer().get(GameClass.KEY, PersistentDataType.STRING));
+        return PlayerDataManager.getInstance().getPlayerData(player.getUniqueId()).getPlayerClass();
     }
 
     public static GameClass getFromID(String id) {

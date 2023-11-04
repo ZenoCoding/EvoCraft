@@ -20,6 +20,9 @@ public class AbilitySettings {
 
     // Ability-Specific Settings
     private ItemAbility.AbilityAction abilityAction;
+    private int strength;
+    private int charges;
+    private int range;
 
     public AbilitySettings() {
         this.id = "default" + UUID.randomUUID();
@@ -29,6 +32,9 @@ public class AbilitySettings {
         this.isPassive = false;
         this.abilityAction = ItemAbility.AbilityAction.NONE;
         this.modifiers = new ArrayList<>();
+        this.strength = 0;
+        this.charges = 0;
+        this.range = 0;
     }
 
     public String getId() {
@@ -96,6 +102,33 @@ public class AbilitySettings {
 
     public AbilitySettings modifier(Modifier modifier) {
         this.modifiers.add(modifier);
+        return this;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public AbilitySettings strength(int strength) {
+        this.strength = strength;
+        return this;
+    }
+
+    public int getCharges() {
+        return charges;
+    }
+
+    public AbilitySettings charges(int charges) {
+        this.charges = charges;
+        return this;
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public AbilitySettings range(int range) {
+        this.range = range;
         return this;
     }
 }

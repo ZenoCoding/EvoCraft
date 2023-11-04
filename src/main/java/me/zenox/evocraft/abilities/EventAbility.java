@@ -17,6 +17,8 @@ public abstract class EventAbility<T extends Event> extends Ability<T> {
 
     private final Class<? extends Event> eventType;
     private final Slot slot;
+    @ClassAbility.SaveState
+    protected TriConsumer<T, Player, ItemStack> executable;
 
     protected EventAbility(String id, int manaCost, double cooldown, Slot slot) {
         this(id, manaCost, cooldown, slot, false);
@@ -118,4 +120,11 @@ public abstract class EventAbility<T extends Event> extends Ability<T> {
         return eventType;
     }
 
+    public TriConsumer<T, Player, ItemStack> getExecutable() {
+        return this.executable;
+    }
+
+    public void setExecutable(TriConsumer<T, Player, ItemStack> executable) {
+        this.executable = executable;
+    }
 }

@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,7 +23,12 @@ public class PlayerDataManager {
 
     private final Map<UUID, PlayerData> loadedPlayerData = new ConcurrentHashMap<>();
 
+    private static PlayerDataManager instance;
+
     public PlayerDataManager() {
+        if (instance != null) throw new IllegalStateException("PlayerDataManager already initialized");
+        instance = this;
+
         playerDataFile = new File(EvoCraft.getPlugin().getDataFolder(), "playerdata.yml");
         if (!playerDataFile.exists()) {
             try {
@@ -44,8 +48,27 @@ public class PlayerDataManager {
         Bukkit.getScheduler().runTaskTimer(EvoCraft.getPlugin(), this::saveAllPlayerData, delay, delay);
     }
 
+    private PlayerData createPlayerData(UUID uuid) {
+        PlayerData newPlayerData = new PlayerData(uuid, GameClass.NONE, new HashMap<>());
+        if (newPlayerData.getPlayerClass().tree() != null)
+            newPlayerData.getPlayerClass().tree().paths().forEach(path -> newPlayerData.setPathLevel(path, -1));
+
+        savePlayerDataImmediately(newPlayerData);
+        loadedPlayerData.put(uuid, newPlayerData);
+
+        return newPlayerData;
+    }
+
     public PlayerData getPlayerData(UUID uuid) {
-        return loadedPlayerData.computeIfAbsent(uuid, this::loadPlayerData);
+        PlayerData data = loadedPlayerData.get(uuid);
+        if(data == null) {
+            data = loadPlayerData(uuid);
+            if(data == null) {
+                data = createPlayerData(uuid);
+            }
+            loadedPlayerData.put(uuid, data);
+        }
+        return data;
     }
 
     public void saveAllPlayerData() {
@@ -77,7 +100,9 @@ public class PlayerDataManager {
     public PlayerData loadPlayerData(@NotNull UUID uuid) {
         // Deserialize from YAML to PlayerData
         // You will need to implement deserialization for your complex types
-        return deserializePlayerData(Objects.requireNonNull(playerDataConfig.getConfigurationSection(uuid.toString())));
+        ConfigurationSection section = playerDataConfig.getConfigurationSection(uuid.toString());
+        if (section == null) return null;
+        return deserializePlayerData(section);
     }
 
     private @NotNull @Unmodifiable Map<?, ?> serializePlayerData(@NotNull PlayerData playerData) {
@@ -108,6 +133,9 @@ public class PlayerDataManager {
             pathMap.put(Path.getFromID(key), paths.getInt(key));
         }
         return pathMap;
+    }
 
+    public static PlayerDataManager getInstance() {
+        return instance;
     }
 }

@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -83,8 +84,8 @@ public class VanillaItem extends ComplexItem {
      * Vanilla item constructor to override the default settings of a vanilla item.
      * @param settings The settings to override.
      */
-    public VanillaItem(ItemSettings settings) {
-        super(settings.id(settings.getMaterial().getKey().getKey()));
+    public VanillaItem(@NotNull ItemSettings settings) {
+        super(settings.id(settings.getMaterial().getKey().getKey()), true);
         if (!settings.getMaterial().isItem()) throw new IllegalArgumentException("Material must have an item form");
         for (VanillaItem item : new ArrayList<>(vanillaItemList)) {
             // remove the old item

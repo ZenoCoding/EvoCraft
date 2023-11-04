@@ -38,13 +38,13 @@ public class PlayerData {
         this.playerClass = playerClass;
     }
 
-    public HashMap<Path, Integer> getPathLevelMap() {
+    public Map<Path, Integer> getPathLevelMap() {
         return pathLevelMap;
     }
 
     // Method to get ability level
     public int getPathLevel(Path path) {
-        return pathLevelMap.getOrDefault(path, 0);
+        return pathLevelMap.getOrDefault(path, -1);
     }
 
     // Method to set ability level
