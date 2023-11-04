@@ -5,6 +5,7 @@ import de.studiocode.invui.gui.builder.GUIBuilder;
 import de.studiocode.invui.gui.builder.guitype.GUIType;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.data.TranslatableText;
+import me.zenox.evocraft.gameclass.tree.AbilityTree;
 import me.zenox.evocraft.gui.item.ClassItem;
 import me.zenox.evocraft.gui.item.CloseItem;
 import me.zenox.evocraft.item.ComplexItem;
@@ -22,7 +23,7 @@ import java.util.List;
 public enum GameClass {
     MAGE("mage", ChatColor.BLUE,
             List.of(ComplexItem.Type.STAFF, ComplexItem.Type.WAND), Material.BLAZE_ROD,
-            TreeRegistry.MAGE_TELEPORT_TREE),
+            new AbilityTree()),
     WARRIOR("warrior", ChatColor.RED,
             List.of(ComplexItem.Type.SWORD), Material.IRON_SWORD,
             new AbilityTree()),
@@ -60,7 +61,7 @@ public enum GameClass {
         return GameClass.getFromID(player.getPersistentDataContainer().get(GameClass.KEY, PersistentDataType.STRING));
     }
 
-    private static GameClass getFromID(String id) {
+    public static GameClass getFromID(String id) {
         return switch (id) {
             case "mage" -> GameClass.MAGE;
             case "warrior" -> GameClass.WARRIOR;
@@ -85,7 +86,7 @@ public enum GameClass {
                 .build();
     }
 
-    private String id() {
+    public String id() {
         return id;
     }
 

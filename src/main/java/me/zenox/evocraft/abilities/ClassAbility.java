@@ -4,6 +4,7 @@ import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.util.Geo;
 import me.zenox.evocraft.util.TriConsumer;
 import org.bukkit.Particle;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -193,11 +194,25 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
                     cancel();
                     return;
                 }
-                player.getWorld().spawnParticle(Particle.REDSTONE, tracedPath.get(a).toLocation(player.getWorld()), 5, 0, 1.8, 0, 0, new Particle.DustOptions(org.bukkit.Color.fromRGB(0, 123, 255), 3));
+                player.getWorld().getNearbyEntities(tracedPath.get(a).toLocation(player.getWorld()), 1, 1, 1).forEach(entity -> {
+                    if (entity instanceof Damageable) {
+                        ((Damageable) entity).damage(5);
+                    }
+                });
+                player.getWorld().spawnParticle(Particle.REDSTONE, tracedPath.get(a).toLocation(player.getWorld()), 5, 0, 1.8, 0, 0, new Particle.DustOptions(org.bukkit.Color.fromRGB(0, 12, 89), 3));
                 a++;
             }
         }.runTaskTimer(EvoCraft.getPlugin(), 0, 1);
 
+    }
+
+    public static void surgeTeleport(PlayerInteractEvent event, Player player, ItemStack item) {
+        darkTeleport(event, player, item);
+    }
+
+    public static void arcaneTeleport(PlayerInteractEvent event, Player player, ItemStack item) {
+        
+        darkTeleport(event, player, item);
     }
 
     @Retention(RetentionPolicy.RUNTIME)

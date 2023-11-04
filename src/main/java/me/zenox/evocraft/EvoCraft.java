@@ -14,6 +14,7 @@ import me.zenox.evocraft.attribute.AttributeRegistry;
 import me.zenox.evocraft.command.Command;
 import me.zenox.evocraft.data.ConfigLoader;
 import me.zenox.evocraft.data.LanguageLoader;
+import me.zenox.evocraft.data.PlayerDataManager;
 import me.zenox.evocraft.enchant.EnchantRegistry;
 import me.zenox.evocraft.events.*;
 import me.zenox.evocraft.gameclass.ClassAbilityListener;
@@ -43,6 +44,7 @@ public final class EvoCraft extends JavaPlugin {
     private static ProtocolManager protocolManager;
     private static ChapterManager chapterManager;
     private static ActionBar actionBar;
+    private static PlayerDataManager playerDataManager;
 
     public static EvoCraft getPlugin() {
         return plugin;
@@ -79,6 +81,7 @@ public final class EvoCraft extends JavaPlugin {
             return;
         }
 
+        playerDataManager = new PlayerDataManager();
         modifiers = new Modifiers(AureliumAPI.getPlugin());
         actionBar = AureliumAPI.getPlugin().getActionBar();
 
@@ -98,7 +101,6 @@ public final class EvoCraft extends JavaPlugin {
         ItemRegistry.registerItems();
         RecipeRegistry.registerRecipes();
         EnchantRegistry.registerEnchants();
-        TreeRegistry.registerNodes();
 
         new Command(plugin);
 
@@ -179,6 +181,6 @@ public final class EvoCraft extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        playerDataManager.shutdown();
     }
 }
