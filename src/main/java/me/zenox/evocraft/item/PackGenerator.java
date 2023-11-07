@@ -3,9 +3,16 @@ package me.zenox.evocraft.item;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.ticxo.modelengine.api.ModelEngineAPI;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.util.Util;
+import org.apache.commons.lang3.NotImplementedException;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -34,15 +41,22 @@ import java.util.zip.ZipOutputStream;
  * <p>
  * Embedded in the JAR is a default set of PNG files that will be copied to the data folder if it doesn't exist, as well as a template
  */
-public class PackGenerator {
+public class PackGenerator implements Listener {
     private final String targetPath;
+    private String url;
+    private byte[] hash;
+    private final File resourcePack;
 
     public PackGenerator(String targetPath) {
         this.targetPath = targetPath;
-        createPack();
+        this.resourcePack = createPack();
+        this.url = EvoCraft.getPlugin().getConfig().getString("resource-pack-url");
+        this.hash = generateHash(resourcePack);
+
+        Bukkit.getPluginManager().registerEvents(this, EvoCraft.getPlugin());
     }
 
-    public void createPack() {
+    public File createPack() {
         // Location of the png files for items, this is where devs/users will add them
         File pngDirectory = new File(EvoCraft.getPlugin().getDataFolder(), "assets/textures/items");
         HashMap<ComplexItem, File> map = readPngs(pngDirectory);
@@ -55,6 +69,10 @@ public class PackGenerator {
         // Now we need to copy the PNG files into the resource pack
         copyPNGToPack(map);
 
+        // Clone modelEngine files
+        File modelEngine = new File(ModelEngineAPI.api.getDataFolder(), "resource pack");
+        copyModelEngineFiles(modelEngine, resourcePack);
+
         // Afterward, we need to compile the ComplexItem JSON files and add them to the resource pack
         compileComplexItemJSON(new ArrayList<>(map.keySet()));
 
@@ -64,6 +82,7 @@ public class PackGenerator {
         // Finally, we need to zip the resource pack folder and save it as a .zip file
         zipResourcePack(resourcePack);
 
+        return resourcePack;
     }
 
 
@@ -210,6 +229,30 @@ public class PackGenerator {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Copies the ModelEngine files to the resource pack folder
+     *
+     * Copies ALL contents of:
+     * <ul>
+     * <li>assets/modelengine</li>
+     *  <li>assets/modelengine/models/... (there are many folders for all the different entities)</li>
+     *  <li>assets/modelengine/textures/entity (there are many files for all the different entities)</li>
+     * <li>assets/minecraft</li>
+     *  <li>assets/minecraft/models/item/leather_horse_armor.json</li>
+     *  <li>assets/minecraft/atlases/blocks.json</li>
+     * </ul>
+     * <p>
+     * Recursively does a deep copy on the needed ModelEngine folders, copying files into preexisting folders if necessary.
+     * <p>
+     * Note: It may be beneficial to write a recursive algorithm that copies all files from one directory to another,
+     * maintaining directory structure and previous files, as it will be more versatile and you will not need to fix your code if ModelEngine updates
+     * @param modelEngine the ModelEngine resource pack folder
+     * @param resourcePack the resource pack folder
+     */
+    private void copyModelEngineFiles(File modelEngine, File resourcePack) {
+        throw new NotImplementedException("copyModelEngineFiles not implemented");
     }
 
     /**
@@ -423,5 +466,31 @@ public class PackGenerator {
                   }
               });
         }
+    }
+
+
+    /**
+     * Generate a sha1 hash given the resource pack file
+     * @return
+     */
+    private byte[] generateHash(File resourcePack) {
+        throw new NotImplementedException("generateHash not implemented");
+    }
+
+    /**
+     * Sets the resource pack for a player when they join the server
+     */
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event){
+        // Send a message to the player briefly telling them about the resource pack
+        Util.sendMessage(...);
+
+        // Set the resource pack for the player
+        Player p = event.getPlayer();
+        // public void setResourcePack(@NotNull String url, byte @Nullable [] hash, net.kyori.adventure.text.@Nullable Component prompt, boolean force);
+        p.setResourcePack(this.url, this.hash ...);
+
+
+        throw new NotImplementedException("Setting resource pack on join not yet implemented.");
     }
 }

@@ -5,3 +5,5 @@ force_update_default: true
 
 # Locale
 locale: en_US
+
+resource-pack-url: "FILL IN"

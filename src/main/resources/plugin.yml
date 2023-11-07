@@ -7,6 +7,7 @@ description: Transforms your game into an highly specialized MMORPG experience.
 softdepend: [ Citizens, WorldGuard, WorldEdit ]
 depend: [ AureliumSkills, ProtocolLib, ModelEngine, Vault ]
 
+
 commands:
   evocraft:
     aliases: [ evc, ec, evo ]
