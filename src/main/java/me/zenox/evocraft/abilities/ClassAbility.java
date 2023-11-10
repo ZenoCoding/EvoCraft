@@ -14,6 +14,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -23,6 +24,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class ClassAbility extends Ability<PlayerInteractEvent> {
     final List<Modifier> modifiers;
@@ -34,9 +36,12 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
     @SaveState
     private int charges;
     @SaveState
+    private int chargeTime;
+    @SaveState
     private int range;
 
     private final Map<String, Object> baseState;
+    private boolean modified = false;
 
     public ClassAbility(AbilitySettings settings, TriConsumer<PlayerInteractEvent, Player, ClassAbility> executable) {
         super(settings.getId(), settings.getManaCost(), settings.getCooldown(), settings.isPassive());
@@ -46,6 +51,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
         // stats
         this.strength = settings.getStrength();
         this.charges = settings.getCharges();
+        this.chargeTime = settings.getChargeTime();
         this.range = settings.getRange();
 
         // save basestate snapshot
@@ -69,50 +75,95 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
         return map;
     }
 
-
-    // Override the useAbility method to consider the modified mana cost, actually dont use this for now
-    // TODO: should abilities only be used through the directUseAbility method?
     @Override
     public void useAbility(Event event) {
-        PlayerInteractEvent e = (PlayerInteractEvent) event;
-        Player p = e.getPlayer();
+        try {
+            PlayerInteractEvent e = (PlayerInteractEvent) event;
+            Player p = e.getPlayer();
 
-        PlayerData data = PlayerDataManager.getInstance().getPlayerData(p.getUniqueId());
+            PlayerData data = PlayerDataManager.getInstance().getPlayerData(p.getUniqueId());
 
-        // TODO: fetch level from player's ability tree
-        int level = data.getPathLevel(data.getPlayerClass().tree().path(this));
-        if(level == -1) {
-            Util.sendMessage(p, "&cYou have not unlocked ability %s yet!".formatted(this.getId()));
-            return; // ability is not unlocked
+            int level = data.getPathLevel(data.getPlayerClass().tree().path(this));
+            if (level == -1) {
+                Util.sendActionBar(p, "&cABILITY %s LOCKED!".formatted(this.getId().replace('_', ' ').toUpperCase()));
+                return; // ability is not unlocked
+            }
+
+            Util.sendMessage(p, "&aUsing ability %s at level %d".formatted(this.getId(), level));
+
+            applyModifiers(level); // apply modifiers to the ability
+
+            // Check if ability is on cooldown
+            if (isAbilityOnCooldown(p)) {
+                sendCooldownMessage(p);
+                return;
+            }
+
+            if (noCharges(p)) {
+                sendNoChargesMessage(p);
+                return;
+            }
+
+            if (notEnoughMana(p, this.getManaCost())) {
+                sendManaInsufficientMessage(p);
+                return;
+            }
+
+            deductMana(p, this.getManaCost());
+            int chargesLeft = Ability.cooldownManager.consumeCharge(p, this);
+
+            String chargeMsg = "&6(&e%d&6/%d) (-1)".formatted(chargesLeft, this.getCharges());
+            showMessage(p, chargeMsg);
+
+            this.executable.accept(e, p, this);
+            setAbilityCooldown(p);
+        } finally {
+            reset();
         }
-
-        Util.sendMessage(p, "&aUsing ability %s at level %d".formatted(this.getId(), level));
-
-        applyModifiers(level); // apply modifiers to the ability
-
-        // Check if ability is on cooldown
-        if (isAbilityOnCooldown(p)) {
-            sendCooldownMessage(p);
-            return;
-        }
-
-        if (notEnoughMana(p, this.getManaCost())) {
-            sendManaInsufficientMessage(p);
-            return;
-        }
-
-        deductMana(p, this.getManaCost());
-        this.executable.accept(e, p, this);
-        setAbilityCooldown(p);
-
-        reset(); // reset the ability to its original state
 
     }
 
+    protected boolean noCharges(Player p) {
+        return cooldownManager.isOnCooldown(p, this);
+    }
+
+    protected void sendNoChargesMessage(Player p) {
+        Util.sendActionBar(p, "&c&lNO CHARGES LEFT");
+    }
+
+
+
+    /**
+     * Execute a code block with the context of the ability's modifiers applied
+     * @param level the level of the ability
+     * @param code the code to execute
+     */
+    public void executeWithLevel(int level, @NotNull Consumer<ClassAbility> code){
+        applyModifiers(level);
+        try {
+            code.accept(this);
+        } finally {
+            reset();
+        }
+    }
+
+    /**
+     * Execute a code block with the context of the ability's modifiers applied
+     * @param p the player to fetch the level from
+     * @param code the code to execute
+     */
+    public void executeAsPlayer(@NotNull Player p, Consumer<ClassAbility> code){
+        PlayerData data = PlayerDataManager.getInstance().getPlayerData(p.getUniqueId());
+        int level = data.getPathLevel(data.getPlayerClass().tree().path(this));
+        executeWithLevel(level, code);
+    }
+
     public void applyModifiers(int level){
+        if (modified) throw new IllegalStateException("You may not modify the ability while it is already being modified.");
         for(int i = 0; i < level; i++){
             modifiers.get(i).modify(this);
         }
+        modified = true;
     }
 
     // Recreate the ability to its original state
@@ -129,6 +180,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
                 }
             }
         }
+        modified = false;
     }
 
     public List<Modifier> getModifiers() {
@@ -149,6 +201,15 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
 
     public void setCharges(int charges) {
         this.charges = charges;
+    }
+
+    public int getChargeTime() {
+        return chargeTime;
+    }
+
+    public ClassAbility setChargeTime(int chargeTime) {
+        this.chargeTime = chargeTime;
+        return this;
     }
 
     public int getRange() {

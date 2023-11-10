@@ -1,7 +1,7 @@
 package me.zenox.evocraft.item;
 
 import com.archyx.aureliumskills.stats.Stats;
-import me.zenox.evocraft.abilities.*;
+import me.zenox.evocraft.abilities.AbilityRegistry;
 import me.zenox.evocraft.abilities.itemabilities.specific.Crucify;
 import me.zenox.evocraft.abilities.itemabilities.specific.EmberAttune;
 import me.zenox.evocraft.abilities.itemabilities.specific.Psychic;
@@ -9,7 +9,6 @@ import me.zenox.evocraft.abilities.itemabilities.specific.Transcendence;
 import me.zenox.evocraft.attribute.AttributeRegistry;
 import me.zenox.evocraft.gui.EnchantingGUI;
 import me.zenox.evocraft.item.basicitems.CorruptPearl;
-import me.zenox.evocraft.item.basicitems.GardenerSapling;
 import me.zenox.evocraft.item.basicitems.RavagerSkin;
 import me.zenox.evocraft.item.basicitems.TormentedSoul;
 import me.zenox.evocraft.util.Util;
@@ -26,8 +25,6 @@ import java.util.List;
 
 public class ItemRegistry {
 
-
-    public static final ComplexItem GARDENER_SAPLING = new GardenerSapling();
     public static final ComplexItem ENCHANTED_MAGMA_BLOCK = new ComplexItem(new ItemSettings()
             .id("enchanted_magma_block")
             .material(Material.MAGMA_BLOCK));
@@ -386,50 +383,6 @@ public class ItemRegistry {
             .modifier(AttributeRegistry.ATTACK_SPEED, -3.2)
             .stat(Stats.STRENGTH, 50d)
             .ability(AbilityRegistry.TERRA_STRIKE));
-
-    public static final ComplexItem BURNING_HELMET = new ComplexItem(new ItemSettings()
-            .id("burning_helmet")
-            .material(Material.LEATHER_HELMET)
-            .rarity(ComplexItem.Rarity.RARE)
-            .type(ComplexItem.Type.HELMET)
-            .modifier(AttributeRegistry.HEALTH, 5)
-            .modifier(AttributeRegistry.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_SCALAR)
-            .modifier(AttributeRegistry.ARMOR, 4)
-            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
-            .abilities(AbilityRegistry.ROARING_FLAME));
-
-    public static final ComplexItem BURNING_CHESTPLATE = new ComplexItem(new ItemSettings()
-            .id("burning_chestplate")
-            .material(Material.LEATHER_CHESTPLATE)
-            .rarity(ComplexItem.Rarity.RARE)
-            .type(ComplexItem.Type.CHESTPLATE)
-            .modifier(AttributeRegistry.HEALTH, 12)
-            .modifier(AttributeRegistry.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_SCALAR)
-            .modifier(AttributeRegistry.ARMOR, 10)
-            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
-            .abilities(AbilityRegistry.ROARING_FLAME));
-
-    public static final ComplexItem BURNING_LEGGINGS = new ComplexItem(new ItemSettings()
-            .id("burning_leggings")
-            .material(Material.LEATHER_LEGGINGS)
-            .rarity(ComplexItem.Rarity.RARE)
-            .type(ComplexItem.Type.LEGGINGS)
-            .modifier(AttributeRegistry.HEALTH, 10)
-            .modifier(AttributeRegistry.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_SCALAR)
-            .modifier(AttributeRegistry.ARMOR, 8)
-            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
-            .abilities(AbilityRegistry.ROARING_FLAME));
-
-    public static final ComplexItem BURNING_BOOTS = new ComplexItem(new ItemSettings()
-            .id("burning_boots")
-            .material(Material.LEATHER_BOOTS)
-            .rarity(ComplexItem.Rarity.RARE)
-            .type(ComplexItem.Type.BOOTS)
-            .modifier(AttributeRegistry.HEALTH, 5)
-            .modifier(AttributeRegistry.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_SCALAR)
-            .modifier(AttributeRegistry.ARMOR, 3)
-            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
-            .abilities(AbilityRegistry.ROARING_FLAME, AbilityRegistry.LAVA_GLIDER));
 
     public static final ComplexItem DARKCALLER = new ComplexItem(new ItemSettings()
             .id("darkcaller")

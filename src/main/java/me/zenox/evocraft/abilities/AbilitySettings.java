@@ -23,6 +23,7 @@ public class AbilitySettings {
     private int strength;
     private int charges;
     private int range;
+    private int chargeTime;
 
     public AbilitySettings() {
         this.id = "default" + UUID.randomUUID();
@@ -35,6 +36,7 @@ public class AbilitySettings {
         this.strength = 0;
         this.charges = 0;
         this.range = 0;
+        this.chargeTime = 0;
     }
 
     public String getId() {
@@ -129,6 +131,20 @@ public class AbilitySettings {
 
     public AbilitySettings range(int range) {
         this.range = range;
+        return this;
+    }
+
+    public int getChargeTime() {
+        return chargeTime;
+    }
+
+    /**
+     * Sets the charge time of the ability
+     * @param chargeTime Charge time in seconds
+     * @return The ability settings
+     */
+    public AbilitySettings chargeTime(int chargeTime) {
+        this.chargeTime = chargeTime;
         return this;
     }
 }

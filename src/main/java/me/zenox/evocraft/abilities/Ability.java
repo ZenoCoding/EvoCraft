@@ -12,6 +12,7 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.ParameterizedType;
@@ -23,6 +24,7 @@ import static me.zenox.evocraft.abilities.ClassAbility.SaveState;
 
 public abstract class Ability<T extends Event> {
     public static final List<Ability<?>> registeredAbilities = new ArrayList<>();
+    public static final CooldownManager cooldownManager = new CooldownManager();
 
     private final TranslatableText name;
     private final String id;
@@ -86,7 +88,7 @@ public abstract class Ability<T extends Event> {
 
     public abstract void useAbility(Event event);
 
-    protected boolean isAbilityOnCooldown(Player p) {
+    protected boolean isAbilityOnCooldown(@NotNull Player p) {
         PersistentDataContainer container = p.getPersistentDataContainer();
         NamespacedKey cooldownKey = new NamespacedKey(EvoCraft.getPlugin(), getId() + "_cooldown");
         Double cooldown;
@@ -107,7 +109,7 @@ public abstract class Ability<T extends Event> {
         }
     }
 
-    protected double getCooldownEndTime(Player p) {
+    protected double getCooldownEndTime(@NotNull Player p) {
         PersistentDataContainer container = p.getPersistentDataContainer();
         NamespacedKey cooldownKey = new NamespacedKey(EvoCraft.getPlugin(), getId() + "_cooldown");
         return container.get(cooldownKey, PersistentDataType.DOUBLE);
@@ -123,8 +125,11 @@ public abstract class Ability<T extends Event> {
 
     protected void deductMana(Player p, int manaCost) {
         AureliumAPI.setMana(p, AureliumAPI.getMana(p) - manaCost);
+    }
+
+    protected void showMessage(Player p, String msg) {
         String manaMessage = manaCost > 0 ? ChatColor.AQUA + "-" + manaCost + " Mana " + "(" + ChatColor.GOLD + name + ChatColor.AQUA + ")" : ChatColor.GOLD + "Used " + name;
-        if (!isPassive) Util.sendActionBar(p, manaMessage);
+        if (!isPassive) Util.sendActionBar(p, manaMessage + " " + msg);
     }
 
     protected void setAbilityCooldown(Player p) {
