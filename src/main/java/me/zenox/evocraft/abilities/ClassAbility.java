@@ -324,6 +324,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
     public static void manaBallAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
         // Create the projectile
         Snowball projectile = player.launchProjectile(Snowball.class);
+        projectile.setGravity(false);
 
         // Set projectile properties
         projectile.setVelocity(player.getLocation().getDirection().multiply(1.5)); // Speed of the projectile
@@ -337,18 +338,19 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
             final int range = ability.getRange();
             @Override
             public void run() {
-                if (a >= 20 || start.distance(projectile.getLocation()) > range) {
+                if (a >= 20 || start.distance(projectile.getLocation()) > range || projectile.isDead()) {
+                    projectile.remove();
                     cancel();
                     return;
                 }
                 // spawn some end rod particles and some teal colored "mana" redstone particles
 
-                player.getWorld().spawnParticle(Particle.END_ROD, projectile.getLocation(), 1, 0, 0, 0, 0);
-                player.getWorld().spawnParticle(Particle.REDSTONE, projectile.getLocation(), 1, 0, 0, 0,
+                player.getWorld().spawnParticle(Particle.END_ROD, projectile.getLocation(), 1, 0.1, 0, 0.1, 0);
+                player.getWorld().spawnParticle(Particle.REDSTONE, projectile.getLocation(), 1, 0, 0.1, 0,
                         new Particle.DustOptions(Color.fromRGB(0, 255, 255), 1));
                 a++;
             }
-        }.runTaskTimer(EvoCraft.getPlugin(), 0, 3);
+        }.runTaskTimer(EvoCraft.getPlugin(), 0, 2);
     }
 
     public static void manaBallDamage(@NotNull ProjectileHitEvent event, int strength){

@@ -11,6 +11,7 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -39,6 +40,7 @@ public class InventoryListener implements Listener {
     public void inventoryInteractEvent(InventoryClickEvent event) {
         ArrayList<ItemStack> contents = new ArrayList<>();
         contents.add(event.getCurrentItem());
+        contents.add(event.getCursor());
         if(!event.isCancelled()) updateItems(contents);
     }
 
@@ -59,6 +61,13 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void itemDropEvent(BlockDropItemEvent event){
         ArrayList<ItemStack> contents = new ArrayList<>(event.getItems().stream().map(Item::getItemStack).toList());
+        updateItems(contents);
+    }
+
+    @EventHandler
+    public void creativeEvent(InventoryCreativeEvent event) {
+        ArrayList<ItemStack> contents = new ArrayList<>();
+        contents.add(event.getCursor());
         updateItems(contents);
     }
 

@@ -122,6 +122,8 @@ public class ComplexItem {
      * @return The ComplexItem object of the item
      */
     public static ComplexItem of(ItemStack item) {
+        if (item == null) return null;
+        if (item.getItemMeta() == null) return VanillaItem.of(item.getType());
         PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
         if (container.has(GLOBAL_ID, PersistentDataType.STRING))
             return itemRegistry.get(container.get(GLOBAL_ID, PersistentDataType.STRING));
