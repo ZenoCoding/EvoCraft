@@ -129,7 +129,7 @@ public abstract class Ability<T extends Event> {
 
     protected void showMessage(Player p, String msg) {
         String manaMessage = manaCost > 0 ? ChatColor.AQUA + "-" + manaCost + " Mana " + "(" + ChatColor.GOLD + name + ChatColor.AQUA + ")" : ChatColor.GOLD + "Used " + name;
-        if (!isPassive) Util.sendActionBar(p, manaMessage + " " + msg);
+        if (!isPassive) Util.sendActionBar(p, manaMessage + msg);
     }
 
     protected void setAbilityCooldown(Player p) {

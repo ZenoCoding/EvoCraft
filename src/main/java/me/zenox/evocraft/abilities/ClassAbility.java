@@ -87,7 +87,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
 
             int level = data.getPathLevel(data.getPlayerClass().tree().path(this));
             if (level == -1) {
-                Util.sendActionBar(p, "&cABILITY %s LOCKED!".formatted(this.getId().replace('_', ' ').toUpperCase()));
+                Util.sendActionBar(p, "&c&l%s LOCKED!".formatted(this.getDisplayName().toUpperCase()));
                 return; // ability is not unlocked
             }
 
@@ -112,9 +112,12 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
             }
 
             deductMana(p, this.getManaCost());
-            int chargesLeft = Ability.cooldownManager.consumeCharge(p, this);
 
-            String chargeMsg = "&6(&e%d&6/%d) (-1)".formatted(chargesLeft, this.getCharges());
+            String chargeMsg = "";
+            if (this.getCharges() > 0) {
+                int chargesLeft = Ability.cooldownManager.consumeCharge(p, this);
+                chargeMsg = " &6(&e%d&6/%d) (-1)".formatted(chargesLeft, this.getCharges());
+            }
             showMessage(p, chargeMsg);
 
             this.executable.accept(e, p, this);
@@ -321,36 +324,117 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
         darkTeleport(event, player, ability);
     }
 
+    // Constants for the homing behavior
+    private static final double ACCELERATION_RATE = 0.2;
+    private static final double MAX_TURN_RATE = Math.toRadians(7);
+
     public static void manaBallAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
-        // Create the projectile
+        Snowball projectile = createProjectile(player, ability);
+        startParticleTask(player, projectile, ability.getRange()).runTaskTimer(EvoCraft.getPlugin(), 0, 2);
+    }
+
+    public static void homingManaBall(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        Snowball projectile = createProjectile(player, ability);
+        startHomingTask(player, projectile, ability.getRange()).runTaskTimer(EvoCraft.getPlugin(), 0, 1);
+    }
+
+    public static void multishotManaBall(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        // Here you can define how many projectiles you want to shoot
+        int numberOfProjectiles = 3;
+        for (int i = 0; i < numberOfProjectiles; i++) {
+            Snowball projectile = createProjectile(player, ability);
+            // Let's keep the projectiles straight but instead shoot them in parallel with offsets
+            Vector direction = projectile.getLocation().getDirection().setY(0).normalize();
+            Vector perpendicular = direction.rotateAroundY(Math.toRadians(90));
+            Vector offset = perpendicular.multiply(((i - numberOfProjectiles/2)*1.5));
+            projectile.teleport(projectile.getLocation().add(offset));
+            startHomingTask(player, projectile, ability.getRange()).runTaskTimer(EvoCraft.getPlugin(), 0, 2);
+        }
+    }
+
+    private static Snowball createProjectile(Player player, ClassAbility ability) {
         Snowball projectile = player.launchProjectile(Snowball.class);
         projectile.setGravity(false);
-
-        // Set projectile properties
-        projectile.setVelocity(player.getLocation().getDirection().multiply(1.5)); // Speed of the projectile
-
-        // Apply metadata to the projectile so we can identify it later as a mana projectile
+        projectile.setVelocity(player.getLocation().getDirection().multiply(1.5));
         projectile.setMetadata("mana_projectile", new FixedMetadataValue(EvoCraft.getPlugin(), ability.getStrength()));
+        return projectile;
+    }
 
-        new BukkitRunnable(){
-            int a = 0;
+    private static BukkitRunnable startParticleTask(Player player, Snowball projectile, int range) {
+        return new BukkitRunnable() {
             final Location start = player.getLocation().clone();
-            final int range = ability.getRange();
             @Override
             public void run() {
-                if (a >= 20 || start.distance(projectile.getLocation()) > range || projectile.isDead()) {
+                if (start.distance(projectile.getLocation()) > range || !projectile.isValid()) {
                     projectile.remove();
                     cancel();
                     return;
                 }
-                // spawn some end rod particles and some teal colored "mana" redstone particles
-
-                player.getWorld().spawnParticle(Particle.END_ROD, projectile.getLocation(), 1, 0.1, 0, 0.1, 0);
-                player.getWorld().spawnParticle(Particle.REDSTONE, projectile.getLocation(), 1, 0, 0.1, 0,
-                        new Particle.DustOptions(Color.fromRGB(0, 255, 255), 1));
-                a++;
+                spawnParticles(projectile.getLocation());
             }
-        }.runTaskTimer(EvoCraft.getPlugin(), 0, 2);
+        };
+    }
+
+    private static BukkitRunnable startHomingTask(Player player, Snowball projectile, int range) {
+        return new BukkitRunnable() {
+            final Location start = player.getLocation().clone();
+            @Override
+            public void run() {
+                if (start.distance(projectile.getLocation()) > range || !projectile.isValid()) {
+                    projectile.remove();
+                    cancel();
+                    return;
+                }
+                LivingEntity target = findNearestTarget(projectile, player);
+                if (target != null) {
+                    adjustProjectileVelocity(projectile, target);
+                }
+                spawnParticles(projectile.getLocation());
+            }
+        };
+    }
+
+    private static void spawnParticles(Location location) {
+        location.getWorld().spawnParticle(Particle.END_ROD, location, 1, 0.1, 0, 0.1, 0);
+        location.getWorld().spawnParticle(Particle.REDSTONE, location, 1, 0, 0.1, 0,
+                new Particle.DustOptions(Color.fromRGB(0, 255, 255), 1));
+    }
+
+    private static void adjustProjectileVelocity(Snowball projectile, LivingEntity target) {
+        Vector currentVelocity = projectile.getVelocity();
+        Vector toTarget = target.getEyeLocation().toVector().subtract(projectile.getLocation().toVector()).normalize();
+        Vector newVelocity = currentVelocity.clone().add(toTarget.clone().subtract(currentVelocity).normalize().multiply(ACCELERATION_RATE));
+        if (currentVelocity.angle(newVelocity) > MAX_TURN_RATE) {
+            newVelocity = rotateVectorTowards(currentVelocity, toTarget, MAX_TURN_RATE);
+        }
+        projectile.setVelocity(newVelocity.normalize().multiply(currentVelocity.length()));
+    }
+
+    private static Vector rotateVectorTowards(Vector source, Vector target, double maxAngle) {
+        double angle = source.angle(target);
+        if (angle < maxAngle) return target; // No need to rotate if within max angle
+
+        double theta = Math.min(angle, maxAngle) / angle;
+        return source.clone().multiply(1 - theta).add(target.clone().multiply(theta)).normalize();
+    }
+
+    private static LivingEntity findNearestTarget(Entity projectile, Player caster) {
+        Location location = projectile.getLocation();
+        double minDistance = Double.MAX_VALUE;
+        LivingEntity nearest = null;
+
+        for (Entity entity : location.getWorld().getNearbyEntities(location, 10, 10, 10)
+                 .stream()
+                 .filter(entity -> entity instanceof LivingEntity && ((LivingEntity) entity).hasLineOfSight(projectile)).toList()) {
+            if (entity instanceof LivingEntity && !entity.equals(caster)) {
+                double distance = entity.getLocation().distance(location);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearest = (LivingEntity) entity;
+                }
+            }
+        }
+        return nearest;
     }
 
     public static void manaBallDamage(@NotNull ProjectileHitEvent event, int strength){
@@ -358,6 +442,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
         if (event.getHitEntity() instanceof LivingEntity) {
             LivingEntity target = (LivingEntity) event.getHitEntity();
             target.damage(5.0*strength, (Entity) event.getEntity().getShooter()); // Deal 5 points of damage, customize as needed
+            target.setNoDamageTicks(0);
             // Additional effects can be added here, like knockback or status effects
         }
         // Remove the projectile upon impact

@@ -632,7 +632,9 @@ ability-lore-thunderstrike:
 ##                           CLASS ABILITIES                            ##
 ##########################################################################
 ability-name-mage_teleport: Teleport
-abilit-name-mage_mana_ball: Mana Ball
+ability-name-mage_mana_ball: Mana Ball
+ability-name-mage_rift_beam: Rift Beam
+ability-name-mage_rune_shield: Rune Shield
 
 
 ##########################################################################
