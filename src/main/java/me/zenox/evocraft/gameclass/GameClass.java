@@ -24,7 +24,7 @@ import java.util.List;
 public enum GameClass {
     MAGE("mage", ChatColor.BLUE,
             List.of(ComplexItem.Type.STAFF, ComplexItem.Type.WAND), Material.BLAZE_ROD,
-            new AbilityTree(AbilityRegistry.TELEPORT, null, null, null)),
+            new AbilityTree(AbilityRegistry.TELEPORT, AbilityRegistry.MANA_BALL, AbilityRegistry.RIFT_BEAM, AbilityRegistry.RUNE_SHIELD)),
     WARRIOR("warrior", ChatColor.RED,
             List.of(ComplexItem.Type.SWORD), Material.IRON_SWORD,
             null),

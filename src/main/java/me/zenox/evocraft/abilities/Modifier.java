@@ -67,6 +67,17 @@ public abstract class Modifier {
                     }
                 };
             }
+        },
+        STRENGTH {
+            @Override
+            Modifier create(String id, double value) {
+                return new Modifier(id) {
+                    @Override
+                    void modify(ClassAbility ability) {
+                        ability.setStrength(ability.getStrength() + (int) value);
+                    }
+                };
+            }
         };
 
         Modifier create(String id, double value) {

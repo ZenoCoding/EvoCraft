@@ -24,9 +24,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Command implements CommandExecutor, TabCompleter {
 
@@ -256,60 +255,59 @@ public class Command implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
-        if (arguments.isEmpty()) {
-            arguments.add("give");
-            arguments.add("loottable");
-            arguments.add("droploottable");
-            arguments.add("dropitematplayer");
-            arguments.add("enchant");
-            arguments.add("reload");
-            arguments.add("removechapterdata");
-            arguments.add("removemetadata");
-            arguments.add("setchapter");
-            arguments.add("class");
-            arguments.add("progresspath");
+        if (args.length == 1) {
+            return getCommandSuggestions(args[0]);
+        } else if (args.length == 2 && "progresspath".equalsIgnoreCase(args[0]) && sender instanceof Player) {
+            return getPathSuggestions((Player) sender, args[1]);
+        } else if (args.length == 3) {
+            return getThirdArgumentSuggestions(args[0], args[2]);
+        } else if (args.length == 4 && "enchant".equalsIgnoreCase(args[0])) {
+            return Collections.singletonList("<level>");
+        } else if (args.length == 4 && "give".equalsIgnoreCase(args[0])) {
+            return Collections.singletonList("<amount>");
         }
+        return Collections.emptyList();
+    }
 
+    private List<String> getCommandSuggestions(String arg) {
+        List<String> commands = Arrays.asList("give", "loottable", "droploottable", "dropitematplayer",
+                "enchant", "reload", "removechapterdata", "removemetadata",
+                "setchapter", "class", "progresspath");
+        return commands.stream()
+                .filter(a -> a.toLowerCase().startsWith(arg.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getPathSuggestions(Player player, String arg) {
+        GameClass gameClass = PlayerDataManager.getInstance().getPlayerData(player.getUniqueId()).getPlayerClass();
+        return gameClass.tree().paths().stream()
+                .map(Path::getId)
+                .filter(path -> path.toLowerCase().startsWith(arg.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getThirdArgumentSuggestions(String arg0, String arg2) {
+        if ("give".equalsIgnoreCase(arg0)) {
+            return getItemSuggestions(arg2);
+        } else if ("enchant".equalsIgnoreCase(arg0)) {
+            return getEnchantmentSuggestions(arg2);
+        }
+        return Collections.emptyList();
+    }
+
+    private List<String> getItemSuggestions(String arg) {
         if (items.isEmpty()) {
             items.addAll(ComplexItem.itemRegistry.keySet());
         }
+        return items.stream()
+                .filter(b -> b.toLowerCase().startsWith(arg.toLowerCase()))
+                .collect(Collectors.toList());
+    }
 
-        List<String> results = new ArrayList<>();
-        if (args.length == 1) {
-            for (String a : arguments) {
-                if (a.toLowerCase().startsWith(args[0].toLowerCase())) {
-                    results.add(a);
-                }
-            }
-            return results;
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("progresspath")){
-            GameClass gameClass = PlayerDataManager.getInstance().getPlayerData(((Player) sender).getUniqueId()).getPlayerClass();
-            for (Path path: gameClass.tree().paths()){
-                if (path.getId().toLowerCase().startsWith(args[1].toLowerCase())){
-                    results.add(path.getId());
-                }
-            }
-        } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
-            for (String b : items) {
-                if (b.toLowerCase().startsWith(args[2].toLowerCase())) {
-                    results.add(b);
-                }
-            }
-            return results;
-        } else if (args.length == 3 && args[0].equalsIgnoreCase("enchant")) {
-            for (ComplexEnchantment b : ComplexEnchantment.getRegisteredEnchants()) {
-                if (b.getId().toLowerCase().startsWith(args[2].toLowerCase())) {
-                    results.add(b.getId());
-                }
-            }
-            return results;
-        } else if (args.length == 4 && args[0].equalsIgnoreCase("enchant")) {
-            results.add("<level>");
-            return results;
-        } else if (args.length == 4 && args[0].equalsIgnoreCase("give")) {
-            results.add("<amount>");
-            return results;
-        }
-        return null;
+    private List<String> getEnchantmentSuggestions(String arg) {
+        return ComplexEnchantment.getRegisteredEnchants().stream()
+                .map(ComplexEnchantment::getId)
+                .filter(id -> id.toLowerCase().startsWith(arg.toLowerCase()))
+                .collect(Collectors.toList());
     }
 }

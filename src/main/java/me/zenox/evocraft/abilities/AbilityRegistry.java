@@ -174,11 +174,37 @@ public class AbilityRegistry {
             .modifier(Modifier.of(Modifier.Type.MANA_COST, "teleport_mana_1", -5))
             .modifier(Modifier.of(Modifier.Type.CHARGE, "teleport_charge_1", +1))
             .modifier(Modifier.of(Modifier.Type.EXECUTABLE, "teleport_dark", ClassAbility::darkTeleport))
-            .modifier(Modifier.of(Modifier.Type.CHARGE, "teleport_charge_2", +2))
+            .modifier(Modifier.of(Modifier.Type.STRENGTH, "teleport_strength_1", +1))
+            .modifier(Modifier.of(Modifier.Type.CHARGE, "teleport_charge_2", +1))
             .modifier(Modifier.of(Modifier.Type.EXECUTABLE, "teleport_surge", ClassAbility::surgeTeleport))
-            .modifier(Modifier.of(Modifier.Type.RANGE, "teleport_range_4", +4))
+            .modifier(Modifier.of(Modifier.Type.RANGE, "teleport_range_2", +4))
             .modifier(Modifier.of(Modifier.Type.EXECUTABLE, "teleport_arcane", ClassAbility::arcaneTeleport))
             , ClassAbility::teleportAbility);
+
+    public static final ClassAbility MANA_BALL = new ClassAbility(new AbilitySettings()
+            .id("mage_mana_ball")
+            .manaCost(10)
+            .cooldown(0)
+            .range(20)
+            .strength(1)
+            .charges(-1)
+            .chargeTime(-1)
+            .modifier(Modifier.of(Modifier.Type.MANA_COST, "mana_ball_mana_1", -5))
+            , ClassAbility::manaBallAbility);
+    public static final ClassAbility RIFT_BEAM = new ClassAbility(new AbilitySettings()
+            .id("mage_rift_beam")
+            .manaCost(50)
+            .cooldown(0)
+            .range(20)
+            .strength(1)
+            , ClassAbility::riftBeamAbility);
+    public static final ClassAbility RUNE_SHIELD = new ClassAbility(new AbilitySettings()
+            .id("mage_rune_shield")
+            .manaCost(50)
+            .cooldown(0)
+            .range(20)
+            .strength(1)
+            , ClassAbility::runeShieldAbility);
 
     public static void registerAbilities(){
         Util.logToConsole("Registering %s abilities.".formatted(ChatColor.GOLD + "" + Ability.registeredAbilities.size() + ChatColor.RESET));

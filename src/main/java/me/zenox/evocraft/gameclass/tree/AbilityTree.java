@@ -17,9 +17,9 @@ public record AbilityTree (ClassAbility LL_Ability, ClassAbility LR_Ability,
     public AbilityTree(ClassAbility LL_Ability, ClassAbility LR_Ability, ClassAbility RL_Ability, ClassAbility RR_Ability, Path ... paths) {
         this(LL_Ability, LR_Ability, RL_Ability, RR_Ability, new ArrayList<>(List.of(
                 new AbilityPath(LL_Ability.getId(), LL_Ability),
-                new AbilityPath(LL_Ability.getId(), LR_Ability),
-                new AbilityPath(LL_Ability.getId(), RL_Ability),
-                new AbilityPath(LL_Ability.getId(), RR_Ability))));
+                new AbilityPath(LR_Ability.getId(), LR_Ability),
+                new AbilityPath(RL_Ability.getId(), RL_Ability),
+                new AbilityPath(RR_Ability.getId(), RR_Ability))));
         this.paths.addAll(List.of(paths));
     }
 

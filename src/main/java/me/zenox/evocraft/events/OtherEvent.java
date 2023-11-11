@@ -3,6 +3,7 @@ package me.zenox.evocraft.events;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import de.studiocode.invui.window.impl.single.SimpleWindow;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.abilities.ClassAbility;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
 import me.zenox.evocraft.gui.EnchantingGUI;
 import me.zenox.evocraft.item.ComplexItemMeta;
@@ -75,19 +76,21 @@ public class OtherEvent implements Listener {
     }
 
     @EventHandler
-    public void projectileCollide(ProjectileHitEvent e){
+    public void projectileCollide(ProjectileHitEvent e) {
         Projectile entity = e.getEntity();
-        if(Objects.isNull(entity)) return;
-        if(Objects.isNull(e.getHitEntity())) return;
+        if (Objects.isNull(entity)) return;
+        if (Objects.isNull(e.getHitEntity())) return;
         List<MetadataValue> snowballValues = entity.getMetadata("super_snowball");
-        if (!snowballValues.isEmpty()) {
+        if (entity.hasMetadata("super_snowball")) {
             Entity hitEntity = e.getHitEntity();
-            if (!Util.isInvulnerable(hitEntity)){
+            if (!Util.isInvulnerable(hitEntity)) {
                 hitEntity.setVelocity(hitEntity.getVelocity().add(hitEntity.getLocation().toVector().subtract(entity.getLocation().add(0, -0.3, 0).toVector()).normalize().multiply(0.5)));
                 hitEntity.setFreezeTicks(Math.max(0, hitEntity.getFreezeTicks()) + 20);
                 if (hitEntity instanceof Player player) player.damage(1);
             }
 
+        } else if (entity.hasMetadata("mana_projectile")) {
+            ClassAbility.manaBallDamage(e, entity.getMetadata("mana_projectile").get(0).asInt());
         }
     }
 

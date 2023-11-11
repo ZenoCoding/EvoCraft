@@ -63,19 +63,21 @@ public class CooldownManager implements Listener {
         BukkitRunnable task = new BukkitRunnable() {
             @Override
             public void run() {
-                if (getCharges(player, ability) < ability.getCharges()) {
-                    chargeMap.get(playerId).put(ability, getCharges(player, ability) + 1);
-                    Util.sendActionBar(player, " &6(+1 %s charge) (%d/%d)".formatted(ability.getDisplayName(), getCharges(player, ability), ability.getCharges()));
-                } else {
-                    cancel();
-                    rechargeTasks.get(playerId).remove(ability);
-                }
+                ability.executeAsPlayer(player, (ability) -> {
+                    if (getCharges(player, ability) < ability.getCharges()) {
+                        chargeMap.get(playerId).put(ability, getCharges(player, ability) + 1);
+                        Util.sendActionBar(player, " &6(+1 %s charge) (%d/%d)".formatted(ability.getDisplayName(), getCharges(player, ability), ability.getCharges()));
+                    } else {
+                        cancel();
+                        rechargeTasks.get(playerId).remove(ability);
+                    }
 
-                if (ability.getChargeTime() * 20 != chargeTime) {
-                    cancel();
-                    rechargeTasks.get(playerId).remove(ability);
-                    this.runTaskTimer(EvoCraft.getPlugin(), ability.getChargeTime(), ability.getChargeTime());
-                }
+                    if (ability.getChargeTime() * 20 != chargeTime) {
+                        cancel();
+                        rechargeTasks.get(playerId).remove(ability);
+                        this.runTaskTimer(EvoCraft.getPlugin(), ability.getChargeTime(), ability.getChargeTime());
+                    }
+                });
             }
         };
 

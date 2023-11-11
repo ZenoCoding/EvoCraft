@@ -6,12 +6,14 @@ import me.zenox.evocraft.data.PlayerDataManager;
 import me.zenox.evocraft.util.Geo;
 import me.zenox.evocraft.util.TriConsumer;
 import me.zenox.evocraft.util.Util;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.entity.Damageable;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -99,7 +101,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
                 return;
             }
 
-            if (noCharges(p)) {
+            if (this.getCharges() > 0 && noCharges(p)) {
                 sendNoChargesMessage(p);
                 return;
             }
@@ -220,89 +222,6 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
         this.range = range;
     }
 
-    public static void teleportAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
-        // Teleport the player up to 5 blocks forward, but less if it's a block
-        int maxDistance = ability.getRange();
-        Util.sendMessage(player, "&aTeleporting %d blocks".formatted(maxDistance));
-        int distance = 0;
-        Location prev = player.getLocation();
-
-        while (distance < maxDistance) {
-            if (player.getLocation().clone().add(player.getLocation().getDirection().multiply(distance)).getBlock().getType().isSolid()) {
-                break;
-            }
-            distance++;
-        }
-        player.teleport(player.getLocation().clone().add(player.getLocation().getDirection().multiply(distance)));
-
-        // Create particles along the path
-        List<Vector> tracedPath = Geo.lerpEdges(List.of(prev.toVector(), player.getLocation().toVector()), (int) (1.3*ability.getRange()));
-        new BukkitRunnable(){
-            int a = 0;
-            @Override
-            public void run() {
-                if (a >= tracedPath.size()/2) {
-                    cancel();
-                    return;
-                }
-                player.getWorld().spawnParticle(Particle.REDSTONE, tracedPath.get(a).toLocation(player.getWorld()),
-                        5, 0, 0.5, 0, 0,
-                        new Particle.DustOptions(org.bukkit.Color.fromRGB(0, 123, 255), 2));
-                a++;
-            }
-        }.runTaskTimer(EvoCraft.getPlugin(), 0, 1);
-    }
-
-    /**
-     * Dark Teleport Executable that damages entities along the path
-     */
-    public static void darkTeleport(PlayerInteractEvent event, Player player, ClassAbility ability) {
-        // Teleport the player up to 5 blocks forward, but less if it's a block
-        int maxDistance = ability.getRange();
-        Util.sendMessage(player, "&aTeleporting %d blocks".formatted(maxDistance));
-        int distance = 0;
-        Location prev = player.getLocation();
-
-        while (distance < maxDistance) {
-            if (player.getLocation().clone().add(player.getLocation().getDirection().multiply(distance)).getBlock().getType().isSolid()) {
-                break;
-            }
-            distance++;
-        }
-        player.teleport(player.getLocation().clone().add(player.getLocation().getDirection().multiply(distance)));
-
-        // Create particles along the path
-        List<Vector> tracedPath = Geo.lerpEdges(List.of(prev.toVector(), player.getLocation().toVector()), (int) (1.3*ability.getRange()));
-        new BukkitRunnable(){
-            int a = 0;
-            @Override
-            public void run() {
-                if (a >= tracedPath.size()/2) {
-                    cancel();
-                    return;
-                }
-                player.getWorld().getNearbyEntities(tracedPath.get(a).toLocation(player.getWorld()), 1, 1, 1).forEach(entity -> {
-                    if (entity instanceof Damageable && !entity.equals(player)) {
-                        ((Damageable) entity).damage(5 * ability.getStrength());
-                    }
-                });
-                player.getWorld().spawnParticle(Particle.REDSTONE, tracedPath.get(a).toLocation(player.getWorld()), 5, 0, 0.5, 0, 0, new Particle.DustOptions(org.bukkit.Color.fromRGB(0, 12, 89), 3));
-                a++;
-            }
-        }.runTaskTimer(EvoCraft.getPlugin(), 0, 1);
-
-    }
-
-
-    public static void surgeTeleport(PlayerInteractEvent event, Player player, ClassAbility ability) {
-        darkTeleport(event, player, ability);
-    }
-
-    public static void arcaneTeleport(PlayerInteractEvent event, Player player, ClassAbility ability) {
-        
-        darkTeleport(event, player, ability);
-    }
-
     public TriConsumer<PlayerInteractEvent, Player, ClassAbility> getExecutable() {
         return this.executable;
     }
@@ -310,6 +229,147 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
     public void setExecutable(TriConsumer<PlayerInteractEvent, Player, ClassAbility> executable) {
         this.executable = executable;
     }
+
+    /*
+     * Ability Executables
+     */
+    private static void teleport(Player player, int distance) {
+        Location currentLocation = player.getLocation();
+        Vector direction = currentLocation.getDirection().normalize();
+
+        // This will check each block along the path, up to the distance
+        for (int i = 1; i <= distance; i++) {
+            Location targetLocation = currentLocation.clone().add(direction.clone().multiply(1)); // Move 1 block at a time in the direction
+            // Check for solid blocks at the player's feet or head level
+            if (targetLocation.getBlock().getType().isSolid() || targetLocation.clone().add(0, 1, 0).getBlock().getType().isSolid()) {
+                // If a solid block is found, stop and teleport the player to the last safe location
+                break;
+            }
+            // Update currentLocation to the last checked location
+            currentLocation = targetLocation;
+        }
+
+        // Perform the actual teleportation
+        player.teleport(currentLocation.add(0, 0.1, 0)); // Slightly raise the Y value to prevent suffocation
+    }
+
+    private static void teleportEffect(Location startLoc, Location endLoc, Color color, Player player, int damage, double width) {
+        List<Vector> tracedPath = Geo.lerpEdges(List.of(startLoc.toVector(), endLoc.toVector()), (int) (1.3 * startLoc.distance(endLoc)));
+        Vector direction = endLoc.toVector().subtract(startLoc.toVector()).normalize();
+
+        new BukkitRunnable() {
+            int a = 0;
+            @Override
+            public void run() {
+                if (a >= tracedPath.size()/2) {
+                    cancel();
+                    return;
+                }
+
+                Location currentLoc = tracedPath.get(a).toLocation(player.getWorld());
+                Vector perpendicular = new Vector(-direction.getZ(), 0, direction.getX()).normalize().multiply(width / 2);
+
+                for (double i = -width / 2; i <= width / 2; i += width / 10) {
+                    Location effectLoc = currentLoc.clone().add(perpendicular.clone().multiply(i));
+                    player.getWorld().getNearbyEntities(effectLoc, 0.5, 0.5, 0.5).forEach(entity -> {
+                        if (entity instanceof Damageable && !entity.equals(player)) {
+                            ((Damageable) entity).damage(damage);
+                        }
+                    });
+                    player.getWorld().spawnParticle(Particle.REDSTONE, effectLoc, 1, 0.1, 0, 0.1, new Particle.DustOptions(color, 1));
+                }
+
+                a++;
+            }
+        }.runTaskTimer(EvoCraft.getPlugin(), 0, 1);
+    }
+
+
+    public static void teleportAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        Location prev = player.getLocation();
+        teleport(player, ability.getRange());
+
+        // Create particles along the path
+        teleportEffect(prev, player.getLocation(), Color.fromRGB(0, 123, 255), player, 0, 1);
+    }
+
+    /**
+     * Dark Teleport Executable that damages entities along the path
+     */
+    public static void darkTeleport(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        Location prev = player.getLocation();
+
+        // Teleport the player using the helper method
+        teleport(player, ability.getRange());
+
+        // Create particles along the path and damage entities using the helper method
+        teleportEffect(prev, player.getLocation(), org.bukkit.Color.fromRGB(0, 12, 89), player, 5 * ability.getStrength(), 1);
+    }
+
+
+    public static void surgeTeleport(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        Location prev = player.getLocation();
+
+        teleport(player, ability.getRange());
+
+        teleportEffect(prev, player.getLocation(), org.bukkit.Color.fromRGB(102, 0, 126), player, 10 * ability.getStrength(), 2);
+
+    }
+
+    public static void arcaneTeleport(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        
+        darkTeleport(event, player, ability);
+    }
+
+    public static void manaBallAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        // Create the projectile
+        Snowball projectile = player.launchProjectile(Snowball.class);
+
+        // Set projectile properties
+        projectile.setVelocity(player.getLocation().getDirection().multiply(1.5)); // Speed of the projectile
+
+        // Apply metadata to the projectile so we can identify it later as a mana projectile
+        projectile.setMetadata("mana_projectile", new FixedMetadataValue(EvoCraft.getPlugin(), ability.getStrength()));
+
+        new BukkitRunnable(){
+            int a = 0;
+            final Location start = player.getLocation().clone();
+            final int range = ability.getRange();
+            @Override
+            public void run() {
+                if (a >= 20 || start.distance(projectile.getLocation()) > range) {
+                    cancel();
+                    return;
+                }
+                // spawn some end rod particles and some teal colored "mana" redstone particles
+
+                player.getWorld().spawnParticle(Particle.END_ROD, projectile.getLocation(), 1, 0, 0, 0, 0);
+                player.getWorld().spawnParticle(Particle.REDSTONE, projectile.getLocation(), 1, 0, 0, 0,
+                        new Particle.DustOptions(Color.fromRGB(0, 255, 255), 1));
+                a++;
+            }
+        }.runTaskTimer(EvoCraft.getPlugin(), 0, 3);
+    }
+
+    public static void manaBallDamage(@NotNull ProjectileHitEvent event, int strength){
+        // Logic to deal damage
+        if (event.getHitEntity() instanceof LivingEntity) {
+            LivingEntity target = (LivingEntity) event.getHitEntity();
+            target.damage(5.0*strength, (Entity) event.getEntity().getShooter()); // Deal 5 points of damage, customize as needed
+            // Additional effects can be added here, like knockback or status effects
+        }
+        // Remove the projectile upon impact
+        event.getEntity().remove();
+    }
+
+    public static void riftBeamAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+
+    }
+
+    public static void runeShieldAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+
+    }
+
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
