@@ -22,7 +22,6 @@ import me.zenox.evocraft.item.ItemRegistry;
 import me.zenox.evocraft.item.VanillaItem;
 import me.zenox.evocraft.network.GlowFilter;
 import me.zenox.evocraft.recipe.RecipeRegistry;
-import me.zenox.evocraft.story.ChapterManager;
 import me.zenox.evocraft.util.Util;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -42,7 +41,6 @@ public final class EvoCraft extends JavaPlugin {
     private static LanguageLoader languageLoader;
     private static ConfigLoader configLoader;
     private static ProtocolManager protocolManager;
-    private static ChapterManager chapterManager;
     private static ActionBar actionBar;
     private static PlayerDataManager playerDataManager;
 
@@ -87,7 +85,6 @@ public final class EvoCraft extends JavaPlugin {
 
         configLoader = new ConfigLoader(plugin);
         languageLoader = new LanguageLoader(plugin);
-        chapterManager = new ChapterManager(plugin);
 
         registerGlobalGUIItems();
 
@@ -165,10 +162,6 @@ public final class EvoCraft extends JavaPlugin {
 
     public static Permission getPermissions() {
         return perms;
-    }
-
-    public static ChapterManager getChapterManager() {
-        return chapterManager;
     }
 
     public static ActionBar getActionBar() {

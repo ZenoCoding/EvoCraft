@@ -105,16 +105,6 @@ public class AbilityRegistry {
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
             .manaCost(100)
             .cooldown(1), ItemAbility::voidWarpAbility);
-    public static final ItemAbility START_BUTTON = new ItemAbility(new AbilitySettings()
-            .id("start_button")
-            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .manaCost(0)
-            .cooldown(0), ItemAbility::startButtonAbility);
-    public static final ItemAbility PORTALIZER = new ItemAbility(new AbilitySettings()
-            .id("portalizer")
-            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .manaCost(0)
-            .cooldown(0), ItemAbility::portalizerAbility);
     public static final ItemAbility SNOW_SHOT = new ItemAbility(new AbilitySettings()
             .id("snow_shot")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)

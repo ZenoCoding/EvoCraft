@@ -13,8 +13,6 @@ import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
 import me.zenox.evocraft.loot.LootTable;
 import me.zenox.evocraft.loot.LootTableRegistry;
-import me.zenox.evocraft.story.Chapter;
-import me.zenox.evocraft.story.ChapterManager;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -189,43 +187,6 @@ public class Command implements CommandExecutor, TabCompleter {
                     return true;
                 }
                 Util.sendMessage(sender, ChatColor.WHITE + "The CustomModelData of " + item.getItemMeta().getDisplayName() + ChatColor.WHITE + "  is " + ComplexItem.of(item).getCustomModelData());
-                return true;
-            }
-            case "removechapterdata" -> {
-                if (sender instanceof Player){
-                    ((Player) sender).getPersistentDataContainer().remove(ChapterManager.CHAPTER_KEY);
-                    Util.sendMessage(sender, "All chapter data has been removed.");
-                }
-                else {
-                    Util.sendMessage(sender, "You must be a player to use this command!");
-                }
-            }
-            case "removemetadata" -> {
-                if (sender instanceof Player){
-                    sender.getServer().getPlayer(args[1]).removeMetadata("hasStarted", EvoCraft.getPlugin());
-                    Util.sendMessage(sender, "All chapter data has been removed.");
-                }
-                else {
-                    Util.sendMessage(sender, "You must be a player to use this command!");
-                }
-            }
-            case "setchapter" -> {
-                // Set the chapter given the player and the chapter's id
-                if (args.length < 2 || sender.getServer().getPlayer(args[1]) == null) {
-                    Util.sendMessage(sender, "Please specify a valid user to set the chapter of.");
-                    return true;
-                }
-                if (args.length < 3) {
-                    Util.sendMessage(sender, "Please specify a valid chapter.");
-                    return true;
-                }
-                Player player = sender.getServer().getPlayer(args[1]);
-                Chapter chapter = EvoCraft.getChapterManager().getChapter(Ints.tryParse(args[2]));
-                if (chapter == null) {
-                    Util.sendMessage(sender, "This chapter does not exist!");
-                    return true;
-                }
-                EvoCraft.getChapterManager().setChapter(player, chapter);
                 return true;
             }
             case "class" -> // Open the class selection GUI
