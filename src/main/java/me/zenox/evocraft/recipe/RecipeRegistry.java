@@ -8,9 +8,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.ShapedRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -259,6 +261,8 @@ public class RecipeRegistry {
                 .addChoice('C', new RecipeChoice.ExactChoice(new ComplexItemStack(ItemRegistry.CORRUPT_PEARL).getItem()))
                 .addChoice('S', new RecipeChoice.ExactChoice(new ComplexItemStack(VanillaItem.of(Material.NETHERITE_SWORD)).getItem()))
                 .build());
+
+
     }
 
     private static Recipe registerRecipe(Recipe recipe) {

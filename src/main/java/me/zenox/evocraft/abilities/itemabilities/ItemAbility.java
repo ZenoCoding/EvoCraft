@@ -942,7 +942,28 @@ public class ItemAbility extends EventAbility<PlayerInteractEvent> {
         // An ability that creates a large AOE sweeping damage ability, displaying sweeping particles, and knocking enemies back
 
     }
-
+    public static void rapidFireAbility(PlayerInteractEvent event, Player player, ItemStack itemStack){
+        if (itemStack != null && itemStack.getType() == ItemRegistry.FROSTFIRE_BOW.getMaterial()) {
+            if (player.getInventory().getItemInMainHand().equals(itemStack)) {
+                // Summon arrow instantly
+                Arrow arrow = player.launchProjectile(Arrow.class);
+                arrow.setVelocity(player.getEyeLocation().getDirection().multiply(5)); // Adjust the arrow speed as needed
+                arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
+                ComplexItemMeta meta =  ComplexItemStack.of(itemStack).getComplexMeta();
+                ElementalFlux.Flux flux = (ElementalFlux.Flux) meta.getVariable(ElementalFlux.FLUX_VARIABLE_TYPE).getValue();
+                if(flux == null){
+                    meta.setVariable(ElementalFlux.FLUX_VARIABLE_TYPE, ElementalFlux.Flux.FIRE);
+                }
+                else if(flux == ElementalFlux.Flux.FIRE){
+                    arrow.setFireTicks(100000);
+                    arrow.setMetadata("frostfire_fire", new FixedMetadataValue(EvoCraft.getPlugin(), true));
+                }
+                else if(flux == ElementalFlux.Flux.FROST){
+                    arrow.setMetadata("frostfire_frost", new FixedMetadataValue(EvoCraft.getPlugin(), true));
+                }
+            }
+        }
+    }
     public static void thunderstrikeAbility(PlayerInteractEvent event, Player player, ItemStack itemStack) {
         /**
          * Thunderstrike Ability

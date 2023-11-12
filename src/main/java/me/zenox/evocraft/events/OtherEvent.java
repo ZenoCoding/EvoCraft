@@ -12,10 +12,9 @@ import me.zenox.evocraft.item.VanillaItem;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Explosive;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -29,10 +28,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+
+import static org.bukkit.Material.*;
 
 public class OtherEvent implements Listener {
 
@@ -91,6 +94,30 @@ public class OtherEvent implements Listener {
 
         } else if (entity.hasMetadata("mana_projectile")) {
             ClassAbility.manaBallDamage(e, entity.getMetadata("mana_projectile").get(0).asInt());
+        }
+        if(entity.hasMetadata("frostfire_fire")){
+            BlockData newBlockData = FIRE.createBlockData();
+            Block theBlockBeneathFeet = e.getHitEntity().getLocation().clone().add(0, -1, 0).getBlock();
+            if(theBlockBeneathFeet.getType() != AIR) {
+                int size = 3; // Adjust the size of the square as needed
+                for (int i = 0; i < size; i++) {
+                    for (int j = 0; j < size + 1; j++) {
+                        e.getEntity().getWorld().setBlockData(e.getHitEntity().getLocation().add(i - 1, 0, j - 1), newBlockData);
+                    }
+                }
+            }
+        }
+        if(entity.hasMetadata("frostfire_frost")){
+            ((LivingEntity) e.getHitEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 10));
+            BlockData newBlockData = ICE.createBlockData();
+            int size = 3; // Adjust the size of the square as needed
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    for(int y = 0; y < size; y++) {
+                        e.getEntity().getWorld().setBlockData(e.getHitEntity().getLocation().add(i-1, y-1, j-1), newBlockData);
+                    }
+                }
+            }
         }
     }
 

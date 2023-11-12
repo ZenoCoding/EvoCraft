@@ -151,6 +151,7 @@ item-name-hard_stone: Hard Stone
 item-name-colossal_blade: Colossal Blade
 
 item-name-thunderstrike_staff: Thunderstrike Staff
+item-name-frostfire_bow: FrostFire Bow
 
 ##########################################################################
 ##                              ITEM LORE                               ##
@@ -433,6 +434,8 @@ item-lore-vertex_blade:
 
 item-lore-thunderstrike_staff:
   - "Smite enemies from above!"
+item-lore-frostfire_bow:
+  - "&bIce &7and &cFire&7, all in one."
 
 ##########################################################################
 ##                              ABILITIES                               ##
@@ -627,6 +630,13 @@ ability-lore-thunderstrike:
   - "Strike down your enemies with the power of &cthunder."
   - ""
   - "Deals &cdamage &7to all enemies in a &a5 block &7radius."
+ability-name-elemental_flux: Elemental Flux
+
+ability-lore-elemental_flux:
+  - "Swap the flux between &b&lFrost &7&rand &c&lFire"
+ability-name-rapid_fire: Rapid Fire
+ability-lore-rapid_fire:
+  - "Fire instantly."
 
 ##########################################################################
 ##                           CLASS ABILITIES                            ##

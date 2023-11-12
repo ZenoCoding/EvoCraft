@@ -672,6 +672,16 @@ public class ItemRegistry {
             .modifier(AttributeRegistry.WISDOM, 50)
             .modifier(AttributeRegistry.ATTACK_DAMAGE, 12)
             .ability(AbilityRegistry.THUNDERSTRIKE));
+    public static final ComplexItem FROSTFIRE_BOW = new ComplexItem(new ItemSettings()
+            .id("frostfire_bow")
+            .material(Material.BOW)
+            .rarity(ComplexItem.Rarity.UNCOMMON)
+            .type(ComplexItem.Type.BOW)
+            .ability(new ElementalFlux())
+            .modifier(AttributeRegistry.STRENGTH, 10)
+            .variable(ElementalFlux.FLUX_VARIABLE_TYPE, ElementalFlux.Flux.FIRE)
+            .ability(AbilityRegistry.RAPID_FIRE)
+    );
 
     private final static List<Recipe> registeredRecipes = new ArrayList<>();
 
