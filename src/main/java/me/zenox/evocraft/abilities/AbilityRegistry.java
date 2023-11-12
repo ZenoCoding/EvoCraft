@@ -3,6 +3,7 @@ package me.zenox.evocraft.abilities;
 import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -169,7 +170,10 @@ public class AbilityRegistry {
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
             .setManaCost(50)
             .setCooldown(0), ItemAbility::thunderstrikeAbility);
-
+    public static final ItemAbility RAPID_FIRE = new ItemAbility(new AbilitySettings()
+            .setId("rapid_fire")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            , ItemAbility::rapidFireAbility);
 
     public static void registerAbilities(){
         Util.logToConsole("Registering %s abilities.".formatted(ChatColor.GOLD + "" + Ability.registeredAbilities.size() + "" + ChatColor.RESET));
