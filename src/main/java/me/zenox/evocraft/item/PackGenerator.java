@@ -500,7 +500,7 @@ public class PackGenerator implements Listener {
 
         } catch (NoSuchAlgorithmException | IOException e) {
             e.printStackTrace();
-            return null; // or handle the exception as per your requirement
+            return null; 
         }
     }
 
