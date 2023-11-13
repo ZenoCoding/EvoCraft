@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.util.Util;
+import net.kyori.adventure.text.Component;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,6 +18,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +29,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.CodeSource;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -474,7 +479,29 @@ public class PackGenerator implements Listener {
      * @return
      */
     private byte[] generateHash(File resourcePack) {
-        throw new NotImplementedException("generateHash not implemented");
+        //throw new NotImplementedException("generateHash not implemented");
+        try {
+            // Create an instance of MessageDigest for SHA-1
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+
+            // Create a FileInputStream to read the resource pack file
+            try (FileInputStream fis = new FileInputStream(resourcePack)) {
+                byte[] byteArray = new byte[1024];
+                int bytesCount;
+
+                // Read the file data and update the MessageDigest
+                while ((bytesCount = fis.read(byteArray)) != -1) {
+                    digest.update(byteArray, 0, bytesCount);
+                }
+            }
+
+            // Complete the hash computation
+            return digest.digest();
+
+        } catch (NoSuchAlgorithmException | IOException e) {
+            e.printStackTrace();
+            return null; // or handle the exception as per your requirement
+        }
     }
 
     /**
@@ -483,14 +510,13 @@ public class PackGenerator implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
         // Send a message to the player briefly telling them about the resource pack
-        Util.sendMessage(...);
-
+        Player player = event.getPlayer();
+        String message = "Welcome to the server!";
+        Util.sendMessage(player, message);
         // Set the resource pack for the player
         Player p = event.getPlayer();
         // public void setResourcePack(@NotNull String url, byte @Nullable [] hash, net.kyori.adventure.text.@Nullable Component prompt, boolean force);
-        p.setResourcePack(this.url, this.hash ...);
-
-
+        p.setResourcePack(this.url, this.hash, Component.text("Please install this resource pack in order to properly render server models"), true);
         throw new NotImplementedException("Setting resource pack on join not yet implemented.");
     }
 }
