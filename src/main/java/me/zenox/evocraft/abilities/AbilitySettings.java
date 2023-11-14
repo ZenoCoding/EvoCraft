@@ -102,6 +102,11 @@ public class AbilitySettings {
         return this;
     }
 
+    public AbilitySettings modifiers(Modifier... modifiers) {
+        this.modifiers.addAll(List.of(modifiers));
+        return this;
+    }
+
     public AbilitySettings modifier(Modifier modifier) {
         this.modifiers.add(modifier);
         return this;

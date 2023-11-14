@@ -78,6 +78,19 @@ public abstract class Modifier {
                     }
                 };
             }
+        },
+        MULTI {
+            @Override
+            Modifier create(String id, Modifier ... modifiers) {
+                return new Modifier(id) {
+                    @Override
+                    void modify(ClassAbility ability) {
+                        for (Modifier modifier : modifiers) {
+                            modifier.modify(ability);
+                        }
+                    }
+                };
+            }
         };
 
         Modifier create(String id, double value) {
@@ -85,6 +98,10 @@ public abstract class Modifier {
         }
 
         Modifier create(String id, TriConsumer<PlayerInteractEvent, Player, ClassAbility> executable) {
+            throw new UnsupportedOperationException("This operation is not supported for type: " + this);
+        }
+
+        Modifier create(String id, Modifier ... modifiers) {
             throw new UnsupportedOperationException("This operation is not supported for type: " + this);
         }
     }
@@ -101,6 +118,10 @@ public abstract class Modifier {
 
     public static Modifier of(Type type, String id, TriConsumer<PlayerInteractEvent, Player, ClassAbility> executable) {
         return type.create(id, executable);
+    }
+
+    public static Modifier of(Type type, String id, Modifier ... modifiers) {
+        return type.create(id, modifiers);
     }
 
     abstract void modify(ClassAbility ability);

@@ -164,15 +164,15 @@ public class AbilityRegistry {
             .strength(1)
             .charges(1)
             .chargeTime(15)
-            .modifier(Modifier.of(Modifier.Type.RANGE, "teleport_range_1", +2))
-            .modifier(Modifier.of(Modifier.Type.MANA_COST, "teleport_mana_1", -5))
-            .modifier(Modifier.of(Modifier.Type.CHARGE, "teleport_charge_1", +1))
-            .modifier(Modifier.of(Modifier.Type.EXECUTABLE, "teleport_dark", ClassAbility::darkTeleport))
-            .modifier(Modifier.of(Modifier.Type.STRENGTH, "teleport_strength_1", +1))
-            .modifier(Modifier.of(Modifier.Type.CHARGE, "teleport_charge_2", +1))
-            .modifier(Modifier.of(Modifier.Type.EXECUTABLE, "teleport_surge", ClassAbility::surgeTeleport))
-            .modifier(Modifier.of(Modifier.Type.RANGE, "teleport_range_2", +4))
-            .modifier(Modifier.of(Modifier.Type.EXECUTABLE, "teleport_arcane", ClassAbility::arcaneTeleport))
+            .modifiers(Modifier.of(Modifier.Type.RANGE, "teleport_range_1", +2),
+                    Modifier.of(Modifier.Type.MANA_COST, "teleport_mana_1", -5),
+                    Modifier.of(Modifier.Type.CHARGE, "teleport_charge_1", +1),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "teleport_dark", ClassAbility::darkTeleport),
+                    Modifier.of(Modifier.Type.STRENGTH, "teleport_strength_1", +1),
+                    Modifier.of(Modifier.Type.CHARGE, "teleport_charge_2", +1),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "teleport_surge", ClassAbility::surgeTeleport),
+                    Modifier.of(Modifier.Type.RANGE, "teleport_range_2", +4),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "teleport_arcane", ClassAbility::arcaneTeleport))
             , ClassAbility::teleportAbility);
 
     public static final ClassAbility MANA_BALL = new ClassAbility(new AbilitySettings()
@@ -183,27 +183,44 @@ public class AbilityRegistry {
             .strength(1)
             .charges(-1)
             .chargeTime(-1)
-            .modifier(Modifier.of(Modifier.Type.MANA_COST, "mana_ball_mana_1", -5))
-            .modifier(Modifier.of(Modifier.Type.RANGE, "mana_ball_range_1", +2))
-            .modifier(Modifier.of(Modifier.Type.STRENGTH, "mana_ball_strength_1", +1))
-            .modifier(Modifier.of(Modifier.Type.EXECUTABLE, "mana_ball_homing", ClassAbility::homingManaBall))
-            .modifier(Modifier.of(Modifier.Type.MANA_COST, "mana_ball_strength_2", +2))
-            .modifier(Modifier.of(Modifier.Type.EXECUTABLE, "mana_ball_multishot", ClassAbility::multishotManaBall))
+            .modifiers(Modifier.of(Modifier.Type.MANA_COST, "mana_ball_mana_1", -5),
+                    Modifier.of(Modifier.Type.RANGE, "mana_ball_range_1", +2),
+                    Modifier.of(Modifier.Type.STRENGTH, "mana_ball_strength_1", +1),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "mana_ball_homing", ClassAbility::homingManaBall),
+                    Modifier.of(Modifier.Type.MANA_COST, "mana_ball_strength_2", +1),
+                    Modifier.of(Modifier.Type.RANGE, "mana_ball_range", +5),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "mana_ball_multishot", ClassAbility::multishotManaBall),
+                    Modifier.of(Modifier.Type.MANA_COST, "mana_ball_strength_2", +1),
+                    Modifier.of(Modifier.Type.MULTI, "mana_ball_am",
+                            Modifier.of(Modifier.Type.MANA_COST, "mana_ball_am_mana_boost", +50),
+                            Modifier.of(Modifier.Type.EXECUTABLE, "mana_ball_am_arcane_multishot", ClassAbility::multishotArcaneSingularity),
+                            Modifier.of(Modifier.Type.RANGE, "mana_ball_am_range", +15)))
             , ClassAbility::manaBallAbility);
     public static final ClassAbility RIFT_BEAM = new ClassAbility(new AbilitySettings()
             .id("mage_rift_beam")
-            .manaCost(50)
-            .cooldown(0)
+            .manaCost(40)
+            .cooldown(10)
             .range(20)
-            .strength(1)
-            , ClassAbility::riftBeamAbility);
+            .strength(2)
+            .charges(0)
+            .chargeTime(0)
+            .modifiers(
+                    Modifier.of(Modifier.Type.RANGE, "rift_beam_extend", +5),
+                    Modifier.of(Modifier.Type.STRENGTH, "rift_beam_energize", +1),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_mark", ClassAbility::riftBeamMark),
+                    Modifier.of(Modifier.Type.MANA_COST, "rift_beam_efficiency", -10),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_chain", ClassAbility::riftBeamChain),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_dimensional_rupture", ClassAbility::riftBeamDimensionalRupture),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_apex", ClassAbility::riftBeamApex)
+            ), ClassAbility::riftBeamAbility);
     public static final ClassAbility RUNE_SHIELD = new ClassAbility(new AbilitySettings()
             .id("mage_rune_shield")
             .manaCost(50)
             .cooldown(0)
             .range(20)
             .strength(1)
-            , ClassAbility::runeShieldAbility);
+,
+ ClassAbility::runeShieldAbility);
 
     public static void registerAbilities(){
         Util.logToConsole("Registering %s abilities.".formatted(ChatColor.GOLD + "" + Ability.registeredAbilities.size() + ChatColor.RESET));
