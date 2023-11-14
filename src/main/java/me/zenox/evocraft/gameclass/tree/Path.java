@@ -13,10 +13,12 @@ public abstract class Path {
     private String id;
 
     public static final List<Path> registeredPaths = new ArrayList<>();
+    private final int maxLevel;
 
     // Constructor
-    public Path(String id) {
+    public Path(String id, int maxLevel) {
         this.id = id;
+        this.maxLevel = maxLevel;
         registeredPaths.add(this);
     }
 
@@ -42,4 +44,8 @@ public abstract class Path {
 
     // Abstract method to apply stats, metadata, etc. to player
     public abstract void apply(PlayerData playerData);
+
+    public int getMaxLevel() {
+        return maxLevel;
+    }
 }

@@ -11,7 +11,7 @@ public class AbilityPath extends Path {
     public final ClassAbility ability;
 
     public AbilityPath(String id, ClassAbility ability) {
-        super(id);
+        super(id, ability.getModifiers().size());
         this.ability = ability;
     }
 

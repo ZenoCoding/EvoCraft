@@ -203,7 +203,12 @@ public class Command implements CommandExecutor, TabCompleter {
                     Util.sendMessage(sender, "This path does not exist!");
                     return true;
                 }
-                data.progressAbility(path);
+                try {
+                    data.progressAbility(path);
+                } catch (IllegalArgumentException e) {
+                    Util.sendMessage(sender, e.getMessage());
+                    return true;
+                }
                 return true;
             }
             default -> Util.sendMessage(sender, "EvoCraft Help Page.");

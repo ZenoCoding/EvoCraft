@@ -55,7 +55,9 @@ public class PlayerData {
     // Progress the level of a specific ability
     public void progressAbility(Path path) {
         int currentLevel = getPathLevel(path);
-        setPathLevel(path, currentLevel + 1);
+        if (getPathLevel(path) < path.getMaxLevel())
+            setPathLevel(path, currentLevel + 1);
+        else throw new IllegalArgumentException("Ability " + path.getId() + " is already at max level!");
     }
 
     // Display all abilities and their levels
