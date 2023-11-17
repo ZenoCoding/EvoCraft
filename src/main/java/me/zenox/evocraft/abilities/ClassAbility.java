@@ -1,21 +1,18 @@
 package me.zenox.evocraft.abilities;
 
-import com.archyx.aureliumskills.listeners.DamageListener;
-import com.sk89q.worldguard.bukkit.event.entity.DamageEntityEvent;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.data.PlayerData;
 import me.zenox.evocraft.data.PlayerDataManager;
 import me.zenox.evocraft.util.Geo;
 import me.zenox.evocraft.util.TriConsumer;
 import me.zenox.evocraft.util.Util;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
@@ -342,7 +339,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
 
     public static void homingManaBall(PlayerInteractEvent event, Player player, ClassAbility ability) {
         Snowball projectile = createProjectile(player, ability);
-        startHomingTask(player, projectile, ability.getRange()).runTaskTimer(EvoCraft.getPlugin(), 0, 1);
+        startHomingTask(player, projectile, ability.getRange(), false).runTaskTimer(EvoCraft.getPlugin(), 0, 2);
     }
 
     public static void multishotManaBall(PlayerInteractEvent event, Player player, ClassAbility ability) {
@@ -355,7 +352,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
             Vector perpendicular = direction.rotateAroundY(Math.toRadians(90));
             Vector offset = perpendicular.multiply(((i - numberOfProjectiles/2)*1.5));
             projectile.teleport(projectile.getLocation().add(offset));
-            startHomingTask(player, projectile, ability.getRange()).runTaskTimer(EvoCraft.getPlugin(), 0, 2);
+            startHomingTask(player, projectile, ability.getRange(), false).runTaskTimer(EvoCraft.getPlugin(), 0, 2);
         }
     }
 
@@ -382,7 +379,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
         };
     }
 
-    private static BukkitRunnable startHomingTask(Player player, Snowball projectile, int range) {
+    private static BukkitRunnable startHomingTask(Player player, Snowball projectile, int range, boolean down) {
         return new BukkitRunnable() {
             final Location start = player.getLocation().clone();
             @Override
@@ -394,7 +391,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
                 }
                 LivingEntity target = findNearestTarget(projectile, player);
                 if (target != null) {
-                    adjustProjectileVelocity(projectile, target);
+                    adjustProjectileVelocity(projectile, target, down);
                 }
                 spawnParticles(projectile.getLocation());
             }
@@ -407,15 +404,28 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
                 new Particle.DustOptions(Color.fromRGB(0, 255, 255), 1));
     }
 
-    private static void adjustProjectileVelocity(Snowball projectile, LivingEntity target) {
+    private static void adjustProjectileVelocity(Snowball projectile, LivingEntity target, boolean downwards) {
         Vector currentVelocity = projectile.getVelocity();
-        Vector toTarget = target.getEyeLocation().toVector().subtract(projectile.getLocation().toVector()).normalize();
-        Vector newVelocity = currentVelocity.clone().add(toTarget.clone().subtract(currentVelocity).normalize().multiply(ACCELERATION_RATE));
-        if (currentVelocity.angle(newVelocity) > MAX_TURN_RATE) {
-            newVelocity = rotateVectorTowards(currentVelocity, toTarget, MAX_TURN_RATE);
+        Vector targetDirection = target.getEyeLocation().toVector().subtract(projectile.getLocation().toVector());
+        double currentHorizontalSpeed = Math.sqrt(currentVelocity.getX() * currentVelocity.getX() + currentVelocity.getZ() * currentVelocity.getZ());
+
+        Vector velocityAdjustment = targetDirection.clone().subtract(currentVelocity).normalize();
+        Vector adjustedVelocity = currentVelocity.clone().add(velocityAdjustment);
+
+        if (downwards) {
+            // Keep the horizontal velocity components the same to maintain horizontal speed
+            double adjustedY = adjustedVelocity.getY() - ACCELERATION_RATE * 1.1; // Slightly increase the downward acceleration
+            adjustedVelocity = new Vector(currentVelocity.getX(), adjustedY, currentVelocity.getZ());
+        } else {
+            if (currentVelocity.angle(adjustedVelocity) > MAX_TURN_RATE) {
+                adjustedVelocity = rotateVectorTowards(currentVelocity, targetDirection.normalize(), MAX_TURN_RATE);
+            }
+            adjustedVelocity = adjustedVelocity.normalize().multiply(currentHorizontalSpeed).setY(adjustedVelocity.getY());
         }
-        projectile.setVelocity(newVelocity.normalize().multiply(currentVelocity.length()));
+
+        projectile.setVelocity(adjustedVelocity);
     }
+
 
     private static Vector rotateVectorTowards(Vector source, Vector target, double maxAngle) {
         double angle = source.angle(target);
@@ -430,7 +440,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
         double minDistance = Double.MAX_VALUE;
         LivingEntity nearest = null;
 
-        for (Entity entity : location.getWorld().getNearbyEntities(location, 10, 10, 10)
+        for (Entity entity : location.getWorld().getNearbyEntities(location, 10, 20, 10)
                  .stream()
                  .filter(entity -> entity instanceof LivingEntity && ((LivingEntity) entity).hasLineOfSight(projectile)).toList()) {
             if (entity instanceof LivingEntity && !entity.equals(caster)) {
@@ -450,15 +460,280 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
             LivingEntity target = (LivingEntity) event.getHitEntity();
             target.damage(5.0*strength, (Entity) event.getEntity().getShooter()); // Deal 5 points of damage, customize as needed
             target.setNoDamageTicks(0);
-            // Additional effects can be added here, like knockback or status effects
+            target.setFreezeTicks(target.getFreezeTicks()+strength*20);
         }
         // Remove the projectile upon impact
         event.getEntity().remove();
     }
 
+    public static void multishotArcaneSingularity(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        int numberOfProjectiles = 3;
+        double spreadAngle = 15; // Angle between each projectile
+
+        Vector baseDirection = player.getLocation().getDirection().normalize();
+        double basePitch = baseDirection.getY(); // Store the original pitch
+
+        for (int i = 0; i < numberOfProjectiles; i++) {
+            // Calculate the yaw offset by spreading the projectiles evenly
+            double yawOffsetDegrees = spreadAngle * (i - (numberOfProjectiles - 1) / 2.0);
+            Vector direction = rotateVectorAroundY(baseDirection.setY(0).normalize(), yawOffsetDegrees);
+            direction.setY(basePitch); // Set the original pitch back to the direction vector
+            direction.normalize(); // Normalize the vector after adjusting pitch
+
+            Snowball projectile = player.launchProjectile(Snowball.class);
+            projectile.setVelocity(direction.multiply(3.0));
+            projectile.setMetadata("arcane_singularity", new FixedMetadataValue(EvoCraft.getPlugin(), true));
+            Location prev = projectile.getLocation().clone();
+
+            new BukkitRunnable() {
+                final int abilityRange = ability.getRange();
+                @Override
+                public void run() {
+                    if (projectile.isDead() || projectile.isOnGround() || reachMaxRange(projectile, prev, abilityRange)) {
+                        createSingularity(projectile.getLocation(), ability, player);
+                        this.cancel(); // Stop the task after the singularity has been created
+                    }
+                    spawnParticles(projectile.getLocation());
+                }
+            }.runTaskTimer(EvoCraft.getPlugin(), 0L, 1L);
+
+            startHomingTask(player, projectile, ability.getRange(), true).runTaskTimer(EvoCraft.getPlugin(), 0, 2);
+        }
+    }
+
+    private static Vector rotateVectorAroundY(Vector vector, double angleDegrees) {
+        double angleRadians = Math.toRadians(angleDegrees);
+        double cos = Math.cos(angleRadians);
+        double sin = Math.sin(angleRadians);
+        double x = vector.getX() * cos + vector.getZ() * sin;
+        double z = vector.getX() * -sin + vector.getZ() * cos;
+        return new Vector(x, vector.getY(), z);
+    }
+
+    private static boolean reachMaxRange(Projectile projectile, Location initial, int range) {
+        return projectile.getLocation().distance(initial) >= range;
+    }
+
+    private static void createSingularity(Location location, ClassAbility ability, Player player) {
+        // Create a singularity effect at the location
+        int range = ability.getRange()/3;
+        int duration = ability.getRange()*20/3;
+        spawnSingularityParticles(location, duration, range);
+        applySingularityEffects(location, duration, range, player);
+
+        // Schedule to end the singularity effect after its lifetime
+        Bukkit.getScheduler().runTaskLater(EvoCraft.getPlugin(), () -> {
+            endSingularity(location, ability);
+        }, duration); // Duration based on ability settings
+    }
+
+    private static void spawnSingularityParticles(Location loc, int duration, int range) {
+        // Spawn particles to indicate the singularity
+        // Placeholder for actual particle effect code
+        final double RADIUS = range;
+        final double DELTA_ANGLE = Math.PI / 16;
+
+        Location location = loc.clone().add(0, 1, 0).setDirection(new Vector(0, 0, 0));
+        new BukkitRunnable(){
+            double angle = 0;
+            int a = 0;
+            @Override
+            public void run(){
+                if (a > duration) {
+                    cancel();
+                    return;
+                }
+                spawnParticles(location.clone().add(Math.cos(angle) * RADIUS, 0, Math.sin(angle) * RADIUS));
+                spawnParticles(location.clone().add(Math.cos(angle + Math.PI) * RADIUS, 0, Math.sin(angle + Math.PI) * RADIUS));
+                spawnParticles(location.clone().add(0, RADIUS + Math.sin(angle) * RADIUS / 2, 0));
+                angle += DELTA_ANGLE;
+
+                if (angle % (Math.PI / 2) < DELTA_ANGLE)
+                    location.getWorld().playSound(location.clone().add(0, RADIUS + Math.sin(angle) * RADIUS / 2, 0), Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 0);
+                a++;
+            }
+        }.runTaskTimer(EvoCraft.getPlugin(), 0L, 1L);
+    }
+
+
+    private static void applySingularityEffects(Location location, int duration, int range, Player p) {
+        final int radius = range;
+        final double pullStrength = 0.2; // Example pull strength
+        final double gravityEffect = 0.3; // Example additional gravity effect
+
+        new BukkitRunnable() {
+            int a = 0;
+            @Override
+            public void run() {
+                if (a > duration) {
+                    cancel();
+                    return;
+                }
+                location.getWorld().getNearbyEntities(location, radius, radius, radius).forEach(entity -> {
+                    if (entity instanceof LivingEntity livingEntity && !entity.equals(p)) {
+                        double distance = location.distance(livingEntity.getLocation());
+
+                        // Apply slowness effect
+                        int effectStrength = (int) (distance / radius * 4); // Scale from 0 to 4
+                        if (effectStrength > 0) {
+                            livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, effectStrength, false, false, false));
+                        }
+
+                        livingEntity.setFreezeTicks(livingEntity.getFreezeTicks()+15);
+
+                        // Apply a grounding effect
+                        if (livingEntity.isOnGround()) {
+                            // Player is on the ground, possibly apply a minor pull
+                            if (distance > radius) {
+                                Vector towardsCenter = location.toVector().subtract(livingEntity.getLocation().toVector()).normalize();
+                                livingEntity.setVelocity(towardsCenter.multiply(pullStrength));
+                            }
+                        } else {
+                            // Player is in the air, apply downward force to simulate increased gravity
+                            Vector currentVelocity = livingEntity.getVelocity();
+                            livingEntity.setVelocity(new Vector(currentVelocity.getX(),
+                                    Math.max(-gravityEffect, currentVelocity.getY() - gravityEffect),
+                                    currentVelocity.getZ()));
+                        }
+                    }
+                });
+                a+= 5;
+            }
+        }.runTaskTimer(EvoCraft.getPlugin(), 0L, 5L); // Repeat every second
+    }
+
+
+    private static void endSingularity(Location location, ClassAbility ability) {
+        // Logic to remove the singularity effects and clean up
+        // For example, removing potion effects from players in the area
+        location.getWorld().getNearbyEntities(location, ability.getRange(), ability.getRange(), ability.getRange())
+                .stream()
+                .filter(entity -> entity instanceof Player)
+                .map(entity -> (Player) entity)
+                .forEach(player -> player.removePotionEffect(PotionEffectType.SLOW));
+    }
+
+    /**
+     * Casts the base Rift Beam ability.
+     * The beam damages and pierces through enemies in a straight line from the player's position.
+     *
+     * @param event   The player interaction event.
+     * @param player  The player casting the ability.
+     * @param ability The class ability information.
+     */
     public static void riftBeamAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        // 1. Calculate the beam trajectory from the player's eye location in the direction they are looking.
+        Vector start = player.getEyeLocation().toVector();
+        Vector end = player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(ability.getRange())).toVector();
+        // 2. Spawn particles along this line to simulate the beam effect.
+        // 3. Check for entities in the beam's path and apply damage to them.
+        List<Vector> tracedPath = Geo.lerpEdges(List.of(start, end), (int) (1.3 * start.distance(end)));
+        tracedPath = tracedPath.subList(0, tracedPath.size()/2);
+        tracedPath.forEach(vector -> {
+            player.getWorld().spawnParticle(Particle.END_ROD, vector.toLocation(player.getWorld()), 1, 0.1, 0.1, 0.1);
+            player.getWorld().spawnParticle(Particle.REDSTONE, vector.toLocation(player.getWorld()), 2, 0, 0, 0,
+                    new Particle.DustOptions(Color.fromRGB(144, 0, 255), 1));
+            player.getWorld().getNearbyEntities(vector.toLocation(player.getWorld()), 0.5, 0.5, 0.5).forEach(entity -> {
+                if (entity instanceof Damageable && !entity.equals(player)) {
+                    ((Damageable) entity).damage(ability.getStrength()*5);
+                }
+            });
+        });
+    }
+
+    /**
+     * Applies a mark to enemies hit by the Rift Beam.
+     * Marked enemies take increased damage from all sources for a short duration.
+     *
+     * @param event   The player interaction event.
+     * @param player  The player casting the ability.
+     * @param ability The class ability information.
+     */
+    public static void riftBeamMark(PlayerInteractEvent event, Player player, ClassAbility ability) {
+
+        Vector start = player.getEyeLocation().toVector();
+        Vector end = player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(ability.getRange())).toVector();
+        // Spawn particles along this line to simulate the beam effect.
+        // Check for entities in the beam's path and apply damage to them.
+        List<Vector> tracedPath = Geo.lerpEdges(List.of(start, end), (int) (1.3 * start.distance(end)));
+        tracedPath = tracedPath.subList(0, tracedPath.size()/2);
+        tracedPath.forEach(vector -> {
+            player.getWorld().spawnParticle(Particle.END_ROD, vector.toLocation(player.getWorld()), 1, 0.1, 0.1, 0.1);
+            player.getWorld().spawnParticle(Particle.REDSTONE, vector.toLocation(player.getWorld()), 2, 0, 0, 0,
+                    new Particle.DustOptions(Color.fromRGB(144, 0, 255), 1));
+            player.getWorld().getNearbyEntities(vector.toLocation(player.getWorld()), 0.5, 0.5, 0.5).forEach(entity -> {
+                if (entity instanceof LivingEntity lEntity && !entity.equals(player)) {
+                    lEntity.damage(ability.getStrength()*5);
+
+                    // Apply a potion effect to the target
+                    lEntity.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*ability.getStrength(), 0));
+                    lEntity.broadcastSlotBreak(EquipmentSlot.CHEST);
+
+                }
+            });
+        });
+    }
+
+    /**
+     * Chains the Rift Beam to additional nearby enemies after hitting the initial target.
+     *
+     * @param event   The player interaction event.
+     * @param player  The player casting the ability.
+     * @param ability The class ability information.
+     */
+    public static void riftBeamChain(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        // Pseudocode:
+        // 1. After hitting an entity, identify additional enemies within a certain radius.
+        // 2. Spawn a new set of particles from the hit entity to the next target to simulate chaining.
+        // 3. Apply damage to the new target and continue chaining as per the ability parameters.
+
+        Location start = player.getEyeLocation();
+        // loop forward until we hit an entity
+        Location end = start.clone();
+        for (int i = 0; i < ability.getRange(); i++){
+            Location newLoc = start.clone().add(player.getLocation().getDirection().multiply(i));
+            List<LivingEntity> entities = (List<LivingEntity>) newLoc.getNearbyLivingEntities(0.5);
+            if (!entities.isEmpty())
+                end = entities.get(0).getLocation();
+        }
+
+        // Spawn particles along this line to simulate the beam effect.
+
 
     }
+
+    /**
+     * Enemies defeated by the Rift Beam have a chance to spawn a mini-rift, dealing AOE damage to nearby enemies.
+     *
+     * @param event   The player interaction event.
+     * @param player  The player casting the ability.
+     * @param ability The class ability information.
+     */
+    public static void riftBeamDimensionalRupture(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        // Pseudocode:
+        // 1. When an enemy is defeated by the Rift Beam, randomly decide if a mini-rift will spawn.
+        // 2. If so, spawn area effect clouds or invisible armor stands at the location.
+        // 3. Apply AOE damage to entities near the mini-rift periodically.
+        // 4. After a short duration, remove the mini-rift and its effects.
+    }
+
+    /**
+     * The ultimate upgrade of the Rift Beam ability.
+     * Charges up to unleash a devastating blast, with residual effects in its path.
+     *
+     * @param event   The player interaction event.
+     * @param player  The player casting the ability.
+     * @param ability The class ability information.
+     */
+    public static void riftBeamApex(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        // Pseudocode:
+        // 1. Initiate a charging mechanic, perhaps by holding down the right-click.
+        // 2. Once fully charged, release the Rift Beam with enhanced visual effects.
+        // 3. Deal significant damage to the first enemy hit and apply a powerful slow effect.
+        // 4. Leave a trail of particles that simulates a residual rift, slowing and damaging enemies.
+    }
+
+
 
     public static void runeShieldAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
 
