@@ -2,6 +2,7 @@ package me.zenox.evocraft.item;
 
 import com.archyx.aureliumskills.stats.Stats;
 import me.zenox.evocraft.abilities.AbilityRegistry;
+import me.zenox.evocraft.abilities.ElementalFlux;
 import me.zenox.evocraft.abilities.itemabilities.specific.Crucify;
 import me.zenox.evocraft.abilities.itemabilities.specific.EmberAttune;
 import me.zenox.evocraft.abilities.itemabilities.specific.Psychic;

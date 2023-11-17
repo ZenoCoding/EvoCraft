@@ -16,6 +16,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.abilities.AbilitySettings;
+import me.zenox.evocraft.abilities.ElementalFlux;
 import me.zenox.evocraft.abilities.EventAbility;
 import me.zenox.evocraft.abilities.itemabilities.specific.EmberAttune;
 import me.zenox.evocraft.item.ComplexItemMeta;

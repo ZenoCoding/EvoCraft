@@ -1,5 +1,7 @@
 package me.zenox.evocraft.abilities;
 
+import com.archyx.aureliumskills.listeners.DamageListener;
+import com.sk89q.worldguard.bukkit.event.entity.DamageEntityEvent;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.data.PlayerData;
 import me.zenox.evocraft.data.PlayerDataManager;
@@ -12,20 +14,25 @@ import org.bukkit.Particle;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public class ClassAbility extends Ability<PlayerInteractEvent> {
@@ -454,6 +461,34 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
     }
 
     public static void runeShieldAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+
+    }
+    public static void bloodlustAbility(PlayerInteractEvent event, Player player, ClassAbility ability){
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 1) );
+    }
+
+    public static void tripleSlashAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+
+    }
+
+    public static void bullRushAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+
+    }
+    public static ArrayList<Player> counterStrikeActive = new ArrayList<>();
+    public static void counterstrikeAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        counterStrikeActive.add(player);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 50, 200));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 50, 200));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 50, 200));
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                counterStrikeActive.remove(player);
+            }
+        }.runTaskLater(EvoCraft.getPlugin(), 50);
+    }
+
+    public static void agilityBloodlust(PlayerInteractEvent event, Player player, ClassAbility ability) {
 
     }
 

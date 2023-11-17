@@ -27,7 +27,7 @@ public enum GameClass {
             new AbilityTree(AbilityRegistry.TELEPORT, AbilityRegistry.MANA_BALL, AbilityRegistry.RIFT_BEAM, AbilityRegistry.RUNE_SHIELD)),
     WARRIOR("warrior", ChatColor.RED,
             List.of(ComplexItem.Type.SWORD), Material.IRON_SWORD,
-            null),
+            new AbilityTree(AbilityRegistry.TRIPLE_SLASH, AbilityRegistry.BLOODLUST, AbilityRegistry.BULL_RUSH, AbilityRegistry.COUNTERSTRIKE)),
     TANK("tank", ChatColor.GREEN,
             List.of(ComplexItem.Type.AXE), Material.IRON_AXE,
             null),

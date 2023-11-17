@@ -646,7 +646,10 @@ ability-name-mage_mana_ball: Mana Ball
 ability-name-mage_rift_beam: Rift Beam
 ability-name-mage_rune_shield: Rune Shield
 
-
+ability-name-warrior_bloodlust: Bloodlust
+ability-name-warrior_triple_slash: Triple Slash
+ability-name-warrior_bull_rush: Triple Slash
+ability-name-warrior_counterstrike: Triple Slash
 ##########################################################################
 ##                             ENCHANTMENTS                             ##
 ##########################################################################
