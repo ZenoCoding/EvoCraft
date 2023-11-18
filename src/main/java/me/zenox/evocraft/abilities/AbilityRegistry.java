@@ -4,7 +4,6 @@ import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.abilities.itemabilities.*;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -160,18 +159,18 @@ public class AbilityRegistry {
             .id("mage_teleport")
             .manaCost(35)
             .cooldown(0)
-            .range(10)
+            .range(20)
             .strength(1)
             .charges(1)
             .chargeTime(15)
-            .modifiers(Modifier.of(Modifier.Type.RANGE, "teleport_range_1", +2),
+            .modifiers(Modifier.of(Modifier.Type.RANGE, "teleport_range_1", +5),
                     Modifier.of(Modifier.Type.MANA_COST, "teleport_mana_1", -5),
                     Modifier.of(Modifier.Type.CHARGE, "teleport_charge_1", +1),
                     Modifier.of(Modifier.Type.EXECUTABLE, "teleport_dark", ClassAbility::darkTeleport),
                     Modifier.of(Modifier.Type.STRENGTH, "teleport_strength_1", +1),
                     Modifier.of(Modifier.Type.CHARGE, "teleport_charge_2", +1),
                     Modifier.of(Modifier.Type.EXECUTABLE, "teleport_surge", ClassAbility::surgeTeleport),
-                    Modifier.of(Modifier.Type.RANGE, "teleport_range_2", +4),
+                    Modifier.of(Modifier.Type.RANGE, "teleport_range_2", +10),
                     Modifier.of(Modifier.Type.EXECUTABLE, "teleport_arcane", ClassAbility::arcaneTeleport))
             , ClassAbility::teleportAbility);
 
@@ -199,7 +198,7 @@ public class AbilityRegistry {
     public static final ClassAbility RIFT_BEAM = new ClassAbility(new AbilitySettings()
             .id("mage_rift_beam")
             .manaCost(40)
-            .cooldown(10)
+            .cooldown(0)
             .range(20)
             .strength(2)
             .charges(0)

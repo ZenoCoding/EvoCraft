@@ -11,7 +11,6 @@ import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -24,9 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ClassAbility extends Ability<PlayerInteractEvent> {
@@ -620,21 +617,27 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
      */
     public static void riftBeamAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
         // 1. Calculate the beam trajectory from the player's eye location in the direction they are looking.
-        Vector start = player.getEyeLocation().toVector();
-        Vector end = player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(ability.getRange())).toVector();
+        Location start = player.getEyeLocation();
+        Location end = player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(ability.getRange()));
         // 2. Spawn particles along this line to simulate the beam effect.
         // 3. Check for entities in the beam's path and apply damage to them.
-        List<Vector> tracedPath = Geo.lerpEdges(List.of(start, end), (int) (1.3 * start.distance(end)));
-        tracedPath = tracedPath.subList(0, tracedPath.size()/2);
-        tracedPath.forEach(vector -> {
-            player.getWorld().spawnParticle(Particle.END_ROD, vector.toLocation(player.getWorld()), 1, 0.1, 0.1, 0.1);
-            player.getWorld().spawnParticle(Particle.REDSTONE, vector.toLocation(player.getWorld()), 2, 0, 0, 0,
+        alongPath(start, end, location -> {
+            location.getWorld().spawnParticle(Particle.END_ROD, location, 1, 0.1, 0, 0.1, 0);
+            player.getWorld().spawnParticle(Particle.REDSTONE, location, 2, 0, 0, 0,
                     new Particle.DustOptions(Color.fromRGB(144, 0, 255), 1));
-            player.getWorld().getNearbyEntities(vector.toLocation(player.getWorld()), 0.5, 0.5, 0.5).forEach(entity -> {
+            player.getWorld().getNearbyEntities(location, 0.5, 0.5, 0.5).forEach(entity -> {
                 if (entity instanceof Damageable && !entity.equals(player)) {
                     ((Damageable) entity).damage(ability.getStrength()*5);
                 }
             });
+        });
+    }
+
+    private static void alongPath(Location start, Location end, Consumer<Location> loc){
+        List<Vector> tracedPath = Geo.lerpEdges(List.of(start.toVector(), end.toVector()), (int) (1.3 * start.distance(end)));
+        tracedPath = tracedPath.subList(0, tracedPath.size()/2);
+        tracedPath.forEach(vector -> {
+            loc.accept(vector.toLocation(start.getWorld()));
         });
     }
 
@@ -648,23 +651,20 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
      */
     public static void riftBeamMark(PlayerInteractEvent event, Player player, ClassAbility ability) {
 
-        Vector start = player.getEyeLocation().toVector();
-        Vector end = player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(ability.getRange())).toVector();
+        Location start = player.getEyeLocation();
+        Location end = player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(ability.getRange()));
         // Spawn particles along this line to simulate the beam effect.
         // Check for entities in the beam's path and apply damage to them.
-        List<Vector> tracedPath = Geo.lerpEdges(List.of(start, end), (int) (1.3 * start.distance(end)));
-        tracedPath = tracedPath.subList(0, tracedPath.size()/2);
-        tracedPath.forEach(vector -> {
-            player.getWorld().spawnParticle(Particle.END_ROD, vector.toLocation(player.getWorld()), 1, 0.1, 0.1, 0.1);
-            player.getWorld().spawnParticle(Particle.REDSTONE, vector.toLocation(player.getWorld()), 2, 0, 0, 0,
+        alongPath(start, end, location -> {
+            location.getWorld().spawnParticle(Particle.END_ROD, location, 1, 0.1, 0, 0.1, 0);
+            player.getWorld().spawnParticle(Particle.REDSTONE, location, 2, 0, 0, 0,
                     new Particle.DustOptions(Color.fromRGB(144, 0, 255), 1));
-            player.getWorld().getNearbyEntities(vector.toLocation(player.getWorld()), 0.5, 0.5, 0.5).forEach(entity -> {
+            player.getWorld().getNearbyEntities(location, 0.5, 0.5, 0.5).forEach(entity -> {
                 if (entity instanceof LivingEntity lEntity && !entity.equals(player)) {
                     lEntity.damage(ability.getStrength()*5);
 
                     // Apply a potion effect to the target
                     lEntity.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*ability.getStrength(), 0));
-                    lEntity.broadcastSlotBreak(EquipmentSlot.CHEST);
 
                 }
             });
@@ -679,24 +679,125 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
      * @param ability The class ability information.
      */
     public static void riftBeamChain(PlayerInteractEvent event, Player player, ClassAbility ability) {
-        // Pseudocode:
-        // 1. After hitting an entity, identify additional enemies within a certain radius.
-        // 2. Spawn a new set of particles from the hit entity to the next target to simulate chaining.
-        // 3. Apply damage to the new target and continue chaining as per the ability parameters.
+        double distance = ability.getRange();
+        Set<LivingEntity> explored = new HashSet<>();
 
         Location start = player.getEyeLocation();
-        // loop forward until we hit an entity
-        Location end = start.clone();
-        for (int i = 0; i < ability.getRange(); i++){
-            Location newLoc = start.clone().add(player.getLocation().getDirection().multiply(i));
-            List<LivingEntity> entities = (List<LivingEntity>) newLoc.getNearbyLivingEntities(0.5);
-            if (!entities.isEmpty())
-                end = entities.get(0).getLocation();
+        Vector direction = start.getDirection().normalize();
+
+        Optional<LivingEntity> hitEntity = findFirstEntity(start, direction, distance, player);
+
+        if (hitEntity.isPresent()) {
+            LivingEntity target = hitEntity.get();
+            target.damage(ability.getStrength() * 5);
+            explored.add(target);
+            createParticlePath(start, target.getLocation(), player);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    chainToClosestEntities(target, player, ability, explored, distance, 1);
+                }
+            }.runTaskLater(EvoCraft.getPlugin(), 5L);
+
+        // create visual particle path to show that it was casted, but nothing was hit
+        } else {
+            Location end = findBeamHitLocation(start, direction, distance);
+            createParticlePath(start, findBeamHitLocation(start, direction, distance), player);
+            end.getWorld().spawnParticle(Particle.REDSTONE, end, 10, 0.2, 0.2, 0.2,
+                    new Particle.DustOptions(Color.fromRGB(144, 0, 255), 1));
+            end.getWorld().spawnParticle(Particle.END_ROD, end, 10, 0.2, 0.2, 0.2);
         }
 
-        // Spawn particles along this line to simulate the beam effect.
-        
+    }
 
+    private static Optional<LivingEntity> findFirstEntity(Location start, Vector direction, double distance, Player player) {
+        double stepSize = 0.5;
+        Vector stepVector = direction.clone().normalize().multiply(stepSize);
+
+        for (double i = 0; i <= distance; i += stepSize) {
+            Location currentLoc = start.clone().add(stepVector.clone().multiply(i));
+
+            // Check if a block is hit
+            if (currentLoc.getBlock().getType() != Material.AIR) {
+                return Optional.empty();
+            }
+
+            List<LivingEntity> nearbyEntities = (List<LivingEntity>) currentLoc.getNearbyLivingEntities(1);
+            for (LivingEntity entity : nearbyEntities) {
+                if (!entity.equals(player)) {
+                    return Optional.of(entity);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    private static Location findBeamHitLocation(Location start, Vector direction, double distance) {
+        double stepSize = 0.5;
+        Vector stepVector = direction.clone().normalize().multiply(stepSize);
+        Location currentLoc = start.clone();
+
+        for (double i = 0; i <= distance; i += stepSize) {
+            currentLoc.add(stepVector);
+            if (currentLoc.getBlock().getType() != Material.AIR) {
+                return currentLoc;
+            }
+        }
+        return start.clone().add(direction.multiply(distance));
+    }
+
+    private static void chainToClosestEntities(LivingEntity initialTarget, Player player, ClassAbility ability, Set<LivingEntity> explored, double remainingDistance, double damageMultiplier) {
+
+        double closestDistanceSquared = Double.MAX_VALUE;
+        LivingEntity closestEntity = null;
+
+        // Find the closest entity within the remaining distance
+        for (LivingEntity entity : initialTarget.getLocation().getWorld().getNearbyLivingEntities(initialTarget.getLocation(), remainingDistance)) {
+            if (!entity.equals(player) && !explored.contains(entity)) {
+                double distanceSquared = entity.getLocation().distanceSquared(initialTarget.getLocation());
+                if (distanceSquared < closestDistanceSquared) {
+                    closestDistanceSquared = distanceSquared;
+                    closestEntity = entity;
+                }
+            }
+        }
+
+        // If a valid closest entity is found
+        if (closestEntity != null && initialTarget.hasLineOfSight(closestEntity)) {
+            // Apply reduced damage to the closest entity
+            closestEntity.damage(ability.getStrength() * 5 * damageMultiplier);
+            explored.add(closestEntity);
+
+            // Create particle effects from the last target to the new one
+            createParticlePath(initialTarget.getEyeLocation(), closestEntity.getEyeLocation(), player);
+            final LivingEntity finalClosestEntity = closestEntity;
+
+            // Calculate remaining distance and continue chaining if possible
+            double distanceToNextTarget = Math.sqrt(closestDistanceSquared);
+            if (remainingDistance - distanceToNextTarget > 0) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        chainToClosestEntities(finalClosestEntity, player, ability, explored, remainingDistance - distanceToNextTarget, damageMultiplier * 0.8); // reduce damage by 10% each chain
+                    }
+                }.runTaskLater(EvoCraft.getPlugin(), 5L);
+            }
+        }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+            }
+        }.runTaskLater(EvoCraft.getPlugin(), 5L); // 20L represents a delay of 1 second (20 ticks)
+    }
+
+    private static void createParticlePath(Location start, Location end, Player player) {
+        alongPath(start, end, location -> {
+
+            location.getWorld().spawnParticle(Particle.END_ROD, location, 1, 0.1, 0, 0.1, 0);
+            location.getWorld().spawnParticle(Particle.REDSTONE, location, 2, 0, 0, 0,
+                    new Particle.DustOptions(Color.fromRGB(144, 0, 255), 1));
+        });
     }
 
     /**
