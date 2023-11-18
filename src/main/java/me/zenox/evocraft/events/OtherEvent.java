@@ -1,10 +1,13 @@
 package me.zenox.evocraft.events;
 
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
+import com.sk89q.worldguard.bukkit.cause.Cause;
+import com.sk89q.worldguard.bukkit.event.entity.DamageEntityEvent;
 import de.studiocode.invui.window.impl.single.SimpleWindow;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.abilities.ClassAbility;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
+import me.zenox.evocraft.gameclass.GameClass;
 import me.zenox.evocraft.gui.EnchantingGUI;
 import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
@@ -75,6 +78,19 @@ public class OtherEvent implements Listener {
             for (Entity nearbyEntity : entity.getLocation().getWorld().getNearbyEntities(entity.getLocation(), 3, 3, 3)) {
                 if (!Util.isInvulnerable(nearbyEntity)) nearbyEntity.setVelocity(nearbyEntity.getVelocity().add(nearbyEntity.getLocation().toVector().subtract(entity.getLocation().add(0, -0.3, 0).toVector()).normalize().multiply(kbValues.get(0).asInt())));
             }
+        }
+    }
+    @EventHandler
+    public void damageEventCounterstrike(EntityDamageByEntityEvent entityDamageByEntityEvent, Player player, Entity entity){
+        if(ClassAbility.counterStrikeActive.contains(player)) {
+            if (((entityDamageByEntityEvent.getDamager() instanceof LivingEntity))) {
+                ((LivingEntity) entityDamageByEntityEvent.getDamager()).damage(entityDamageByEntityEvent.getDamage()/2);
+            }
+            entityDamageByEntityEvent.setCancelled(true);
+            ClassAbility.counterStrikeActive.remove(player);
+            player.removePotionEffect(PotionEffectType.SLOW);
+            player.removePotionEffect(PotionEffectType.SLOW_FALLING);
+            player.removePotionEffect(PotionEffectType.WEAKNESS);
         }
     }
 

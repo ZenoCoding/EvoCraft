@@ -7,6 +7,7 @@ import me.zenox.evocraft.util.Geo;
 import me.zenox.evocraft.util.TriConsumer;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.*;
+import org.bukkit.Color;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -24,6 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class ClassAbility extends Ability<PlayerInteractEvent> {
@@ -751,6 +753,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
         double closestDistanceSquared = Double.MAX_VALUE;
         LivingEntity closestEntity = null;
 
+
         // Find the closest entity within the remaining distance
         for (LivingEntity entity : initialTarget.getLocation().getWorld().getNearbyLivingEntities(initialTarget.getLocation(), remainingDistance)) {
             if (!entity.equals(player) && !explored.contains(entity)) {
@@ -834,6 +837,34 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
 
 
     public static void runeShieldAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+
+    }
+    public static void bloodlustAbility(PlayerInteractEvent event, Player player, ClassAbility ability){
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 1) );
+    }
+
+    public static void tripleSlashAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+
+    }
+
+    public static void bullRushAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+
+    }
+    public static ArrayList<Player> counterStrikeActive = new ArrayList<>();
+    public static void counterstrikeAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        counterStrikeActive.add(player);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 50, 200));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 50, 200));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 50, 200));
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                counterStrikeActive.remove(player);
+            }
+        }.runTaskLater(EvoCraft.getPlugin(), 50);
+    }
+
+    public static void agilityBloodlust(PlayerInteractEvent event, Player player, ClassAbility ability) {
 
     }
 

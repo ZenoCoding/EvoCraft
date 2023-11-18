@@ -218,8 +218,36 @@ public class AbilityRegistry {
             .cooldown(0)
             .range(20)
             .strength(1)
-,
- ClassAbility::runeShieldAbility);
+            , ClassAbility::runeShieldAbility);
+    public static final ClassAbility BLOODLUST = new ClassAbility(new AbilitySettings()
+            .id("bloodlust")
+            .manaCost(35)
+            .cooldown(100)
+            .strength(1)
+            .charges(1)
+            .modifier(Modifier.of(Modifier.Type.EXECUTABLE, "bloodlust_agility", ClassAbility::agilityBloodlust))
+            , ClassAbility::bloodlustAbility);
+    public static final ClassAbility TRIPLE_SLASH = new ClassAbility(new AbilitySettings()
+            .id("triple_slash")
+            .manaCost(35)
+            .cooldown(100)
+            .strength(1)
+            .charges(1)
+            , ClassAbility::tripleSlashAbility);
+    public static final ClassAbility BULL_RUSH = new ClassAbility(new AbilitySettings()
+            .id("bull_rush")
+            .manaCost(35)
+            .cooldown(100)
+            .strength(1)
+            .charges(1)
+            , ClassAbility::bullRushAbility);
+    public static final ClassAbility COUNTERSTRIKE = new ClassAbility(new AbilitySettings()
+            .id("counterstrike")
+            .manaCost(15)
+            .cooldown(5)
+            .strength(10)
+            .charges(3)
+            , ClassAbility::counterstrikeAbility);
 
     public static void registerAbilities(){
         Util.logToConsole("Registering %s abilities.".formatted(ChatColor.GOLD + "" + Ability.registeredAbilities.size() + ChatColor.RESET));
