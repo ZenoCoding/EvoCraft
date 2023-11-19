@@ -8,6 +8,8 @@ import com.archyx.aureliumskills.stats.Stat;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.zenox.evocraft.EvoCraft;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -18,6 +20,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -30,8 +33,20 @@ public class Util {
         sendMessage(p, ChatColor.translateAlternateColorCodes('&', message), true);
     }
 
+    public static void sendMessage(Player p, TextComponent message) {
+        sendMessage(p, message, true);
+    }
+
+    public static void sendMessage(CommandSender p, TextComponent message) {
+        sendMessage(p, message, true);
+    }
+
     public static void sendMessage(@NotNull Player p, String message, boolean prefix) {
         p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix ? ChatColor.AQUA + "[Evo" + ChatColor.GREEN + "Craft] " + ChatColor.WHITE + message : ChatColor.WHITE + message));
+    }
+
+    public static void sendMessage(CommandSender p, TextComponent message, boolean prefix) {
+        p.sendMessage(prefix ? Component.text(ChatColor.AQUA + "[Evo" + ChatColor.GREEN + "Craft] ").append(message) : message);
     }
 
     public static void sendMessage(CommandSender p, String message) {
@@ -161,5 +176,39 @@ public class Util {
     public static double round(double value, int digits) {
         double factor = Math.pow(10, digits);
         return Math.round(value * factor) / factor;
+    }
+
+    /**
+     * Checks if a given string is a valid url
+     * @param url
+     * @return
+     */
+    public static boolean urlIsValid(String url) {
+        try {
+            URI.create(url).toURL().openStream().close();
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Converts a hex string to a byte array.
+     *
+     * @param hexString The string containing hexadecimal digits.
+     * @return A byte array corresponding to the hex string.
+     */
+    public static byte[] hexStringToByteArray(String hexString) {
+        if (hexString.length() % 2 != 0) {
+            throw new IllegalArgumentException("Invalid hex string.");
+        }
+        byte[] bytes = new byte[hexString.length() / 2];
+        for (int i = 0; i < bytes.length; i++) {
+            int index = i * 2;
+            int value = Integer.parseInt(hexString.substring(index, index + 2), 16);
+            bytes[i] = (byte) value;
+        }
+        return bytes;
     }
 }

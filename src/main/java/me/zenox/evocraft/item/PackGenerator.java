@@ -7,21 +7,16 @@ import com.ticxo.modelengine.api.ModelEngineAPI;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.util.Util;
 import net.kyori.adventure.text.Component;
-
-import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
@@ -59,6 +54,21 @@ public class PackGenerator implements Listener {
         this.hash = generateHash(resourcePack);
 
         Bukkit.getPluginManager().registerEvents(this, EvoCraft.getPlugin());
+
+        if ("FILL IN".equals(this.url)) {
+            new BukkitRunnable(){
+
+                @Override
+                public void run() {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        if (player.isOp() && "FILL IN".equals(url)) {
+                            Util.sendMessage(player, "&cResource pack URL not set in config! Set with /evocraft rsrcpack <url>");
+                        }
+                    }
+                }
+            }.runTaskTimer(EvoCraft.getPlugin(), 0, 4000);
+            EvoCraft.getPlugin().getLogger().warning("Resource pack URL not set in config! Set with /evocraft rsrcpack <url>");
+        }
     }
 
     public File createPack() {
@@ -85,9 +95,28 @@ public class PackGenerator implements Listener {
         compileVanillaItemJSON(new ArrayList<>(map.keySet()));
 
         // Finally, we need to zip the resource pack folder and save it as a .zip file
-        zipResourcePack(resourcePack);
+        resourcePack = zipResourcePack(resourcePack);
 
         return resourcePack;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public static void deepCopyFolder(File from, File to, StandardCopyOption option){
+        to.mkdirs();
+        for (File sub: Objects.requireNonNull(from.listFiles())) {
+            if (sub.isDirectory()) {
+                deepCopyFolder(sub, new File(to, sub.getName()), option);
+            } else {
+                try {
+                    Files.copy(sub.toPath(), new File(to, sub.getName()).toPath(), option);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 
@@ -198,18 +227,6 @@ public class PackGenerator implements Listener {
                         }
                     }
                 }
-            } else {
-                // Handle the case where it's not in a JAR - possibly during development
-                File source = new File(dirURL.getPath());
-                Files.walk(source.toPath())
-                        .forEach(sourcePath -> {
-                            Path destPath = Paths.get(directory.getPath(), sourcePath.subpath(source.toPath().getNameCount(), sourcePath.getNameCount()).toString());
-                            try {
-                                Files.copy(sourcePath, destPath, StandardCopyOption.REPLACE_EXISTING);
-                            } catch (IOException e) {
-                                throw new RuntimeException("Error copying files", e);
-                            }
-                        });
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to copy template pack", e);
@@ -246,7 +263,6 @@ public class PackGenerator implements Listener {
      *  <li>assets/modelengine/textures/entity (there are many files for all the different entities)</li>
      * <li>assets/minecraft</li>
      *  <li>assets/minecraft/models/item/leather_horse_armor.json</li>
-     *  <li>assets/minecraft/atlases/blocks.json</li>
      * </ul>
      * <p>
      * Recursively does a deep copy on the needed ModelEngine folders, copying files into preexisting folders if necessary.
@@ -257,7 +273,30 @@ public class PackGenerator implements Listener {
      * @param resourcePack the resource pack folder
      */
     private void copyModelEngineFiles(File modelEngine, File resourcePack) {
-        throw new NotImplementedException("copyModelEngineFiles not implemented");
+        File assetsFolder = new File(modelEngine, "assets");
+        if(!assetsFolder.exists()){
+            throw new RuntimeException("ModelEngine resource pack folder does not exist");
+        }
+
+        // copy item model to resource pack
+        File itemModel = new File(assetsFolder, "minecraft/models/item/leather_horse_armor.json");
+        File itemModelDest = new File(resourcePack, "assets/minecraft/models/item/leather_horse_armor.json");
+        try {
+            Files.copy(itemModel.toPath(), itemModelDest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // copy modelengine files
+        // textures first
+        File texturesFolder = new File(assetsFolder, "modelengine/textures/entity");
+
+        deepCopyFolder(texturesFolder, new File(resourcePack, "assets/modelengine/textures/entity"), StandardCopyOption.REPLACE_EXISTING);
+
+        // then, copy models which have subfolders
+        File modelsFolder = new File(assetsFolder, "modelengine/models");
+        deepCopyFolder(modelsFolder, new File(resourcePack, "assets/modelengine/models"), StandardCopyOption.REPLACE_EXISTING);
+
     }
 
     /**
@@ -288,24 +327,13 @@ public class PackGenerator implements Listener {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         // Create a new JSON file for every single item with the format above, referencing the PNG file (Hint: it's just the id of the item + .png)
         for (ComplexItem item : items) {
-            // Create JSON file
-            // Write JSON file to resource pack folder (hint: saveResource())
-            // Use gson to write JSON file
-            // Use the item's ID to reference the PNG file
-            // Use the item's ID to reference the JSON file
-            // Use the item's ID to reference the vanilla JSON file
-            // Use the item's ID to reference the vanilla model file
-            // Use the item's ID to reference the vanilla texture file
-            //we need to add the vanilla json file
-            //we need to add the vanilla model file
-            //we need to add the vanilla texture file
             JsonObject vanillaObject = new JsonObject();
             vanillaObject.addProperty("parent", "minecraft:item/" + item.getMaterial().toString());
             JsonObject vanillaTextures = new JsonObject();
-            vanillaTextures.addProperty("layer0", "minecraft:item/" + item.getMaterial().toString());
+            vanillaTextures.addProperty("layer0", "evocraft:item/" + item.getId());
             vanillaObject.add("textures", vanillaTextures);
             try {
-                File file = new File(EvoCraft.getPlugin().getDataFolder(), targetPath + File.separator + "assets/minecraft/models/item/" + item.getMaterial().toString() + ".json");
+                File file = new File(EvoCraft.getPlugin().getDataFolder(), targetPath + File.separator + "assets/minecraft/models/item/" + item.getId() + ".json");
                 file.createNewFile();
                 FileWriter fileWriter = new FileWriter(file);
                 fileWriter.write(gson.toJson(vanillaObject));
@@ -376,10 +404,10 @@ public class PackGenerator implements Listener {
         Map<String, List<ComplexItem>> materialItemsMap = new HashMap<>();
         for (ComplexItem item : items) {
             Material material = item.getMaterial(); // Assuming ComplexItem has a method 'getMaterial'
-            if (!materialItemsMap.containsKey(material.toString())) {
-                materialItemsMap.put(material.toString(), new ArrayList<>());
+            if (!materialItemsMap.containsKey(material.toString().toLowerCase())) {
+                materialItemsMap.put(material.toString().toLowerCase(), new ArrayList<>());
             }
-            materialItemsMap.get(material.toString()).add(item);
+            materialItemsMap.get(material.toString().toLowerCase()).add(item);
         }
 
         //loop over each material type
@@ -401,7 +429,6 @@ public class PackGenerator implements Listener {
             //making object overrides
             JsonObject overrides = new JsonObject();
             for (ComplexItem item : materialItemsMap.get(material)) {
-                //explain what this is doing
                 //this is adding the overrides for each complex item
                 JsonObject predicate = new JsonObject();
                 predicate.addProperty("custom_model_data", item.getCustomModelData());
@@ -439,7 +466,7 @@ public class PackGenerator implements Listener {
      * Zip and save the resource pack folder into the resource pack directory. Make sure you zip the contents of the folder, not the folder itself, as that will cause issues.
      * @param directory the directory to zip
      */
-    private void zipResourcePack(@NotNull File directory) {
+    private File zipResourcePack(@NotNull File directory) {
         // Zip the directory
         // Save the zip file to the resource pack directory
         try {
@@ -448,7 +475,9 @@ public class PackGenerator implements Listener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return new File(directory.getAbsolutePath() + ".zip");
     }
+
     private static void pack(String sourceDirPath, String zipFilePath) throws IOException {
         Path p = Paths.get(zipFilePath);
         if (Files.exists(p)) {
@@ -476,10 +505,9 @@ public class PackGenerator implements Listener {
 
     /**
      * Generate a sha1 hash given the resource pack file
-     * @return
+     * @return a byte array containing the sha1 hash
      */
     private byte[] generateHash(File resourcePack) {
-        //throw new NotImplementedException("generateHash not implemented");
         try {
             // Create an instance of MessageDigest for SHA-1
             MessageDigest digest = MessageDigest.getInstance("SHA-1");
@@ -504,19 +532,29 @@ public class PackGenerator implements Listener {
         }
     }
 
+    public void applyPack(Player player){
+        String message = "Applying resource pack...";
+        Util.sendMessage(player, message);
+        // Set the resource pack for the player
+        player.setResourcePack(this.url, this.hash, Component.text("Please install this resource pack in order to properly" +
+                " render server models. You will be disconnected upon rejection of the pack."), true);
+    }
+
     /**
      * Sets the resource pack for a player when they join the server
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
-        // Send a message to the player briefly telling them about the resource pack
-        Player player = event.getPlayer();
-        String message = "Welcome to the server!";
-        Util.sendMessage(player, message);
-        // Set the resource pack for the player
-        Player p = event.getPlayer();
-        // public void setResourcePack(@NotNull String url, byte @Nullable [] hash, net.kyori.adventure.text.@Nullable Component prompt, boolean force);
-        p.setResourcePack(this.url, this.hash, Component.text("Please install this resource pack in order to properly render server models"), true);
-        throw new NotImplementedException("Setting resource pack on join not yet implemented.");
+        if ("FILL IN".equals(this.url)) return; // If the URL is not set, don't do anything
+
+        applyPack(event.getPlayer());
+    }
+
+    public String getSha1() {
+        return Base64.getEncoder().encodeToString(this.hash);
+    }
+
+    public void setHash(byte[] hash) {
+        this.hash = hash;
     }
 }

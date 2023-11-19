@@ -12,6 +12,12 @@ import me.zenox.evocraft.loot.LootTableRegistry;
 import me.zenox.evocraft.story.Chapter;
 import me.zenox.evocraft.story.ChapterManager;
 import me.zenox.evocraft.util.Util;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
@@ -225,6 +231,60 @@ public class Command implements CommandExecutor, TabCompleter {
                 EvoCraft.getChapterManager().setChapter(player, chapter);
                 return true;
             }
+            case "rsrcpack" -> {
+                if (args.length < 3) {
+                    Util.sendMessage(sender, "Please specify a valid resource pack URL and SHA-1 hash.");
+                    return true;
+                }
+
+                // verify that the URL is valid
+                if (!Util.urlIsValid(args[1])) {
+                    Util.sendMessage(sender, "Please specify a valid resource pack URL.");
+                    return true;
+                }
+
+                // set the URL of the resource pack
+                EvoCraft.getPackGenerator().setUrl(args[1]);
+                // set in config
+                plugin.getConfig().set("resource-pack-url", args[1]);
+
+                // verify and set the SHA-1 hash
+                String sha1HashString = args[2];
+
+                try {
+                    // Convert the hex string to a byte array
+                    byte[] sha1Hash = Util.hexStringToByteArray(sha1HashString);
+                    EvoCraft.getPackGenerator().setHash(sha1Hash);
+                    plugin.getConfig().set("resource-pack-sha1", sha1HashString);
+                } catch (IllegalArgumentException e) {
+                    Util.sendMessage(sender, "The SHA-1 hash provided is not a valid hexadecimal string.");
+                    return true;
+                }
+
+                // send confirmation message
+                Util.sendMessage(sender, "&aResource pack URL set to " + args[1]);
+                Util.sendMessage(sender, "&aSHA-1 hash set to " + sha1HashString);
+
+                // send funny message with clickable text
+                Util.sendMessage(sender,
+                        Component.text().content("CLICK HERE TO APPLY THE RESOURCE PACK FOR ALL PLAYERS")
+                                .color(NamedTextColor.YELLOW)
+                                .decorate(TextDecoration.BOLD)
+                                .decorate(TextDecoration.UNDERLINED)
+                                .hoverEvent(HoverEvent.showText(Component.text("Run /evocraft applypack ").color(NamedTextColor.GRAY)))
+                                .clickEvent(ClickEvent.suggestCommand("/evocraft applypack"))
+                                .build());
+                plugin.saveConfig();
+                return true;
+            }
+            case "applypack" -> {
+                // apply the resource pack to all players
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    EvoCraft.getPackGenerator().applyPack(player);
+                }
+                Util.sendMessage(sender, "&aResource pack applied to all players.");
+                return true;
+            }
             default -> Util.sendMessage(sender, "EvoCraft Help Page.");
         }
         return true;
@@ -243,6 +303,8 @@ public class Command implements CommandExecutor, TabCompleter {
             arguments.add("enchant");
             arguments.add("reload");
             arguments.add("removechapterdata");
+            arguments.add("rsrcpack");
+            arguments.add("applypack");
         }
 
         if (items.isEmpty()) {

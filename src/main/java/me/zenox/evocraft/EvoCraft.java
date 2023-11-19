@@ -43,6 +43,7 @@ public final class EvoCraft extends JavaPlugin {
     private static ProtocolManager protocolManager;
     private static ChapterManager chapterManager;
     private static ActionBar actionBar;
+    private static PackGenerator packGenerator;
 
     public static EvoCraft getPlugin() {
         return plugin;
@@ -103,7 +104,7 @@ public final class EvoCraft extends JavaPlugin {
 
         registerListeners();
 
-        new PackGenerator("pack");
+        packGenerator = new PackGenerator("pack");
 
     }
 
@@ -173,6 +174,11 @@ public final class EvoCraft extends JavaPlugin {
     public static ActionBar getActionBar() {
         return actionBar;
     }
+
+    public static PackGenerator getPackGenerator() {
+        return packGenerator;
+    }
+
     public void reload() {
         this.reloadConfig();
         languageLoader = new LanguageLoader(this);
