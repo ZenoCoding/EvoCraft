@@ -231,7 +231,7 @@ public class Command implements CommandExecutor, TabCompleter {
                 EvoCraft.getChapterManager().setChapter(player, chapter);
                 return true;
             }
-            case "rsrcpack" -> {
+            case "pack" -> {
                 if (args.length < 3) {
                     Util.sendMessage(sender, "Please specify a valid resource pack URL and SHA-1 hash.");
                     return true;
@@ -285,6 +285,22 @@ public class Command implements CommandExecutor, TabCompleter {
                 Util.sendMessage(sender, "&aResource pack applied to all players.");
                 return true;
             }
+            case "modeldata" -> {
+                // get custommodeldata of item in hand
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    ItemStack item = player.getInventory().getItemInMainHand();
+                    if (item.getType() == Material.AIR) {
+                        Util.sendMessage(sender, ChatColor.WHITE + "This item has no CustomModelData (that is created by EvoCraft)");
+                        return true;
+                    }
+                    Util.sendMessage(sender, "The CustomModelData of " + item.getItemMeta().getDisplayName() + "&f  is " + ComplexItemStack.of(item).getComplexItem().getCustomModelData());
+                    Util.sendMessage(sender, "Actual model data: " + item.getItemMeta().getCustomModelData());
+                    return true;
+                } else {
+                    Util.sendMessage(sender, "You must be a player to use this command!");
+                }
+            }
             default -> Util.sendMessage(sender, "EvoCraft Help Page.");
         }
         return true;
@@ -303,8 +319,9 @@ public class Command implements CommandExecutor, TabCompleter {
             arguments.add("enchant");
             arguments.add("reload");
             arguments.add("removechapterdata");
-            arguments.add("rsrcpack");
+            arguments.add("pack");
             arguments.add("applypack");
+            arguments.add("modeldata");
         }
 
         if (items.isEmpty()) {
