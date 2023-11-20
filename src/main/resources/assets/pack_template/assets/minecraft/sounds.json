@@ -1,0 +1,41 @@
+{
+	"entity.wildfire.hurt": {
+		"sounds":["evocraft:custom/wildfire_hurt"]
+	},
+	"entity.wildfire.idle": {
+		"sounds":["evocraft:custom/wildfire_idle"]
+	},
+	"entity.wildfire.idle_vocal": {
+		"sounds":["evocraft:custom/wildfire_idle_vocal",
+ "evocraft:custom/wildfire_idle_vocal_01"]
+	},
+    "entity.wildfire.shoot": {
+		"sounds":["evocraft:custom/wildfire_shoot"]
+	},
+    "entity.wildfire.shoot_vocal": {
+		"sounds":["evocraft:custom/wildfire_shoot_vocal"]
+	},
+    "entity.wildfire.shockwave": {
+		"sounds":["evocraft:custom/wildfire_shockwave",
+ "evocraft:custom/wildfire_shockwave_01"]
+	},
+    "entity.wildfire.shockwave_projectile": {
+		"sounds":["evocraft:custom/wildfire_shockwave_projectile"]
+    },
+    "entity.player.retro_death": {
+        "sounds":["evocraft:custom/player_death"]
+    },
+    "entity.player.death_coins": {
+        "sounds":["evocraft:custom/money_drop"]
+    },
+    "story.0.startup": {
+        "sounds":["evocraft:custom/startup"]
+    },
+    "story.chapter.1.backstory_1": {
+        "sounds":["evocraft:custom/backstory_1"]
+    },
+    "story.chapter.1.backstory_2": {
+        "sounds":["evocraft:custom/backstory_2"]
+    }
+
+}

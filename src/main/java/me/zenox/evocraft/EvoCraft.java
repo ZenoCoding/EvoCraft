@@ -17,6 +17,7 @@ import me.zenox.evocraft.data.LanguageLoader;
 import me.zenox.evocraft.enchant.EnchantRegistry;
 import me.zenox.evocraft.events.*;
 import me.zenox.evocraft.item.ItemRegistry;
+import me.zenox.evocraft.item.PackGenerator;
 import me.zenox.evocraft.item.VanillaItem;
 import me.zenox.evocraft.network.GlowFilter;
 import me.zenox.evocraft.recipe.RecipeRegistry;
@@ -42,6 +43,7 @@ public final class EvoCraft extends JavaPlugin {
     private static ProtocolManager protocolManager;
     private static ChapterManager chapterManager;
     private static ActionBar actionBar;
+    private static PackGenerator packGenerator;
 
     public static EvoCraft getPlugin() {
         return plugin;
@@ -101,6 +103,8 @@ public final class EvoCraft extends JavaPlugin {
         new Command(plugin);
 
         registerListeners();
+
+        packGenerator = new PackGenerator("pack");
 
     }
 
@@ -170,9 +174,14 @@ public final class EvoCraft extends JavaPlugin {
     public static ActionBar getActionBar() {
         return actionBar;
     }
+
+    public static PackGenerator getPackGenerator() {
+        return packGenerator;
+    }
+
     public void reload() {
         this.reloadConfig();
-        this.languageLoader = new LanguageLoader(this);
+        languageLoader = new LanguageLoader(this);
     }
 
     @Override

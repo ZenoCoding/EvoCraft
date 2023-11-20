@@ -1090,9 +1090,14 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                         // Remove the metadata
                         player.removeMetadata("thunderstrike_projectile", EvoCraft.getPlugin());
                     }
-                    // Create particles at the projectile's location
-                    player.getWorld().spawnParticle(Particle.CRIT_MAGIC, projectile.getLocation(), 10, 0.3, 0.3, 0.3, 0.1);
-                    player.getWorld().spawnParticle(Particle.REDSTONE, projectile.getLocation(), 10, 0.3, 0.3, 0.3, 0.1, new Particle.DustOptions(Color.fromRGB(244, 252, 3), 1));
+                    //loop through blocks until you find the highest block that is not air
+                    Location loc = projectile.getLocation();
+                    while (loc.getBlock().getType() == Material.AIR) {
+                        loc.add(0, 1, 0);
+                    }
+                    //create lighting at the block
+                    player.getWorld().spawnParticle(Particle.CRIT_MAGIC, loc, 10, 0.3, 0.3, 0.3, 0.1);
+                    player.getWorld().spawnParticle(Particle.REDSTONE, loc, 10, 0.3, 0.3, 0.3, 0.1, new Particle.DustOptions(Color.fromRGB(244, 252, 3), 1));
                 }
             }.runTaskTimer(EvoCraft.getPlugin(), 0, 3);
         }
