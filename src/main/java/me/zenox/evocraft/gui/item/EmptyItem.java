@@ -1,8 +1,8 @@
 package me.zenox.evocraft.gui.item;
 
-import de.studiocode.invui.item.ItemProvider;
-import de.studiocode.invui.item.builder.ItemBuilder;
-import de.studiocode.invui.item.impl.BaseItem;
+import xyz.xenondevs.invui.item.ItemProvider;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import xyz.xenondevs.invui.item.impl.AbstractItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * "Empty" item that can be replaced with another item via clicking on it
  */
-public class EmptyItem extends BaseItem {
+public class EmptyItem extends AbstractItem {
 
     private ItemStack item = new ItemStack(Material.AIR);
 

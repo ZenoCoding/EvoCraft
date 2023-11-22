@@ -209,7 +209,6 @@ public class AbilityRegistry {
                     Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_mark", ClassAbility::riftBeamMark),
                     Modifier.of(Modifier.Type.MANA_COST, "rift_beam_efficiency", -10),
                     Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_chain", ClassAbility::riftBeamChain),
-                    Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_dimensional_rupture", ClassAbility::riftBeamDimensionalRupture),
                     Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_apex", ClassAbility::riftBeamApex)
             ), ClassAbility::riftBeamAbility);
     public static final ClassAbility RUNE_SHIELD = new ClassAbility(new AbilitySettings()

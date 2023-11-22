@@ -53,7 +53,7 @@ public class PlayerData {
     }
 
     // Progress the level of a specific ability
-    public void progressAbility(Path path) {
+    public void progressPath(Path path) {
         int currentLevel = getPathLevel(path);
         if (getPathLevel(path) < path.getMaxLevel())
             setPathLevel(path, currentLevel + 1);

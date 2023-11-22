@@ -25,6 +25,7 @@ public class LanguageLoader {
             languageDirectory.mkdir();
             try {
                 InputStream stream = plugin.getResource("languages/en_US.yml");
+                assert stream != null;
                 FileUtils.copyInputStreamToFile(stream, defaultLanguageFile);
             } catch (IOException e) {
                 e.printStackTrace();

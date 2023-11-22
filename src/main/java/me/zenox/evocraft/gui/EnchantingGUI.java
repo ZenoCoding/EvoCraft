@@ -2,12 +2,6 @@ package me.zenox.evocraft.gui;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
 import com.archyx.aureliumskills.skills.Skills;
-import de.studiocode.invui.gui.GUI;
-import de.studiocode.invui.gui.SlotElement;
-import de.studiocode.invui.gui.impl.SimpleGUI;
-import de.studiocode.invui.gui.structure.Structure;
-import de.studiocode.invui.item.builder.ItemBuilder;
-import de.studiocode.invui.virtualinventory.VirtualInventoryManager;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
 import me.zenox.evocraft.gui.item.BookshelfItem;
 import me.zenox.evocraft.gui.item.BooleanItem;
@@ -26,6 +20,12 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import xyz.xenondevs.invui.gui.AbstractGui;
+import xyz.xenondevs.invui.gui.Gui;
+import xyz.xenondevs.invui.gui.SlotElement;
+import xyz.xenondevs.invui.gui.structure.Structure;
+import xyz.xenondevs.invui.inventory.VirtualInventoryManager;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
 import java.util.*;
 
@@ -34,7 +34,7 @@ import static java.lang.Math.min;
 /**
  * Enchantment GUI that is shown to players
  */
-public class EnchantingGUI extends SimpleGUI {
+public class EnchantingGUI extends AbstractGui {
 
     public static final VariableType<Integer> ENCHANT_FUEL_VAR = new VariableType<>("enchant_fuel",
             new LoreEntry("enchant_fuel",
@@ -151,9 +151,9 @@ public class EnchantingGUI extends SimpleGUI {
         fuelItem.getItem().setAmount(fuelItem.getItem().getAmount() - 1);
 
         // Set fuel to be empty
-        VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1).setItemStack(null, 0, fuelItem.getItem());
+        VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1).setItem(null, 0, fuelItem.getItem());
         // update virtual container with enchanted version
-        VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_ITEM_KEY + p.getName()), 1).setItemStack(null, 0, item.getItem());
+        VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_ITEM_KEY + p.getName()), 1).setItem(null, 0, item.getItem());
 
         this.eTable.getWorld().playSound(this.eTable.getLocation(), ENCHANT_SOUND, 1f + level, 1f - level * 0.15f);
 
@@ -177,7 +177,7 @@ public class EnchantingGUI extends SimpleGUI {
      * @return the item being enchanted
      */
     private ItemStack getEItem() {
-        return VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_ITEM_KEY + p.getName()), 1).getItemStack(0);
+        return VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_ITEM_KEY + p.getName()), 1).getItem(0);
     }
 
     /**
@@ -186,7 +186,7 @@ public class EnchantingGUI extends SimpleGUI {
      * @return the fuel item
      */
     private ItemStack getFuelItem() {
-        return VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1).getItemStack(0);
+        return VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1).getItem(0);
     }
 
     public Block getETable() {
@@ -210,10 +210,10 @@ public class EnchantingGUI extends SimpleGUI {
     private static boolean itemValid(ItemStack item) {
         try {
             ComplexItem.Type type = ComplexItem.of(item).getType();
-            return item.getType() != Material.AIR && ComplexEnchantment.getRegisteredEnchants()
+            return item.getType() != Material.AIR && !ComplexEnchantment.getRegisteredEnchants()
                     .stream()
                     .filter(complexEnchantment ->
-                            complexEnchantment.getTypes().contains(type)).toList().size() > 0;
+                            complexEnchantment.getTypes().contains(type)).toList().isEmpty();
         } catch (NullPointerException e) {
             return false;
         }
@@ -275,8 +275,8 @@ public class EnchantingGUI extends SimpleGUI {
         return Math.min(maxLevel, result);
     }
 
-    public static GUI getGui(Player p, Block block) {
-        return new EnchantGUIBuilder(GUITypes.ENCHANT, p, block)
+    public static Gui getGui(Player p, Block block) {
+        return new EnchantGuiBuilder(p, block)
                 .setStructure(
                         "# # # # # $ $ 1 #",
                         "# # # # # $ # # #",
@@ -285,8 +285,8 @@ public class EnchantingGUI extends SimpleGUI {
                         "# # # # # ^ ^ 3 #",
                         "# # # # C B # # #"
                 )
-                .addIngredient('E', new SlotElement.VISlotElement(VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_ITEM_KEY + p.getName()), 1), 0, new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE)))
-                .addIngredient('F', new SlotElement.VISlotElement(VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1), 0, new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)))
+                .addIngredient('E', new SlotElement.InventorySlotElement(VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_ITEM_KEY + p.getName()), 1), 0, new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE)))
+                .addIngredient('F', new SlotElement.InventorySlotElement(VirtualInventoryManager.getInstance().getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1), 0, new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)))
                 .addIngredient('R', new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName(""))
                 .addIngredient('1', new EnchantItem(1, 0))
                 .addIngredient('2', new EnchantItem(2, 10))

@@ -1,13 +1,9 @@
 package me.zenox.evocraft.events;
 
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
-import com.sk89q.worldguard.bukkit.cause.Cause;
-import com.sk89q.worldguard.bukkit.event.entity.DamageEntityEvent;
-import de.studiocode.invui.window.impl.single.SimpleWindow;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.abilities.ClassAbility;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
-import me.zenox.evocraft.gameclass.GameClass;
 import me.zenox.evocraft.gui.EnchantingGUI;
 import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
@@ -33,6 +29,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import xyz.xenondevs.invui.window.Window;
 
 import java.util.HashMap;
 import java.util.List;
@@ -52,12 +49,17 @@ public class OtherEvent implements Listener {
     @EventHandler
     public void tileEntityInteract(PlayerInteractEvent e){
         if(e.getAction() == Action.RIGHT_CLICK_BLOCK){
-            if (e.getClickedBlock().getType() == Material.ENCHANTING_TABLE) {
-                new SimpleWindow(e.getPlayer(), "Enchantment Table", EnchantingGUI.getGui(e.getPlayer(), e.getClickedBlock()), true, true).show();
-            } else {
-                return;
+            if (Objects.requireNonNull(e.getClickedBlock()).getType() == Material.ENCHANTING_TABLE) {
+                e.setCancelled(true);
+                Window.single()
+                        .setViewer(e.getPlayer())
+                        .setTitle("Enchantment Table")
+                        .setGui(EnchantingGUI.getGui(e.getPlayer(), e.getClickedBlock()))
+                        .setCloseable(true)
+                        .build()
+                        .open();
             }
-            e.setCancelled(true);
+
         }
     }
 
@@ -81,7 +83,9 @@ public class OtherEvent implements Listener {
         }
     }
     @EventHandler
-    public void damageEventCounterstrike(EntityDamageByEntityEvent entityDamageByEntityEvent, Player player, Entity entity){
+    public void damageEventCounterstrike(EntityDamageByEntityEvent entityDamageByEntityEvent){
+        if(!(entityDamageByEntityEvent.getEntity() instanceof Player)) return;
+        Player player = (Player) entityDamageByEntityEvent.getEntity();
         if(ClassAbility.counterStrikeActive.contains(player)) {
             if (((entityDamageByEntityEvent.getDamager() instanceof LivingEntity))) {
                 ((LivingEntity) entityDamageByEntityEvent.getDamager()).damage(entityDamageByEntityEvent.getDamage()/2);

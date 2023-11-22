@@ -804,34 +804,56 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
     }
 
     /**
-     * Enemies defeated by the Rift Beam have a chance to spawn a mini-rift, dealing AOE damage to nearby enemies.
-     *
-     * @param event   The player interaction event.
-     * @param player  The player casting the ability.
-     * @param ability The class ability information.
-     */
-    public static void riftBeamDimensionalRupture(PlayerInteractEvent event, Player player, ClassAbility ability) {
-        // Pseudocode:
-        // 1. When an enemy is defeated by the Rift Beam, randomly decide if a mini-rift will spawn.
-        // 2. If so, spawn area effect clouds or invisible armor stands at the location.
-        // 3. Apply AOE damage to entities near the mini-rift periodically.
-        // 4. After a short duration, remove the mini-rift and its effects.
-    }
-
-    /**
      * The ultimate upgrade of the Rift Beam ability.
-     * Charges up to unleash a devastating blast, with residual effects in its path.
+     * Charges up to unleash a devastating blast, with two chaining beams and one main beam.
      *
      * @param event   The player interaction event.
      * @param player  The player casting the ability.
      * @param ability The class ability information.
      */
     public static void riftBeamApex(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        // Start charging
+        startCharge(player);
+
+        // Schedule task to check for charge completion
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (isFullyCharged(player)) {
+                    // On full charge, release the beams
+                    releaseMainBeam(player, ability);
+                    releaseChainingBeams(player, ability);
+
+                    this.cancel(); // Stop the task
+                }
+            }
+        }.runTaskTimer(EvoCraft.getPlugin(), 0L, 1L); // Check every tick
+    }
+
+    private static void startCharge(Player player) {
         // Pseudocode:
-        // 1. Initiate a charging mechanic, perhaps by holding down the right-click.
-        // 2. Once fully charged, release the Rift Beam with enhanced visual effects.
-        // 3. Deal significant damage to the first enemy hit and apply a powerful slow effect.
-        // 4. Leave a trail of particles that simulates a residual rift, slowing and damaging enemies.
+        // Display charging particles or effects around the player.
+        // Record the start time of the charge.
+        // Possibly play a charging sound.
+    }
+
+    private static boolean isFullyCharged(Player player) {
+        // Pseudocode:
+        // Check if the required charge time has elapsed.
+        // Return true if fully charged, false otherwise.
+        return false; // Placeholder
+    }
+
+    private static void releaseMainBeam(Player player, ClassAbility ability) {
+        // Pseudocode:
+        // Create and launch the main beam.
+        // This beam could have higher damage and range compared to normal rift beams.
+    }
+
+    private static void releaseChainingBeams(Player player, ClassAbility ability) {
+        // Pseudocode:
+        // Launch additional beams that chain to nearby enemies.
+        // These beams could originate from the player or the main beam's hit location.
     }
 
 

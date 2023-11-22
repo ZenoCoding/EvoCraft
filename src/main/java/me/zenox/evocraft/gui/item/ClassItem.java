@@ -1,9 +1,9 @@
 package me.zenox.evocraft.gui.item;
 
-import de.studiocode.invui.item.ItemProvider;
-import de.studiocode.invui.item.builder.ItemBuilder;
-import de.studiocode.invui.item.impl.BaseItem;
-import de.studiocode.invui.window.Window;
+import xyz.xenondevs.invui.item.ItemProvider;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import xyz.xenondevs.invui.item.impl.AbstractItem;
+import xyz.xenondevs.invui.window.Window;
 import me.zenox.evocraft.data.TranslatableList;
 import me.zenox.evocraft.data.TranslatableText;
 import me.zenox.evocraft.gameclass.GameClass;
@@ -14,7 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.jetbrains.annotations.NotNull;
 
-public class ClassItem extends BaseItem {
+public class ClassItem extends AbstractItem {
     private final GameClass gameClass;
     private final TranslatableText NAME;
     private final TranslatableList LORE;
@@ -38,7 +38,7 @@ public class ClassItem extends BaseItem {
         GameClass.setClass(player, gameClass);
         for (Window window : getWindows()) {
             if(window.getCurrentViewer().equals(player)){
-                window.closeForViewer();
+                window.close();
             }
         }
     }

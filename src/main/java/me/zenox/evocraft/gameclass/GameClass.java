@@ -1,8 +1,5 @@
 package me.zenox.evocraft.gameclass;
 
-import de.studiocode.invui.gui.GUI;
-import de.studiocode.invui.gui.builder.GUIBuilder;
-import de.studiocode.invui.gui.builder.guitype.GUIType;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.abilities.AbilityRegistry;
 import me.zenox.evocraft.data.PlayerDataManager;
@@ -15,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import xyz.xenondevs.invui.gui.Gui;
 
 import java.util.List;
 
@@ -76,9 +74,8 @@ public enum GameClass {
         };
     }
 
-    public static GUI getGui() {
-        return new GUIBuilder<>(GUIType.NORMAL)
-                .setStructure(
+    public static Gui getGui() {
+        return Gui.normal().setStructure(
                         "# # # # # # # # #",
                         "# M # W # T # A #",
                         "# # # # # # # # #"

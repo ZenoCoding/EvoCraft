@@ -1,7 +1,6 @@
 package me.zenox.evocraft.command;
 
 import com.google.common.primitives.Ints;
-import de.studiocode.invui.window.impl.single.SimpleWindow;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.data.PlayerData;
 import me.zenox.evocraft.data.PlayerDataManager;
@@ -21,6 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import xyz.xenondevs.invui.window.Window;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -190,7 +190,13 @@ public class Command implements CommandExecutor, TabCompleter {
                 return true;
             }
             case "class" -> // Open the class selection GUI
-                    new SimpleWindow(((Player) sender), "Class Selection", GameClass.getGui(), true, true).show();
+                    Window.single()
+                            .setViewer((Player) sender)
+                            .setTitle("Class Selection")
+                            .setGui(GameClass.getGui())
+                            .setCloseable(true)
+                            .build()
+                            .open();
             case "progresspath" -> {
                 if (args.length < 2) {
                     Util.sendMessage(sender, "Please specify a valid path.");
@@ -200,15 +206,21 @@ public class Command implements CommandExecutor, TabCompleter {
                 PlayerData data = PlayerDataManager.getInstance().getPlayerData(player.getUniqueId());
                 Path path = data.getPlayerClass().tree().path(args[1]);
                 if (path == null) {
-                    Util.sendMessage(sender, "This path does not exist!");
+                    Util.sendMessage(sender, "&cThis path does not exist!");
                     return true;
                 }
                 try {
-                    data.progressAbility(path);
+                    if (args.length < 3)
+                        data.progressPath(path);
+                    else {
+                        int level = Integer.parseInt(args[2]);
+                        data.setPathLevel(path, level);
+                    }
                 } catch (IllegalArgumentException e) {
                     Util.sendMessage(sender, e.getMessage());
                     return true;
                 }
+                Util.sendMessage(sender, "&aYou have progressed on the " + path.getId() + " path to level " + data.getPathLevel(path) + "!");
                 return true;
             }
             default -> Util.sendMessage(sender, "EvoCraft Help Page.");
