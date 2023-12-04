@@ -4,7 +4,7 @@ import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.abilities.ClassAbility;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
-import me.zenox.evocraft.gui.EnchantingGUI;
+import me.zenox.evocraft.gui.EnchantingGui;
 import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
 import me.zenox.evocraft.item.VanillaItem;
@@ -54,7 +54,7 @@ public class OtherEvent implements Listener {
                 Window.single()
                         .setViewer(e.getPlayer())
                         .setTitle("Enchantment Table")
-                        .setGui(EnchantingGUI.getGui(e.getPlayer(), e.getClickedBlock()))
+                        .setGui(EnchantingGui.getGui(e.getPlayer(), e.getClickedBlock()))
                         .setCloseable(true)
                         .build()
                         .open();
@@ -198,7 +198,7 @@ public class OtherEvent implements Listener {
             // Get the enchantmaps of both of the items in the AnvilInventory
             HashMap<ComplexEnchantment, Integer> firstEnchants = (HashMap<ComplexEnchantment, Integer>) ComplexItemStack.of(inventory.getFirstItem()).getComplexMeta().getComplexEnchants();
             HashMap<ComplexEnchantment, Integer> secondEnchants = (HashMap<ComplexEnchantment, Integer>) ComplexItemStack.of(inventory.getSecondItem()).getComplexMeta().getComplexEnchants();
-            resultMeta.setComplexEnchantments(EnchantingGUI.combineEnchantMaps(firstEnchants, secondEnchants));
+            resultMeta.setComplexEnchantments(EnchantingGui.combineEnchantMaps(firstEnchants, secondEnchants));
             resultMeta.updateItem();
             e.setResult(resultStack.getItem());
 

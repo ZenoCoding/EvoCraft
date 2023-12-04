@@ -126,7 +126,7 @@ public class ComplexItemMeta {
         }
 
         // Write ComplexEnchants
-        dataContainer.set(ENCHANT_KEY, new SerializedPersistentType<HashMap>(), complexEnchMap);
+        dataContainer.set(ENCHANT_KEY, new SerializedPersistentType<>(), complexEnchMap);
 
         // Clear vanilla enchantments
         for (Enchantment enchant:

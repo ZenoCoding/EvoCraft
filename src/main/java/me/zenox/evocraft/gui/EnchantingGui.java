@@ -34,7 +34,7 @@ import static java.lang.Math.min;
 /**
  * Enchantment GUI that is shown to players
  */
-public class EnchantingGUI extends AbstractGui {
+public class EnchantingGui extends AbstractGui {
 
     public static final VariableType<Integer> ENCHANT_FUEL_VAR = new VariableType<>("enchant_fuel",
             new LoreEntry("enchant_fuel",
@@ -52,13 +52,13 @@ public class EnchantingGUI extends AbstractGui {
     private final Block eTable;
     private int bookshelfPower = 0;
 
-    public EnchantingGUI(int width, int height, Player p, Block eTable) {
+    public EnchantingGui(int width, int height, Player p, Block eTable) {
         super(width, height);
         this.p = p;
         this.eTable = eTable;
     }
 
-    public EnchantingGUI(@NotNull Structure structure, Player p, Block eTable) {
+    public EnchantingGui(@NotNull Structure structure, Player p, Block eTable) {
         super(structure.getWidth(), structure.getHeight());
         applyStructure(structure);
         this.p = p;
@@ -197,7 +197,7 @@ public class EnchantingGUI extends AbstractGui {
         this.bookshelfPower = bookshelfPower;
     }
 
-    public static boolean enchantValid(EnchantingGUI gui, int power, int XPRequired) {
+    public static boolean enchantValid(EnchantingGui gui, int power, int XPRequired) {
         int skillRequirement = 0;
         switch (power) {
             case 2 -> skillRequirement = 10;
@@ -299,4 +299,6 @@ public class EnchantingGUI extends AbstractGui {
                 .addIngredient('C', new CloseItem())
                 .build();
     }
+
+    interface Enchanting extends Gui.Builder<EnchantingGui, Enchanting> {}
 }

@@ -51,6 +51,7 @@ public final class EvoCraft extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        long startTime = System.currentTimeMillis();
         plugin = this;
         plugin.getLogger().info("EvoCraft v" + plugin.getDescription().getVersion() + " loaded.");
 
@@ -102,6 +103,8 @@ public final class EvoCraft extends JavaPlugin {
         new Command(plugin);
 
         registerListeners();
+
+        Util.logToConsole("v" + plugin.getDescription().getVersion() + " enabled in &e" + (System.currentTimeMillis() - startTime) + "&fms.");
     }
 
     private void registerListeners() {
@@ -174,6 +177,8 @@ public final class EvoCraft extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        long startTime = System.currentTimeMillis();
         playerDataManager.shutdown();
+        Util.logToConsole("v" + plugin.getDescription().getVersion() + " disabled in &e" + (System.currentTimeMillis() - startTime) + "&fms.");
     }
 }

@@ -4,13 +4,12 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import xyz.xenondevs.invui.gui.AbstractGui;
-import xyz.xenondevs.invui.gui.Gui;
 
 
 /**
  * hhahahh enchant gui code go brr
  */
-public class EnchantGuiBuilder extends AbstractGui.AbstractBuilder<EnchantingGUI, EnchantGuiBuilder.Enchanting> {
+public class EnchantGuiBuilder extends AbstractGui.AbstractBuilder<EnchantingGui, EnchantingGui.Enchanting> implements EnchantingGui.Enchanting {
 
     private final Player p;
     private final Block block;
@@ -21,14 +20,12 @@ public class EnchantGuiBuilder extends AbstractGui.AbstractBuilder<EnchantingGUI
     }
 
     @Override
-    public @NotNull EnchantingGUI build() {
+    public @NotNull EnchantingGui build() {
         if (structure == null)
             throw new IllegalStateException("Structure is not defined.");
-        EnchantingGUI gui = new EnchantingGUI(structure, p, block);
+        EnchantingGui gui = new EnchantingGui(structure, p, block);
         gui.setBackground(background);
         return gui;
     }
-
-    interface Enchanting extends Gui.Builder<EnchantingGUI, Enchanting> {}
 }
 

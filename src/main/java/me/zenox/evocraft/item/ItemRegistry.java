@@ -8,7 +8,7 @@ import me.zenox.evocraft.abilities.itemabilities.specific.EmberAttune;
 import me.zenox.evocraft.abilities.itemabilities.specific.Psychic;
 import me.zenox.evocraft.abilities.itemabilities.specific.Transcendence;
 import me.zenox.evocraft.attribute.AttributeRegistry;
-import me.zenox.evocraft.gui.EnchantingGUI;
+import me.zenox.evocraft.gui.EnchantingGui;
 import me.zenox.evocraft.item.basicitems.CorruptPearl;
 import me.zenox.evocraft.item.basicitems.RavagerSkin;
 import me.zenox.evocraft.item.basicitems.TormentedSoul;
@@ -339,7 +339,7 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.COMMON)
             .type(ComplexItem.Type.ENCHANTING_FUEL)
             .glow()
-            .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 5));
+            .variable(EnchantingGui.ENCHANT_FUEL_VAR, 5));
 
     public static final ComplexItem INFUSED_ORBITEX = new ComplexItem(new ItemSettings()
             .id("infused_orbitex")
@@ -347,7 +347,7 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .type(ComplexItem.Type.ENCHANTING_FUEL)
             .glow()
-            .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 15));
+            .variable(EnchantingGui.ENCHANT_FUEL_VAR, 15));
 
     public static final ComplexItem CREATIVE_MIND = new ComplexItem((new ItemSettings()
             .id("creative_mind")
@@ -652,7 +652,7 @@ public class ItemRegistry {
     // Vanilla Items
     public static final VanillaItem LAPIS_LAZULI = new VanillaItem(new ItemSettings()
             .material(Material.LAPIS_LAZULI)
-            .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 1));
+            .variable(EnchantingGui.ENCHANT_FUEL_VAR, 1));
 
     public static final ComplexItem VERTEXICAL_BLADE = new ComplexItem(new ItemSettings()
             .id("vertex_blade")
