@@ -7,7 +7,7 @@ import xyz.xenondevs.invui.gui.AbstractGui;
 
 
 /**
- * hhahahh enchant gui code go brr
+ * A builder class for {@link EnchantingGui}.
  */
 public class EnchantGuiBuilder extends AbstractGui.AbstractBuilder<EnchantingGui, EnchantingGui.Enchanting> implements EnchantingGui.Enchanting {
 

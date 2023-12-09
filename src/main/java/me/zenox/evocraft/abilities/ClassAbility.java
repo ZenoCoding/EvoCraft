@@ -805,7 +805,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
 
     /**
      * The ultimate upgrade of the Rift Beam ability.
-     * Charges up to unleash a devastating blast, with two chaining beams and one main beam.
+     * Charges up to unleash a devastating blast with one main beam.
      *
      * @param event   The player interaction event.
      * @param player  The player casting the ability.
@@ -822,7 +822,6 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
                 if (isFullyCharged(player)) {
                     // On full charge, release the beams
                     releaseMainBeam(player, ability);
-                    releaseChainingBeams(player, ability);
 
                     this.cancel(); // Stop the task
                 }
@@ -830,32 +829,70 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
         }.runTaskTimer(EvoCraft.getPlugin(), 0L, 1L); // Check every tick
     }
 
-    private static void startCharge(Player player) {
-        // Pseudocode:
+    public static void startCharge(Player player) {
         // Display charging particles or effects around the player.
+        player.getWorld().spawnParticle(Particle.END_ROD, player.getLocation(), 10, 0.5, 0.5, 0.5, 0);
         // Record the start time of the charge.
-        // Possibly play a charging sound.
+        player.setMetadata("charge_start_time", new FixedMetadataValue(EvoCraft.getPlugin(), System.currentTimeMillis()));
+
+        // Start a task that increases the pitch of the sound and sends a message to the action bar as the charge progresses
+        new BukkitRunnable() {
+            float pitch = 0.5f; // Start pitch
+            @Override
+            public void run() {
+                if (!isFullyCharged(player)) {
+                    // Increase the pitch and play the sound
+                    pitch += 0.05f; // Increase pitch
+                    player.playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1.0f, pitch);
+
+                    // Send a message to the action bar
+                    player.sendActionBar(ChatColor.GREEN + "Charging... " + Math.round(pitch * 100) + "%");
+                } else {
+                    // Stop the task when the charge is complete
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(EvoCraft.getPlugin(), 0L, 20L); // Run every second (20 ticks)
     }
 
-    private static boolean isFullyCharged(Player player) {
-        // Pseudocode:
+    public static boolean isFullyCharged(Player player) {
         // Check if the required charge time has elapsed.
+        long chargeStartTime = player.getMetadata("charge_start_time").get(0).asLong();
+        long chargeDuration = System.currentTimeMillis() - chargeStartTime;
         // Return true if fully charged, false otherwise.
-        return false; // Placeholder
+        return chargeDuration >= 5000; // Assuming 5 seconds as the required charge time
     }
 
-    private static void releaseMainBeam(Player player, ClassAbility ability) {
-        // Pseudocode:
+    public static void releaseMainBeam(Player player, ClassAbility ability) {
         // Create and launch the main beam.
-        // This beam could have higher damage and range compared to normal rift beams.
-    }
+        Location start = player.getEyeLocation();
+        Location end = player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(ability.getRange() * 2)); // Assuming the main beam has twice the range
 
-    private static void releaseChainingBeams(Player player, ClassAbility ability) {
-        // Pseudocode:
-        // Launch additional beams that chain to nearby enemies.
-        // These beams could originate from the player or the main beam's hit location.
-    }
+        new BukkitRunnable() {
+            int ticks = 0; // Count the number of ticks
+            @Override
+            public void run() {
+                if (ticks < 20) { // Run for 20 ticks (1 second)
+                    alongPath(start, end, location -> {
+                        // Spawn particles for visual effects
+                        location.getWorld().spawnParticle(Particle.END_ROD, location, 10, 0.5, 0.5, 0.5, 0); // Increase the count and speed for a bigger beam
+                        location.getWorld().spawnParticle(Particle.SQUID_INK, location, 10, 0.5, 0.5, 0.5, 0); // Use SQUID_INK particles for sonic effect
 
+                        // Deal damage to nearby entities
+                        player.getWorld().getNearbyEntities(location, 0.5, 0.5, 0.5).forEach(entity -> {
+                            if (entity instanceof Damageable && !entity.equals(player)) {
+                                ((Damageable) entity).damage(ability.getStrength() * 10); // Assuming the main beam deals 10 times the ability's strength as damage
+                            }
+                        });
+                    });
+                    ticks++;
+                } else {
+                    // Stop the task after 1 second
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(EvoCraft.getPlugin(), 0L, 1L); // Run every tick (1/20th of a second)
+    }
 
 
     public static void runeShieldAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {

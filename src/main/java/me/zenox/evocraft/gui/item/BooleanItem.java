@@ -17,7 +17,7 @@ import java.util.function.Predicate;
  */
 public class BooleanItem extends ControlItem<EnchantingGui> {
 
-    private Predicate<EnchantingGui> supplier;
+    private final Predicate<EnchantingGui> supplier;
     private ItemProvider trueItem = new ItemBuilder(Material.GREEN_STAINED_GLASS_PANE).setDisplayName("§r");
     private ItemProvider falseItem = new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("§r");
 
