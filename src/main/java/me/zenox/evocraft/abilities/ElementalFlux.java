@@ -1,5 +1,6 @@
 package me.zenox.evocraft.abilities;
 
+import me.zenox.evocraft.abilities.itemabilities.ItemAbility;
 import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
 import me.zenox.evocraft.item.LoreEntry;

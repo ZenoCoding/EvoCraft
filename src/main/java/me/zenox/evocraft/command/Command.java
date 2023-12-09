@@ -2,15 +2,16 @@ package me.zenox.evocraft.command;
 
 import com.google.common.primitives.Ints;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.data.PlayerData;
+import me.zenox.evocraft.data.PlayerDataManager;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
+import me.zenox.evocraft.gameclass.GameClass;
+import me.zenox.evocraft.gameclass.tree.Path;
 import me.zenox.evocraft.item.ComplexItem;
 import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
-import me.zenox.evocraft.item.ItemRegistry;
 import me.zenox.evocraft.loot.LootTable;
 import me.zenox.evocraft.loot.LootTableRegistry;
-import me.zenox.evocraft.story.Chapter;
-import me.zenox.evocraft.story.ChapterManager;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,10 +20,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import xyz.xenondevs.invui.window.Window;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Command implements CommandExecutor, TabCompleter {
 
@@ -54,7 +55,7 @@ public class Command implements CommandExecutor, TabCompleter {
                     Util.sendMessage(p, "Please specify a item to give.");
                     return true;
                 }
-                ComplexItem itemtype = ItemRegistry.byId(args[2]);
+                ComplexItem itemtype = ComplexItem.itemRegistry.get(args[2]);
                 if (itemtype == null) {
                     Util.sendMessage(p, "This item could not be found!");
                 } else {
@@ -106,7 +107,7 @@ public class Command implements CommandExecutor, TabCompleter {
                     Util.sendMessage(sender, "Please specify a item to drop.");
                     return true;
                 }
-                ComplexItem itemtypetodrop = ItemRegistry.byId(args[2]);
+                ComplexItem itemtypetodrop = ComplexItem.itemRegistry.get(args[2]);
                 if (itemtypetodrop == null) {
                     Util.sendMessage(sender, "This item could not be found!");
                 } else {
@@ -185,44 +186,41 @@ public class Command implements CommandExecutor, TabCompleter {
                     Util.sendMessage(sender, ChatColor.WHITE + "This item has no CustomModelData (that is created by EvoCraft)");
                     return true;
                 }
-                Util.sendMessage(sender, ChatColor.WHITE + "The CustomModelData of " + item.getItemMeta().getDisplayName() + ChatColor.WHITE + "  is " + ComplexItemStack.of(item).getComplexItem().getCustomModelData());
+                Util.sendMessage(sender, ChatColor.WHITE + "The CustomModelData of " + item.getItemMeta().getDisplayName() + ChatColor.WHITE + "  is " + ComplexItem.of(item).getCustomModelData());
                 return true;
             }
-            case "removechapterdata" -> {
-                if (sender instanceof Player){
-                    ((Player) sender).getPersistentDataContainer().remove(ChapterManager.CHAPTER_KEY);
-                    Util.sendMessage(sender, "All chapter data has been removed.");
-                }
-                else {
-                    Util.sendMessage(sender, "You must be a player to use this command!");
-                }
-            }
-            case "removemetadata" -> {
-                if (sender instanceof Player){
-                    sender.getServer().getPlayer(args[1]).removeMetadata("hasStarted", EvoCraft.getPlugin());
-                    Util.sendMessage(sender, "All chapter data has been removed.");
-                }
-                else {
-                    Util.sendMessage(sender, "You must be a player to use this command!");
-                }
-            }
-            case "setchapter" -> {
-                // Set the chapter given the player and the chapter's id
-                if (args.length < 2 || sender.getServer().getPlayer(args[1]) == null) {
-                    Util.sendMessage(sender, "Please specify a valid user to set the chapter of.");
+            case "class" -> // Open the class selection GUI
+                    Window.single()
+                            .setViewer((Player) sender)
+                            .setTitle("Class Selection")
+                            .setGui(GameClass.getGui())
+                            .setCloseable(true)
+                            .build()
+                            .open();
+            case "progresspath" -> {
+                if (args.length < 2) {
+                    Util.sendMessage(sender, "Please specify a valid path.");
                     return true;
                 }
-                if (args.length < 3) {
-                    Util.sendMessage(sender, "Please specify a valid chapter.");
+                Player player = ((Player) sender);
+                PlayerData data = PlayerDataManager.getInstance().getPlayerData(player.getUniqueId());
+                Path path = data.getPlayerClass().tree().path(args[1]);
+                if (path == null) {
+                    Util.sendMessage(sender, "&cThis path does not exist!");
                     return true;
                 }
-                Player player = sender.getServer().getPlayer(args[1]);
-                Chapter chapter = EvoCraft.getChapterManager().getChapter(Ints.tryParse(args[2]));
-                if (chapter == null) {
-                    Util.sendMessage(sender, "This chapter does not exist!");
+                try {
+                    if (args.length < 3)
+                        data.progressPath(path);
+                    else {
+                        int level = Integer.parseInt(args[2]);
+                        data.setPathLevel(path, level);
+                    }
+                } catch (IllegalArgumentException e) {
+                    Util.sendMessage(sender, e.getMessage());
                     return true;
                 }
-                EvoCraft.getChapterManager().setChapter(player, chapter);
+                Util.sendMessage(sender, "&aYou have progressed on the " + path.getId() + " path to level " + data.getPathLevel(path) + "!");
                 return true;
             }
             default -> Util.sendMessage(sender, "EvoCraft Help Page.");
@@ -235,51 +233,59 @@ public class Command implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
-        if (arguments.isEmpty()) {
-            arguments.add("give");
-            arguments.add("loottable");
-            arguments.add("droploottable");
-            arguments.add("dropitematplayer");
-            arguments.add("enchant");
-            arguments.add("reload");
-            arguments.add("removechapterdata");
-        }
-
-        if (items.isEmpty()) {
-            for (ComplexItem item : ComplexItem.itemRegistry) {
-                items.add(item.getId());
-            }
-        }
-
-        List<String> results = new ArrayList<>();
         if (args.length == 1) {
-            for (String a : arguments) {
-                if (a.toLowerCase().startsWith(args[0].toLowerCase())) {
-                    results.add(a);
-                }
-            }
-            return results;
-        } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
-            for (String b : items) {
-                if (b.toLowerCase().startsWith(args[2].toLowerCase())) {
-                    results.add(b);
-                }
-            }
-            return results;
-        } else if (args.length == 3 && args[0].equalsIgnoreCase("enchant")) {
-            for (ComplexEnchantment b : ComplexEnchantment.getRegisteredEnchants()) {
-                if (b.getId().toLowerCase().startsWith(args[2].toLowerCase())) {
-                    results.add(b.getId());
-                }
-            }
-            return results;
-        } else if (args.length == 4 && args[0].equalsIgnoreCase("enchant")) {
-            results.add("<level>");
-            return results;
-        } else if (args.length == 4 && args[0].equalsIgnoreCase("give")) {
-            results.add("<amount>");
-            return results;
+            return getCommandSuggestions(args[0]);
+        } else if (args.length == 2 && "progresspath".equalsIgnoreCase(args[0]) && sender instanceof Player) {
+            return getPathSuggestions((Player) sender, args[1]);
+        } else if (args.length == 3) {
+            return getThirdArgumentSuggestions(args[0], args[2]);
+        } else if (args.length == 4 && "enchant".equalsIgnoreCase(args[0])) {
+            return Collections.singletonList("<level>");
+        } else if (args.length == 4 && "give".equalsIgnoreCase(args[0])) {
+            return Collections.singletonList("<amount>");
         }
-        return null;
+        return Collections.emptyList();
+    }
+
+    private List<String> getCommandSuggestions(String arg) {
+        List<String> commands = Arrays.asList("give", "loottable", "droploottable", "dropitematplayer",
+                "enchant", "reload", "removechapterdata", "removemetadata",
+                "setchapter", "class", "progresspath");
+        return commands.stream()
+                .filter(a -> a.toLowerCase().startsWith(arg.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getPathSuggestions(Player player, String arg) {
+        GameClass gameClass = PlayerDataManager.getInstance().getPlayerData(player.getUniqueId()).getPlayerClass();
+        return gameClass.tree().paths().stream()
+                .map(Path::getId)
+                .filter(path -> path.toLowerCase().startsWith(arg.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getThirdArgumentSuggestions(String arg0, String arg2) {
+        if ("give".equalsIgnoreCase(arg0)) {
+            return getItemSuggestions(arg2);
+        } else if ("enchant".equalsIgnoreCase(arg0)) {
+            return getEnchantmentSuggestions(arg2);
+        }
+        return Collections.emptyList();
+    }
+
+    private List<String> getItemSuggestions(String arg) {
+        if (items.isEmpty()) {
+            items.addAll(ComplexItem.itemRegistry.keySet());
+        }
+        return items.stream()
+                .filter(b -> b.toLowerCase().startsWith(arg.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getEnchantmentSuggestions(String arg) {
+        return ComplexEnchantment.getRegisteredEnchants().stream()
+                .map(ComplexEnchantment::getId)
+                .filter(id -> id.toLowerCase().startsWith(arg.toLowerCase()))
+                .collect(Collectors.toList());
     }
 }

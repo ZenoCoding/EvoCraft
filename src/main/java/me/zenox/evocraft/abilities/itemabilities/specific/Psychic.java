@@ -1,4 +1,4 @@
-package me.zenox.evocraft.abilities;
+package me.zenox.evocraft.abilities.itemabilities.specific;
 
 import com.archyx.aureliumskills.api.AureliumAPI;
 import com.archyx.aureliumskills.stats.Stats;
@@ -12,6 +12,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.abilities.itemabilities.ItemAbility;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

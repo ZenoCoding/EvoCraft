@@ -35,7 +35,7 @@ public class ComplexItemStack {
     private ItemStack item;
     private ComplexItemMeta complexMeta;
 
-    private String skullURL;
+    private final String skullURL;
 
     public ComplexItemStack(ComplexItem complexItem, int amount) {
         this(complexItem, new ItemStack(complexItem.getMaterial()));
@@ -76,7 +76,7 @@ public class ComplexItemStack {
 
         Map<Enchantment, Integer> vanillaEnchantments = item.getEnchantments();
 
-        ComplexItem complexItem = Objects.requireNonNullElse(ItemRegistry.byItem(item), VanillaItem.of(item.getType()));
+        ComplexItem complexItem = Objects.requireNonNullElse(ComplexItem.of(item), VanillaItem.of(item.getType()));
         ComplexItemStack cItem = new ComplexItemStack(complexItem, item);
 
         // add vanilla variables???
@@ -173,8 +173,8 @@ public class ComplexItemStack {
         return this.complexItem.getKey();
     }
 
-    public List<Ability> getAbilities() {
-        return this.complexMeta.getAbilities();
+    public List<Ability<?>> getAbilities() {
+        return this.complexItem.getAbilities();
     }
 
     public ComplexItem getComplexItem() {

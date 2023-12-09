@@ -42,10 +42,10 @@ public enum Slot {
      * @return The list of unique abilities that the player possesses
      */
     @Deprecated
-    public static List<Ability> uniqueEquipped(Player p) {
+    public static List<Ability<?>> uniqueEquipped(Player p) {
         List<ItemStack> items = Arrays.stream(new ItemStack[]{MAIN_HAND.item(p).get(0), OFF_HAND.item(p).get(0), HEAD.item(p).get(0), CHEST.item(p).get(0), LEGS.item(p).get(0), FEET.item(p).get(0)})
                 .filter(Objects::nonNull).toList();
-        List<Ability> abilities = new ArrayList<>();
+        List<Ability<?>> abilities = new ArrayList<>();
         items.stream()
                 .map(ComplexItemStack::of)
                 .forEach((complexItemStack) -> abilities.addAll(complexItemStack.getAbilities()));

@@ -1,11 +1,15 @@
 package me.zenox.evocraft.item;
 
 import com.archyx.aureliumskills.stats.Stats;
-import me.zenox.evocraft.abilities.*;
+import me.zenox.evocraft.abilities.AbilityRegistry;
+import me.zenox.evocraft.abilities.ElementalFlux;
+import me.zenox.evocraft.abilities.itemabilities.specific.Crucify;
+import me.zenox.evocraft.abilities.itemabilities.specific.EmberAttune;
+import me.zenox.evocraft.abilities.itemabilities.specific.Psychic;
+import me.zenox.evocraft.abilities.itemabilities.specific.Transcendence;
 import me.zenox.evocraft.attribute.AttributeRegistry;
-import me.zenox.evocraft.gui.EnchantingGUI;
+import me.zenox.evocraft.gui.EnchantingGui;
 import me.zenox.evocraft.item.basicitems.CorruptPearl;
-import me.zenox.evocraft.item.basicitems.GardenerSapling;
 import me.zenox.evocraft.item.basicitems.RavagerSkin;
 import me.zenox.evocraft.item.basicitems.TormentedSoul;
 import me.zenox.evocraft.util.Util;
@@ -15,20 +19,13 @@ import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ItemRegistry {
 
-
-    public static final ComplexItem GARDENER_SAPLING = new GardenerSapling();
     public static final ComplexItem ENCHANTED_MAGMA_BLOCK = new ComplexItem(new ItemSettings()
             .id("enchanted_magma_block")
             .material(Material.MAGMA_BLOCK));
@@ -224,7 +221,7 @@ public class ItemRegistry {
             .modifier(AttributeRegistry.ATTACK_DAMAGE, 15)
             .modifier(AttributeRegistry.ATTACK_SPEED, -3)
             .modifier(AttributeRegistry.WISDOM, 50)
-            .abilities(AbilityRegistry.VOID_WARP, AbilityRegistry.VOIDULAR_RECALL)
+            .abilities(AbilityRegistry.VOID_WARP)
             .rarity(ComplexItem.Rarity.EPIC)
             .material(Material.NETHERITE_SHOVEL)
             .type(ComplexItem.Type.STAFF)
@@ -342,7 +339,7 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.COMMON)
             .type(ComplexItem.Type.ENCHANTING_FUEL)
             .glow()
-            .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 5));
+            .variable(EnchantingGui.ENCHANT_FUEL_VAR, 5));
 
     public static final ComplexItem INFUSED_ORBITEX = new ComplexItem(new ItemSettings()
             .id("infused_orbitex")
@@ -350,7 +347,7 @@ public class ItemRegistry {
             .rarity(ComplexItem.Rarity.UNCOMMON)
             .type(ComplexItem.Type.ENCHANTING_FUEL)
             .glow()
-            .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 15));
+            .variable(EnchantingGui.ENCHANT_FUEL_VAR, 15));
 
     public static final ComplexItem CREATIVE_MIND = new ComplexItem((new ItemSettings()
             .id("creative_mind")
@@ -388,50 +385,6 @@ public class ItemRegistry {
             .stat(Stats.STRENGTH, 50d)
             .ability(AbilityRegistry.TERRA_STRIKE));
 
-    public static final ComplexItem BURNING_HELMET = new ComplexItem(new ItemSettings()
-            .id("burning_helmet")
-            .material(Material.LEATHER_HELMET)
-            .rarity(ComplexItem.Rarity.RARE)
-            .type(ComplexItem.Type.HELMET)
-            .modifier(AttributeRegistry.HEALTH, 5)
-            .modifier(AttributeRegistry.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_SCALAR)
-            .modifier(AttributeRegistry.ARMOR, 4)
-            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
-            .abilities(AbilityRegistry.ROARING_FLAME));
-
-    public static final ComplexItem BURNING_CHESTPLATE = new ComplexItem(new ItemSettings()
-            .id("burning_chestplate")
-            .material(Material.LEATHER_CHESTPLATE)
-            .rarity(ComplexItem.Rarity.RARE)
-            .type(ComplexItem.Type.CHESTPLATE)
-            .modifier(AttributeRegistry.HEALTH, 12)
-            .modifier(AttributeRegistry.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_SCALAR)
-            .modifier(AttributeRegistry.ARMOR, 10)
-            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
-            .abilities(AbilityRegistry.ROARING_FLAME));
-
-    public static final ComplexItem BURNING_LEGGINGS = new ComplexItem(new ItemSettings()
-            .id("burning_leggings")
-            .material(Material.LEATHER_LEGGINGS)
-            .rarity(ComplexItem.Rarity.RARE)
-            .type(ComplexItem.Type.LEGGINGS)
-            .modifier(AttributeRegistry.HEALTH, 10)
-            .modifier(AttributeRegistry.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_SCALAR)
-            .modifier(AttributeRegistry.ARMOR, 8)
-            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
-            .abilities(AbilityRegistry.ROARING_FLAME));
-
-    public static final ComplexItem BURNING_BOOTS = new ComplexItem(new ItemSettings()
-            .id("burning_boots")
-            .material(Material.LEATHER_BOOTS)
-            .rarity(ComplexItem.Rarity.RARE)
-            .type(ComplexItem.Type.BOOTS)
-            .modifier(AttributeRegistry.HEALTH, 5)
-            .modifier(AttributeRegistry.MOVEMENT_SPEED, 0.05, AttributeModifier.Operation.ADD_SCALAR)
-            .modifier(AttributeRegistry.ARMOR, 3)
-            .modifier(AttributeRegistry.ARMOR_TOUGHNESS, 1)
-            .abilities(AbilityRegistry.ROARING_FLAME, AbilityRegistry.LAVA_GLIDER));
-
     public static final ComplexItem DARKCALLER = new ComplexItem(new ItemSettings()
             .id("darkcaller")
             .material(Material.BEACON)
@@ -450,18 +403,6 @@ public class ItemRegistry {
             .material(Material.GOLDEN_CARROT)
             .ability(AbilityRegistry.GILDED_CONSUME)
             .rarity(ComplexItem.Rarity.RARE));
-
-    public static final ComplexItem START_BUTTON = new ComplexItem(new ItemSettings()
-            .id("start_button")
-            .material(Material.REDSTONE)
-            .ability(AbilityRegistry.START_BUTTON)
-            .rarity(ComplexItem.Rarity.MYTHIC));
-
-    public static final ComplexItem SOUL_STONE = new ComplexItem(new ItemSettings()
-            .id("soul_stone")
-            .material(Material.NETHER_STAR)
-            .ability(AbilityRegistry.PORTALIZER)
-            .rarity(ComplexItem.Rarity.MYTHIC));
 
     public static final ComplexItem ARCANE_JEWEL = new ComplexItem(new ItemSettings()
             .id("arcane_jewel")
@@ -711,7 +652,7 @@ public class ItemRegistry {
     // Vanilla Items
     public static final VanillaItem LAPIS_LAZULI = new VanillaItem(new ItemSettings()
             .material(Material.LAPIS_LAZULI)
-            .variable(EnchantingGUI.ENCHANT_FUEL_VAR, 1));
+            .variable(EnchantingGui.ENCHANT_FUEL_VAR, 1));
 
     public static final ComplexItem VERTEXICAL_BLADE = new ComplexItem(new ItemSettings()
             .id("vertex_blade")
@@ -747,7 +688,7 @@ public class ItemRegistry {
 
     @Deprecated
     public static List<Recipe> registerRecipes() {
-        for (ComplexItem item : ComplexItem.itemRegistry) {
+        for (ComplexItem item : ComplexItem.itemRegistry.values()) {
             registeredRecipes.addAll(item.getRecipes());
         }
 
@@ -768,27 +709,5 @@ public class ItemRegistry {
 
     public static void registerItems() {
         Util.logToConsole(ChatColor.WHITE + "Registering " + ChatColor.GOLD + ComplexItem.itemRegistry.size() + ChatColor.WHITE + " items.");
-    }
-
-    @Nullable
-    public static ComplexItem byItem(ItemStack item) {
-        try {
-            PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta()).getPersistentDataContainer();
-            String id = container.get(ComplexItem.GLOBAL_ID, PersistentDataType.STRING);
-            return byId(id);
-        } catch (NullPointerException e) {
-            return null;
-        }
-    }
-
-    @Nullable
-    public static ComplexItem byId(String id) {
-        for (ComplexItem item : ComplexItem.itemRegistry) {
-            if (id == null) return null;
-            if (id.equals(item.getId())) {
-                return item;
-            }
-        }
-        return null;
     }
 }

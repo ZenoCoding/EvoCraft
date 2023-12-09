@@ -5,8 +5,8 @@ import com.archyx.aureliumskills.modifier.ModifierType;
 import com.archyx.aureliumskills.modifier.Modifiers;
 import com.archyx.aureliumskills.modifier.StatModifier;
 import com.archyx.aureliumskills.stats.Stat;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import me.zenox.evocraft.EvoCraft;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -74,15 +73,9 @@ public class Util {
         r.nextBytes(array);
         UUID id = UUID.nameUUIDFromBytes(array);
 
-        GameProfile profile = new GameProfile(id, null);
-        profile.getProperties().put("textures", new Property("textures", base64EncodedString));
-        try {
-            Field profileField = meta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(meta, profile);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        PlayerProfile profile = Bukkit.createProfile(id, null);
+        profile.getProperties().add(new ProfileProperty("textures", base64EncodedString));
+        meta.setPlayerProfile(profile);
         item.setItemMeta(meta);
         return item;
     }
@@ -104,9 +97,9 @@ public class Util {
     /**
      * Gets nearby blocks given a radius and location
      * @param loc The location
-     * @param radius The radius
-     * @param yradius The y radius
-     * @return
+     * @param radius The radius in the orthogonal horizontal directions
+     * @param yradius The radius in the y direction
+     * @return the list of blocks
      */
     public static List<Block> getNearbyBlocks(Location loc, int radius, int yradius) {
         List<Block> nearbyBlocks = new ArrayList();

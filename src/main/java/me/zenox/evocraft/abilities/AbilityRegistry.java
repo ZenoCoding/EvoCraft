@@ -1,9 +1,9 @@
 package me.zenox.evocraft.abilities;
 
 import me.zenox.evocraft.Slot;
+import me.zenox.evocraft.abilities.itemabilities.*;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -13,169 +13,242 @@ import java.util.List;
 
 public class AbilityRegistry {
     public static final ItemAbility SOUL_RIFT = new ItemAbility(new AbilitySettings()
-            .setId("soul_rift")
+            .id("soul_rift")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(100)
-            .setCooldown(50), ItemAbility::soulRiftAbility);
+            .manaCost(100)
+            .cooldown(50), ItemAbility::soulRiftAbility);
     public static final ItemAbility MAGIC_MISSILE_COMBUST_6 = new ItemAbility(new AbilitySettings()
-            .setId("magic_missile")
+            .id("magic_missile")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(0)
-            .setCooldown(0),
+            .manaCost(0)
+            .cooldown(0),
             (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.magicMissileAbility(event, p, item,true, 6));
     public static final ItemAbility MAGIC_MISSILE_DEV = new ItemAbility(new AbilitySettings()
-            .setId("magic_missile_dev")
+            .id("magic_missile_dev")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(0)
-            .setCooldown(0), (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.magicMissileAbility(event, p, item, false, 15));
+            .manaCost(0)
+            .cooldown(0), (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.magicMissileAbility(event, p, item, false, 15));
     public static final ItemAbility SMALL_EMBER_SHOOT = new ItemAbility(new AbilitySettings()
-            .setId("small_ember_shoot")
+            .id("small_ember_shoot")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(10)
-            .setCooldown(0), ItemAbility::smallEmberShootAbility);
+            .manaCost(10)
+            .cooldown(0), ItemAbility::smallEmberShootAbility);
     public static final ItemAbility EMBER_SHOOT = new ItemAbility(new AbilitySettings()
-            .setId("ember_shoot")
+            .id("ember_shoot")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(50)
-            .setCooldown(0), ItemAbility::emberShootAbility);
+            .manaCost(50)
+            .cooldown(0), ItemAbility::emberShootAbility);
     public static final ItemAbility CENTRALIZE = new ItemAbility(new AbilitySettings()
-            .setId("centralize")
+            .id("centralize")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(150)
-            .setCooldown(0), (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.centralizeAbility(event, p, item, false, 30));
+            .manaCost(150)
+            .cooldown(0), (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.centralizeAbility(event, p, item, false, 30));
 
     public static final ItemAbility CENTRALIZE_CORRUPT = new ItemAbility(new AbilitySettings()/*"centralize_corrupt", ItemAbility.AbilityAction.RIGHT_CLICK_ALL, 250, 0, (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.centralizeAbility(event, p, item, true, 45)*/
-            .setId("centralize_corrupt")
+            .id("centralize_corrupt")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(250)
-            .setCooldown(0), (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.centralizeAbility(event, p, item, true, 45));
+            .manaCost(250)
+            .cooldown(0), (PlayerInteractEvent event, Player p, ItemStack item) -> ItemAbility.centralizeAbility(event, p, item, true, 45));
     public static final ItemAbility OBSIDIAN_SHARD = new ItemAbility(new AbilitySettings()
-            .setId("obsidian_shard")
+            .id("obsidian_shard")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(25)
-            .setCooldown(0), ItemAbility::obsidianShardAbility);
+            .manaCost(25)
+            .cooldown(0), ItemAbility::obsidianShardAbility);
     public static final ItemAbility TARHELM = new ItemAbility(new AbilitySettings()
-            .setId("tarhelm")
+            .id("tarhelm")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(150)
-            .setCooldown(30), ItemAbility::tarhelmAbility);
+            .manaCost(150)
+            .cooldown(30), ItemAbility::tarhelmAbility);
     public static final AttackAbility JUSTICE = new AttackAbility(new AbilitySettings()
-            .setId("justice")
-            .setManaCost(0)
-            .setCooldown(0)
-            .setSlot(Slot.MAIN_HAND), AttackAbility::justiceAbility);
+            .id("justice")
+            .manaCost(0)
+            .cooldown(0)
+            .slot(Slot.MAIN_HAND), AttackAbility::justiceAbility);
     public static final AttackAbility VERTEX_ABILITY = new AttackAbility(new AbilitySettings()
-            .setId("vertex_ability")
-            .setManaCost(20)
-            .setCooldown(0)
-            .setSlot(Slot.MAIN_HAND), AttackAbility::vertexAbility);
+            .id("vertex_ability")
+            .manaCost(20)
+            .cooldown(0)
+            .slot(Slot.MAIN_HAND), AttackAbility::vertexAbility);
     public static final AttackAbility DARK_FURY = new AttackAbility(new AbilitySettings()
-            .setId("dark_fury")
-            .setManaCost(20)
-            .setCooldown(0)
-            .setSlot(Slot.MAIN_HAND), AttackAbility::darkFuryAbility);
+            .id("dark_fury")
+            .manaCost(20)
+            .cooldown(0)
+            .slot(Slot.MAIN_HAND), AttackAbility::darkFuryAbility);
     public static final FullSetAttackAbility TEST_FULLSET = new FullSetAttackAbility(new AbilitySettings()
-            .setId("test_fullset")
-            .setManaCost(10)
-            .setCooldown(0)
-            .setSlot(Slot.ARMOR), FullSetAttackAbility::testFullSetAbility);
+            .id("test_fullset")
+            .manaCost(10)
+            .cooldown(0)
+            .slot(Slot.ARMOR), FullSetAttackAbility::testFullSetAbility);
     public static final ItemAbility TERRA_STRIKE = new ItemAbility(new AbilitySettings()
-            .setId("terra_strike")
-            .setAbilityAction(ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK)
-            .setManaCost(10)
-            .setCooldown(5), ItemAbility::terraStrikeAbility);
+            .id("terra_strike")
+            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
+            .manaCost(10)
+            .cooldown(5), ItemAbility::terraStrikeAbility);
     public static final FullSetAttackAbility ROARING_FLAME = new FullSetAttackAbility(new AbilitySettings()
-            .setId("roaring_flame")
-            .setPassive(true)
-            .setManaCost(0)
-            .setCooldown(0)
-            .setSlot(Slot.ARMOR), FullSetAttackAbility::roaringFlameAbility);
-    public static final MoveAbility LAVA_GLIDER = new MoveAbility(new AbilitySettings()
-            .setId("lava_glider")
-            .setPassive(true)
-            .setManaCost(0)
-            .setCooldown(0)
-            .setSlot(Slot.ARMOR), MoveAbility::lavaGliderAbility);
+            .id("roaring_flame")
+            .passive(true)
+            .manaCost(0)
+            .cooldown(0)
+            .slot(Slot.ARMOR), FullSetAttackAbility::roaringFlameAbility);
     public static final ItemAbility DARKCALL = new ItemAbility(new AbilitySettings()
-            .setId("darkcall")
+            .id("darkcall")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(0)
-            .setCooldown(60), ItemAbility::darkcallerAbility);
+            .manaCost(0)
+            .cooldown(60), ItemAbility::darkcallerAbility);
     public static final ItemAbility GILDED_CONSUME = new ItemAbility(new AbilitySettings()
-            .setId("gilded_consume")
+            .id("gilded_consume")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(0)
-            .setCooldown(0), ItemAbility::consumeAbility);
+            .manaCost(0)
+            .cooldown(0), ItemAbility::consumeAbility);
     public static final ItemAbility VOID_WARP = new ItemAbility(new AbilitySettings()
-            .setId("void_warp")
+            .id("void_warp")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(100)
-            .setCooldown(1), ItemAbility::voidWarpAbility);
-    public static final ItemAbility VOIDULAR_RECALL= new ItemAbility(new AbilitySettings()
-            .setId("voidular_recall")
-            .setAbilityAction(ItemAbility.AbilityAction.SHIFT_RIGHT_CLICK)
-            .setManaCost(10)
-            .setCooldown(1), ItemAbility::voidularRecallAbility);
-    public static final ItemAbility START_BUTTON = new ItemAbility(new AbilitySettings()
-            .setId("start_button")
-            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(0)
-            .setCooldown(0), ItemAbility::startButtonAbility);
-    public static final ItemAbility PORTALIZER = new ItemAbility(new AbilitySettings()
-            .setId("portalizer")
-            .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(0)
-            .setCooldown(0), ItemAbility::portalizerAbility);
+            .manaCost(100)
+            .cooldown(1), ItemAbility::voidWarpAbility);
     public static final ItemAbility SNOW_SHOT = new ItemAbility(new AbilitySettings()
-            .setId("snow_shot")
+            .id("snow_shot")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(5)
-            .setCooldown(0), ItemAbility::snowShotAbility);
+            .manaCost(5)
+            .cooldown(0), ItemAbility::snowShotAbility);
     public static final FullSetEntityDamagedAbility DIAMANTINE_SHIELD = new FullSetEntityDamagedAbility(new AbilitySettings()
-            .setId("diamantine_shield")
-            .setPassive(true)
-            .setManaCost(0)
-            .setCooldown(0)
-            .setSlot(Slot.ARMOR), FullSetEntityDamagedAbility::diamantineShieldAbility);
+            .id("diamantine_shield")
+            .passive(true)
+            .manaCost(0)
+            .cooldown(0)
+            .slot(Slot.ARMOR), FullSetEntityDamagedAbility::diamantineShieldAbility);
     public static final FullSetDamagedAbility GOLEMS_HEART = new FullSetDamagedAbility(new AbilitySettings()
-            .setId("golems_heart")
-            .setPassive(true)
-            .setManaCost(0)
-            .setCooldown(0)
-            .setSlot(Slot.ARMOR), FullSetDamagedAbility::golemsHeartAbility, List.of(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, EntityDamageEvent.DamageCause.BLOCK_EXPLOSION));
+            .id("golems_heart")
+            .passive(true)
+            .manaCost(0)
+            .cooldown(0)
+            .slot(Slot.ARMOR), FullSetDamagedAbility::golemsHeartAbility, List.of(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, EntityDamageEvent.DamageCause.BLOCK_EXPLOSION));
 
     public static final FullSetDamagedAbility TITANS_HEART = new FullSetDamagedAbility(new AbilitySettings()
-            .setId("titans_heart")
-            .setPassive(true)
-            .setManaCost(0)
-            .setCooldown(0)
-            .setSlot(Slot.ARMOR), FullSetDamagedAbility::titansHeartAbility, List.of(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, EntityDamageEvent.DamageCause.BLOCK_EXPLOSION));
+            .id("titans_heart")
+            .passive(true)
+            .manaCost(0)
+            .cooldown(0)
+            .slot(Slot.ARMOR), FullSetDamagedAbility::titansHeartAbility, List.of(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, EntityDamageEvent.DamageCause.BLOCK_EXPLOSION));
     public static final ItemAbility CRYSTAL_SPIKE = new ItemAbility(new AbilitySettings()
-            .setId("crystal_spike")
+            .id("crystal_spike")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(75)
-            .setCooldown(1), ItemAbility::crystalSpikeAbility);
+            .manaCost(75)
+            .cooldown(1), ItemAbility::crystalSpikeAbility);
     public static final ItemAbility MANA_BOOST = new ItemAbility(new AbilitySettings()
-            .setId("mana_boost")
+            .id("mana_boost")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(0)
-            .setCooldown(0), ItemAbility::manaBoostAbility);
+            .manaCost(0)
+            .cooldown(0), ItemAbility::manaBoostAbility);
     public static final ItemAbility COLOSSAL_SWEEP = new ItemAbility(new AbilitySettings()
-            .setId("colossal_sweep")
+            .id("colossal_sweep")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(100)
-            .setCooldown(0), ItemAbility::colossalSweepAbility);
+            .manaCost(100)
+            .cooldown(0), ItemAbility::colossalSweepAbility);
     public static final ItemAbility THUNDERSTRIKE = new ItemAbility(new AbilitySettings()
-            .setId("thunderstrike")
+            .id("thunderstrike")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
-            .setManaCost(50)
-            .setCooldown(0), ItemAbility::thunderstrikeAbility);
+            .manaCost(50)
+            .cooldown(0), ItemAbility::thunderstrikeAbility);
     public static final ItemAbility RAPID_FIRE = new ItemAbility(new AbilitySettings()
-            .setId("rapid_fire")
+            .id("rapid_fire")
             .setAbilityAction(ItemAbility.AbilityAction.RIGHT_CLICK_ALL)
             , ItemAbility::rapidFireAbility);
 
+    // Class Abilities
+    public static final ClassAbility TELEPORT = new ClassAbility(new AbilitySettings()
+            .id("mage_teleport")
+            .manaCost(35)
+            .cooldown(0)
+            .range(20)
+            .strength(1)
+            .charges(1)
+            .chargeTime(15)
+            .modifiers(Modifier.of(Modifier.Type.RANGE, "teleport_range_1", +5),
+                    Modifier.of(Modifier.Type.MANA_COST, "teleport_mana_1", -5),
+                    Modifier.of(Modifier.Type.CHARGE, "teleport_charge_1", +1),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "teleport_dark", ClassAbility::darkTeleport),
+                    Modifier.of(Modifier.Type.STRENGTH, "teleport_strength_1", +1),
+                    Modifier.of(Modifier.Type.CHARGE, "teleport_charge_2", +1),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "teleport_surge", ClassAbility::surgeTeleport),
+                    Modifier.of(Modifier.Type.RANGE, "teleport_range_2", +10),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "teleport_arcane", ClassAbility::arcaneTeleport))
+            , ClassAbility::teleportAbility);
+
+    public static final ClassAbility MANA_BALL = new ClassAbility(new AbilitySettings()
+            .id("mage_mana_ball")
+            .manaCost(15)
+            .cooldown(0)
+            .range(20)
+            .strength(1)
+            .charges(-1)
+            .chargeTime(-1)
+            .modifiers(Modifier.of(Modifier.Type.MANA_COST, "mana_ball_mana_1", -5),
+                    Modifier.of(Modifier.Type.RANGE, "mana_ball_range_1", +2),
+                    Modifier.of(Modifier.Type.STRENGTH, "mana_ball_strength_1", +1),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "mana_ball_homing", ClassAbility::homingManaBall),
+                    Modifier.of(Modifier.Type.MANA_COST, "mana_ball_strength_2", +1),
+                    Modifier.of(Modifier.Type.RANGE, "mana_ball_range", +5),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "mana_ball_multishot", ClassAbility::multishotManaBall),
+                    Modifier.of(Modifier.Type.MANA_COST, "mana_ball_strength_2", +1),
+                    Modifier.of(Modifier.Type.MULTI, "mana_ball_am",
+                            Modifier.of(Modifier.Type.MANA_COST, "mana_ball_am_mana_boost", +50),
+                            Modifier.of(Modifier.Type.EXECUTABLE, "mana_ball_am_arcane_multishot", ClassAbility::multishotArcaneSingularity),
+                            Modifier.of(Modifier.Type.RANGE, "mana_ball_am_range", +15)))
+            , ClassAbility::manaBallAbility);
+    public static final ClassAbility RIFT_BEAM = new ClassAbility(new AbilitySettings()
+            .id("mage_rift_beam")
+            .manaCost(40)
+            .cooldown(0)
+            .range(20)
+            .strength(2)
+            .charges(0)
+            .chargeTime(0)
+            .modifiers(
+                    Modifier.of(Modifier.Type.RANGE, "rift_beam_extend", +5),
+                    Modifier.of(Modifier.Type.STRENGTH, "rift_beam_energize", +1),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_mark", ClassAbility::riftBeamMark),
+                    Modifier.of(Modifier.Type.MANA_COST, "rift_beam_efficiency", -10),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_chain", ClassAbility::riftBeamChain),
+                    Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_apex", ClassAbility::riftBeamApex)
+            ), ClassAbility::riftBeamAbility);
+    public static final ClassAbility RUNE_SHIELD = new ClassAbility(new AbilitySettings()
+            .id("mage_rune_shield")
+            .manaCost(50)
+            .cooldown(0)
+            .range(20)
+            .strength(1)
+            , ClassAbility::runeShieldAbility);
+    public static final ClassAbility BLOODLUST = new ClassAbility(new AbilitySettings()
+            .id("bloodlust")
+            .manaCost(35)
+            .cooldown(100)
+            .strength(1)
+            .charges(1)
+            .modifier(Modifier.of(Modifier.Type.EXECUTABLE, "bloodlust_agility", ClassAbility::agilityBloodlust))
+            , ClassAbility::bloodlustAbility);
+    public static final ClassAbility TRIPLE_SLASH = new ClassAbility(new AbilitySettings()
+            .id("triple_slash")
+            .manaCost(35)
+            .cooldown(100)
+            .strength(1)
+            .charges(1)
+            , ClassAbility::tripleSlashAbility);
+    public static final ClassAbility BULL_RUSH = new ClassAbility(new AbilitySettings()
+            .id("bull_rush")
+            .manaCost(35)
+            .cooldown(100)
+            .strength(1)
+            .charges(1)
+            , ClassAbility::bullRushAbility);
+    public static final ClassAbility COUNTERSTRIKE = new ClassAbility(new AbilitySettings()
+            .id("counterstrike")
+            .manaCost(15)
+            .cooldown(5)
+            .strength(10)
+            .charges(3)
+            , ClassAbility::counterstrikeAbility);
+
     public static void registerAbilities(){
-        Util.logToConsole("Registering %s abilities.".formatted(ChatColor.GOLD + "" + Ability.registeredAbilities.size() + "" + ChatColor.RESET));
+        Util.logToConsole("Registering %s abilities.".formatted(ChatColor.GOLD + "" + Ability.registeredAbilities.size() + ChatColor.RESET));
     }
 }

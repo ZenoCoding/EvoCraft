@@ -1,9 +1,9 @@
 package me.zenox.evocraft.gui.item;
 
-import de.studiocode.invui.item.ItemProvider;
-import de.studiocode.invui.item.builder.ItemBuilder;
-import de.studiocode.invui.item.impl.controlitem.ControlItem;
-import me.zenox.evocraft.gui.EnchantingGUI;
+import xyz.xenondevs.invui.item.ItemProvider;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import xyz.xenondevs.invui.item.impl.controlitem.ControlItem;
+import me.zenox.evocraft.gui.EnchantingGui;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -15,34 +15,34 @@ import java.util.function.Predicate;
 /**
  * Item that represents a boolean and changes based on boolean
  */
-public class BooleanItem extends ControlItem<EnchantingGUI> {
+public class BooleanItem extends ControlItem<EnchantingGui> {
 
-    private Predicate<EnchantingGUI> supplier;
+    private final Predicate<EnchantingGui> supplier;
     private ItemProvider trueItem = new ItemBuilder(Material.GREEN_STAINED_GLASS_PANE).setDisplayName("§r");
     private ItemProvider falseItem = new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("§r");
 
-    public BooleanItem(Predicate<EnchantingGUI> supplier, ItemProvider trueItem, ItemProvider falseItem){
+    public BooleanItem(Predicate<EnchantingGui> supplier, ItemProvider trueItem, ItemProvider falseItem){
         super();
         this.supplier = supplier;
         this.trueItem = trueItem;
         this.falseItem = falseItem;
     }
 
-    public BooleanItem(Predicate<EnchantingGUI> supplier, ItemProvider trueItem){
+    public BooleanItem(Predicate<EnchantingGui> supplier, ItemProvider trueItem){
         super();
         this.supplier = supplier;
         this.trueItem = trueItem;
     }
 
-    public BooleanItem(Predicate<EnchantingGUI> supplier){
+    public BooleanItem(Predicate<EnchantingGui> supplier){
         super();
         this.supplier = supplier;
     }
 
-    private EnchantingGUI gui;
+    private EnchantingGui gui;
 
     @Override
-    public ItemProvider getItemProvider(EnchantingGUI gui) {
+    public ItemProvider getItemProvider(EnchantingGui gui) {
         this.gui = gui;
         return supplier.test(gui) ? trueItem : falseItem;
     }

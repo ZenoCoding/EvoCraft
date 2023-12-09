@@ -7,20 +7,21 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import de.studiocode.invui.gui.structure.Structure;
-import de.studiocode.invui.item.builder.ItemBuilder;
+import xyz.xenondevs.invui.gui.structure.Structure;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import me.zenox.evocraft.abilities.AbilityRegistry;
 import me.zenox.evocraft.attribute.AttributeRegistry;
 import me.zenox.evocraft.command.Command;
 import me.zenox.evocraft.data.ConfigLoader;
 import me.zenox.evocraft.data.LanguageLoader;
+import me.zenox.evocraft.data.PlayerDataManager;
 import me.zenox.evocraft.enchant.EnchantRegistry;
 import me.zenox.evocraft.events.*;
+import me.zenox.evocraft.gameclass.ClassAbilityListener;
 import me.zenox.evocraft.item.ItemRegistry;
 import me.zenox.evocraft.item.VanillaItem;
 import me.zenox.evocraft.network.GlowFilter;
 import me.zenox.evocraft.recipe.RecipeRegistry;
-import me.zenox.evocraft.story.ChapterManager;
 import me.zenox.evocraft.util.Util;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -40,8 +41,8 @@ public final class EvoCraft extends JavaPlugin {
     private static LanguageLoader languageLoader;
     private static ConfigLoader configLoader;
     private static ProtocolManager protocolManager;
-    private static ChapterManager chapterManager;
     private static ActionBar actionBar;
+    private static PlayerDataManager playerDataManager;
 
     public static EvoCraft getPlugin() {
         return plugin;
@@ -50,6 +51,7 @@ public final class EvoCraft extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        long startTime = System.currentTimeMillis();
         plugin = this;
         plugin.getLogger().info("EvoCraft v" + plugin.getDescription().getVersion() + " loaded.");
 
@@ -78,12 +80,12 @@ public final class EvoCraft extends JavaPlugin {
             return;
         }
 
+        playerDataManager = new PlayerDataManager();
         modifiers = new Modifiers(AureliumAPI.getPlugin());
         actionBar = AureliumAPI.getPlugin().getActionBar();
 
         configLoader = new ConfigLoader(plugin);
         languageLoader = new LanguageLoader(plugin);
-        chapterManager = new ChapterManager(plugin);
 
         registerGlobalGUIItems();
 
@@ -102,6 +104,7 @@ public final class EvoCraft extends JavaPlugin {
 
         registerListeners();
 
+        Util.logToConsole("v" + plugin.getDescription().getVersion() + " enabled in &e" + (System.currentTimeMillis() - startTime) + "&fms.");
     }
 
     private void registerListeners() {
@@ -110,6 +113,7 @@ public final class EvoCraft extends JavaPlugin {
         new InventoryListener(plugin);
         new DimensionLocker(plugin);
         new DeathManager(plugin);
+        new ClassAbilityListener(plugin);
     }
 
     private boolean setupEconomy() {
@@ -163,10 +167,6 @@ public final class EvoCraft extends JavaPlugin {
         return perms;
     }
 
-    public static ChapterManager getChapterManager() {
-        return chapterManager;
-    }
-
     public static ActionBar getActionBar() {
         return actionBar;
     }
@@ -177,6 +177,8 @@ public final class EvoCraft extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        long startTime = System.currentTimeMillis();
+        playerDataManager.shutdown();
+        Util.logToConsole("v" + plugin.getDescription().getVersion() + " disabled in &e" + (System.currentTimeMillis() - startTime) + "&fms.");
     }
 }

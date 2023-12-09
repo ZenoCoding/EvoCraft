@@ -1,18 +1,18 @@
 package me.zenox.evocraft.gui.item;
 
-import de.studiocode.invui.item.ItemProvider;
-import de.studiocode.invui.item.builder.ItemBuilder;
-import de.studiocode.invui.item.impl.controlitem.ControlItem;
+import xyz.xenondevs.invui.item.ItemProvider;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import xyz.xenondevs.invui.item.impl.controlitem.ControlItem;
 import me.zenox.evocraft.data.TranslatableList;
 import me.zenox.evocraft.data.TranslatableText;
-import me.zenox.evocraft.gui.EnchantingGUI;
+import me.zenox.evocraft.gui.EnchantingGui;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class EnchantItem extends ControlItem<EnchantingGUI> {
+public class EnchantItem extends ControlItem<EnchantingGui> {
 
     private final int level;
     private final int skillreq;
@@ -27,17 +27,17 @@ public class EnchantItem extends ControlItem<EnchantingGUI> {
         this.LORE = new TranslatableList(TranslatableText.Type.GUI + "-enchant-action-lore-" + level);
     }
 
-    private EnchantingGUI gui;
+    private EnchantingGui gui;
 
     @Override
-    public ItemProvider getItemProvider(EnchantingGUI gui) {
+    public ItemProvider getItemProvider(EnchantingGui gui) {
         this.gui = gui;
         return new ItemBuilder(Material.EXPERIENCE_BOTTLE).setDisplayName(NAME.toString()).setLegacyLore(LORE.getList()).setAmount(level);
     }
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        if(EnchantingGUI.enchantValid(gui, level, getXPRequired())) gui.enchantItem(level, getXPRequired());
+        if(EnchantingGui.enchantValid(gui, level, getXPRequired())) gui.enchantItem(level, getXPRequired());
     }
 
     public int getXPRequired(){
