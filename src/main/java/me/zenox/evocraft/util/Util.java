@@ -8,6 +8,8 @@ import com.archyx.aureliumskills.stats.Stat;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import me.zenox.evocraft.EvoCraft;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -43,6 +45,10 @@ public class Util {
 
     public static void sendActionBar(@NotNull Player p, String message) {
         EvoCraft.getActionBar().sendAbilityActionBar(p, ChatColor.translateAlternateColorCodes('&', message));
+    }
+
+    public static void sendActionBar(@NotNull Player p, Component message) {
+        EvoCraft.getActionBar().sendAbilityActionBar(p, LegacyComponentSerializer.legacySection().serialize(message));
     }
 
     public static void sendTitle(@NotNull Player p, String title, String subtitle, int fadeIn, int stay, int fadeOut) {

@@ -14,7 +14,6 @@ import me.zenox.evocraft.loot.LootTable;
 import me.zenox.evocraft.loot.LootTableRegistry;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -23,269 +22,287 @@ import org.bukkit.inventory.ItemStack;
 import xyz.xenondevs.invui.window.Window;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Command implements CommandExecutor, TabCompleter {
 
     private final EvoCraft plugin;
+    private final Map<String, Consumer<CommandContext>> subcommands = new HashMap<>();
 
     public Command(EvoCraft plugin) {
         this.plugin = plugin;
+
+        // Register subcommands
+        subcommands.put("give", this::handleGive);
+        subcommands.put("loottable", this::handleLootTable);
+        subcommands.put("dropitematplayer", this::handleDropItemAtPlayer);
+        subcommands.put("droploottable", this::handleDropLootTable);
+        subcommands.put("enchant", this::handleEnchant);
+        subcommands.put("reload", this::handleReload);
+        subcommands.put("model", this::handleModel);
+        subcommands.put("class", this::handleClass);
+        subcommands.put("progresspath", this::handleProgressPath);
+
         plugin.getCommand("evocraft").setExecutor(this);
         plugin.getCommand("evocraft").setTabCompleter(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-
         if (args.length == 0) {
-            Util.sendMessage(sender, "EvoCraft Help Page.");
+            Util.sendMessage(sender, "EvoCraft Help Page. Available commands: " + String.join(", ", subcommands.keySet()));
             return true;
         }
 
-        switch (args[0]) {
-            case "give" -> {
-                if (args.length < 2 || sender.getServer().getPlayer(args[1]) == null) {
-                    Util.sendMessage(sender, "Please specify a valid user to give an item.");
-                    return true;
-                }
-                Player p = (Player) sender;
-                Player givento = sender.getServer().getPlayer(args[1]);
-                if (args.length < 3) {
-                    Util.sendMessage(p, "Please specify a item to give.");
-                    return true;
-                }
-                ComplexItem itemtype = ComplexItem.itemRegistry.get(args[2]);
-                if (itemtype == null) {
-                    Util.sendMessage(p, "This item could not be found!");
-                } else {
-                    Object amount;
-                    if (args.length >= 4) {
-                        amount = Ints.tryParse(args[3]);
-                        if (amount == null) {
-                            Util.sendMessage(p, args[3] + " is not a valid integer! Please specify an integer for argument <amount>.");
-                            return true;
-                        }
-                    } else {
-                        amount = 1;
-                    }
+        Consumer<CommandContext> subcommand = subcommands.get(args[0].toLowerCase());
+        if (subcommand == null) {
+            Util.sendMessage(sender, "Unknown subcommand. Type /evocraft for help.");
+            return true;
+        }
 
-                    givento.getInventory().addItem(new ComplexItemStack(itemtype, (int) amount).getItem());
-                    Util.sendMessage(p, "You gave " + givento.getDisplayName() + " x" + amount + " [" + itemtype.getDisplayName() + ChatColor.GOLD + "]");
-                }
-                return true;
-            }
-            case "loottable" -> {
-                if (args.length < 2 || sender.getServer().getPlayer(args[1]) == null) {
-                    Util.sendMessage(sender, "Please specify a valid user to give a loottable for.");
-                    return true;
-                }
-                if (args.length < 3) {
-                    Util.sendMessage(sender, "Please specify a valid loottable.");
-                    return true;
-                }
-                int threatlevel;
-                if (args.length < 4 || Ints.tryParse(args[3]) == null) {
-                    threatlevel = 1;
-                } else {
-                    threatlevel = Ints.tryParse(args[3]);
-                }
-                for (LootTable lootTable : LootTableRegistry.lootTableList) {
-                    if (args[2].equalsIgnoreCase(lootTable.getId())) {
-                        lootTable.openLootGUI(sender.getServer().getPlayer(args[1]), threatlevel);
-                        return true;
-                    }
-                }
-            }
-            case "dropitematplayer" -> {
-                if (args.length < 2 || sender.getServer().getPlayer(args[1]) == null) {
-                    Util.sendMessage(sender, "Please specify a valid user to drop an item at.");
-                    return true;
-                }
-                Player dropgivento = sender.getServer().getPlayer(args[1]);
-                if (args.length < 3) {
-                    Util.sendMessage(sender, "Please specify a item to drop.");
-                    return true;
-                }
-                ComplexItem itemtypetodrop = ComplexItem.itemRegistry.get(args[2]);
-                if (itemtypetodrop == null) {
-                    Util.sendMessage(sender, "This item could not be found!");
-                } else {
-                    Object amount;
-                    if (args.length >= 4) {
-                        amount = Ints.tryParse(args[3]);
-                        if (amount == null) {
-                            Util.sendMessage(sender, args[3] + " is not a valid integer! Please specify an integer for argument <amount>.");
-                            return true;
-                        }
-                    } else {
-                        amount = 1;
-                    }
-
-                    dropgivento.getWorld().dropItemNaturally(dropgivento.getLocation(), new ComplexItemStack(itemtypetodrop, (int) amount).getItem());
-                    Util.sendMessage(sender, "You gave " + dropgivento.getDisplayName() + " x" + amount + " [" + itemtypetodrop.getDisplayName() + ChatColor.GOLD + "]");
-                }
-            }
-            case "droploottable" -> {
-                if (args.length < 2 || sender.getServer().getEntity(UUID.fromString(args[1])) == null) {
-                    Util.sendMessage(sender, "Please specify a valid entity to give a loot table for.");
-                    return true;
-                }
-                if (args.length < 3) {
-                    Util.sendMessage(sender, "Please specify a valid loot table.");
-                    return true;
-                }
-                for (LootTable lootTable : LootTableRegistry.lootTableList) {
-                    if (args[2].equalsIgnoreCase(lootTable.getId())) {
-                        lootTable.dropLoot(sender.getServer().getEntity(UUID.fromString(args[1])).getLocation(), 1);
-                        return true;
-                    }
-                }
-                return false;
-            }
-            case "enchant" -> {
-                if (args.length < 2 || sender.getServer().getPlayer(args[1]) == null) {
-                    Util.sendMessage(sender, "Please specify a valid user to give an item.");
-                    return true;
-                }
-                if (args.length < 3) {
-                    Util.sendMessage(sender, "Please specify a item to give.");
-                    return true;
-                }
-                Player enchanted = sender.getServer().getPlayer(args[1]);
-                ComplexEnchantment enchant = ComplexEnchantment.byId(args[2]);
-                if (enchant == null) {
-                    Util.sendMessage(sender, "Enchantment " + ChatColor.WHITE + args[2] + " doesn't exist.");
-                } else {
-                    Object level;
-                    if (args.length >= 4) {
-                        level = Ints.tryParse(args[3]);
-                        if (level == null) {
-                            Util.sendMessage(sender, args[3] + " is not a valid integer! Please specify an integer for argument <level>.");
-                            return true;
-                        }
-                    } else {
-                        level = 1;
-                    }
-
-                    ComplexItemMeta meta = ComplexItemStack.of(enchanted.getInventory().getItemInMainHand()).getComplexMeta();
-                    if(((int) level) > 0) meta.addEnchantment(enchant, (Integer) level);
-                    else meta.removeEnchantment(enchant);
-                    Util.sendMessage(sender, "You enchanted " + enchanted.getDisplayName() + " with " + ChatColor.WHITE + enchant.getName() + " " + level);
-                }
-                return true;
-            }
-            case "reload" -> {
-                plugin.reload();
-                Util.sendMessage(sender, ChatColor.WHITE + "EvoCraft " + ChatColor.GREEN + "v" + plugin.getDescription().getVersion() + ChatColor.WHITE + " has been reloaded.");
-                return true;
-            }
-            case "model" -> {
-                ItemStack item = ((Player) sender).getEquipment().getItemInMainHand();
-                if(item.getType() == Material.AIR) {
-                    Util.sendMessage(sender, ChatColor.WHITE + "This item has no CustomModelData (that is created by EvoCraft)");
-                    return true;
-                }
-                Util.sendMessage(sender, ChatColor.WHITE + "The CustomModelData of " + item.getItemMeta().getDisplayName() + ChatColor.WHITE + "  is " + ComplexItem.of(item).getCustomModelData());
-                return true;
-            }
-            case "class" -> // Open the class selection GUI
-                    Window.single()
-                            .setViewer((Player) sender)
-                            .setTitle("Class Selection")
-                            .setGui(GameClass.getGui())
-                            .setCloseable(true)
-                            .build()
-                            .open();
-            case "progresspath" -> {
-                if (args.length < 2) {
-                    Util.sendMessage(sender, "Please specify a valid path.");
-                    return true;
-                }
-                Player player = ((Player) sender);
-                PlayerData data = PlayerDataManager.getInstance().getPlayerData(player.getUniqueId());
-                Path path = data.getPlayerClass().tree().path(args[1]);
-                if (path == null) {
-                    Util.sendMessage(sender, "&cThis path does not exist!");
-                    return true;
-                }
-                try {
-                    if (args.length < 3)
-                        data.progressPath(path);
-                    else {
-                        int level = Integer.parseInt(args[2]);
-                        data.setPathLevel(path, level);
-                    }
-                } catch (IllegalArgumentException e) {
-                    Util.sendMessage(sender, e.getMessage());
-                    return true;
-                }
-                Util.sendMessage(sender, "&aYou have progressed on the " + path.getId() + " path to level " + data.getPathLevel(path) + "!");
-                return true;
-            }
-            default -> Util.sendMessage(sender, "EvoCraft Help Page.");
+        CommandContext context = new CommandContext(sender, args);
+        try {
+            subcommand.accept(context);
+        } catch (IllegalArgumentException e) {
+            Util.sendMessage(sender, ChatColor.RED + "Error: " + e.getMessage());
         }
         return true;
     }
 
-    final List<String> arguments = new ArrayList<>();
-    final List<String> items = new ArrayList<>();
+    private void handleGive(CommandContext context) {
+        Player giver = context.requirePlayer();
+        Player recipient = context.requirePlayerArgument(1, "Please specify a valid player to give an item.");
+        String itemId = context.requireStringArgument(2, "Please specify an item to give.");
+        ComplexItem item = ComplexItem.itemRegistry.get(itemId);
+        if (item == null) throw new IllegalArgumentException("Item not found: " + itemId);
+
+        int amount = context.optionalIntArgument(3, 1);
+        recipient.getInventory().addItem(new ComplexItemStack(item, amount).getItem());
+        Util.sendMessage(giver, "Gave " + recipient.getDisplayName() + " x" + amount + " [" + item.getDisplayName() + "]");
+    }
+
+    private void handleLootTable(CommandContext context) {
+        Player player = context.requirePlayer();
+        Player recipient = context.requirePlayerArgument(1, "Please specify a valid player.");
+        String lootTableId = context.requireStringArgument(2, "Please specify a valid loot table.");
+        int threatLevel = context.optionalIntArgument(3, 1);
+
+        LootTable lootTable = LootTableRegistry.lootTableList.stream()
+                .filter(lt -> lootTableId.equalsIgnoreCase(lt.getId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Loot table not found: " + lootTableId));
+
+        lootTable.openLootGUI(recipient, threatLevel);
+        Util.sendMessage(player, "Opened loot table " + lootTableId + " for " + recipient.getDisplayName());
+    }
+
+    private void handleDropItemAtPlayer(CommandContext context) {
+        Player player = context.requirePlayer();
+        Player target = context.requirePlayerArgument(1, "Please specify a valid player.");
+        String itemId = context.requireStringArgument(2, "Please specify an item to drop.");
+        ComplexItem item = ComplexItem.itemRegistry.get(itemId);
+        if (item == null) throw new IllegalArgumentException("Item not found: " + itemId);
+
+        int amount = context.optionalIntArgument(3, 1);
+        target.getWorld().dropItemNaturally(target.getLocation(), new ComplexItemStack(item, amount).getItem());
+        Util.sendMessage(player, "Dropped x" + amount + " [" + item.getDisplayName() + "] at " + target.getDisplayName());
+    }
+
+    private void handleDropLootTable(CommandContext context) {
+        String entityUUID = context.requireStringArgument(1, "Please specify a valid entity UUID.");
+        String lootTableId = context.requireStringArgument(2, "Please specify a valid loot table.");
+        int amount = context.optionalIntArgument(3, 1);
+
+        LootTable lootTable = LootTableRegistry.lootTableList.stream()
+                .filter(lt -> lootTableId.equalsIgnoreCase(lt.getId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Loot table not found: " + lootTableId));
+
+        lootTable.dropLoot(context.getSender().getServer().getEntity(UUID.fromString(entityUUID)).getLocation(), 1);
+    }
+
+    private void handleReload(CommandContext context) {
+        plugin.reload();
+        Util.sendMessage(context.getSender(), ChatColor.GREEN + "EvoCraft has been reloaded.");
+    }
+
+    private void handleProgressPath(CommandContext context) {
+        Player player = context.requirePlayer();
+        String pathId = context.requireStringArgument(1, "Please specify a valid path.");
+        int level = context.optionalIntArgument(2, -1);
+
+        PlayerData data = PlayerDataManager.getInstance().getPlayerData(player.getUniqueId());
+        Path path = data.getPlayerClass().tree().path(pathId);
+        if (path == null) throw new IllegalArgumentException("Path not found: " + pathId);
+
+        if (level == -1) {
+            data.progressPath(path);
+            Util.sendMessage(player, "Progressed on path " + path.getId() + " to level " + data.getPathLevel(path) + ".");
+        } else {
+            data.setPathLevel(path, level);
+            Util.sendMessage(player, "Set path " + path.getId() + " to level " + level + ".");
+        }
+    }
+
+    private void handleEnchant(CommandContext context) {
+        Player player = context.requirePlayer();
+        Player target = context.requirePlayerArgument(1, "Please specify a valid player.");
+        String enchantmentId = context.requireStringArgument(2, "Please specify an enchantment.");
+        ComplexEnchantment enchantment = ComplexEnchantment.byId(enchantmentId);
+        if (enchantment == null) throw new IllegalArgumentException("Enchantment not found: " + enchantmentId);
+
+        int level = context.optionalIntArgument(3, 1);
+        ItemStack item = target.getInventory().getItemInMainHand();
+        if (item == null || item.getType().isAir()) throw new IllegalArgumentException("The target's main hand is empty.");
+
+        ComplexItemMeta meta = ComplexItemStack.of(item).getComplexMeta();
+        if (level > 0) {
+            meta.addEnchantment(enchantment, level);
+        } else {
+            meta.removeEnchantment(enchantment);
+        }
+        Util.sendMessage(player, "Enchanted " + target.getDisplayName() + "'s item with " + enchantment.getName() + " (level " + level + ").");
+    }
+
+    private void handleModel(CommandContext context) {
+        Player player = context.requirePlayer();
+        ItemStack item = player.getEquipment().getItemInMainHand();
+        if (item.getType().isAir()) {
+            Util.sendMessage(player, "This item has no CustomModelData (that is created by EvoCraft).");
+            return;
+        }
+
+        ComplexItem complexItem = ComplexItem.of(item);
+        if (complexItem == null) {
+            Util.sendMessage(player, "This item is not a valid EvoCraft item.");
+            return;
+        }
+
+        Util.sendMessage(player, "The CustomModelData of " + item.getItemMeta().getDisplayName() + " is " + complexItem.getCustomModelData());
+    }
+
+    private void handleClass(CommandContext context) {
+        Player player = context.requirePlayer();
+        Window.single()
+                .setViewer(player)
+                .setTitle("Class Selection")
+                .setGui(GameClass.getGui())
+                .setCloseable(true)
+                .build()
+                .open();
+    }
+
+
+
+    // Additional handlers...
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (args.length == 1) {
-            return getCommandSuggestions(args[0]);
-        } else if (args.length == 2 && "progresspath".equalsIgnoreCase(args[0]) && sender instanceof Player) {
-            return getPathSuggestions((Player) sender, args[1]);
-        } else if (args.length == 3) {
-            return getThirdArgumentSuggestions(args[0], args[2]);
-        } else if (args.length == 4 && "enchant".equalsIgnoreCase(args[0])) {
-            return Collections.singletonList("<level>");
-        } else if (args.length == 4 && "give".equalsIgnoreCase(args[0])) {
-            return Collections.singletonList("<amount>");
+            return subcommands.keySet().stream()
+                    .filter(cmd -> cmd.startsWith(args[0].toLowerCase()))
+                    .sorted()
+                    .collect(Collectors.toList());
         }
+
+        if (args.length >= 2) {
+            switch (args[0].toLowerCase()) {
+                case "give", "dropitematplayer" -> {
+                    if (args.length == 2) {
+                        // Suggest player names
+                        return getOnlinePlayers(sender).stream()
+                                .filter(name -> name.toLowerCase().startsWith(args[1].toLowerCase()))
+                                .sorted()
+                                .collect(Collectors.toList());
+                    } else if (args.length == 3) {
+                        // Suggest item IDs
+                        return ComplexItem.itemRegistry.keySet().stream()
+                                .filter(item -> item.toLowerCase().startsWith(args[2].toLowerCase()))
+                                .sorted()
+                                .collect(Collectors.toList());
+                    }
+                }
+                case "loottable", "droploottable" -> {
+                    if (args.length == 2) {
+                        // Suggest player or entity UUIDs
+                        return getOnlinePlayers(sender).stream()
+                                .filter(name -> name.toLowerCase().startsWith(args[1].toLowerCase()))
+                                .sorted()
+                                .collect(Collectors.toList());
+                    } else if (args.length == 3) {
+                        // Suggest loot table IDs
+                        return LootTableRegistry.lootTableList.stream()
+                                .map(LootTable::getId)
+                                .filter(id -> id.toLowerCase().startsWith(args[2].toLowerCase()))
+                                .sorted()
+                                .collect(Collectors.toList());
+                    }
+                }
+                case "progresspath" -> {
+                    if (args.length == 2 && sender instanceof Player) {
+                        // Suggest paths
+                        Player player = (Player) sender;
+                        GameClass gameClass = PlayerDataManager.getInstance()
+                                .getPlayerData(player.getUniqueId()).getPlayerClass();
+                        return gameClass.tree().paths().stream()
+                                .map(Path::getId)
+                                .filter(path -> path.toLowerCase().startsWith(args[1].toLowerCase()))
+                                .sorted()
+                                .collect(Collectors.toList());
+                    }
+                }
+            }
+        }
+
         return Collections.emptyList();
     }
 
-    private List<String> getCommandSuggestions(String arg) {
-        List<String> commands = Arrays.asList("give", "loottable", "droploottable", "dropitematplayer",
-                "enchant", "reload", "removechapterdata", "removemetadata",
-                "setchapter", "class", "progresspath");
-        return commands.stream()
-                .filter(a -> a.toLowerCase().startsWith(arg.toLowerCase()))
+    private List<String> getOnlinePlayers(CommandSender sender) {
+        return sender.getServer().getOnlinePlayers().stream()
+                .map(Player::getName)
                 .collect(Collectors.toList());
     }
 
-    private List<String> getPathSuggestions(Player player, String arg) {
-        GameClass gameClass = PlayerDataManager.getInstance().getPlayerData(player.getUniqueId()).getPlayerClass();
-        return gameClass.tree().paths().stream()
-                .map(Path::getId)
-                .filter(path -> path.toLowerCase().startsWith(arg.toLowerCase()))
-                .collect(Collectors.toList());
-    }
+    private static class CommandContext {
+        private final CommandSender sender;
+        private final String[] args;
 
-    private List<String> getThirdArgumentSuggestions(String arg0, String arg2) {
-        if ("give".equalsIgnoreCase(arg0)) {
-            return getItemSuggestions(arg2);
-        } else if ("enchant".equalsIgnoreCase(arg0)) {
-            return getEnchantmentSuggestions(arg2);
+        public CommandContext(CommandSender sender, String[] args) {
+            this.sender = sender;
+            this.args = args;
         }
-        return Collections.emptyList();
-    }
 
-    private List<String> getItemSuggestions(String arg) {
-        if (items.isEmpty()) {
-            items.addAll(ComplexItem.itemRegistry.keySet());
+        public CommandSender getSender() {
+            return sender;
         }
-        return items.stream()
-                .filter(b -> b.toLowerCase().startsWith(arg.toLowerCase()))
-                .collect(Collectors.toList());
-    }
 
-    private List<String> getEnchantmentSuggestions(String arg) {
-        return ComplexEnchantment.getRegisteredEnchants().stream()
-                .map(ComplexEnchantment::getId)
-                .filter(id -> id.toLowerCase().startsWith(arg.toLowerCase()))
-                .collect(Collectors.toList());
+        public Player requirePlayer() {
+            if (!(sender instanceof Player)) throw new IllegalArgumentException("This command can only be used by a player.");
+            return (Player) sender;
+        }
+
+        public Player requirePlayerArgument(int index, String errorMessage) {
+            if (args.length <= index) throw new IllegalArgumentException(errorMessage);
+            Player player = sender.getServer().getPlayer(args[index]);
+            if (player == null) throw new IllegalArgumentException("Player not found: " + args[index]);
+            return player;
+        }
+
+        public String requireStringArgument(int index, String errorMessage) {
+            if (args.length <= index) throw new IllegalArgumentException(errorMessage);
+            return args[index];
+        }
+
+        public int optionalIntArgument(int index, int defaultValue) {
+            if (args.length <= index) return defaultValue;
+            Integer value = Ints.tryParse(args[index]);
+            if (value == null) throw new IllegalArgumentException("Invalid number: " + args[index]);
+            return value;
+        }
+
+        public org.bukkit.Server requireServer() {
+            return sender.getServer();
+        }
     }
 }

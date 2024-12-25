@@ -209,15 +209,26 @@ public class AbilityRegistry {
                     Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_mark", ClassAbility::riftBeamMark),
                     Modifier.of(Modifier.Type.MANA_COST, "rift_beam_efficiency", -10),
                     Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_chain", ClassAbility::riftBeamChain),
+                    Modifier.of(Modifier.Type.MULTI, "rift_beam_concentrate", Modifier.of(Modifier.Type.COOLDOWN, "rift_beam_concentrate_cooldown", 0),
+                    Modifier.of(Modifier.Type.MANA_COST, "rift_beam_concentrate_mana_cost", +250)),
                     Modifier.of(Modifier.Type.EXECUTABLE, "rift_beam_apex", ClassAbility::riftBeamApex)
-            ), ClassAbility::riftBeamAbility);
+             ), ClassAbility::riftBeamAbility);
     public static final ClassAbility RUNE_SHIELD = new ClassAbility(new AbilitySettings()
             .id("mage_rune_shield")
             .manaCost(50)
-            .cooldown(0)
-            .range(20)
-            .strength(1)
-            , ClassAbility::runeShieldAbility);
+            .cooldown(30)
+            .range(0) // Assuming the shield is self-cast and does not have a range.
+            .strength(1) // This could represent the base level of damage reduction.
+            .charges(0)
+            .chargeTime(0)
+            .modifiers(
+                    Modifier.of(Modifier.Type.RANGE, "rune_shield_duration", +2), // Enhanced Durability
+                    Modifier.of(Modifier.Type.STRENGTH, "rune_shield_barrier", +10), // Reinforced Barrier
+                    Modifier.of(Modifier.Type.MANA_COST, "rune_shield_efficiency", -5), // Mana Efficiency
+                    Modifier.of(Modifier.Type.EXECUTABLE, "rune_shield_illumination", ClassAbility::runeIlluminatingAura), // Illuminating Aura
+                    Modifier.of(Modifier.Type.COOLDOWN, "rune_shield_recovery", -5), // Rapid Recovery
+                    Modifier.of(Modifier.Type.EXECUTABLE, "rune_shield_resonance", ClassAbility::arcaneResonance) // Arcane Resonance
+            ), ClassAbility::runeShieldAbility);
     public static final ClassAbility BLOODLUST = new ClassAbility(new AbilitySettings()
             .id("bloodlust")
             .manaCost(35)
@@ -247,6 +258,18 @@ public class AbilityRegistry {
             .strength(10)
             .charges(3)
             , ClassAbility::counterstrikeAbility);
+
+//    public static final ClassAbility PRECISION_SHOT = new ClassAbility(new AbilitySettings()
+//            .id("precision_shot")
+//            .manaCost(15)
+//            .cooldown(5)
+//            .strength(10)
+//            .charges(3)
+//            .modifiers(
+//                    Modifier.of(Modifier.Type.RANGE, "precision_shot_range", +20),
+//                    Modifier.of(Modifier.Type.MANA_COST, "precision_cheaper_1", -20)
+//            )
+//            , ClassAbility::precisionShotAbility);
 
     public static void registerAbilities(){
         Util.logToConsole("Registering %s abilities.".formatted(ChatColor.GOLD + "" + Ability.registeredAbilities.size() + ChatColor.RESET));

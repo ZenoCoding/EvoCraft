@@ -5,7 +5,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Geo {
+public class GeometryUtils {
 
     /// Generates a list of vertices (in arbitrary order) for a tetrahedron centered on the origin.
     public static List<Vector> makeDodecahedron(Vector vec, double r) {

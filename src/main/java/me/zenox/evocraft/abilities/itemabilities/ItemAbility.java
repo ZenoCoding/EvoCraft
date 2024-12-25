@@ -23,7 +23,7 @@ import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
 import me.zenox.evocraft.item.ItemRegistry;
 import me.zenox.evocraft.persistence.NBTEditor;
-import me.zenox.evocraft.util.Geo;
+import me.zenox.evocraft.util.GeometryUtils;
 import me.zenox.evocraft.util.TriConsumer;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.*;
@@ -142,7 +142,7 @@ public class ItemAbility extends EventAbility<PlayerInteractEvent> {
             @Override
             public void run() {
                 // Particle Magic
-                List<Vector> dodecahedron = Geo.makeDodecahedron(loc.toVector(), 2);
+                List<Vector> dodecahedron = GeometryUtils.makeDodecahedron(loc.toVector(), 2);
                 for (Vector v : dodecahedron) {
                     Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 187, 215), 0.5F);
                     w.spawnParticle(Particle.REDSTONE, v.toLocation(w).add(0, 0.5 + Math.sin(count) / 4, 0), 1, dustOptions);

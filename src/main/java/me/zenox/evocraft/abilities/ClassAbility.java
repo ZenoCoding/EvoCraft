@@ -1,15 +1,22 @@
 package me.zenox.evocraft.abilities;
 
+import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.model.ActiveModel;
+import com.ticxo.modelengine.api.model.ModeledEntity;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.data.PlayerData;
 import me.zenox.evocraft.data.PlayerDataManager;
-import me.zenox.evocraft.util.Geo;
+import me.zenox.evocraft.util.GeometryUtils;
 import me.zenox.evocraft.util.TriConsumer;
 import me.zenox.evocraft.util.Util;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
-import org.bukkit.Color;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -25,11 +32,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class ClassAbility extends Ability<PlayerInteractEvent> {
     final List<Modifier> modifiers;
+
     @SaveState
     protected TriConsumer<PlayerInteractEvent, Player, ClassAbility> executable;
 
@@ -257,7 +264,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
     }
 
     private static void teleportEffect(Location startLoc, Location endLoc, Color color, Player player, int damage, double width) {
-        List<Vector> tracedPath = Geo.lerpEdges(List.of(startLoc.toVector(), endLoc.toVector()), (int) (1.3 * startLoc.distance(endLoc)));
+        List<Vector> tracedPath = GeometryUtils.lerpEdges(List.of(startLoc.toVector(), endLoc.toVector()), (int) (1.3 * startLoc.distance(endLoc)));
         Vector direction = endLoc.toVector().subtract(startLoc.toVector()).normalize();
 
         new BukkitRunnable() {
@@ -636,7 +643,7 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
     }
 
     private static void alongPath(Location start, Location end, Consumer<Location> loc){
-        List<Vector> tracedPath = Geo.lerpEdges(List.of(start.toVector(), end.toVector()), (int) (1.3 * start.distance(end)));
+        List<Vector> tracedPath = GeometryUtils.lerpEdges(List.of(start.toVector(), end.toVector()), (int) (1.3 * start.distance(end)));
         tracedPath = tracedPath.subList(0, tracedPath.size()/2);
         tracedPath.forEach(vector -> {
             loc.accept(vector.toLocation(start.getWorld()));
@@ -837,22 +844,41 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
 
         // Start a task that increases the pitch of the sound and sends a message to the action bar as the charge progresses
         new BukkitRunnable() {
-            float pitch = 0.5f; // Start pitch
             @Override
             public void run() {
-                if (!isFullyCharged(player)) {
-                    // Increase the pitch and play the sound
-                    pitch += 0.05f; // Increase pitch
-                    player.playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1.0f, pitch);
 
-                    // Send a message to the action bar
-                    player.sendActionBar(ChatColor.GREEN + "Charging... " + Math.round(pitch * 100) + "%");
+                long chargeStartTime = player.getMetadata("charge_start_time").get(0).asLong();
+                long elapsedTime = System.currentTimeMillis() - chargeStartTime;
+                if (elapsedTime < 5000) {
+                    // Calculate the percentage of the elapsed time relative to the total charge time
+                    float percentage = (float) elapsedTime / 5000; // Assuming 5 seconds as the total charge time
+
+                    // Calculate the pitch based on the percentage
+                    float pitch = 0.5f + 0.5f * percentage; // Assuming the pitch ranges from 0.5 to 1.0
+
+                    // Play the sound with the calculated pitch
+                    if ((int) (percentage * 100) % 10 == 0) player.playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1.0f, pitch);
+
+                    // Summon particle effects to look like the player is drawing power from the ground
+                    // particles should move from the ground towards the player
+                    Location loc = player.getLocation().clone().add(0, 0.5, 0);
+                    Vector direction = loc.toVector().subtract(player.getLocation().toVector()).normalize();
+                    Vector perpendicular = direction.clone().rotateAroundY(Math.toRadians(90));
+                    Vector offset = perpendicular.multiply(0.5);
+                    loc.add(offset);
+                    player.getWorld().spawnParticle(Particle.END_ROD, loc, 1, 0.1, 0.1, 0.1, 0);
+
+                    // Send a message to the action bar with the calculated percentage
+                    Component message = Component.text("Charging... ", NamedTextColor.GREEN)
+                            .append(Component.text(Math.round(percentage * 100) + "%"));
+
+                    Util.sendActionBar(player, message);
                 } else {
                     // Stop the task when the charge is complete
                     this.cancel();
                 }
             }
-        }.runTaskTimer(EvoCraft.getPlugin(), 0L, 20L); // Run every second (20 ticks)
+        }.runTaskTimer(EvoCraft.getPlugin(), 0L, 5L);
     }
 
     public static boolean isFullyCharged(Player player) {
@@ -867,37 +893,167 @@ public class ClassAbility extends Ability<PlayerInteractEvent> {
         // Create and launch the main beam.
         Location start = player.getEyeLocation();
         Location end = player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(ability.getRange() * 2)); // Assuming the main beam has twice the range
+        double totalDistance = start.distance(end);
 
         new BukkitRunnable() {
             int ticks = 0; // Count the number of ticks
             @Override
             public void run() {
                 if (ticks < 20) { // Run for 20 ticks (1 second)
+                    double currentDistance = totalDistance * (ticks / 20.0); // Calculate the current distance based on the elapsed time
                     alongPath(start, end, location -> {
-                        // Spawn particles for visual effects
-                        location.getWorld().spawnParticle(Particle.END_ROD, location, 10, 0.5, 0.5, 0.5, 0); // Increase the count and speed for a bigger beam
-                        location.getWorld().spawnParticle(Particle.SQUID_INK, location, 10, 0.5, 0.5, 0.5, 0); // Use SQUID_INK particles for sonic effect
+                        double distanceFromStart = start.distance(location);
+                        if (distanceFromStart <= currentDistance) {
+                            // Spawn particles for visual effects
+                            location.getWorld().spawnParticle(Particle.END_ROD, location, 1, 0.5, 0.5, 0.5, 0); // Increase the count and speed for a bigger beam
+                            location.getWorld().spawnParticle(Particle.REDSTONE, location, 1, 0.5, 0.5, 0.5, 0,
+                                    new Particle.DustOptions(Color.fromRGB(144, 0, 255), 1));
+                            if (ticks % 8 == 0) location.getWorld().spawnParticle(Particle.SONIC_BOOM, location, 1);
 
-                        // Deal damage to nearby entities
-                        player.getWorld().getNearbyEntities(location, 0.5, 0.5, 0.5).forEach(entity -> {
-                            if (entity instanceof Damageable && !entity.equals(player)) {
-                                ((Damageable) entity).damage(ability.getStrength() * 10); // Assuming the main beam deals 10 times the ability's strength as damage
-                            }
-                        });
+                            // Deal damage to nearby entities
+                            player.getWorld().getNearbyEntities(location, 1, 1, 1).forEach(entity -> {
+                                if (entity instanceof Damageable dEntity && !entity.equals(player)) {
+                                    dEntity.damage(ability.getStrength() * 10); // Assuming the main beam deals 10 times the ability's strength as damage
+                                    // knock the entity back and play a sound
+                                    entity.setVelocity(entity.getLocation().toVector().subtract(location.toVector()).normalize().multiply(0.5));
+                                    entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 0);
+                                    // particle impact
+                                    entity.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, entity.getLocation(), 1, 0.5, 0.5, 0.5, 0);
+                                }
+                            });
+                        }
                     });
-                    ticks++;
+                    ticks += 4;
                 } else {
                     // Stop the task after 1 second
                     this.cancel();
                 }
             }
-        }.runTaskTimer(EvoCraft.getPlugin(), 0L, 1L); // Run every tick (1/20th of a second)
+        }.runTaskTimer(EvoCraft.getPlugin(), 0L, 4L); // Run every tick (1/20th of a second)
+    }
+
+    public static class ShieldListener implements Listener {
+        private static final Map<Player, ArmorStand> shields = new HashMap<>();
+
+        @EventHandler
+        public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+            if (event.getEntity() instanceof Player) {
+                Player player = (Player) event.getEntity();
+                ArmorStand shield = shields.get(player);
+                if (shield != null && isInFront(player, event.getDamager())) {
+                    event.setCancelled(true);
+                    // Decrease shield health
+                    shield.setHealth(shield.getHealth() - event.getFinalDamage());
+
+                    player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 1.0f, 0f);
+
+                    // Play sound effect with pitch relative to shield's health
+                    float pitch = (float) shield.getHealth() / 20f; // Assuming max health is 20
+
+                    if (shield.getHealth() <= 0) {
+                        shields.remove(player);
+                        shield.remove();
+
+                        // Play breaking sound effect
+
+                        player.playSound(player.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 1, pitch);
+
+                        // Play break animation
+                        ActiveModel model = ModelEngineAPI.createActiveModel("mana_rune");
+                        ModeledEntity entity = ModelEngineAPI.createModeledEntity(shield);
+                        entity.addModel(model, true);
+                        model.getAnimationHandler().playAnimation("death", 1, 1, 1, false);
+                    }
+                }
+            }
+        }
+
+        public static void addShield(Player player, ArmorStand shield) {
+            shields.put(player, shield);
+        }
+
+        public static void removeShield(Player player) {
+            shields.remove(player);
+        }
     }
 
 
     public static void runeShieldAbility(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        // Spawn the rune shield model in front of the player
+        Location shieldLocation = player.getLocation().add(player.getLocation().getDirection().multiply(1));
+        ActiveModel model = ModelEngineAPI.createActiveModel("mana_rune");
+
+        ArmorStand stand = player.getWorld().spawn(shieldLocation, ArmorStand.class);
+        stand.setGravity(false);
+        stand.setVisible(false);
+        stand.setCollidable(true); // Prevent entities from passing through
+        stand.setHealth(20); // Set shield health (10 seconds * 20 health per second)
+        ModeledEntity entity = ModelEngineAPI.createModeledEntity(stand);
+        entity.addModel(model, true);
+        model.getAnimationHandler().playAnimation("idle", 1, 1, 1, true);
+
+        // Add the shield to the listener
+        ShieldListener.addShield(player, stand);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (stand.isValid()) {
+                    double newHealth = stand.getHealth() - 1; // Decrease health by 1 each second
+                    if (newHealth <= 0) {
+                        // If health is 0 or less, remove the shield
+                        ShieldListener.removeShield(player);
+                        stand.remove();
+                    } else {
+                        // Otherwise, update the shield's health
+                        stand.setHealth(newHealth);
+                    }
+                } else {
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(EvoCraft.getPlugin(), 0L, 20L);
+
+        // Task to make the shield follow the player
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (stand.isValid()) {
+                    stand.teleport(player.getLocation().add(player.getLocation().getDirection().multiply(1)));
+                } else {
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(EvoCraft.getPlugin(), 0L, 1L); // Update every tick
+
+        // Remove the shield after a certain duration
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (stand.isValid()) {
+                    ShieldListener.removeShield(player);
+                    stand.remove();
+                }
+            }
+        }.runTaskLater(EvoCraft.getPlugin(), 20 * 10); // Remove the shield after 10 seconds
+    }
+
+    private static boolean isInFront(Player player, Entity entity) {
+        Vector toEntity = entity.getLocation().toVector().subtract(player.getLocation().toVector()).normalize();
+        Vector direction = player.getLocation().getDirection();
+        return direction.dot(toEntity) >= 0; // This checks if the entity is in front of the player
+    }
+
+    public static void runeIlluminatingAura(PlayerInteractEvent event, Player player, ClassAbility ability) {
+        runeShieldAbility(event, player, ability);
+        // Create a light source at the player's location
 
     }
+
+    public static void arcaneResonance(PlayerInteractEvent event, Player player, ClassAbility ability) {
+
+    }
+
     public static void bloodlustAbility(PlayerInteractEvent event, Player player, ClassAbility ability){
         player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 1) );
     }

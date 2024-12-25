@@ -14,6 +14,7 @@ import me.zenox.evocraft.item.VariableType;
 import me.zenox.evocraft.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -22,7 +23,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.inventoryaccess.component.ComponentWrapper;
+import xyz.xenondevs.inventoryaccess.component.AdventureComponentWrapper;
 import xyz.xenondevs.invui.gui.AbstractGui;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.gui.SlotElement;
@@ -291,13 +292,25 @@ public class EnchantingGui extends AbstractGui {
                 .addIngredient('E', new SlotElement.InventorySlotElement(VirtualInventoryManager.getInstance()
                         .getOrCreate(Util.constantUUID(ENCHANT_GUI_ITEM_KEY + p.getName()), 1), 0,
                         new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE)
-                                .setDisplayName((ComponentWrapper) Component.text("Enchant Item").color(NamedTextColor.GRAY))
-                                .setLore(List.of((ComponentWrapper) Component.text().content("→ Place an item here to enchant it").color(NamedTextColor.YELLOW)))))
+                                .setDisplayName(new AdventureComponentWrapper(
+                                        Component.text("Enchanting Slot").color(NamedTextColor.LIGHT_PURPLE)))
+                                .setLore(List.of(
+                                        new AdventureComponentWrapper(
+                                                Component.text("The enchanting table funnels its energy through this slot, adding mystical properties to the item.")
+                                                        .color(NamedTextColor.GRAY).decorate(TextDecoration.ITALIC)
+                                        ),
+                                        new AdventureComponentWrapper(Component.text("")),
+                                        new AdventureComponentWrapper(
+                                                Component.text("→ Place an item here to enchant it.").color(NamedTextColor.YELLOW)
+                                        )
+                                ))))
                 .addIngredient('F', new SlotElement.InventorySlotElement(VirtualInventoryManager.getInstance()
                         .getOrCreate(Util.constantUUID(ENCHANT_GUI_FUEL_KEY + p.getName()), 1), 0,
                         new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)
-                                .setDisplayName((ComponentWrapper) Component.text("Enchant Fuel").color(NamedTextColor.GRAY))
-                                .setLore(List.of((ComponentWrapper) Component.text().content("→ Place an item here to use it as enchant fuel").color(NamedTextColor.YELLOW)))))
+                                .setDisplayName(new AdventureComponentWrapper(
+                                        Component.text("Enchant Fuel").color(NamedTextColor.BLUE)))
+                                .setLore(List.of(new AdventureComponentWrapper(
+                                        Component.text("→ Place an item here to use it as enchant fuel").color(NamedTextColor.YELLOW))))))
                 .addIngredient('R', new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName(""))
                 .addIngredient('1', new EnchantItem(1, 0))
                 .addIngredient('2', new EnchantItem(2, 10))
