@@ -1,13 +1,13 @@
 package me.zenox.evocraft.attribute.types;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
-import com.archyx.aureliumskills.modifier.ModifierType;
-import com.archyx.aureliumskills.modifier.StatModifier;
-import com.archyx.aureliumskills.stats.Stat;
+import dev.aurelium.auraskills.api.AuraSkillsBukkit;
+import dev.aurelium.auraskills.api.item.ItemManager;
+import dev.aurelium.auraskills.api.item.ModifierType;
+import dev.aurelium.auraskills.api.stat.Stat;
+import dev.aurelium.auraskills.api.stat.StatModifier;
 import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.attribute.Attribute;
 import me.zenox.evocraft.attribute.AttributeModifier;
-import me.zenox.evocraft.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,11 @@ import java.util.function.Function;
 
 public class AureliumAttribute extends Attribute {
 
+    private static final ItemManager itemManager = AuraSkillsBukkit.get().getItemManager();
+
     private final Stat stat;
+
+
 
     public AureliumAttribute(String id, ChatColor color, Stat stat) {
         this(id, color, stat, (value) -> (value > 0 ? "+" : "") + value);
@@ -31,12 +35,12 @@ public class AureliumAttribute extends Attribute {
     @Override
     public ItemStack apply(ItemStack item, @NotNull AttributeModifier modifier) {
         double value = modifier.getValue();
-        double curValue = Util.getAureliumModifiers(item,
+        double curValue = itemManager.getStatModifiers(item,
                         List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.FEET, Slot.ARMOR)
                                 .contains(modifier.getSlot()) ? ModifierType.ARMOR : ModifierType.ITEM)
                 .stream()
-                .filter(statModifier -> stat.equals(statModifier.getStat()))
-                .mapToDouble(StatModifier::getValue)
+                .filter(statModifier -> stat.equals(statModifier.stat()))
+                .mapToDouble(StatModifier::value)
                 .sum();
 
         if (modifier.getOperation().equals(org.bukkit.attribute.AttributeModifier.Operation.ADD_SCALAR)){
@@ -47,15 +51,15 @@ public class AureliumAttribute extends Attribute {
 
         // Returns an armor modifier if the item's type is a valid armor type, otherwise adds an item modifier
         if(List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.FEET, Slot.ARMOR).contains(modifier.getSlot())){
-            return AureliumAPI.addArmorModifier(item, stat, curValue, false);
+            return itemManager.addStatModifier(item, ModifierType.ARMOR, stat, curValue, false);
         } else {
-            return AureliumAPI.addItemModifier(item, stat, curValue, false);
+            return itemManager.addStatModifier(item, ModifierType.ITEM, stat, curValue, false);
         }
     }
 
     @Override
     public ItemStack remove(ItemStack item, @NotNull AttributeModifier modifier) {
-        return Util.removeAureliumModifier(item, List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.FEET, Slot.ARMOR)
+        return itemManager.removeStatModifier(item, List.of(Slot.HEAD, Slot.CHEST, Slot.LEGS, Slot.FEET, Slot.ARMOR)
                 .contains(modifier.getSlot()) ? ModifierType.ARMOR : ModifierType.ITEM, stat);
     }
 

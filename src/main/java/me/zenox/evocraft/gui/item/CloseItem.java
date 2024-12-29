@@ -1,25 +1,25 @@
 package me.zenox.evocraft.gui.item;
 
-import de.studiocode.invui.gui.impl.SimpleGUI;
-import de.studiocode.invui.item.ItemProvider;
-import de.studiocode.invui.item.builder.ItemBuilder;
-import de.studiocode.invui.item.impl.controlitem.ControlItem;
-import de.studiocode.invui.window.Window;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
+import xyz.xenondevs.invui.gui.AbstractGui;
+import xyz.xenondevs.invui.item.ItemProvider;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import xyz.xenondevs.invui.item.impl.controlitem.ControlItem;
+import xyz.xenondevs.invui.window.Window;
 
 /**
  * "Empty" item that can be replaced with another item via clicking on it
  */
-public class CloseItem extends ControlItem<SimpleGUI> {
+public class CloseItem extends ControlItem<AbstractGui> {
 
-    private SimpleGUI gui;
+    private AbstractGui gui;
 
     @Override
-    public ItemProvider getItemProvider(SimpleGUI gui) {
+    public ItemProvider getItemProvider(AbstractGui gui) {
         this.gui = gui;
         return new ItemBuilder(Material.BARRIER).setDisplayName("§cClose Menu");
     }
@@ -29,7 +29,7 @@ public class CloseItem extends ControlItem<SimpleGUI> {
         for (Window window :
                 getWindows()) {
             if(window.getCurrentViewer().equals(player)){
-                window.closeForViewer();
+                window.close();
             }
         }
     }

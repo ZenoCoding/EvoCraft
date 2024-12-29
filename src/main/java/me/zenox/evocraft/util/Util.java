@@ -1,13 +1,11 @@
 package me.zenox.evocraft.util;
 
-import com.archyx.aureliumskills.AureliumSkills;
-import com.archyx.aureliumskills.modifier.ModifierType;
-import com.archyx.aureliumskills.modifier.Modifiers;
-import com.archyx.aureliumskills.modifier.StatModifier;
-import com.archyx.aureliumskills.stats.Stat;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import me.zenox.evocraft.EvoCraft;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
+import dev.aurelium.auraskills.api.AuraSkillsApi;
+import dev.aurelium.auraskills.api.user.SkillsUser;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -17,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -43,7 +40,11 @@ public class Util {
     }
 
     public static void sendActionBar(@NotNull Player p, String message) {
-        EvoCraft.getActionBar().sendAbilityActionBar(p, ChatColor.translateAlternateColorCodes('&', message));
+        AuraSkillsApi.get().getUserManager().getUser(p.getUniqueId()).sendActionBar(ChatColor.translateAlternateColorCodes('&', message));
+    }
+
+    public static void sendActionBar(@NotNull Player p, Component message) {
+        AuraSkillsApi.get().getUserManager().getUser(p.getUniqueId()).sendActionBar( LegacyComponentSerializer.legacySection().serialize(message));
     }
 
     public static void sendTitle(@NotNull Player p, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
@@ -74,15 +75,9 @@ public class Util {
         r.nextBytes(array);
         UUID id = UUID.nameUUIDFromBytes(array);
 
-        GameProfile profile = new GameProfile(id, null);
-        profile.getProperties().put("textures", new Property("textures", base64EncodedString));
-        try {
-            Field profileField = meta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(meta, profile);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        PlayerProfile profile = Bukkit.createProfile(id, null);
+        profile.getProperties().add(new ProfileProperty("textures", base64EncodedString));
+        meta.setPlayerProfile(profile);
         item.setItemMeta(meta);
         return item;
     }
@@ -104,9 +99,9 @@ public class Util {
     /**
      * Gets nearby blocks given a radius and location
      * @param loc The location
-     * @param radius The radius
-     * @param yradius The y radius
-     * @return
+     * @param radius The radius in the orthogonal horizontal directions
+     * @param yradius The radius in the y direction
+     * @return the list of blocks
      */
     public static List<Block> getNearbyBlocks(Location loc, int radius, int yradius) {
         List<Block> nearbyBlocks = new ArrayList();
@@ -130,29 +125,6 @@ public class Util {
     }
 
     /**
-     * Gets all the modifiers an item has
-     * @param item the item to check
-     * @param type the type of modifier to check
-     * @return the list of modifiers
-     */
-    public static List<StatModifier> getAureliumModifiers(ItemStack item, ModifierType type){
-        Modifiers modifiers = new Modifiers(AureliumSkills.getPlugin(AureliumSkills.class));
-        return modifiers.getModifiers(type, item);
-    }
-
-    /**
-     * Removes all modifiers of a certain type from an item
-     * @param item the item to remove the modifiers from
-     * @param type the type of modifiers to remove
-     * @param stat the stat to remove the modifiers from
-     * @return the item with the modifiers removed
-     */
-    public static ItemStack removeAureliumModifier(ItemStack item, ModifierType type, Stat stat){
-        Modifiers modifiers = new Modifiers(AureliumSkills.getPlugin(AureliumSkills.class));
-        return modifiers.removeModifier(type, item, stat);
-    }
-
-    /**
      * Rounds a given double to the specified number of decimal places.
      * @param value the value to round
      * @param digits the number of decimal places to round to
@@ -161,5 +133,11 @@ public class Util {
     public static double round(double value, int digits) {
         double factor = Math.pow(10, digits);
         return Math.round(value * factor) / factor;
+    }
+
+    private static final AuraSkillsApi api = AuraSkillsApi.get();
+
+    public static SkillsUser getSkillsUser(Player player) {
+        return api.getUser(player.getUniqueId());
     }
 }

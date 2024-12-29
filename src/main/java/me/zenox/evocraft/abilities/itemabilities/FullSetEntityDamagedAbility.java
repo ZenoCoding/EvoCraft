@@ -1,5 +1,6 @@
-package me.zenox.evocraft.abilities;
+package me.zenox.evocraft.abilities.itemabilities;
 
+import me.zenox.evocraft.abilities.AbilitySettings;
 import me.zenox.evocraft.util.TriConsumer;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.Color;
@@ -30,12 +31,12 @@ public class FullSetEntityDamagedAbility extends FullSetArmorAbility<EntityDamag
     }
 
     @Override
-    Player getPlayerOfEvent(EntityDamageByEntityEvent e) {
+    protected Player getPlayerOfEvent(EntityDamageByEntityEvent e) {
         return ((Player) e.getEntity());
     }
 
     @Override
-    List<ItemStack> getItem(Player p, EntityDamageByEntityEvent e) {
+    protected List<ItemStack> getItem(Player p, EntityDamageByEntityEvent e) {
         return this.getSlot().item(p);
     }
 

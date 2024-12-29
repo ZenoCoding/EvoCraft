@@ -1,7 +1,9 @@
 package me.zenox.evocraft.item;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
-import com.archyx.aureliumskills.stats.Stat;
+import dev.aurelium.auraskills.api.AuraSkillsBukkit;
+import dev.aurelium.auraskills.api.item.ItemManager;
+import dev.aurelium.auraskills.api.item.ModifierType;
+import dev.aurelium.auraskills.api.stat.Stats;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.abilities.Ability;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
@@ -17,7 +19,10 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Class that represents a "custom" ItemStack.
@@ -35,7 +40,9 @@ public class ComplexItemStack {
     private ItemStack item;
     private ComplexItemMeta complexMeta;
 
-    private String skullURL;
+    private final String skullURL;
+
+    private final static ItemManager itemManager = AuraSkillsBukkit.get().getItemManager();
 
     public ComplexItemStack(ComplexItem complexItem, int amount) {
         this(complexItem, new ItemStack(complexItem.getMaterial()));
@@ -76,7 +83,7 @@ public class ComplexItemStack {
 
         Map<Enchantment, Integer> vanillaEnchantments = item.getEnchantments();
 
-        ComplexItem complexItem = Objects.requireNonNullElse(ItemRegistry.byItem(item), VanillaItem.of(item.getType()));
+        ComplexItem complexItem = Objects.requireNonNullElse(ComplexItem.of(item), VanillaItem.of(item.getType()));
         ComplexItemStack cItem = new ComplexItemStack(complexItem, item);
 
         // add vanilla variables???
@@ -126,8 +133,9 @@ public class ComplexItemStack {
         item.setItemMeta(meta);
 
         // Set stats and clone
-        for (Map.Entry<Stat, Double> entry : complexItem.getStats().entrySet()) {
-            item = complexItem.getType().isWearable() ? AureliumAPI.addArmorModifier(item, entry.getKey(), entry.getValue(), false) : AureliumAPI.addItemModifier(item, entry.getKey(), entry.getValue(), false);
+        for (Map.Entry<Stats, Double> entry : complexItem.getStats().entrySet()) {
+            ModifierType type = complexItem.getType().isWearable() ? ModifierType.ARMOR : ModifierType.ITEM;
+            item = itemManager.addStatModifier(item, type, entry.getKey(), entry.getValue(), false);
         }
 
         meta = item.getItemMeta();
@@ -173,8 +181,8 @@ public class ComplexItemStack {
         return this.complexItem.getKey();
     }
 
-    public List<Ability> getAbilities() {
-        return this.complexMeta.getAbilities();
+    public List<Ability<?>> getAbilities() {
+        return this.complexItem.getAbilities();
     }
 
     public ComplexItem getComplexItem() {

@@ -1,19 +1,20 @@
 package me.zenox.evocraft.item;
 
-import com.archyx.aureliumskills.modifier.ModifierType;
-import com.archyx.aureliumskills.modifier.StatModifier;
-import com.archyx.aureliumskills.stats.Stats;
+import dev.aurelium.auraskills.api.AuraSkillsBukkit;
+import dev.aurelium.auraskills.api.item.ItemManager;
+import dev.aurelium.auraskills.api.item.ModifierType;
+import dev.aurelium.auraskills.api.stat.StatModifier;
+import dev.aurelium.auraskills.api.stat.Stats;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.abilities.Ability;
-import me.zenox.evocraft.abilities.FullSetArmorAbility;
-import me.zenox.evocraft.abilities.ItemAbility;
+import me.zenox.evocraft.abilities.itemabilities.FullSetArmorAbility;
+import me.zenox.evocraft.abilities.itemabilities.ItemAbility;
 import me.zenox.evocraft.attribute.AttributeModifier;
 import me.zenox.evocraft.attribute.types.AureliumAttribute;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
 import me.zenox.evocraft.persistence.ArrayListType;
 import me.zenox.evocraft.persistence.SerializedPersistentType;
 import me.zenox.evocraft.util.Romans;
-import me.zenox.evocraft.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -41,7 +42,6 @@ import java.util.stream.Stream;
  */
 
 public class ComplexItemMeta {
-    public static final NamespacedKey ABILITY_ID = new NamespacedKey(EvoCraft.getPlugin(), "ability");
     public static final String VAR_PREFIX = "var_";
     public static final String ATTRIBUTE_BASE_KEY = "base";
     public static final VariableType<ComplexItem.Rarity> RARITY_VAR = new VariableType<>("rarity", new LoreEntry("rarity", List.of("Rarity Lore")), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Rarity) variable.getValue()).color() + ((ComplexItem.Rarity) variable.getValue()).getName())));
@@ -52,20 +52,17 @@ public class ComplexItemMeta {
     })), VariableType.Priority.BELOW, (loreEntry, variable) -> loreEntry.setLore(List.of(((ComplexItem.Type) variable.getValue()).getName())));
     public static final NamespacedKey ENCHANT_KEY = new NamespacedKey(EvoCraft.getPlugin(), "complexEnchants");
     private static final NamespacedKey ATTRIBUTE_KEY = new NamespacedKey(EvoCraft.getPlugin(), "attributes");
-    private List<Ability> abilities;
+
+    private static final ItemManager itemManager = AuraSkillsBukkit.get().getItemManager();
+
     private final List<Variable> variableList = new ArrayList<>();
     private HashMap<ComplexEnchantment, Integer> complexEnchantments = new HashMap<>();
     private List<AttributeModifier> modifierList = new ArrayList<>();
     private final ComplexItemStack complexItemStack;
 
-    public ComplexItemMeta(ComplexItemStack complexItemStack, List<Ability> abilities) {
-        this.abilities = abilities == null ? new ArrayList<>() : new ArrayList<>(abilities);
+    public ComplexItemMeta(ComplexItemStack complexItemStack) {
         this.complexItemStack = complexItemStack;
         this.read();
-    }
-
-    public ComplexItemMeta(ComplexItemStack complexItemStack) {
-        this(complexItemStack, complexItemStack.getComplexItem().getAbilities());
     }
 
     /**
@@ -95,7 +92,7 @@ public class ComplexItemMeta {
         Arrays.stream(Attribute.values()).forEach(meta::removeAttributeModifier);
         item.setItemMeta(meta);
 
-        Arrays.stream(Stats.values()).forEach(stats -> item.setItemMeta(Util.removeAureliumModifier(item, ((ComplexItem.Type) getVariable(TYPE_VAR).getValue()).isWearable() ? ModifierType.ARMOR : ModifierType.ITEM, stats).getItemMeta()));
+        Arrays.stream(Stats.values()).forEach(stats -> item.setItemMeta(itemManager.removeStatModifier(item, ((ComplexItem.Type) getVariable(TYPE_VAR).getValue()).isWearable() ? ModifierType.ARMOR : ModifierType.ITEM, stats).getItemMeta()));
 
         meta = item.getItemMeta();
 
@@ -133,7 +130,7 @@ public class ComplexItemMeta {
         }
 
         // Write ComplexEnchants
-        dataContainer.set(ENCHANT_KEY, new SerializedPersistentType<HashMap>(), complexEnchMap);
+        dataContainer.set(ENCHANT_KEY, new SerializedPersistentType<>(), complexEnchMap);
 
         // Clear vanilla enchantments
         for (Enchantment enchant:
@@ -159,7 +156,6 @@ public class ComplexItemMeta {
 
         // Write Abilities
         writeAbilityLore(lore);
-        dataContainer.set(ABILITY_ID, new ArrayListType(), new ArrayList<>(abilities.stream().map(Ability::getId).toList()));
 
         writeVariables(VariableType.Priority.BELOW_ABILITIES, dataContainer, lore, true);
 
@@ -257,7 +253,7 @@ public class ComplexItemMeta {
     }
 
     private void writeAbilityLore(LoreBuilder loreBuilder) {
-        for (Ability ability : this.abilities) {
+        for (Ability<?> ability : complexItemStack.getComplexItem().getAbilities()) {
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GOLD + (ability.isPassive() ? "Passive " : "") + (ability instanceof FullSetArmorAbility ? "Full Set " : "") + "Ability: " + ability.getDisplayName() + ChatColor.YELLOW + ChatColor.BOLD + " " + (ability instanceof ItemAbility ? ((ItemAbility) ability).getAction().getName() : ""));
             lore.addAll(ability.getLore());
@@ -287,7 +283,7 @@ public class ComplexItemMeta {
 
         // Read AureliumSkills Modifiers
         for(StatModifier modifier :
-                Util.getAureliumModifiers(stack.getItem(),
+                itemManager.getStatModifiers(stack.getItem(),
                         ((ComplexItem.Type) meta.getVariable(ComplexItemMeta.TYPE_VAR).getValue()).isWearable() ? ModifierType.ARMOR : ModifierType.ITEM)){
             modifiers.add(AttributeModifier.of(modifier));
         }
@@ -356,10 +352,6 @@ public class ComplexItemMeta {
 
     public List<Variable> getVariableList() {
         return variableList;
-    }
-
-    public List<Ability> getAbilities() {
-        return abilities;
     }
 
     public List<AttributeModifier> getModifierList() {

@@ -1,6 +1,6 @@
 package me.zenox.evocraft.item;
 
-import com.archyx.aureliumskills.stats.Stat;
+import dev.aurelium.auraskills.api.stat.Stats;
 import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.abilities.Ability;
 import me.zenox.evocraft.attribute.Attribute;
@@ -26,9 +26,9 @@ public class ItemSettings {
     private ComplexItem.Type type;
     private Material material;
     private ItemMeta meta;
-    private Map<Stat, Double> stats;
+    private Map<Stats, Double> stats;
     private String skullURL;
-    private List<Ability> abilities;
+    private List<Ability<?>> abilities;
     private HashMap<VariableType, Serializable> variableMap;
     private List<me.zenox.evocraft.attribute.AttributeModifier> attributeModifiers;
 
@@ -47,7 +47,7 @@ public class ItemSettings {
         this.attributeModifiers = new ArrayList<>();
     }
 
-    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities, HashMap<VariableType, Serializable> variableMap, List<me.zenox.evocraft.attribute.AttributeModifier> attributeModifiers) {
+    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stats, Double> stats, String skullURL, List<Ability<?>> abilities, HashMap<VariableType, Serializable> variableMap, List<me.zenox.evocraft.attribute.AttributeModifier> attributeModifiers) {
         this.id = id;
         this.unique = unique;
         this.glow = glow;
@@ -62,7 +62,7 @@ public class ItemSettings {
         this.attributeModifiers = attributeModifiers;
     }
 
-    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stat, Double> stats, String skullURL, List<Ability> abilities){
+    public ItemSettings(String id, Boolean unique, Boolean glow, ComplexItem.Rarity rarity, ComplexItem.Type type, Material material, ItemMeta meta, Map<Stats, Double> stats, String skullURL, List<Ability<?>> abilities){
         this(id, unique, glow, rarity, type, material, meta, stats, skullURL, abilities, new HashMap<>(), new ArrayList<>());
     }
 
@@ -105,7 +105,7 @@ public class ItemSettings {
         return meta;
     }
 
-    public Map<Stat, Double> getStats() {
+    public Map<Stats, Double> getStats() {
         return stats;
     }
 
@@ -113,7 +113,7 @@ public class ItemSettings {
         return skullURL;
     }
 
-    public List<Ability> getAbilities() {
+    public List<Ability<?>> getAbilities() {
         return abilities;
     }
 
@@ -179,12 +179,12 @@ public class ItemSettings {
         return this;
     }
 
-    public ItemSettings stats(Map<Stat, Double> stats) {
+    public ItemSettings stats(Map<Stats, Double> stats) {
         this.stats = stats;
         return this;
     }
 
-    public ItemSettings stat(Stat stat, Double num) {
+    public ItemSettings stat(Stats stat, Double num) {
         Attribute attr;
         try {
             attr = ((Attribute) Attribute.attributeRegistry.stream()
@@ -206,22 +206,22 @@ public class ItemSettings {
         return this;
     }
 
-    public ItemSettings abilities(List<Ability> abilities) {
+    public ItemSettings abilities(List<Ability<?>> abilities) {
         this.abilities = abilities;
         return this;
     }
 
-    public ItemSettings abilities(Ability... abilities) {
+    public ItemSettings abilities(Ability<?>... abilities) {
         this.abilities = List.of(abilities);
         return this;
     }
 
-    public ItemSettings addAbilities(Ability... abilities) {
+    public ItemSettings addAbilities(Ability<?>... abilities) {
         this.abilities.addAll(List.of(abilities));
         return this;
     }
 
-    public ItemSettings ability(Ability ability) {
+    public ItemSettings ability(Ability<?> ability) {
         this.abilities.add(ability);
         return this;
     }

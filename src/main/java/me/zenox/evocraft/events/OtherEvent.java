@@ -1,10 +1,10 @@
 package me.zenox.evocraft.events;
 
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
-import de.studiocode.invui.window.impl.single.SimpleWindow;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.abilities.ClassAbility;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
-import me.zenox.evocraft.gui.EnchantingGUI;
+import me.zenox.evocraft.gui.EnchantingGui;
 import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
 import me.zenox.evocraft.item.VanillaItem;
@@ -29,6 +29,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import xyz.xenondevs.invui.window.Window;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,13 +49,17 @@ public class OtherEvent implements Listener {
     @EventHandler
     public void tileEntityInteract(PlayerInteractEvent e){
         if(e.getAction() == Action.RIGHT_CLICK_BLOCK){
-            switch(e.getClickedBlock().getType()){
-                case ENCHANTING_TABLE -> new SimpleWindow(e.getPlayer(), "Enchantment Table", EnchantingGUI.getGui(e.getPlayer(), e.getClickedBlock()), true, true).show();
-                default -> {
-                    return;
-                }
+            if (Objects.requireNonNull(e.getClickedBlock()).getType() == Material.ENCHANTING_TABLE) {
+                e.setCancelled(true);
+                Window.single()
+                        .setViewer(e.getPlayer())
+                        .setTitle("Enchantment Table")
+                        .setGui(EnchantingGui.getGui(e.getPlayer(), e.getClickedBlock()))
+                        .setCloseable(true)
+                        .build()
+                        .open();
             }
-            e.setCancelled(true);
+
         }
     }
 
@@ -77,21 +82,38 @@ public class OtherEvent implements Listener {
             }
         }
     }
+    @EventHandler
+    public void damageEventCounterstrike(EntityDamageByEntityEvent entityDamageByEntityEvent){
+        if(!(entityDamageByEntityEvent.getEntity() instanceof Player)) return;
+        Player player = (Player) entityDamageByEntityEvent.getEntity();
+        if(ClassAbility.counterStrikeActive.contains(player)) {
+            if (((entityDamageByEntityEvent.getDamager() instanceof LivingEntity))) {
+                ((LivingEntity) entityDamageByEntityEvent.getDamager()).damage(entityDamageByEntityEvent.getDamage()/2);
+            }
+            entityDamageByEntityEvent.setCancelled(true);
+            ClassAbility.counterStrikeActive.remove(player);
+            player.removePotionEffect(PotionEffectType.SLOW);
+            player.removePotionEffect(PotionEffectType.SLOW_FALLING);
+            player.removePotionEffect(PotionEffectType.WEAKNESS);
+        }
+    }
 
     @EventHandler
-    public void projectileCollide(ProjectileHitEvent e){
+    public void projectileCollide(ProjectileHitEvent e) {
         Projectile entity = e.getEntity();
-        if(Objects.isNull(entity)) return;
-        if(Objects.isNull(e.getHitEntity())) return;
+        if (Objects.isNull(entity)) return;
+        if (Objects.isNull(e.getHitEntity())) return;
         List<MetadataValue> snowballValues = entity.getMetadata("super_snowball");
-        if (!snowballValues.isEmpty()) {
+        if (entity.hasMetadata("super_snowball")) {
             Entity hitEntity = e.getHitEntity();
-            if (!Util.isInvulnerable(hitEntity)){
+            if (!Util.isInvulnerable(hitEntity)) {
                 hitEntity.setVelocity(hitEntity.getVelocity().add(hitEntity.getLocation().toVector().subtract(entity.getLocation().add(0, -0.3, 0).toVector()).normalize().multiply(0.5)));
                 hitEntity.setFreezeTicks(Math.max(0, hitEntity.getFreezeTicks()) + 20);
                 if (hitEntity instanceof Player player) player.damage(1);
             }
 
+        } else if (entity.hasMetadata("mana_projectile")) {
+            ClassAbility.manaBallDamage(e, entity.getMetadata("mana_projectile").get(0).asInt());
         }
         if(entity.hasMetadata("frostfire_fire")){
             BlockData newBlockData = FIRE.createBlockData();
@@ -176,7 +198,7 @@ public class OtherEvent implements Listener {
             // Get the enchantmaps of both of the items in the AnvilInventory
             HashMap<ComplexEnchantment, Integer> firstEnchants = (HashMap<ComplexEnchantment, Integer>) ComplexItemStack.of(inventory.getFirstItem()).getComplexMeta().getComplexEnchants();
             HashMap<ComplexEnchantment, Integer> secondEnchants = (HashMap<ComplexEnchantment, Integer>) ComplexItemStack.of(inventory.getSecondItem()).getComplexMeta().getComplexEnchants();
-            resultMeta.setComplexEnchantments(EnchantingGUI.combineEnchantMaps(firstEnchants, secondEnchants));
+            resultMeta.setComplexEnchantments(EnchantingGui.combineEnchantMaps(firstEnchants, secondEnchants));
             resultMeta.updateItem();
             e.setResult(resultStack.getItem());
 

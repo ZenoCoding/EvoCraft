@@ -1,8 +1,10 @@
-package me.zenox.evocraft.abilities;
+package me.zenox.evocraft.abilities.itemabilities;
 
 import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.EvoCraft;
-import me.zenox.evocraft.util.Geo;
+import me.zenox.evocraft.abilities.AbilitySettings;
+import me.zenox.evocraft.abilities.EventAbility;
+import me.zenox.evocraft.util.GeometryUtils;
 import me.zenox.evocraft.util.TriConsumer;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.*;
@@ -20,7 +22,7 @@ import org.bukkit.util.Vector;
 import java.util.List;
 import java.util.Random;
 
-public class AttackAbility extends Ability<EntityDamageByEntityEvent> {
+public class AttackAbility extends EventAbility<EntityDamageByEntityEvent> {
 
 
     public AttackAbility(AbilitySettings settings) {
@@ -41,12 +43,12 @@ public class AttackAbility extends Ability<EntityDamageByEntityEvent> {
     }
 
     @Override
-    Player getPlayerOfEvent(EntityDamageByEntityEvent e) {
+    protected Player getPlayerOfEvent(EntityDamageByEntityEvent e) {
         return ((Player) e.getDamager());
     }
 
     @Override
-    List<ItemStack> getItem(Player p, EntityDamageByEntityEvent e) {
+    protected List<ItemStack> getItem(Player p, EntityDamageByEntityEvent e) {
         return this.getSlot().item(p);
     }
 
@@ -122,7 +124,7 @@ public class AttackAbility extends Ability<EntityDamageByEntityEvent> {
 
                     if (stacks >= 3) {
                         // Create Dodecahedron
-                        List<Vector> edgedDodecahedron = Geo.lerpEdges(Geo.makeDodecahedron(p.getLocation().toVector(), 2), 7);
+                        List<Vector> edgedDodecahedron = GeometryUtils.lerpEdges(GeometryUtils.makeDodecahedron(p.getLocation().toVector(), 2), 7);
 
                         for (Vector v : edgedDodecahedron) {
                             Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(5, 165, 255), 0.6F);

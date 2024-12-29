@@ -1,6 +1,5 @@
-package me.zenox.evocraft.abilities;
+package me.zenox.evocraft.abilities.itemabilities;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -12,14 +11,20 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import dev.aurelium.auraskills.api.trait.Traits;
+import dev.aurelium.auraskills.api.user.SkillsUser;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
-import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.Slot;
+import me.zenox.evocraft.abilities.AbilitySettings;
+import me.zenox.evocraft.abilities.ElementalFlux;
+import me.zenox.evocraft.abilities.EventAbility;
+import me.zenox.evocraft.abilities.itemabilities.specific.EmberAttune;
 import me.zenox.evocraft.item.ComplexItemMeta;
 import me.zenox.evocraft.item.ComplexItemStack;
 import me.zenox.evocraft.item.ItemRegistry;
 import me.zenox.evocraft.persistence.NBTEditor;
-import me.zenox.evocraft.util.Geo;
+import me.zenox.evocraft.util.GeometryUtils;
 import me.zenox.evocraft.util.TriConsumer;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.*;
@@ -44,7 +49,7 @@ import java.util.*;
 import static me.zenox.evocraft.item.ItemRegistry.TOTEM_POLE;
 import static me.zenox.evocraft.util.Util.getNearbyBlocks;
 
-public class ItemAbility extends Ability<PlayerInteractEvent> {
+public class ItemAbility extends EventAbility<PlayerInteractEvent> {
     private static final int SHARD_SPEED = 3;
     private static final int SHARD_RADIUS = 3;
     private final AbilityAction action;
@@ -81,12 +86,12 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
     }
 
     @Override
-    Player getPlayerOfEvent(PlayerInteractEvent e) {
+    protected Player getPlayerOfEvent(PlayerInteractEvent e) {
         return e.getPlayer();
     }
 
     @Override
-    List<ItemStack> getItem(Player p, PlayerInteractEvent e) {
+    protected List<ItemStack> getItem(Player p, PlayerInteractEvent e) {
         return Arrays.stream(new ItemStack[]{e.getItem()}).filter(Objects::nonNull).toList();
     }
 
@@ -96,7 +101,7 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
 
     @Override
     public boolean checkEvent(PlayerInteractEvent event) {
-        return action.isAction(event.getAction(), event.getPlayer().isSneaking());
+        return action.isAction(event.getAction()) && !event.getPlayer().isSneaking();
     }
 
     /**
@@ -138,7 +143,7 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
             @Override
             public void run() {
                 // Particle Magic
-                List<Vector> dodecahedron = Geo.makeDodecahedron(loc.toVector(), 2);
+                List<Vector> dodecahedron = GeometryUtils.makeDodecahedron(loc.toVector(), 2);
                 for (Vector v : dodecahedron) {
                     Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 187, 215), 0.5F);
                     w.spawnParticle(Particle.REDSTONE, v.toLocation(w).add(0, 0.5 + Math.sin(count) / 4, 0), 1, dustOptions);
@@ -809,6 +814,9 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
     }
 
     public static void emberShootAbility(PlayerInteractEvent event, Player p, ItemStack item) {
+
+        SkillsUser user = Util.getSkillsUser(p);
+
         ComplexItemMeta complexMeta = ComplexItemStack.of(item).getComplexMeta();
 
         Location eyeLoc = p.getEyeLocation();
@@ -817,11 +825,11 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
 
         if (complexMeta.getVariable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE).getValue().equals(EmberAttune.Attunement.BLAZEBORN)) {
             Fireball f = (Fireball) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.FIREBALL);
-            f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, AureliumAPI.getMaxMana(event.getPlayer()) / 75)));
+            f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, user.getMaxMana() / 75)));
             f.setMetadata("dmgEnv", new FixedMetadataValue(EvoCraft.getPlugin(), false));
             f.setMetadata("knockback", new FixedMetadataValue(EvoCraft.getPlugin(), 2));
             f.setShooter(p);
-            f.setYield(((float) Math.sqrt(AureliumAPI.getMaxMana(p))) / 10f);
+            f.setYield(((float) Math.sqrt(user.getMaxMana())) / 10f);
 
             // get rid of the fireball after 10 seconds
             new BukkitRunnable() {
@@ -833,10 +841,10 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
 
         } else if (complexMeta.getVariable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE).getValue().equals(EmberAttune.Attunement.DARKSOUL)) {
             WitherSkull f = (WitherSkull) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.WITHER_SKULL);
-            f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, AureliumAPI.getMaxMana(event.getPlayer()) / 50)));
+            f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, user.getMaxMana() / 50)));
             f.setMetadata("dmgEnv", new FixedMetadataValue(EvoCraft.getPlugin(), false));
             f.setShooter(p);
-            f.setYield((float) Math.sqrt(AureliumAPI.getMaxMana(p)) / 6f);
+            f.setYield((float) Math.sqrt(user.getMaxMana()) / 6f);
 
             // get rid of the fireball after 10 seconds
             new BukkitRunnable() {
@@ -857,82 +865,6 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
         f.setMetadata("dmgEnv", new FixedMetadataValue(EvoCraft.getPlugin(), false));
         f.setYield(2f);
         f.setShooter(p);
-    }
-
-    public static void startButtonAbility(PlayerInteractEvent playerInteractEvent, Player player, ItemStack itemStack) {
-        // Check if the player has started using the "hasStarted" metadata value
-        try {
-            if (player.getMetadata("hasStarted").size() > 0 || player.getMetadata("hasStarted").get(0).asBoolean())
-                return;
-        } catch (IndexOutOfBoundsException ignored){
-
-        }
-
-        player.setMetadata("hasStarted", new FixedMetadataValue(EvoCraft.getPlugin(), true));
-
-        BukkitRunnable startup = new BukkitRunnable(){
-            @Override
-            public void run() {
-                Util.sendMessage(player, "&aStarting Windows XP... &a&l(" + 100 + ")%", false);
-                EvoCraft.getChapterManager().getChapter(player).progress(player, playerInteractEvent);
-            }
-        };
-
-        new BukkitRunnable(){
-            int a = 0;
-            @Override
-            public void run() {
-                if(a == 0) Util.sendMessage(player, "&aStarting Windows XP...", false);
-                else Util.sendMessage(player, "&aStarting Windows XP... &7(" + Math.min(100, a) + ")%", false);
-                a += Util.round(new Random().nextDouble()*10, 1);
-                if(a >= 100) {
-                    cancel();
-                    player.playSound(player.getLocation(), "story.0.startup", 1, 1);
-                    startup.runTaskLater(EvoCraft.getPlugin(), 120);
-                }
-            }
-        }.runTaskTimer(EvoCraft.getPlugin(), 5, 4);
-    }
-
-    public static void portalizerAbility(PlayerInteractEvent playerInteractEvent, Player player, ItemStack itemStack) {
-        if(playerInteractEvent.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            Block block = playerInteractEvent.getClickedBlock();
-            if(block != null) {
-                if(block.getType() == Material.WHITE_STAINED_GLASS) {
-                    itemStack.setAmount(0);
-                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1, 1);
-                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 1f);
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm m spawn -s LightCrystalCharger 1 " + player.getWorld() + "," + -347 + "," + -61 + "," + -511);
-                    new BukkitRunnable(){
-                        @Override
-                        public void run() {
-                            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 0.5f, 0.8f);
-                            player.teleport(new Location(player.getServer().getWorld("flat"), -369, -53, -594));
-                            player.setBedSpawnLocation(new Location(player.getServer().getWorld("flat"), -369, -53, -594), true);
-                            Util.sendMessage(player, "&b100BCE | &8The Desolated Temple", false);
-                            // Play second voiceover sounds
-                            player.playSound(player.getLocation(), "story.chapter.1.backstory_2", 20f, 1f);
-                        }
-                    }.runTaskLater(EvoCraft.getPlugin(), 80);
-
-                } else if (block.getType() == Material.TINTED_GLASS) {
-                    itemStack.setAmount(0);
-                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1, 0.5f);
-                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 0.5f);
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm m spawn -s DarkCrystalCharger 1 " + player.getWorld() + "," + -369 + "," + -61 + "," + -594);
-                    new BukkitRunnable(){
-                        @Override
-                        public void run() {
-                            player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 1);
-                            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 0.8f);
-
-                            Util.sendMessage(player, "&bPresent Day | &aEnsildia", false);
-                            EvoCraft.getChapterManager().getChapter(player).progress(player, playerInteractEvent);
-                        }
-                    }.runTaskLater(EvoCraft.getPlugin(), 80);
-                }
-            }
-        }
     }
 
     public static void snowShotAbility(PlayerInteractEvent playerInteractEvent, @NotNull Player player, ItemStack itemStack) {
@@ -976,8 +908,10 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
     }
 
     public static void manaBoostAbility(PlayerInteractEvent event, Player player, ItemStack itemStack) {
+        SkillsUser user = Util.getSkillsUser(player);
+
         // An ability that refuels the player to full mana instantaneously, and grants them 2x mana regeneration for the next 10 seconds
-        AureliumAPI.setMana(player, AureliumAPI.getMaxMana(player));
+        user.setMana(user.getMaxMana());
         // Send and action bar
         Util.sendActionBar(player, "&b&lMana Refueled!");
         // Play a sound
@@ -1002,9 +936,9 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
                     cancel();
                 }
                 // Get the players current mana regeneration
-                double manaRegen = AureliumAPI.getManaRegen(player);
+                double manaRegen = user.getEffectiveTraitLevel(Traits.MANA_REGEN);
                 // Add that amount to the player's mana
-                AureliumAPI.setMana(player, Math.min(AureliumAPI.getMaxMana(player), AureliumAPI.getMana(player) + manaRegen));
+                user.setMana(Math.min(user.getMaxMana(), user.getMana() + manaRegen));
 
             }
         }.runTaskTimer(EvoCraft.getPlugin(), 0, 20);
@@ -1099,32 +1033,28 @@ public class ItemAbility extends Ability<PlayerInteractEvent> {
     }
 
     public enum AbilityAction {
-        LEFT_CLICK_BLOCK("LEFT CLICK", new Action[]{Action.LEFT_CLICK_BLOCK}, false),
-        LEFT_CLICK_AIR("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR}, false),
-        LEFT_CLICK_ALL("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, false),
-        SHIFT_LEFT_CLICK("SHIFT LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}, true),
-        RIGHT_CLICK_BLOCK("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR}, false),
-        RIGHT_CLICK_AIR("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK}, false),
-        RIGHT_CLICK_ALL("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR}, false),
-        SHIFT_RIGHT_CLICK("SHIFT RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK}, true),
-        NONE("", new Action[]{}, false);
+        LEFT_CLICK_BLOCK("LEFT CLICK", new Action[]{Action.LEFT_CLICK_BLOCK}),
+        LEFT_CLICK_AIR("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR}),
+        LEFT_CLICK_ALL("LEFT CLICK", new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}),
+        RIGHT_CLICK_BLOCK("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_AIR}),
+        RIGHT_CLICK_AIR("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK}),
+        RIGHT_CLICK_ALL("RIGHT CLICK", new Action[]{Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR}),
+
+        NONE("", new Action[]{});
 
         private final String name;
         private final Action[] actionList;
-        private final boolean requiresShift;
 
-        AbilityAction(String name, Action[] actionList, boolean requiresShift) {
+        AbilityAction(String name, Action[] actionList) {
             this.name = name;
             this.actionList = actionList;
-            this.requiresShift = requiresShift;
         }
 
         public String getName() {
             return this.name;
         }
 
-        public boolean isAction(Action action, boolean isCrouching) {
-            if (this.requiresShift && !isCrouching) return false;
+        public boolean isAction(Action action) {
 
             return Arrays.asList(actionList).contains(action);
 

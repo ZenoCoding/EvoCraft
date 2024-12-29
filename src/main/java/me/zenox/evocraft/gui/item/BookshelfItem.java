@@ -1,9 +1,9 @@
 package me.zenox.evocraft.gui.item;
 
-import de.studiocode.invui.item.ItemProvider;
-import de.studiocode.invui.item.builder.ItemBuilder;
-import de.studiocode.invui.item.impl.controlitem.ControlItem;
-import me.zenox.evocraft.gui.EnchantingGUI;
+import xyz.xenondevs.invui.item.ItemProvider;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import xyz.xenondevs.invui.item.impl.controlitem.ControlItem;
+import me.zenox.evocraft.gui.EnchantingGui;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,12 +17,12 @@ import java.util.List;
 /**
  * Bookshelf Counter Item for EnchantingTable
  */
-public class BookshelfItem extends ControlItem<EnchantingGUI> {
+public class BookshelfItem extends ControlItem<EnchantingGui> {
 
-    private EnchantingGUI gui;
+    private EnchantingGui gui;
 
     @Override
-    public ItemProvider getItemProvider(EnchantingGUI gui) {
+    public ItemProvider getItemProvider(EnchantingGui gui) {
         this.gui = gui;
         int bookshelfPower = 0;
         for (Block block : Util.getNearbyBlocks(gui.getETable().getLocation(), 5, 5))
