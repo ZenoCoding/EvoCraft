@@ -1,7 +1,5 @@
 package me.zenox.evocraft.abilities.itemabilities.specific;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
-import com.archyx.aureliumskills.stats.Stats;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.util.Location;
 import com.sk89q.worldguard.LocalPlayer;
@@ -10,8 +8,12 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
-import me.zenox.evocraft.Slot;
+import dev.aurelium.auraskills.api.AuraSkillsApi;
+import dev.aurelium.auraskills.api.stat.StatModifier;
+import dev.aurelium.auraskills.api.stat.Stats;
+import dev.aurelium.auraskills.api.user.SkillsUser;
 import me.zenox.evocraft.EvoCraft;
+import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.abilities.itemabilities.ItemAbility;
 import me.zenox.evocraft.util.Util;
 import org.bukkit.Bukkit;
@@ -35,6 +37,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
 
 public class Psychic extends ItemAbility implements Listener {
+
+    private static final AuraSkillsApi skillsApi = AuraSkillsApi.get();
 
     public Psychic() {
         super("psychic", AbilityAction.RIGHT_CLICK_ALL, 0, 0, Slot.MAIN_HAND);
@@ -104,7 +108,7 @@ public class Psychic extends ItemAbility implements Listener {
 
         dataContainer.set(key, PersistentDataType.INTEGER, count);
         p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1, 1.2f);
-        AureliumAPI.addStatModifier(p, "evocraft:psychic_wisdom_buff_" + count, Stats.WISDOM, 50d);
+        skillsApi.getUser(p.getUniqueId()).addStatModifier(new StatModifier("evocraft:psychic_wisdom_buff_" + count, Stats.WISDOM , 50d));
     }
 
     private void killPlayer(Player p, NamespacedKey key, PersistentDataContainer dataContainer) {
@@ -112,6 +116,7 @@ public class Psychic extends ItemAbility implements Listener {
         p.setMetadata("evocraft:death_psychic", new FixedMetadataValue(EvoCraft.getPlugin(), true));
         p.setHealth(0);
         p.damage(10, p);
+        SkillsUser user = skillsApi.getUser(p.getUniqueId());
         new BukkitRunnable() {
             int count = 0;
 
@@ -125,7 +130,7 @@ public class Psychic extends ItemAbility implements Listener {
             }
         }.runTaskTimer(EvoCraft.getPlugin(), 0, 20);
         for (int i = 0; i < 20; i++) {
-            AureliumAPI.removeStatModifier(p, "evocraft:psychic_wisdom_buff_" + i);
+            user.removeStatModifier("evocraft:psychic_wisdom_buff_" + i);
         }
     }
 

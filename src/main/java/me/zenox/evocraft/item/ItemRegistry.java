@@ -1,6 +1,6 @@
 package me.zenox.evocraft.item;
 
-import com.archyx.aureliumskills.stats.Stats;
+import dev.aurelium.auraskills.api.stat.Stats;
 import me.zenox.evocraft.abilities.AbilityRegistry;
 import me.zenox.evocraft.abilities.ElementalFlux;
 import me.zenox.evocraft.abilities.itemabilities.specific.Crucify;

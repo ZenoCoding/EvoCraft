@@ -1,6 +1,6 @@
 package me.zenox.evocraft.attribute;
 
-import com.archyx.aureliumskills.modifier.StatModifier;
+import dev.aurelium.auraskills.api.stat.StatModifier;
 import me.zenox.evocraft.Slot;
 import me.zenox.evocraft.attribute.types.AureliumAttribute;
 import me.zenox.evocraft.attribute.types.MinecraftAttribute;
@@ -50,10 +50,10 @@ public class AttributeModifier implements Serializable {
 
     public static AttributeModifier of(StatModifier modifier){
         try {
-            return new AttributeModifier(modifier.getName(), UUID.randomUUID(),
+            return new AttributeModifier(modifier.name(), UUID.randomUUID(),
                     ((Attribute) Attribute.attributeRegistry.stream()
-                            .filter(attribute1 -> attribute1 instanceof AureliumAttribute && ((AureliumAttribute) attribute1).getStat() == modifier.getStat())
-                            .toArray()[0]), modifier.getValue(), Operation.ADD_NUMBER, modifier.getName().contains("item") && !modifier.getName().contains("armor") ? Slot.MAIN_HAND : Slot.ARMOR);
+                            .filter(attribute1 -> attribute1 instanceof AureliumAttribute && ((AureliumAttribute) attribute1).getStat() == modifier.stat())
+                            .toArray()[0]), modifier.value(), Operation.ADD_NUMBER, modifier.name().contains("item") && !modifier.name().contains("armor") ? Slot.MAIN_HAND : Slot.ARMOR);
         } catch (IndexOutOfBoundsException e){
             throw new IllegalArgumentException("AttributeModifier " + modifier + " was");
         }

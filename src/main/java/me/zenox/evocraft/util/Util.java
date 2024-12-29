@@ -1,13 +1,9 @@
 package me.zenox.evocraft.util;
 
-import com.archyx.aureliumskills.AureliumSkills;
-import com.archyx.aureliumskills.modifier.ModifierType;
-import com.archyx.aureliumskills.modifier.Modifiers;
-import com.archyx.aureliumskills.modifier.StatModifier;
-import com.archyx.aureliumskills.stats.Stat;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import me.zenox.evocraft.EvoCraft;
+import dev.aurelium.auraskills.api.AuraSkillsApi;
+import dev.aurelium.auraskills.api.user.SkillsUser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.*;
@@ -44,11 +40,11 @@ public class Util {
     }
 
     public static void sendActionBar(@NotNull Player p, String message) {
-        EvoCraft.getActionBar().sendAbilityActionBar(p, ChatColor.translateAlternateColorCodes('&', message));
+        AuraSkillsApi.get().getUserManager().getUser(p.getUniqueId()).sendActionBar(ChatColor.translateAlternateColorCodes('&', message));
     }
 
     public static void sendActionBar(@NotNull Player p, Component message) {
-        EvoCraft.getActionBar().sendAbilityActionBar(p, LegacyComponentSerializer.legacySection().serialize(message));
+        AuraSkillsApi.get().getUserManager().getUser(p.getUniqueId()).sendActionBar( LegacyComponentSerializer.legacySection().serialize(message));
     }
 
     public static void sendTitle(@NotNull Player p, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
@@ -129,29 +125,6 @@ public class Util {
     }
 
     /**
-     * Gets all the modifiers an item has
-     * @param item the item to check
-     * @param type the type of modifier to check
-     * @return the list of modifiers
-     */
-    public static List<StatModifier> getAureliumModifiers(ItemStack item, ModifierType type){
-        Modifiers modifiers = new Modifiers(AureliumSkills.getPlugin(AureliumSkills.class));
-        return modifiers.getModifiers(type, item);
-    }
-
-    /**
-     * Removes all modifiers of a certain type from an item
-     * @param item the item to remove the modifiers from
-     * @param type the type of modifiers to remove
-     * @param stat the stat to remove the modifiers from
-     * @return the item with the modifiers removed
-     */
-    public static ItemStack removeAureliumModifier(ItemStack item, ModifierType type, Stat stat){
-        Modifiers modifiers = new Modifiers(AureliumSkills.getPlugin(AureliumSkills.class));
-        return modifiers.removeModifier(type, item, stat);
-    }
-
-    /**
      * Rounds a given double to the specified number of decimal places.
      * @param value the value to round
      * @param digits the number of decimal places to round to
@@ -160,5 +133,11 @@ public class Util {
     public static double round(double value, int digits) {
         double factor = Math.pow(10, digits);
         return Math.round(value * factor) / factor;
+    }
+
+    private static final AuraSkillsApi api = AuraSkillsApi.get();
+
+    public static SkillsUser getSkillsUser(Player player) {
+        return api.getUser(player.getUniqueId());
     }
 }

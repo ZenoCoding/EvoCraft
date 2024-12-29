@@ -1,14 +1,11 @@
 package me.zenox.evocraft;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
-import com.archyx.aureliumskills.modifier.Modifiers;
-import com.archyx.aureliumskills.ui.ActionBar;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import xyz.xenondevs.invui.gui.structure.Structure;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import dev.aurelium.auraskills.api.AuraSkillsApi;
+import dev.aurelium.auraskills.api.AuraSkillsBukkit;
 import me.zenox.evocraft.abilities.AbilityRegistry;
 import me.zenox.evocraft.attribute.AttributeRegistry;
 import me.zenox.evocraft.command.Command;
@@ -28,6 +25,8 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Material;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import xyz.xenondevs.invui.gui.structure.Structure;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
 public final class EvoCraft extends JavaPlugin {
 
@@ -37,12 +36,12 @@ public final class EvoCraft extends JavaPlugin {
     private static Permission perms = null;
 
     public boolean isUsingWorldGuard;
-    public static Modifiers modifiers;
     private static LanguageLoader languageLoader;
     private static ConfigLoader configLoader;
     private static ProtocolManager protocolManager;
-    private static ActionBar actionBar;
     private static PlayerDataManager playerDataManager;
+    private static AuraSkillsApi auraSkillsApi;
+    private static AuraSkillsBukkit auraSkillsBukkit;
 
     public static EvoCraft getPlugin() {
         return plugin;
@@ -80,9 +79,10 @@ public final class EvoCraft extends JavaPlugin {
             return;
         }
 
+        auraSkillsApi = AuraSkillsApi.get();
+        auraSkillsBukkit = AuraSkillsBukkit.get();
+
         playerDataManager = new PlayerDataManager();
-        modifiers = new Modifiers(AureliumAPI.getPlugin());
-        actionBar = AureliumAPI.getPlugin().getActionBar();
 
         configLoader = new ConfigLoader(plugin);
         languageLoader = new LanguageLoader(plugin);
@@ -167,9 +167,6 @@ public final class EvoCraft extends JavaPlugin {
         return perms;
     }
 
-    public static ActionBar getActionBar() {
-        return actionBar;
-    }
     public void reload() {
         this.reloadConfig();
         this.languageLoader = new LanguageLoader(this);

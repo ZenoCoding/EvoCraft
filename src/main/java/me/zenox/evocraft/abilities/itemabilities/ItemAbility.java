@@ -1,6 +1,5 @@
 package me.zenox.evocraft.abilities.itemabilities;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -12,6 +11,8 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import dev.aurelium.auraskills.api.trait.Traits;
+import dev.aurelium.auraskills.api.user.SkillsUser;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.Slot;
@@ -813,6 +814,9 @@ public class ItemAbility extends EventAbility<PlayerInteractEvent> {
     }
 
     public static void emberShootAbility(PlayerInteractEvent event, Player p, ItemStack item) {
+
+        SkillsUser user = Util.getSkillsUser(p);
+
         ComplexItemMeta complexMeta = ComplexItemStack.of(item).getComplexMeta();
 
         Location eyeLoc = p.getEyeLocation();
@@ -821,11 +825,11 @@ public class ItemAbility extends EventAbility<PlayerInteractEvent> {
 
         if (complexMeta.getVariable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE).getValue().equals(EmberAttune.Attunement.BLAZEBORN)) {
             Fireball f = (Fireball) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.FIREBALL);
-            f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, AureliumAPI.getMaxMana(event.getPlayer()) / 75)));
+            f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, user.getMaxMana() / 75)));
             f.setMetadata("dmgEnv", new FixedMetadataValue(EvoCraft.getPlugin(), false));
             f.setMetadata("knockback", new FixedMetadataValue(EvoCraft.getPlugin(), 2));
             f.setShooter(p);
-            f.setYield(((float) Math.sqrt(AureliumAPI.getMaxMana(p))) / 10f);
+            f.setYield(((float) Math.sqrt(user.getMaxMana())) / 10f);
 
             // get rid of the fireball after 10 seconds
             new BukkitRunnable() {
@@ -837,10 +841,10 @@ public class ItemAbility extends EventAbility<PlayerInteractEvent> {
 
         } else if (complexMeta.getVariable(EmberAttune.ATTUNEMENT_VARIABLE_TYPE).getValue().equals(EmberAttune.Attunement.DARKSOUL)) {
             WitherSkull f = (WitherSkull) eyeLoc.getWorld().spawnEntity(eyeLoc.add(eyeLoc.getDirection()), EntityType.WITHER_SKULL);
-            f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, AureliumAPI.getMaxMana(event.getPlayer()) / 50)));
+            f.setVelocity(eyeLoc.getDirection().normalize().multiply(Math.min(5, user.getMaxMana() / 50)));
             f.setMetadata("dmgEnv", new FixedMetadataValue(EvoCraft.getPlugin(), false));
             f.setShooter(p);
-            f.setYield((float) Math.sqrt(AureliumAPI.getMaxMana(p)) / 6f);
+            f.setYield((float) Math.sqrt(user.getMaxMana()) / 6f);
 
             // get rid of the fireball after 10 seconds
             new BukkitRunnable() {
@@ -904,8 +908,10 @@ public class ItemAbility extends EventAbility<PlayerInteractEvent> {
     }
 
     public static void manaBoostAbility(PlayerInteractEvent event, Player player, ItemStack itemStack) {
+        SkillsUser user = Util.getSkillsUser(player);
+
         // An ability that refuels the player to full mana instantaneously, and grants them 2x mana regeneration for the next 10 seconds
-        AureliumAPI.setMana(player, AureliumAPI.getMaxMana(player));
+        user.setMana(user.getMaxMana());
         // Send and action bar
         Util.sendActionBar(player, "&b&lMana Refueled!");
         // Play a sound
@@ -930,9 +936,9 @@ public class ItemAbility extends EventAbility<PlayerInteractEvent> {
                     cancel();
                 }
                 // Get the players current mana regeneration
-                double manaRegen = AureliumAPI.getManaRegen(player);
+                double manaRegen = user.getEffectiveTraitLevel(Traits.MANA_REGEN);
                 // Add that amount to the player's mana
-                AureliumAPI.setMana(player, Math.min(AureliumAPI.getMaxMana(player), AureliumAPI.getMana(player) + manaRegen));
+                user.setMana(Math.min(user.getMaxMana(), user.getMana() + manaRegen));
 
             }
         }.runTaskTimer(EvoCraft.getPlugin(), 0, 20);

@@ -1,6 +1,6 @@
 package me.zenox.evocraft.abilities;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
+import dev.aurelium.auraskills.api.user.SkillsUser;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.data.TranslatableList;
 import me.zenox.evocraft.data.TranslatableText;
@@ -116,7 +116,8 @@ public abstract class Ability<T extends Event> {
     }
 
     protected boolean notEnoughMana(Player p, int requiredMana) {
-        return ((int) AureliumAPI.getMana(p)) < requiredMana;
+        SkillsUser user = Util.getSkillsUser(p);
+        return ((int) user.getMana()) < requiredMana;
     }
 
     protected void sendManaInsufficientMessage(Player p) {
@@ -124,7 +125,8 @@ public abstract class Ability<T extends Event> {
     }
 
     protected void deductMana(Player p, int manaCost) {
-        AureliumAPI.setMana(p, AureliumAPI.getMana(p) - manaCost);
+        SkillsUser user = Util.getSkillsUser(p);
+        user.setMana(user.getMana() - manaCost);
     }
 
     protected void showMessage(Player p, String msg) {

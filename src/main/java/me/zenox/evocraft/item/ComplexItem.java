@@ -1,7 +1,7 @@
 package me.zenox.evocraft.item;
 
-import com.archyx.aureliumskills.stats.Stat;
 import com.google.common.primitives.Ints;
+import dev.aurelium.auraskills.api.stat.Stats;
 import me.zenox.evocraft.EvoCraft;
 import me.zenox.evocraft.abilities.Ability;
 import me.zenox.evocraft.abilities.itemabilities.ItemAbility;
@@ -43,7 +43,7 @@ public class ComplexItem {
     private final Type type;
     private final Material material;
     private final ItemMeta meta;
-    private final Map<Stat, Double> stats;
+    private final Map<Stats, Double> stats;
     private final List<Ability<?>> abilities;
     private final HashMap<VariableType, Serializable> variableMap = new HashMap<>();
     private final List<AttributeModifier> attributeModifiers;
@@ -51,7 +51,7 @@ public class ComplexItem {
     private String skullURL;
 
 
-    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability<?>> abilities, HashMap<VariableType, Serializable> variableMap, List<AttributeModifier> attributeModifiers) {
+    public ComplexItem(String id, Boolean unique, Boolean glow, Rarity rarity, Type type, Material material, Map<Stats, Double> stats, List<Ability<?>> abilities, HashMap<VariableType, Serializable> variableMap, List<AttributeModifier> attributeModifiers) {
         this.id = id;
         this.name = new TranslatableText(TranslatableText.Type.ITEM_NAME + "-" + id);
         this.lore = new TranslatableList(TranslatableText.Type.ITEM_LORE + "-" + id);
@@ -73,15 +73,15 @@ public class ComplexItem {
         register(false);
     }
 
-    public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability<?>> abilities) {
+    public ComplexItem(String id, Boolean unique, Rarity rarity, Type type, Material material, Map<Stats, Double> stats, List<Ability<?>> abilities) {
         this(id, unique, false, rarity, type, material, stats, abilities, new HashMap<>(), new ArrayList<>());
     }
 
-    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats, List<Ability<?>> abilities) {
+    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stats, Double> stats, List<Ability<?>> abilities) {
         this(id, false, rarity, type, material, stats, abilities);
     }
 
-    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stat, Double> stats) {
+    public ComplexItem(String id, Rarity rarity, Type type, Material material, Map<Stats, Double> stats) {
         this(id, false, rarity, type, material, stats, List.of());
     }
 
@@ -207,7 +207,7 @@ public class ComplexItem {
         return this.type;
     }
 
-    public Map<Stat, Double> getStats() {
+    public Map<Stats, Double> getStats() {
         return stats;
     }
 

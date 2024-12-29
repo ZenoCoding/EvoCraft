@@ -24,6 +24,7 @@ public abstract class Attribute implements Serializable {
 
     public Attribute(String id, ChatColor color, AttributeSource source, Function<Double, String> valueFormatter) {
         this.id = id;
+
         this.name = new TranslatableText(TranslatableText.Type.ATTRIBUTE + "-" + id);
         this.color = color;
         this.source = source;

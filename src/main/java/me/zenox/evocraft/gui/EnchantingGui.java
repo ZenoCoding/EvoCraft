@@ -1,7 +1,7 @@
 package me.zenox.evocraft.gui;
 
-import com.archyx.aureliumskills.api.AureliumAPI;
-import com.archyx.aureliumskills.skills.Skills;
+import dev.aurelium.auraskills.api.skill.Skills;
+import dev.aurelium.auraskills.api.user.SkillsUser;
 import me.zenox.evocraft.enchant.ComplexEnchantment;
 import me.zenox.evocraft.gui.item.BookshelfItem;
 import me.zenox.evocraft.gui.item.BooleanItem;
@@ -86,11 +86,12 @@ public class EnchantingGui extends AbstractGui {
         ComplexItemStack item = ComplexItemStack.of(getEItem());
         ComplexItemStack fuelItem = ComplexItemStack.of(getFuelItem());
         Random r = new Random();
+        SkillsUser user = Util.getSkillsUser(p);
 
         int fuelStrength = (int) (fuelItem.getComplexMeta().getVariable(ENCHANT_FUEL_VAR).getValue());
 
         double variety = calculateVariety(bookshelfPower);
-        double strength = calculateStrength(level, fuelStrength, AureliumAPI.getSkillLevel(p, Skills.ENCHANTING));
+        double strength = calculateStrength(level, fuelStrength, user.getSkillLevel(Skills.ENCHANTING));
 
         // Util.sendMessage(p, "Enchant | Strength: " + strength + " | Variety: " + variety);
 
@@ -171,7 +172,7 @@ public class EnchantingGui extends AbstractGui {
         p.setLevel(p.getLevel() - xpRequired - level + 1);
 
         // Update player's Skill XP
-        AureliumAPI.addXp(p, Skills.ENCHANTING, calculateSkillXP(level, strength, calculateVariety(bookshelfPower)));
+        user.addSkillXp(Skills.ENCHANTING, calculateSkillXP(level, strength, calculateVariety(bookshelfPower)));
         return true;
     }
 
@@ -202,13 +203,14 @@ public class EnchantingGui extends AbstractGui {
     }
 
     public static boolean enchantValid(EnchantingGui gui, int power, int XPRequired) {
+        SkillsUser user = Util.getSkillsUser(gui.p);
         int skillRequirement = 0;
         switch (power) {
             case 2 -> skillRequirement = 10;
             case 3 -> skillRequirement = 25;
         }
         // Check XP and skill level
-        return fuelValid(gui.getFuelItem()) && itemValid(gui.getEItem()) && AureliumAPI.getSkillLevel(gui.p, Skills.ENCHANTING) >= skillRequirement && gui.p.getLevel() >= XPRequired;
+        return fuelValid(gui.getFuelItem()) && itemValid(gui.getEItem()) && user.getSkillLevel(Skills.ENCHANTING) >= skillRequirement && gui.p.getLevel() >= XPRequired;
     }
 
     private static boolean itemValid(ItemStack item) {

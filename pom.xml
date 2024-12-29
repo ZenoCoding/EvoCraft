@@ -112,9 +112,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.Archy-X</groupId>
-            <artifactId>AureliumSkills</artifactId>
-            <version>Beta1.3.23</version>
+            <groupId>dev.aurelium</groupId>
+            <artifactId>auraskills-api-bukkit</artifactId>
+            <version>2.2.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

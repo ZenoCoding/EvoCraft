@@ -1,6 +1,6 @@
 package me.zenox.evocraft.attribute;
 
-import com.archyx.aureliumskills.stats.Stats;
+import dev.aurelium.auraskills.api.stat.Stats;
 import me.zenox.evocraft.attribute.types.AureliumAttribute;
 import me.zenox.evocraft.attribute.types.MinecraftAttribute;
 import me.zenox.evocraft.util.Util;
@@ -25,6 +25,8 @@ public class AttributeRegistry {
     public static final Attribute AS_LUCK = new AureliumAttribute("as-luck", ChatColor.GREEN, Stats.LUCK);
     public static final Attribute WISDOM = new AureliumAttribute("as-wisdom", ChatColor.BLUE, Stats.WISDOM);
     public static final Attribute TOUGHNESS = new AureliumAttribute("as-toughness", ChatColor.DARK_PURPLE, Stats.TOUGHNESS);
+    public static final Attribute CRIT_CHANCE = new AureliumAttribute("as-crit_chance", ChatColor.GOLD, Stats.CRIT_CHANCE);
+    public static final Attribute CRIT_DAMAGE = new AureliumAttribute("as-crit_damage", ChatColor.GOLD, Stats.CRIT_DAMAGE);
 
     public static void registerAttributes(){
         Util.logToConsole(ChatColor.WHITE + "Registering " + ChatColor.GOLD + Attribute.attributeRegistry.size() + ChatColor.WHITE + " attributes");
